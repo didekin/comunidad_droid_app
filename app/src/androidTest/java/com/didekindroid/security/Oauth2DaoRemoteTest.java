@@ -20,18 +20,18 @@ import retrofit2.Response;
 
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
 import static com.didekinlib.http.GenericExceptionMsg.NOT_FOUND;
 import static com.didekinlib.http.oauth2.OauthClient.CL_USER;
@@ -85,7 +85,7 @@ public class Oauth2DaoRemoteTest {
         whatClean = CLEAN_JUAN;
 
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
-        boolean isRegistered = userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
+        boolean isRegistered = userComuMockDao.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
         assertThat(isRegistered, is(true));
         // Solicita token.
         SpringOauthToken token = Oauth2.getPasswordUserToken(UsuarioDataTestUtils.USER_JUAN.getUserName(), UsuarioDataTestUtils.USER_JUAN.getPassword());
@@ -100,7 +100,7 @@ public class Oauth2DaoRemoteTest {
         whatClean = CLEAN_JUAN;
 
         //Inserta userComu, comunidad y usuariocomunidad.
-        boolean isRegistered = userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
+        boolean isRegistered = userComuMockDao.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
         assertThat(isRegistered, is(true));
         // Solicita token y actuliza tokenCache.
         updateSecurityData(COMU_REAL_JUAN.getUsuario().getUserName(), COMU_REAL_JUAN.getUsuario().getPassword());
@@ -135,7 +135,7 @@ public class Oauth2DaoRemoteTest {
     {
         whatClean = CLEAN_DROID;
 
-        userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
+        userComuMockDao.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
 
         SpringOauthToken token0 = Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword());
         assertThat(token0.getRefreshToken(), notNullValue());

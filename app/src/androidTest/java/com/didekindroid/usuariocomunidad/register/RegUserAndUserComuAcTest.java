@@ -129,7 +129,7 @@ public class RegUserAndUserComuAcTest {
     //    =================================== Tests ===================================
 
     @Test
-    public void testRegisterUserAndUserComu_1() throws UiException, InterruptedException
+    public void testRegisterUserAndUserComu_1() throws UiException, InterruptedException    // TODO: fail.
     {
         SECONDS.sleep(2);
 
@@ -157,7 +157,7 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterUserAndUserComu_2() throws UiException
+    public void testRegisterUserAndUserComu_2() throws UiException     // TODO: fail.
     {
         // Usuario data.
         typeUserDataFull(

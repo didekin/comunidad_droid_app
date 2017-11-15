@@ -32,6 +32,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -63,7 +64,7 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
                     incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_JUAN);
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
-                    assertThat(userComuDaoRemote.regUserAndUserComu(
+                    assertThat(userComuMockDao.regUserAndUserComu(
                             new UsuarioComunidad.UserComuBuilder(
                                     incidImportancia.getUserComu().getComunidad(), USER_PEPE).roles(PRESIDENTE.function)
                                     .build())

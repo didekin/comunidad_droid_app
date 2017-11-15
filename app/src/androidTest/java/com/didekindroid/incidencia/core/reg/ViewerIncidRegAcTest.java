@@ -30,7 +30,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.gcmTokenSentFlag;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -111,7 +110,7 @@ public class ViewerIncidRegAcTest {
     public void testDoViewInViewer() throws Exception
     {
         // The flag should be turned to true.
-        waitAtMost(6, SECONDS).until(gcmTokenSentFlag(ctrlerFirebaseToken));
+        waitAtMost(6, SECONDS).until(ctrlerFirebaseToken::isGcmTokenSentServer);
         onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_ac_button)).check(matches(isDisplayed()));
     }
@@ -133,13 +132,7 @@ public class ViewerIncidRegAcTest {
     {
         final StringBuilder errors = getErrorMsgBuilder(activity);
         errors.append(activity.getResources().getString(R.string.incid_reg_importancia)).append(LINE_BREAK.getRegexp());
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(viewer.registerIncidencia(null, errors), is(false));
-            }
-        });
+        activity.runOnUiThread(() -> assertThat(viewer.registerIncidencia(null, errors), is(false)));
     }
 
     @Test

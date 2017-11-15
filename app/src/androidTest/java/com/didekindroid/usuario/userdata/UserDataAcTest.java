@@ -238,6 +238,7 @@ public class UserDataAcTest {
     public void testPasswordChangeMn() throws InterruptedException
     {
         PASSWORD_CHANGE_AC.checkItemRegisterUser(activity);
+        SECONDS.sleep(1);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }

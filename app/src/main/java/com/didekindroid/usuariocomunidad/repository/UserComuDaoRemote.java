@@ -86,7 +86,6 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     @Override
     public Call<Boolean> regComuAndUserAndUserComu(String localeToStr, UsuarioComunidad usuarioCom)
     {
-        Timber.d(("regComuAndUserAndUserComu()"));
         return endPoint.regComuAndUserAndUserComu(localeToStr, usuarioCom);
     }
 
@@ -99,7 +98,6 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     @Override
     public Call<Boolean> regUserAndUserComu(String localeToStr, UsuarioComunidad userCom)
     {
-        Timber.d("regUserAndUserComu()");
         return endPoint.regUserAndUserComu(localeToStr, userCom);
     }
 

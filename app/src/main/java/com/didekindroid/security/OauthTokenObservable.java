@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import timber.log.Timber;
@@ -34,13 +32,7 @@ public class OauthTokenObservable {
     {
         Timber.d("oauthTokenFromUserPswd(), Thread: %s", Thread.currentThread().getName());
 
-        return fromCallable(new Callable<SpringOauthToken>() {
-            @Override
-            public SpringOauthToken call() throws Exception
-            {
-                return Oauth2.getPasswordUserToken(usuario.getUserName(), usuario.getPassword());
-            }
-        });
+        return fromCallable(() -> Oauth2.getPasswordUserToken(usuario.getUserName(), usuario.getPassword()));
     }
 
     /**
@@ -55,14 +47,7 @@ public class OauthTokenObservable {
         Timber.d("oauthTokenFromRefreshTk()");
         assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
 
-        return fromCallable(new Callable<SpringOauthToken>() {
-            @Override
-            public SpringOauthToken call() throws Exception
-            {
-                Timber.d("Thread for oauthTokenFromRefreshTk: %s", Thread.currentThread().getName());
-                return Oauth2.getRefreshUserToken(refreshToken);
-            }
-        }).doOnSuccess(initTokenAction)
+        return fromCallable(() -> Oauth2.getRefreshUserToken(refreshToken)).doOnSuccess(initTokenAction)
                 .toCompletable();
     }
 

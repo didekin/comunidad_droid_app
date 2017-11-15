@@ -4,7 +4,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
@@ -44,9 +43,11 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
@@ -110,7 +111,7 @@ public class UserComuDaoRemoteTest {
     @Test
     public void testGetComunidadesByUser_2() throws UiException, IOException
     {
-        regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         List<Comunidad> comunidades = userComuDaoRemote.getComusByUser();
         assertThat(comunidades.size(), is(2));
         assertThat(comunidades, hasItems(COMU_REAL, COMU_LA_PLAZUELA_5));
@@ -151,7 +152,7 @@ public class UserComuDaoRemoteTest {
         cleanWithTkhandler();
         UsuarioComunidad userComu = makeUsuarioComunidad(cDb, USER_JUAN2,
                 "portalB", null, "planta1", null, PRO.function);
-        userComuDaoRemote.regUserAndUserComu(userComu).execute().body();
+        userComuMockDao.regUserAndUserComu(userComu).execute().body();
         updateSecurityData(USER_JUAN2.getUserName(), USER_JUAN2.getPassword());
 
         assertThat(userComuDaoRemote.isOldestOrAdmonUserComu(cDb.getC_Id()), is(false));
@@ -217,7 +218,7 @@ public class UserComuDaoRemoteTest {
     {
         whatClean = CLEAN_JUAN;
 
-        boolean isInserted = userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
+        boolean isInserted = userComuMockDao.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
         assertThat(isInserted, is(true));
     }
 
@@ -233,7 +234,7 @@ public class UserComuDaoRemoteTest {
 
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
-        boolean isInserted = userComuDaoRemote.regUserAndUserComu(userComu).execute().body();
+        boolean isInserted = userComuMockDao.regUserAndUserComu(userComu).execute().body();
         assertThat(isInserted, is(true));
     }
 
@@ -250,7 +251,7 @@ public class UserComuDaoRemoteTest {
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepeAgain,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
 
-        Response<Boolean> response = userComuDaoRemote.regUserAndUserComu(userComu).execute();
+        Response<Boolean> response = userComuMockDao.regUserAndUserComu(userComu).execute();
         assertThat(response.isSuccessful(), is(false));
         ErrorBean errorBean = creator.get().getRetrofitHandler().getErrorBean(response);
         assertThat(errorBean, notNullValue());
@@ -284,7 +285,7 @@ public class UserComuDaoRemoteTest {
     @Test
     public void testSeeUserComuByComu() throws Exception
     {
-        regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu()); // User1, comunidades 1 y 2, userComu 1 y 2.
+        regTwoUserComuSameUser(makeListTwoUserComu()); // User1, comunidades 1 y 2, userComu 1 y 2.
         Comunidad comunidad1 = userComuDaoRemote.getComusByUser().get(0); // User1 in session.
         assertThat(comunidad1.getNombreComunidad(), is(COMU_REAL.getNombreComunidad()));
 

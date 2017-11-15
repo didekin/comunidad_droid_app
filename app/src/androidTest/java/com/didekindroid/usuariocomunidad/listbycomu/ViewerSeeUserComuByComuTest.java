@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 
@@ -22,6 +24,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -31,7 +34,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
@@ -247,7 +249,7 @@ public class ViewerSeeUserComuByComuTest {
 
     public void checkAdapterAndHeader(int count)
     {
-        waitAtMost(6, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(6, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         SeeUserComuByComuListAdapter adapter = (SeeUserComuByComuListAdapter) HeaderViewListAdapter.class.cast(viewer.getViewInViewer().getAdapter()).getWrappedAdapter();
         assertThat(adapter.getCount(), is(count));
         waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(allOf(withId(R.id.see_usercomu_by_comu_list_header), withText(containsString(COMU_REAL.getNombreComunidad())))));

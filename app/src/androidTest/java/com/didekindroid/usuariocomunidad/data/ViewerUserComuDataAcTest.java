@@ -168,7 +168,7 @@ public class ViewerUserComuDataAcTest {
     }
 
     @Test
-    public void test_ModifyComuObserver_2()
+    public void test_ModifyComuObserver_2()        // TODO: fail.
     {
         execCheckUpdateMenu(false);
     }

@@ -10,8 +10,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import io.reactivex.functions.Predicate;
-
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
@@ -32,11 +30,11 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.is;
@@ -77,15 +75,15 @@ public class UsuarioDaoObservableTest {
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
 
-        loginSingle(new Usuario.UsuarioBuilder().userName("user@notfound.com").password(USER_DROID.getPassword()).build())
-                .test().assertError(new Predicate<Throwable>() {
-            @Override
-            public boolean test(Throwable throwable) throws Exception
-            {
-                UiException uiException = (UiException) throwable;
-                return uiException.getErrorBean().getMessage().equalsIgnoreCase(USER_NAME_NOT_FOUND.getHttpMessage());
-            }
-        });
+        loginSingle(new Usuario.UsuarioBuilder()
+                .userName("user@notfound.com")
+                .password(USER_DROID.getPassword())
+                .build())
+                .test()
+                .assertError(throwable -> {
+                    UiException uiException = (UiException) throwable;
+                    return uiException.getErrorBean().getMessage().equalsIgnoreCase(USER_NAME_NOT_FOUND.getHttpMessage());
+                });
 
         cleanOptions(CLEAN_DROID);
     }
@@ -104,7 +102,7 @@ public class UsuarioDaoObservableTest {
     @Test
     public void test_LoginUpdateTkCache_1() throws UiException, IOException
     {
-        TKhandler.updateIsRegistered(userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body());
+        TKhandler.updateIsRegistered(userComuMockDao.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body());
         checkNoInitCache(); // Precondition.
         loginUpdateTkCache(USER_DROID).test().assertResult(true);
         checkInitTokenCache();

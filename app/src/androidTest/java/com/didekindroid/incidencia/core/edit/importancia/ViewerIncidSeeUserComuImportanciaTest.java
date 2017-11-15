@@ -2,6 +2,8 @@ package com.didekindroid.incidencia.core.edit.importancia;
 
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 
 import com.didekindroid.incidencia.core.edit.CtrlerIncidEditAc;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
@@ -16,6 +18,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -31,7 +34,6 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -86,7 +88,7 @@ public class ViewerIncidSeeUserComuImportanciaTest {
         onView(withId(android.R.id.list)).check(matches(isDisplayed()));
         onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));
 
-        waitAtMost(4, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(1));
         checkImportanciaUser(importanciaUser, activity);
     }
@@ -102,7 +104,7 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     {
 
         // Preconditions.
-        waitAtMost(4, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()

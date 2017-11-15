@@ -7,22 +7,18 @@ import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Completable;
-import io.reactivex.CompletableSource;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
-import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekindroid.security.OauthTokenObservable.oauthTokenInitCacheUpdateRegister;
+import static com.didekindroid.security.TokenIdentityCacher.updateRegisterAction;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static io.reactivex.Completable.error;
+import static io.reactivex.Completable.fromAction;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
@@ -41,119 +37,65 @@ public class CtrlerUsuarioComunidad extends Controller {
     {
         Timber.d("userAndComuRegistered()");
 
-        return fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                Response<Boolean> response = userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute();
-                return getResponseBody(response);
-            }
-        }).flatMapCompletable(new Function<Boolean, CompletableSource>() {
-            @Override
-            public CompletableSource apply(Boolean isUserInDb) throws Exception
-            {
-                if (isUserInDb) {
-                    return oauthTokenInitCacheUpdateRegister(usuarioComunidad.getUsuario());
-                } else {
-                    return error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
-                }
-            }
-        });
+        return fromCallable(() -> getResponseBody(userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute()))
+                .flatMapCompletable(isUserInDb -> {
+                    if (isUserInDb) {
+                        return fromAction(() -> updateRegisterAction.accept(true));
+                    } else {
+                        return error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
+                    }
+                });
     }
 
     static Single<Boolean> userComuAndComuRegistered(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userComuAndComuRegistered()");
-        return fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                return userComuDaoRemote.regComuAndUserComu(usuarioComunidad);
-            }
-        });
+        return fromCallable(() -> userComuDaoRemote.regComuAndUserComu(usuarioComunidad));
     }
 
     static Completable userAndUserComuRegistered(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userAndUserComuRegistered");
 
-        return fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                Response<Boolean> response = userComuDaoRemote.regUserAndUserComu(usuarioComunidad).execute();
-                return getResponseBody(response);
-            }
-        }).flatMapCompletable(new Function<Boolean, CompletableSource>() {
-            @Override
-            public CompletableSource apply(Boolean isUserInDb) throws Exception
-            {
-                if (isUserInDb) {
-                    return oauthTokenInitCacheUpdateRegister(usuarioComunidad.getUsuario());
-                } else {
-                    return error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
-                }
-            }
-        });
+        return fromCallable(() -> getResponseBody(userComuDaoRemote.regUserAndUserComu(usuarioComunidad).execute()))
+                .flatMapCompletable(isUserInDb -> {
+                    if (isUserInDb) {
+                        return fromAction(() -> updateRegisterAction.accept(true));
+                    } else {
+                        return error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
+                    }
+                });
     }
 
     static Single<Integer> userComuRegistered(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userComuAndComuRegistered()");
-        return fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception
-            {
-                return userComuDaoRemote.regUserComu(usuarioComunidad);
-            }
-        });
+        return fromCallable(() -> userComuDaoRemote.regUserComu(usuarioComunidad));
     }
 
     static Single<Boolean> isOldestAdmonUser(final Comunidad comunidad)
     {
         Timber.d("isOldestAdmonUser()");
-        return fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                Timber.d("call()");
-                return userComuDaoRemote.isOldestOrAdmonUserComu(comunidad.getC_Id());
-            }
-        });
+        return fromCallable(() -> userComuDaoRemote.isOldestOrAdmonUserComu(comunidad.getC_Id()));
     }
 
     static Single<Integer> userComuModified(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userComuModified()");
-        return fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception
-            {
-                return userComuDaoRemote.modifyUserComu(usuarioComunidad);
-            }
-        });
+        return fromCallable(() -> userComuDaoRemote.modifyUserComu(usuarioComunidad));
     }
 
     Single<Integer> userComuDeleted(final Comunidad comunidad)
     {
         Timber.d("userComuDeleted()");
-        return fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception
-            {
-                return userComuDaoRemote.deleteUserComu(comunidad.getC_Id());
-            }
-        }).map(new Function<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer rowsUpdated) throws Exception
-            {
-                if (rowsUpdated == IS_USER_DELETED) {
-                    identityCacher.cleanIdentityCache();
-                    identityCacher.updateIsRegistered(false);
-                }
-                return rowsUpdated;
-            }
-        });
+        return fromCallable(() -> userComuDaoRemote.deleteUserComu(comunidad.getC_Id()))
+                .map(rowsUpdated -> {
+                    if (rowsUpdated == IS_USER_DELETED) {
+                        identityCacher.cleanIdentityCache();
+                        identityCacher.updateIsRegistered(false);
+                    }
+                    return rowsUpdated;
+                });
     }
 
     //  =======================================================================================

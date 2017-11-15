@@ -41,65 +41,36 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //    .................................... ACTIONS AND FUNCTIONS .................................
     //  ======================================================================================
 
-    public static final Function<Boolean, Boolean> cleanTokenAndUnregisterFunc = new Function<Boolean, Boolean>() {
+    public static final Function<Boolean, Boolean> cleanTokenAndUnregisterFunc = isDeletedUser -> {
+        if (isDeletedUser) {
+            TKhandler.cleanIdentityCache();
+            TKhandler.updateIsRegistered(false);
+        }
+        return isDeletedUser;
+    };
 
-        @Override
-        public Boolean apply(Boolean isDeletedUser)
-        {
-            Timber.d("cleanTokenAndUnregisterFunc.apply()");
-
-            if (isDeletedUser) {
-                TKhandler.cleanIdentityCache();
-                TKhandler.updateIsRegistered(false);
-            }
-            return isDeletedUser;
+    public static final Consumer<Boolean> cleanTkCacheConsumer = isUserModified -> {
+        if (isUserModified) {
+            TKhandler.cleanIdentityCache();
         }
     };
 
-    public static final Consumer<Boolean> cleanTkCacheConsumer = new Consumer<Boolean>() {
-        @Override
-        public void accept(Boolean isUserModified)
-        {
-            if (isUserModified) {
-                TKhandler.cleanIdentityCache();
-            }
-        }
-    };
+    public static final Consumer<Boolean> updateRegisterAction = TKhandler::updateIsRegistered;
 
-    static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
-        @Override
-        public void accept(SpringOauthToken token)
-        {
-            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
-            TKhandler.initIdentityCache(token);
-        }
-    };
+    static final Consumer<SpringOauthToken> initTokenAction = TKhandler::initIdentityCache;
 
-    static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc
-            = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
-
-        @Override
-        public Boolean apply(Boolean isLoginValid, SpringOauthToken token)
-        {
-            Timber.d("initTokenAndRegisterFunc.apply()");
-
-            boolean isUpdatedTokenData = isLoginValid && token != null;
-            if (isUpdatedTokenData) {
-                Timber.d("Updating token data ...");
-                TKhandler.initIdentityCache(token);
-                TKhandler.updateIsRegistered(true);
-            }
-            return isUpdatedTokenData;
-        }
-    };
-    static final Consumer<SpringOauthToken> initTokenUpdateRegisterAction = new Consumer<SpringOauthToken>() {
-        @Override
-        public void accept(SpringOauthToken token)
-        {
-            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
+    static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc = (isLoginValid, token) -> {
+        boolean isUpdatedTokenData = isLoginValid && token != null;
+        if (isUpdatedTokenData) {
             TKhandler.initIdentityCache(token);
             TKhandler.updateIsRegistered(true);
         }
+        return isUpdatedTokenData;
+    };
+
+    static final Consumer<SpringOauthToken> initTokenUpdateRegisterAction = token -> {
+        TKhandler.initIdentityCache(token);
+        TKhandler.updateIsRegistered(true);
     };
 
     //  ======================================================================================
@@ -126,7 +97,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
         String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
         tokenCache = (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
                 new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) :
-                new AtomicReference<SpringOauthToken>();
+                new AtomicReference<>();
     }
 
     /**

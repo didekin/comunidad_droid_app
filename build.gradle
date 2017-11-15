@@ -70,7 +70,6 @@ ext {
 
     junit = ["junit:junit:4.12"]
     testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-
     testOrchestrator =["com.android.support.test:orchestrator:1.0.1"]
 
     testRunner = ["com.android.support.test:runner:1.0.1"]
@@ -91,5 +90,5 @@ ext {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = '4.3.1'
 }

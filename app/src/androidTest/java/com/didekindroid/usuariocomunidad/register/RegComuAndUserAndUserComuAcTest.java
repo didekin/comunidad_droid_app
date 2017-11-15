@@ -98,7 +98,7 @@ public class RegComuAndUserAndUserComuAcTest {
     }
 
     @Test
-    public void testRegComuAndUserComuAndUser_OK() throws UiException, InterruptedException
+    public void testRegComuAndUserComuAndUser_OK() throws UiException, InterruptedException  // TODO: fail
     {
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         focusOnButton(activity, buttonId);

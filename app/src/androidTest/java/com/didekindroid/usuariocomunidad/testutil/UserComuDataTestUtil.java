@@ -24,6 +24,7 @@ import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,7 +35,6 @@ import static org.junit.Assert.assertThat;
  * Date: 24/11/16
  * Time: 11:38
  */
-
 public final class UserComuDataTestUtil {
 
     public static final UsuarioComunidad COMU_ESCORIAL_PEPE = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_PEPE,
@@ -62,14 +62,14 @@ public final class UserComuDataTestUtil {
 
     public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws IOException, UiException
     {
-        userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
+        userComuMockDao.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
         return usuarioDaoRemote.getUserData();
     }
 
     public static Comunidad signUpWithTkGetComu(UsuarioComunidad usuarioComunidad) throws IOException, UiException
     {
-        userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
+        userComuMockDao.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
         return userComuDaoRemote.getComusByUser().get(0);
     }
