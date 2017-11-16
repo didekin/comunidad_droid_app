@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -101,13 +100,7 @@ public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMainTest {
         bundleState.putString(user_alias.key, "MOCK_ALIAS");
 
         // Exec.
-        intentRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewerDrawer.doViewForRegUser(bundleState);
-            }
-        });
+        intentRule.getActivity().runOnUiThread(() -> viewerDrawer.doViewForRegUser(bundleState));
         // Check.
         clickNavigateUp();
         waitAtMost(6, SECONDS).until(isViewDisplayed(

@@ -2,6 +2,7 @@ package com.didekindroid.usuario.login;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -17,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -25,6 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.v4.app.TaskStackBuilder.create;
 import static com.didekindroid.R.id.login_ac_button;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
@@ -32,6 +35,8 @@ import static com.didekindroid.R.string.send_password_by_mail_NO;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -44,6 +49,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -75,6 +81,11 @@ public class LoginAcTest {
             } catch (Exception e) {
                 fail();
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext())
+                        .addParentStack(LoginAc.class)
+                        .startActivities();
+            }
         }
 
         @Override
@@ -102,6 +113,9 @@ public class LoginAcTest {
     @After
     public void cleanUp() throws UiException
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_DROID);
     }
 
@@ -119,6 +133,10 @@ public class LoginAcTest {
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withContentDescription(R.string.navigate_up_txt)).check(matches(isDisplayed()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test
@@ -133,9 +151,10 @@ public class LoginAcTest {
     public void testValidateLoginRemote_1()
     {
         typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
+        // Exec.
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
-
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
+        // Check.
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         waitAtMost(2, SECONDS).until(isActivityDying(activity), is(true));
     }
 

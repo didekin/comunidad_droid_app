@@ -106,7 +106,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
 
         if (isLoginOk) {
             Timber.d("login OK");
-            replaceComponent(new Bundle());   // TODO: llevar a Tus comunidades.
+            replaceComponent(new Bundle());
         } else {
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
