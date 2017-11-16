@@ -14,9 +14,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
-import static com.didekindroid.R.string.send_password_by_mail_NO;
-import static com.didekindroid.R.string.send_password_by_mail_YES;
-import static com.didekindroid.R.string.send_password_by_mail_dialog;
 
 /**
  * User: pedro@didekin
@@ -30,10 +27,8 @@ public final class UserEspressoTestUtil {
     {
     }
 
-    public static void typeUserDataFull(String email, String alias, String password, String passwordConfirm)
+    public static void typeUserDataFull(String email, String alias/*, String password, String passwordConfirm*/)
     {
-        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), replaceText(password));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(), replaceText(passwordConfirm));
         onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), replaceText(email));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), replaceText(alias), closeSoftKeyboard());
     }
@@ -64,13 +59,11 @@ public final class UserEspressoTestUtil {
         onView(withId(reg_usuario_password_ediT)).perform(typeText(password));
     }
 
-    public static void checkPswdSendByMailDialog()
+    public static void checkTextsInDialog(int... textsDialogs)
     {
-        onView(withText(send_password_by_mail_dialog)).inRoot(isDialog())
-                .check(matches(isDisplayed()));
-        onView(withText(send_password_by_mail_YES)).inRoot(isDialog())
-                .check(matches(isDisplayed()));
-        onView(withText(send_password_by_mail_NO)).inRoot(isDialog())
-                .check(matches(isDisplayed()));
+        for (int textsDialog : textsDialogs) {
+            onView(withText(textsDialog)).inRoot(isDialog())
+                    .check(matches(isDisplayed()));
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.login;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -23,14 +24,19 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.R.id.login_ac_button;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
+import static com.didekindroid.R.string.send_password_by_mail_NO;
+import static com.didekindroid.R.string.send_password_by_mail_YES;
+import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkPswdSendByMailDialog;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
@@ -41,9 +47,11 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -65,8 +73,16 @@ public class LoginAcTest {
             try {
                 registeredUser = signUpAndUpdateTk(COMU_REAL_DROID);
             } catch (Exception e) {
-                e.printStackTrace();
+                fail();
             }
+        }
+
+        @Override
+        protected Intent getActivityIntent()
+        {
+            Intent intent = new Intent();
+            intent.putExtra(user_name.key, USER_DROID.getUserName());
+            return intent;
         }
     };
 
@@ -80,6 +96,7 @@ public class LoginAcTest {
     public void setUp() throws Exception
     {
         activity = (LoginAc) mActivityRule.getActivity();
+        assertThat(activity.getIntent().hasExtra(user_name.key), is(true));
     }
 
     @After
@@ -93,7 +110,10 @@ public class LoginAcTest {
     @Test
     public final void testOnCreate() throws Exception
     {
-        onView(withId(reg_usuario_email_editT)).check(matches(isDisplayed()));
+        onView(allOf(
+                withId(reg_usuario_email_editT),
+                withText(USER_DROID.getUserName())
+        )).check(matches(isDisplayed()));
         onView(withId(reg_usuario_password_ediT)).check(matches(isDisplayed()));
         onView(withId(login_ac_button)).check(matches(isDisplayed()));
 
@@ -104,13 +124,7 @@ public class LoginAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnStop(activity);
-            }
-        });
+        activity.runOnUiThread(() -> getInstrumentation().callActivityOnStop(activity));
         // Check.
         assertThat(activity.viewerLogin.getController().getSubscriptions().size(), is(0));
     }
@@ -133,7 +147,7 @@ public class LoginAcTest {
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         waitAtMost(2, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(4));
-        checkPswdSendByMailDialog();
+        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES, send_password_by_mail_NO);
     }
 
     @Test   // Login NOT OK, counterWrong <= 3.

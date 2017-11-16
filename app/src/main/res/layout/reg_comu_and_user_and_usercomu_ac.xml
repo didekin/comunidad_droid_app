@@ -9,7 +9,7 @@
         <include layout="@layout/appbar_include_design"/>
 
         <LinearLayout
-            android:id="@+id/reg_comu_usuario_usuariocomu_layout"
+            android:id="@+id/reg_comu_and_user_and_usercomu_ac_layout"
             style="@style/baseLayout"
             android:layout_marginTop="@dimen/app_bar_bottom_margin"
             tools:context="com.didekindroid.com.didekindroid.usuario.RegComuAndUserAndUserComuAc">
@@ -36,7 +36,7 @@
                 tools:layout="@layout/reg_user_fr"/>
 
             <Button
-                android:id="@+id/reg_com_usuario_usuariocomu_button"
+                android:id="@+id/reg_user_plus_button"
                 style="@style/textBase.acButton1"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/reg_usercomu_ac_button_rot"/>

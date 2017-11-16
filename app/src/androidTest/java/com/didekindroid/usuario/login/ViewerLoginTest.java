@@ -3,12 +3,13 @@ package com.didekindroid.usuario.login;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -24,6 +25,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.R.string.send_password_by_mail_NO;
+import static com.didekindroid.R.string.send_password_by_mail_YES;
+import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -32,7 +36,7 @@ import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.login.ViewerLogin.newViewerLogin;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkPswdSendByMailDialog;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
@@ -56,7 +60,7 @@ public class ViewerLoginTest {
     static final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(LoginAc.class, true, true);
+    public IntentsTestRule<? extends Activity> activityRule = new IntentsTestRule<>(LoginAc.class, true, true);
 
     LoginAc activity;
     ViewerLogin viewerLogin;
@@ -65,7 +69,7 @@ public class ViewerLoginTest {
     public void setUp()
     {
         activity = (LoginAc) activityRule.getActivity();
-        viewerLogin = (ViewerLogin) newViewerLogin(activity);
+        viewerLogin = newViewerLogin(activity);
     }
 
     @Test
@@ -76,7 +80,7 @@ public class ViewerLoginTest {
     }
 
     @Test
-    public void testDoViewInViewer() throws Exception
+    public void testDoViewInViewer_1() throws Exception
     {
         Bundle bundle = new Bundle(1);
         bundle.putInt(login_counter_atomic_int.key, 2);
@@ -88,17 +92,23 @@ public class ViewerLoginTest {
         assertThat(viewerLogin.getCounterWrong().get(), is(2));
     }
 
+    @Test
+    public void testDoViewInViewer_2() throws Exception
+    {
+        // Execute.
+        activity.runOnUiThread(() -> {
+            viewerLogin.doViewInViewer(new Bundle(0), USER_DROID.getUserName());
+            // Check.
+            assertThat(((EditText) viewerLogin.getViewInViewer().findViewById(R.id.reg_usuario_email_editT))
+                    .getText().toString(), is(USER_DROID.getUserName()));
+        });
+    }
+
     @Test  // Validation: error message.
     public void testCheckLoginData_1() throws Exception
     {
         typeLoginData("user_wrong", "psw");
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewerLogin.checkLoginData();
-            }
-        });
+        activity.runOnUiThread(() -> viewerLogin.checkLoginData());
         waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
                 R.string.email_hint, R.string.password));
     }
@@ -124,16 +134,10 @@ public class ViewerLoginTest {
         viewerLogin.getCounterWrong().set(3);
         viewerLogin.usuarioBean.compareAndSet(null, new UsuarioBean("mail_wrong", null, "password_wrong", null));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewerLogin.processLoginBackInView(false);
-            }
-        });
+        activity.runOnUiThread(() -> viewerLogin.processLoginBackInView(false));
 
         waitAtMost(3, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(4));
-        checkPswdSendByMailDialog();
+        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES, send_password_by_mail_NO);
     }
 
     @Test   // Login NO ok, counterWrong <= 3.
@@ -141,13 +145,7 @@ public class ViewerLoginTest {
     {
         viewerLogin.getCounterWrong().set(2);
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewerLogin.processLoginBackInView(false);
-            }
-        });
+        activity.runOnUiThread(() -> viewerLogin.processLoginBackInView(false));
 
         waitAtMost(5, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(3));
         waitAtMost(5, SECONDS).until(isToastInView(R.string.password_wrong, activity));
@@ -157,13 +155,7 @@ public class ViewerLoginTest {
     @Test
     public void testDoDialogNegativeClick() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewerLogin.doDialogNegativeClick();
-            }
-        });
+        activity.runOnUiThread(() -> viewerLogin.doDialogNegativeClick());
 
         waitAtMost(3, SECONDS).until(isActivityDying(activity), is(true));
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
@@ -187,26 +179,14 @@ public class ViewerLoginTest {
     @Test
     public void testProcessBackSendPswdInView() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewerLogin.processBackSendPswdInView(true);
-            }
-        });
+        activity.runOnUiThread(() -> viewerLogin.processBackSendPswdInView(true));
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
     }
 
     @Test
     public void testOnErrorInObserver_1() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewerLogin.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
-            }
-        });
+        activity.runOnUiThread(() -> viewerLogin.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND))));
         waitAtMost(3, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activity));
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
     }

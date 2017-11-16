@@ -25,7 +25,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnSt
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
+import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
@@ -92,7 +92,7 @@ public class RegComuAndUserComuAcTest {
     {
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, ADM, INQ);
-        focusOnButton(activity, buttonId);
+        focusOnView(activity, buttonId);
         typeComunidadData();
         onView(withId(buttonId)).perform(scrollTo(), click());
 

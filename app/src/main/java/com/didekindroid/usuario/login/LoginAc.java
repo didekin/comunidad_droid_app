@@ -13,6 +13,7 @@ import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
 
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -22,7 +23,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Time: 10:04
  * <p>
  * Preconditions:
- * 1. The user is not necessarily registered: she might have erased the security app data.
+ * 1. The user may not be registered: there is not tokenCache initialized and it is not marked as 'registered'.
+ * 2. There may be an intent with a userName (after registering, p.e.).
  * Results:
  * 1a. If successful, the activity ComuSearchAc is presented and the security data are updated.
  * 1b. If the userName doesn't exist, the user is invited to register.
@@ -32,7 +34,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
 public class LoginAc extends AppCompatActivity {
 
     View acView;
-    ViewerLoginIf viewerLogin;
+    ViewerLogin viewerLogin;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -45,7 +47,7 @@ public class LoginAc extends AppCompatActivity {
         doToolBar(this, true);
 
         viewerLogin = ViewerLogin.newViewerLogin(this);
-        viewerLogin.doViewInViewer(savedInstanceState, null);
+        viewerLogin.doViewInViewer(savedInstanceState, getIntent().hasExtra(user_name.key) ? getIntent().getStringExtra(user_name.key) : null);
     }
 
     @Override

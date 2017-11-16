@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.CtrlerSelectListIf;
@@ -46,7 +45,7 @@ public class ViewerIncidSeeClose extends
 
     protected ViewerIncidSeeClose(View frView, AppCompatActivity activity)
     {
-        super((ListView) frView.findViewById(android.R.id.list), activity, null);
+        super(frView.findViewById(android.R.id.list), activity, null);
         emptyListView = frView.findViewById(android.R.id.empty);
         // To get visible a divider on top of the list: true.
         view.addHeaderView(new View(activity), null, true);
@@ -57,7 +56,7 @@ public class ViewerIncidSeeClose extends
         Timber.d("newViewerIncidSeeClose()");
         ViewerIncidSeeClose parentInstance = new ViewerIncidSeeClose(view, activity);
         parentInstance.setController(new CtrlerIncidSeeCloseByComu());
-        parentInstance.comuSpinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
+        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
         return parentInstance;
     }
 

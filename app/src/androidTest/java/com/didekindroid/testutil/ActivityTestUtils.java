@@ -20,7 +20,6 @@ import android.support.v7.widget.PopupMenu;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
@@ -152,6 +151,18 @@ public final class ActivityTestUtils {
         };
     }
 
+    public static Callable<Boolean> isViewDisplayed(final ViewInteraction viewInteraction)
+    {
+        return () -> {
+            try {
+                viewInteraction.check(matches(isDisplayed()));
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
+            }
+        };
+    }
+
     public static Callable<Boolean> isViewDisplayedAndPerform(final Matcher<View> viewMatcher, final ViewAction... viewActions)
     {
         return () -> {
@@ -178,18 +189,16 @@ public final class ActivityTestUtils {
         };
     }
 
-    //    ============================== BUTTONS ============================
-
-    public static int focusOnButton(Activity activity, int buttonRsId)
+    public static int focusOnView(Activity activity, int viewRsId)
     {
-        final Button button = activity.findViewById(buttonRsId);
+        final View view = activity.findViewById(viewRsId);
 
         activity.runOnUiThread(() -> {
-            button.setFocusable(true);
-            button.setFocusableInTouchMode(true);
-            button.requestFocus();
+            view.setFocusable(true);
+            view.setFocusableInTouchMode(true);
+            view.requestFocus();
         });
-        return buttonRsId;
+        return viewRsId;
     }
 
     //    ============================= CONTROLLER/Adapters ===================================

@@ -20,8 +20,8 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.PASSWORD;
 public final class UsuarioBean implements Serializable {
 
     private final String userName;
-    private final String password;
     private final String alias;
+    private final String password;
     private final String verificaPassword;
     private Usuario usuario;
 
@@ -33,17 +33,15 @@ public final class UsuarioBean implements Serializable {
         this.verificaPassword = verificaPassword;
     }
 
-    public boolean validate(Resources resources, StringBuilder errorMsg)
+    boolean validateRegUser(Resources resources, StringBuilder errorBuilder)
     {
-        boolean isValide = validateAlias(resources.getText(R.string.alias), errorMsg)
-                & validateDoublePassword(resources, errorMsg)
-                & validateUserName(resources.getText(R.string.email_hint), errorMsg);
+        boolean isValide = validateAlias(resources.getText(R.string.alias), errorBuilder)
+                & validateUserName(resources.getText(R.string.email_hint), errorBuilder);
 
         if (isValide) {
             usuario = new Usuario.UsuarioBuilder()
                     .userName(userName)
                     .alias(alias)
-                    .password(password)
                     .build();
         }
         return isValide;
@@ -93,7 +91,7 @@ public final class UsuarioBean implements Serializable {
         return isValid;
     }
 
-    private boolean validateAlias(CharSequence text, StringBuilder errorMsg)
+    boolean validateAlias(CharSequence text, StringBuilder errorMsg)
     {
         boolean isValid = ALIAS.isPatternOk(alias);
         if (!isValid) {
@@ -102,7 +100,7 @@ public final class UsuarioBean implements Serializable {
         return isValid;
     }
 
-    private boolean validateSinglePassword(Resources resources, StringBuilder errorMsg)
+    boolean validateSinglePassword(Resources resources, StringBuilder errorMsg)
     {
         boolean isValid = PASSWORD.isPatternOk(password);
         if (!isValid) {
@@ -111,7 +109,7 @@ public final class UsuarioBean implements Serializable {
         return isValid;
     }
 
-    private boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
+    boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
     {
         if (!password.trim().equals(verificaPassword)) {
             errorMsg.append(resources.getText(R.string.password))
@@ -122,7 +120,7 @@ public final class UsuarioBean implements Serializable {
         return validateSinglePassword(resources, errorMsg);
     }
 
-    private boolean validateUserName(CharSequence text, StringBuilder errorMsg)
+    boolean validateUserName(CharSequence text, StringBuilder errorMsg)
     {
         boolean isValid = EMAIL.isPatternOk(userName);
         if (!isValid) {
@@ -144,11 +142,6 @@ public final class UsuarioBean implements Serializable {
     public String getUserName()
     {
         return userName;
-    }
-
-    public String getVerificaPassword()
-    {
-        return verificaPassword;
     }
 
     public Usuario getUsuario()

@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjectedIf;
@@ -53,9 +52,9 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
         AppCompatActivity activity = parentViewer.getActivity();
         ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, activity, parentViewer);
         instance.viewerAmbitoIncidSpinner =
-                newViewerAmbitoIncidSpinner((Spinner) frView.findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
+                newViewerAmbitoIncidSpinner(frView.findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
         instance.viewerImportanciaSpinner =
-                newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
+                newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
         instance.setController(new CtrlerIncidRegEditFr());
         return instance;
     }
@@ -73,14 +72,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
         if (!canUserEraseIncidencia(resolBundle.getIncidImportancia())) {
             buttonErase.setVisibility(GONE);
         } else {
-            buttonErase.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
-                    Timber.d("mButtonErase.onClickLinkToImportanciaUsers()");
-                    onClickButtonErase();
-                }
-            });
+            buttonErase.setOnClickListener(v -> onClickButtonErase());
         }
     }
 

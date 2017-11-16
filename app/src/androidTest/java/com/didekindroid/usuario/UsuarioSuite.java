@@ -40,7 +40,7 @@ import org.junit.runners.Suite;
         UserDataAcTest.class,
         ViewerUserDataTest.class,
         // .
-        UsuarioBeanValidaTests.class,
+        UsuarioBeanTests.class,
         ViewerRegUserFrTest.class,
 
 })

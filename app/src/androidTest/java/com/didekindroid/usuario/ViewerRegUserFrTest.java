@@ -4,9 +4,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc;
 import com.didekinlib.model.usuario.Usuario;
@@ -59,13 +58,13 @@ public class ViewerRegUserFrTest {
         assertThat(ViewerRegComuUserUserComuAc.class.isInstance(fragment.viewer.getParentViewer()), is(true));
         assertThat(ChildViewersInjectorIf.class.isInstance(activity), is(true));
         ParentViewerInjectedIf parentViewer = (ParentViewerInjectedIf) fragment.viewer.getParentViewer();
-        assertThat(parentViewer.getChildViewer(ViewerRegUserFr.class), CoreMatchers.<ViewerIf>is(fragment.viewer));
+        assertThat(parentViewer.getChildViewer(ViewerRegUserFr.class), CoreMatchers.is(fragment.viewer));
     }
 
     @Test
     public void test_GetUserFromViewerOk() throws Exception
     {
-        typeUserDataFull("yo@email.com", "alias1", "password1", "password1");
+        typeUserDataFull("yo@email.com", "alias1");
         assertThat(fragment.viewer.getUserFromViewer(new StringBuilder()), allOf(
                 notNullValue(),
                 is(new Usuario.UsuarioBuilder().userName("yo@email.com").alias("alias1").password("password1").build())
@@ -75,7 +74,7 @@ public class ViewerRegUserFrTest {
     @Test
     public void test_GetUserFromViewerWrong() throws Exception
     {
-        typeUserDataFull("yo_email.com", "alias1", "password1", "password1");
+        typeUserDataFull("yo_email.com", "alias1");
         assertThat(fragment.viewer.getUserFromViewer(new StringBuilder()), nullValue());
     }
 }

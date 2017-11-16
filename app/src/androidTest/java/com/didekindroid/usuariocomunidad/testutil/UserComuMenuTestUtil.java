@@ -35,7 +35,7 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         @Override
         public void checkItemNoRegisterUser(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.reg_nueva_comunidad_ac_mn, R.id.reg_comu_usuario_usuariocomu_layout);
+            checkAppBarMenu(activity, R.string.reg_nueva_comunidad_ac_mn, R.id.reg_comu_and_user_and_usercomu_ac_layout);
         }
 
         @Override

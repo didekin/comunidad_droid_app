@@ -43,13 +43,9 @@ ext {
     sourceCompatibilityVersion = JavaVersion.VERSION_1_8
     targetCompatibilityVersion = JavaVersion.VERSION_1_8
 
-    didekinlibsVersion = 'a-0.2.2'
-
-    didekinlib_model = ":didekinlib_model-$rootProject.ext.didekinlibsVersion:@jar"
-    didekinlib_http = ":didekinlib_http-$rootProject.ext.didekinlibsVersion:@jar"
-    didekinlib_gcm = ":didekinlib_gcm-$rootProject.ext.didekinlibsVersion:@jar"
-
-    firebase_message = ['com.google.firebase:firebase-messaging:11.0.4']
+    didekinlib_model = ':didekinlib_model-a-0.2.2:@jar'
+    didekinlib_http = ':didekinlib_http-a-0.2.2:@jar'
+    didekinlib_gcm = ':didekinlib_gcm-a-0.2.2:@jar'
 
     retrofit2 = ['com.squareup.retrofit2:retrofit:2.3.0',
                  'com.squareup.retrofit2:converter-gson:2.3.0',
@@ -70,7 +66,7 @@ ext {
 
     junit = ["junit:junit:4.12"]
     testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-    testOrchestrator =["com.android.support.test:orchestrator:1.0.1"]
+    testOrchestrator = ["com.android.support.test:orchestrator:1.0.1"]
 
     testRunner = ["com.android.support.test:runner:1.0.1"]
     testRuler = ["com.android.support.test:rules:1.0.1"]
@@ -78,7 +74,6 @@ ext {
                 "com.android.support.test.espresso:espresso-intents:3.0.1",
                 "com.android.support.test.espresso:espresso-contrib:3.0.1",
                 "com.android.support.test.espresso:espresso-idling-resource:3.0.1"]
-
 
     /*test_depend_resolution = ["com.android.support:support-annotations:26.0.2",
                               "com.android.support:support-v4:26.0.2",

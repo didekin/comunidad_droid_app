@@ -21,15 +21,18 @@ import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -189,7 +192,7 @@ public class UsuarioDaoRemoteTest {
     }
 
     @Test
-    public void testPasswordSend() throws UiException, IOException
+    public void testPasswordSend_1() throws UiException, IOException
     {
         // If exception, login data are not changed.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
@@ -200,6 +203,19 @@ public class UsuarioDaoRemoteTest {
             assertThat(ue.getErrorBean().getMessage(), is(USER_NAME_NOT_FOUND.getHttpMessage()));
         }
         assertThat(usuarioDaoRemote.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
+    }
+
+    @Test
+    public void testPasswordSend_2() throws UiException, IOException
+    {
+        signUpAndUpdateTk(COMU_REAL_DROID);
+        // Exec and check.
+        assertThat(usuarioDaoRemote.sendPassword(USER_DROID.getUserName()), is(true));
+        // Login data has changed.
+        assertThat(usuarioDaoRemote.loginInternal(USER_DROID.getUserName(), USER_DROID.getPassword()), is(false));
+        // Clean.
+        assertThat(userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body(), is(true));
+
     }
 
 //    ====================== NON INTERFACE TESTS =========================

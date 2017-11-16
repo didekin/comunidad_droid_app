@@ -1,6 +1,7 @@
 package com.didekindroid.usuariocomunidad.register;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -8,6 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.ViewerRegUserFr;
+import com.didekindroid.usuario.login.LoginAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -19,35 +21,34 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.app.TaskStackBuilder.create;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.RolUi.INQ;
-import static com.didekindroid.usuariocomunidad.RolUi.PRE;
+import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAcTest.execCheckCleanDialog;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -66,10 +67,19 @@ public class ViewerRegUserAndUserComuAcTest {
     @Rule
     public IntentsTestRule<RegUserAndUserComuAc> intentRule = new IntentsTestRule<RegUserAndUserComuAc>(RegUserAndUserComuAc.class) {
         @Override
+        protected void beforeActivityLaunched()
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addParentStack(LoginAc.class).startActivities();
+            }
+        }
+
+        @Override
         protected Intent getActivityIntent()
         {
             try {
                 comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+                cleanOptions(CLEAN_TK_HANDLER);
             } catch (UiException | IOException e) {
                 fail();
             }
@@ -80,7 +90,6 @@ public class ViewerRegUserAndUserComuAcTest {
     };
 
     RegUserAndUserComuAc activity;
-    boolean isCleaned;
 
     @Before
     public void setUp() throws Exception
@@ -94,8 +103,8 @@ public class ViewerRegUserAndUserComuAcTest {
     @After
     public void tearDown() throws Exception
     {
-        if (isCleaned) {
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
         }
         cleanOptions(CLEAN_JUAN);
     }
@@ -113,39 +122,38 @@ public class ViewerRegUserAndUserComuAcTest {
                 withId(R.id.descripcion_comunidad_text),
                 withText(comunidad.getNombreComunidad())
         )).check(matches(isDisplayed()));
-        onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
     public void test_OnRegisterSuccess() throws Exception
     {
-        activity.viewer.onRegisterSuccess(comunidad.getC_Id());
-        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
-        intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
+        /* Precondition: the user is registered and the cache is NOT initialized.*/
+        activity.viewer.getController().updateIsRegistered(true);
+        // Exec.
+        activity.viewer.onRegisterSuccess(COMU_PLAZUELA5_PEPE);
+        // Check.
+        checkTextsInDialog(R.string.receive_password_by_mail_dialog, R.string.continuar_button_rot);
     }
 
     @Test
     public void test_RegUserAndUserComuButtonListener_1() throws Exception
     {
-        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword(), USER_PEPE.getPassword());
-        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo(), click());
-
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
-        cleanOptions(CLEAN_JUAN_AND_PEPE);
-        isCleaned = true;
+        // Precondition:
+        assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
+        // Data, exec and check.
+        execCheckCleanDialog(activity.viewer);
     }
 
     @Test
     public void test_RegUserAndUserComuButtonListener_2() throws Exception
     {
-        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword(), "password_error");
-        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo(), click());
+        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias());
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5");
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
-                R.string.password_different,
-                R.string.password));
+                R.string.reg_usercomu_role_rot));
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

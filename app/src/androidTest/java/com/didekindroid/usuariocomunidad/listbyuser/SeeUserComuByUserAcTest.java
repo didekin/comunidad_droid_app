@@ -119,7 +119,7 @@ public class SeeUserComuByUserAcTest {
         assertThat(adapter.getItem(2), is(COMU_PLAZUELA5_PEPE));
 
         for (int i = 0; i < adapter.getCount(); ++i) {
-            onView(withAdaptedData(Matchers.<Object>is(adapter.getItem(i)))).check(matches(isDisplayed()));
+            onView(withAdaptedData(Matchers.is(adapter.getItem(i)))).check(matches(isDisplayed()));
         }
     }
 

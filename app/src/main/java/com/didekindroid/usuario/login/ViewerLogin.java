@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.login;
 
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -13,8 +12,8 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
@@ -40,9 +39,8 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLoginIf {
+final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
 
-    @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
     private AtomicInteger counterWrong;
 
@@ -53,10 +51,10 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         usuarioBean = new AtomicReference<>(null);
     }
 
-    static ViewerLoginIf newViewerLogin(LoginAc activity)
+    static ViewerLogin newViewerLogin(LoginAc activity)
     {
         Timber.d("newViewerLogin()");
-        ViewerLoginIf instance = new ViewerLogin(activity);
+        ViewerLogin instance = new ViewerLogin(activity);
         instance.setController(new CtrlerUsuario());
         return instance;
     }
@@ -66,6 +64,9 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
     {
         Timber.d("doViewInViewer()");
 
+        if (viewBean != null) {
+            ((EditText) view.findViewById(R.id.reg_usuario_email_editT)).setText(String.class.cast(viewBean));
+        }
         Button mLoginButton = view.findViewById(R.id.login_ac_button);
         mLoginButton.setOnClickListener(new LoginButtonListener());
         if (savedState != null) {
@@ -73,8 +74,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         }
     }
 
-    @Override
-    public boolean checkLoginData()
+    boolean checkLoginData()
     {
         Timber.i("checkLoginData()");
         usuarioBean.set(new UsuarioBean(getLoginDataFromView()[0], null, getLoginDataFromView()[1], null));
@@ -100,14 +100,13 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         };
     }
 
-    @Override
-    public void processLoginBackInView(boolean isLoginOk)
+    void processLoginBackInView(boolean isLoginOk)
     {
         Timber.d("processLoginBackInView()");
 
         if (isLoginOk) {
             Timber.d("login OK");
-            replaceComponent(new Bundle());
+            replaceComponent(new Bundle());   // TODO: llevar a Tus comunidades.
         } else {
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
@@ -126,8 +125,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
-    @Override
-    public AppCompatDialog doDialogInViewer(final LoginAc.PasswordMailDialog dialogFragment)
+    AppCompatDialog doDialogInViewer(final LoginAc.PasswordMailDialog dialogFragment)
     {
         Timber.d("doDialogInViewer()");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.alertDialogTheme);
@@ -135,37 +133,29 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         builder.setMessage(R.string.send_password_by_mail_dialog)
                 .setPositiveButton(
                         R.string.send_password_by_mail_YES,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.dismiss();
-                                doDialogPositiveClick((Usuario) dialogFragment.getArguments().getSerializable(usuario_object.key));
-                            }
+                        (dialog, id) -> {
+                            dialog.dismiss();
+                            doDialogPositiveClick((Usuario) dialogFragment.getArguments().getSerializable(usuario_object.key));
                         }
                 )
                 .setNegativeButton(
                         R.string.send_password_by_mail_NO,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.dismiss();
-                                makeToast(getActivity(), R.string.login_wrong_no_mail);
-                                doDialogNegativeClick();
-                            }
+                        (dialog, id) -> {
+                            dialog.dismiss();
+                            makeToast(getActivity(), R.string.login_wrong_no_mail);
+                            doDialogNegativeClick();
                         }
                 );
         return builder.create();
     }
 
-    @Override
-    public void doDialogNegativeClick()
+    void doDialogNegativeClick()
     {
         Timber.d("doDialogNegativeClick()");
         replaceComponent(new Bundle());
     }
 
-    @Override
-    public void doDialogPositiveClick(Usuario usuario)
+    void doDialogPositiveClick(Usuario usuario)
     {
         Timber.d("sendNewPassword()");
         controller.sendNewPassword(new LoginObserver() {
@@ -178,8 +168,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         }, usuario);
     }
 
-    @Override
-    public void processBackSendPswdInView(boolean isSendPassword)
+    void processBackSendPswdInView(boolean isSendPassword)
     {
         Timber.d("processBackSendPswdInView()");
         if (isSendPassword) {
@@ -188,6 +177,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         }
     }
 
+    @SuppressWarnings("ThrowableNotThrown")
     @Override
     public void onErrorInObserver(Throwable error)
     {
@@ -209,8 +199,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         savedState.putInt(login_counter_atomic_int.key, counterWrong.get());
     }
 
-    @Override
-    public AtomicInteger getCounterWrong()
+    AtomicInteger getCounterWrong()
     {
         Timber.d("getCounterWrong()");
         return counterWrong;

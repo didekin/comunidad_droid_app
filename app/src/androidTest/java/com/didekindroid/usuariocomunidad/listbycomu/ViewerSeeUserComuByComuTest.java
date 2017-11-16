@@ -235,13 +235,9 @@ public class ViewerSeeUserComuByComuTest {
     public void test_OnSuccessComunidadData() throws Exception
     {
         final String testTxt = "testNombre";
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessComunidadData(testTxt);
-                assertThat(viewer.nombreComuView.getText().toString(), is(testTxt));
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessComunidadData(testTxt);
+            assertThat(viewer.nombreComuView.getText().toString(), is(testTxt));
         });
     }
 
@@ -257,13 +253,7 @@ public class ViewerSeeUserComuByComuTest {
 
     public void runAndCheckAdapterAndHeader(final List<UsuarioComunidad> list, int rowCount)
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadItems(list);
-            }
-        });
+        activity.runOnUiThread(() -> viewer.onSuccessLoadItems(list));
         checkAdapterAndHeader(rowCount);
     }
 }

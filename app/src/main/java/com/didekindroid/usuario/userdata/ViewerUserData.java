@@ -93,14 +93,9 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         oldUser.set(usuario);
 
         Button modifyButton = view.findViewById(R.id.user_data_modif_button);
-        modifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("modifyButton.OnClickListener().onClick()");
-                if (checkUserData()) {
-                    modifyUserData(whatDataChangeToMake());
-                }
+        modifyButton.setOnClickListener(v -> {
+            if (checkUserData()) {
+                modifyUserData(whatDataChangeToMake());
             }
         });
 

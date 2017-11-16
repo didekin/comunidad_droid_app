@@ -38,12 +38,9 @@ public class ViewerRegUserFr extends Viewer<View, Controller> {
                         .toString(),
                 ((EditText) view.findViewById(R.id.reg_usuario_alias_ediT)).getText()
                         .toString(),
-                ((EditText) view.findViewById(R.id.reg_usuario_password_ediT)).getText()
-                        .toString(),
-                ((EditText) view.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText()
-                        .toString()
+                null, null
         );
-        if (usuarioBean.validate(activity.getResources(), errorBuilder)) {
+        if (usuarioBean.validateRegUser(activity.getResources(), errorBuilder)) {
             return usuarioBean.getUsuario();
         } else {
             return null;

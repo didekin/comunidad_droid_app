@@ -98,7 +98,7 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
     public Call<Boolean> passwordSend(String deviceLanguage, String userName)
     {
         Timber.d("passwordSend()");
-        return endPoint.passwordSend(deviceLanguage, userName);       // TODO: test.
+        return endPoint.passwordSend(deviceLanguage, userName);
     }
 
 //  =============================================================================

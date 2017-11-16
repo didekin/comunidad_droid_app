@@ -8,9 +8,9 @@
         style="@style/textBase.textPageLabel1"
         android:text="@string/reg_usuario_rotulo"/>
 
-    <include
+    <!--<include
         android:id="@+id/reg_user_fr_password_include"
-        layout="@layout/password_include"/>
+        layout="@layout/password_include"/>-->
 
     <include
         android:id="@+id/reg_user_fr_user_data_include"

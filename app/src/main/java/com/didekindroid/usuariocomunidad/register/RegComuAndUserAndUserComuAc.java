@@ -26,7 +26,6 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The comunidad has not been registered either, by other users.
  * 3. There is not extras in the activity intent.
  */
-// TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
 public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         ChildViewersInjectorIf {
 

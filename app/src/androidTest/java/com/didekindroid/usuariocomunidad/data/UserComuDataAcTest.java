@@ -2,12 +2,10 @@ package com.didekindroid.usuariocomunidad.data;
 
 import android.content.Intent;
 import android.support.test.espresso.NoActivityResumedException;
-import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -176,6 +174,7 @@ public class UserComuDataAcTest {
     public void testComuDataMn() throws InterruptedException
     {
         // Only one user associated to the comunidad: the menu shows the item.
+        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showComuDataMn);
         COMU_DATA_AC.checkItemRegisterUser(activity);
         intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);

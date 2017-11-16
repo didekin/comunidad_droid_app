@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.didekindroid.R;
@@ -65,18 +64,13 @@ public class SeeUserComuByUserFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
         activity = getActivity();
         mListener = (SeeUserComuByUserFrListener) activity;
-        fragmentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                Timber.d("onItemClick()");
-                fragmentView.setItemChecked(position, true);
-                view.setSelected(true);
+        fragmentView.setOnItemClickListener((parent, view, position, id) -> {
+            fragmentView.setItemChecked(position, true);
+            view.setSelected(true);
 
-                if (mListener != null) {
-                    UsuarioComunidad intentUserComuData = (UsuarioComunidad) fragmentView.getItemAtPosition(position);
-                    mListener.onUserComuSelected(intentUserComuData, position);
-                }
+            if (mListener != null) {
+                UsuarioComunidad intentUserComuData = (UsuarioComunidad) fragmentView.getItemAtPosition(position);
+                mListener.onUserComuSelected(intentUserComuData, position);
             }
         });
     }
@@ -93,6 +87,7 @@ public class SeeUserComuByUserFr extends Fragment {
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
+    @FunctionalInterface
     interface SeeUserComuByUserFrListener {
         void onUserComuSelected(UsuarioComunidad userComu, int position);
     }

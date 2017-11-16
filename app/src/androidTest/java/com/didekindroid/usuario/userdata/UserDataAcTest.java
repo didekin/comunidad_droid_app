@@ -47,7 +47,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
+import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
@@ -269,7 +269,7 @@ public class UserDataAcTest {
     public void typeClickWait()
     {
         typeUserData("new@username.com", "new_alias", USER_JUAN.getPassword());
-        focusOnButton(activity, user_data_modif_button);
+        focusOnView(activity, user_data_modif_button);
         onView(withId(user_data_modif_button)).perform(scrollTo(), click());
 
         waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));

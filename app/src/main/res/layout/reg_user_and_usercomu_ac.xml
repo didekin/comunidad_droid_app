@@ -29,7 +29,7 @@
                 tools:layout="@layout/reg_user_fr"/>
 
             <Button
-                android:id="@+id/reg_user_usercomu_button"
+                android:id="@+id/reg_user_plus_button"
                 style="@style/textBase.acButton1"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/reg_usercomu_ac_button_rot"/>

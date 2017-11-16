@@ -71,10 +71,10 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(IncidEditAc.class, IncidSeeOpenByComuAc.class);
         acRouterMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
         acRouterMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
-        acRouterMap.put(LoginAc.class, ComuSearchAc.class);
-        acRouterMap.put(RegComuAndUserAndUserComuAc.class, SeeUserComuByUserAc.class);
+        acRouterMap.put(LoginAc.class, SeeUserComuByUserAc.class);
+        acRouterMap.put(RegComuAndUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
-        acRouterMap.put(RegUserAndUserComuAc.class, SeeUserComuByUserAc.class);
+        acRouterMap.put(RegUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(UserComuDataAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
