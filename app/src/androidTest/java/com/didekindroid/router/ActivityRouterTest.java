@@ -11,8 +11,11 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ActivityNextMock;
+import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.testutil.ActivityTestUtils;
+import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc;
 
 import org.junit.After;
 import org.junit.Rule;
@@ -24,13 +27,14 @@ import java.util.Collection;
 import timber.log.Timber;
 
 import static android.content.Context.ACTIVITY_SERVICE;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.runner.lifecycle.Stage.RESUMED;
-import static com.didekindroid.router.ActivityRouter.NULL_MENU_ITEM;
-import static com.didekindroid.router.ActivityRouter.acByDefaultNoRegUser;
-import static com.didekindroid.router.ActivityRouter.acByDefaultRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultNoRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultRegUser;
 import static com.didekindroid.router.ActivityRouter.acRouter;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.getActivitesInTaskByStage;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static org.hamcrest.CoreMatchers.is;
@@ -66,32 +70,46 @@ public class ActivityRouterTest {
     {
         // No registered user.
         assertThat(TKhandler.isRegisteredUser(), is(false));
-        assertThat(acRouter.nextActivityFromMn(NULL_MENU_ITEM).equals(acByDefaultNoRegUser), is(true));
+        assertThat(acRouter.nextActivityFromMn(-1).equals(defaultNoRegUser.activityToGo), is(true));
+        assertThat(acRouter.nextActivityFromMn(R.id.reg_nueva_comunidad_ac_mn).equals(RegComuAndUserAndUserComuAc.class), is(true));
 
         // Registered user.
         TKhandler.updateIsRegistered(true);
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(acRouter.nextActivityFromMn(NULL_MENU_ITEM).equals(acByDefaultRegUser), is(true));
+        assertThat(acRouter.nextActivityFromMn(-1).equals(defaultRegUser.activityToGo), is(true));
+        assertThat(acRouter.nextActivityFromMn(R.id.reg_nueva_comunidad_ac_mn).equals(RegComuAndUserComuAc.class), is(true));
     }
 
     @Test
-    public void test_DoUpMenu() throws Exception
+    public void test_NextActivity() throws Exception
+    {
+        assertThat(acRouter.nextActivity(ComuDataAc.class).equals(SeeUserComuByUserAc.class), is(true));
+    }
+
+    @Test
+    public void test_DoUpMenu_1() throws Exception
     {
         ActivityMock activityMock = activityRule.getActivity();
         ActivityManager manager = (ActivityManager) activityMock.getSystemService(ACTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             manager.getAppTasks().get(0).startActivity(activityMock, new Intent(activityMock, ActivityNextMock.class), new Bundle(0));
             // Calling indirectly the method to test.
             checkUp(R.id.mock_ac_layout);
 
             Timber.d("============= Checking parent activity =================");
 
-            Collection<Activity> activities = ActivityTestUtils.getActivitesInTaskByStage(RESUMED);
+            Collection<Activity> activities = getActivitesInTaskByStage(RESUMED);
             assertThat(activities.size(), is(1));
             for (Activity next : activities) {
                 assertThat(next.getComponentName().getClassName(), is(ActivityMock.class.getCanonicalName()));
                 assertThat(next.getIntent().getStringExtra("keyTest_2"), is("Value_keyTest_2"));
             }
         }
+    }
+
+    @Test
+    public void test_DoUpMenu_2() throws Exception
+    {
+        // TODO: implementar opciones 1 y 2 directamente llamando al método.
     }
 }

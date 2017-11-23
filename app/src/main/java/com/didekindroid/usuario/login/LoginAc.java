@@ -1,20 +1,16 @@
 package com.didekindroid.usuario.login;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialog;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityRouter;
-import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
 
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -82,30 +78,6 @@ public class LoginAc extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    // ============================================================
-    //    ................ ERROR DIALOG .................
-    // ============================================================
-
-    public static class PasswordMailDialog extends DialogFragment {
-
-        public static PasswordMailDialog newInstance(Usuario usuario)
-        {
-            Timber.d("newInstance()");
-            PasswordMailDialog dialog = new PasswordMailDialog();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(usuario_object.key, usuario);
-            dialog.setArguments(bundle);
-            return dialog;
-        }
-
-        @Override
-        public AppCompatDialog onCreateDialog(Bundle savedInstanceState)
-        {
-            Timber.d("onCreateDialog()");
-            return ((LoginAc) getActivity()).viewerLogin.doDialogInViewer(this);
         }
     }
 }

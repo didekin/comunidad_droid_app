@@ -11,7 +11,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekindroid.util.ConnectionUtils;
@@ -39,7 +39,8 @@ import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
  * Time: 09:27
  */
 
-final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
+final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> implements
+        ActivityInitiatorIf {
 
     @SuppressWarnings("WeakerAccess")
     UsuarioComunidad userComuIntent;
@@ -123,7 +124,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
     class AcMenuObserver extends UserComuDataObserver<Boolean> {
 
         /**
-         *  Postcondition: flag for showing the ComunidadDataAc menu option is initialized.
+         * Postcondition: flag for showing the ComunidadDataAc menu option is initialized.
          */
         @Override
         public void onSuccess(Boolean hasComuDataModPower)
@@ -137,7 +138,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
     class ModifyUserComuObserver extends UserComuDataObserver<Integer> {
 
         /**
-         *  This variable is initialized with the roles in the new UsuarioComuidad instance to be used in the modification.
+         * This variable is initialized with the roles in the new UsuarioComuidad instance to be used in the modification.
          */
         private final boolean upDateMenu;
 
@@ -147,16 +148,16 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
         }
 
         /**
-         *  Postcondition: flag for showing the ComunidadDataAc menu option is updated.
-         *  It may happen that if a user change her roles to NO ADM roles, although she continues to be the oldest user,
-         *  the flag would signal NOT to show the ComunidadDataAc menu option.
+         * Postcondition: flag for showing the ComunidadDataAc menu option is updated.
+         * It may happen that if a user change her roles to NO ADM roles, although she continues to be the oldest user,
+         * the flag would signal NOT to show the ComunidadDataAc menu option.
          */
         @Override
         public void onSuccess(Integer rowsUpdated)
         {
             Timber.d("onSuccess()");
             showComuDataMn.set(rowsUpdated == 1 && upDateMenu);
-            new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+            initAcFromActivity(new Bundle(0));
         }
     }
 
@@ -175,7 +176,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
                 activity.startActivity(intent);
                 activity.finish();
             } else {
-                new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+                initAcFromActivity(new Bundle(0));
             }
         }
     }

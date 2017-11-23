@@ -10,7 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.ActionForUiException;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.userdata.UserDataAc;
@@ -23,6 +23,8 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.modifyPswd;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.sendNewPswd;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
@@ -40,9 +42,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Date: 21/03/17
  * Time: 20:08
  */
-
-@SuppressWarnings("ClassWithOnlyPrivateConstructors")
-public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
+public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> implements ActivityInitiatorIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -74,10 +74,22 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
 
         Button modifyButton = view.findViewById(R.id.password_change_ac_button);
-        modifyButton.setOnClickListener(new ModifyPswdButtonListener());
+        modifyButton.setOnClickListener(
+                v -> {
+                    if (checkLoginData()) {
+                        controller.changePassword(
+                                new PswdChangeCompletableObserver(),
+                                oldUserPswd.get(),
+                                usuarioBean.get().getUsuario()
+                        );
+                    }
+                }
+        );
 
         Button sendPswdButton = view.findViewById(R.id.password_send_ac_button);
-        sendPswdButton.setOnClickListener(new SendNewPswdButtonListener());
+        sendPswdButton.setOnClickListener(
+                v -> controller.sendNewPassword(new PswdSendSingleObserver(), new Usuario.UsuarioBuilder().userName(userName).build())
+        );
     }
 
     boolean checkLoginData()
@@ -131,24 +143,15 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         }
     }
 
-    // ............................ SUBSCRIBERS ..................................
+    // ...................... SUBSCRIBERS .........................
 
-    @SuppressWarnings("WeakerAccess")
     class PswdChangeCompletableObserver extends DisposableCompletableObserver {
-
-        View.OnClickListener listener;
-
-        public PswdChangeCompletableObserver(ModifyPswdButtonListener modifyPswdButtonListener)
-        {
-            listener = modifyPswdButtonListener;
-        }
-
         @Override
         public void onComplete()
         {
             Timber.d("onComplete(), Thread: %s", Thread.currentThread().getName());
             makeToast(activity, R.string.password_remote_change);
-            new ActivityInitiator(activity).initAcFromListener(new Bundle(0), listener.getClass());
+            initAcFromListener(null, modifyPswd);
         }
 
         @Override
@@ -159,15 +162,7 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
     class PswdSendSingleObserver extends DisposableSingleObserver<Boolean> {
-
-        View.OnClickListener listener;
-
-        public PswdSendSingleObserver(SendNewPswdButtonListener sendNewPswdButtonListener)
-        {
-            listener = sendNewPswdButtonListener;
-        }
 
         @Override
         public void onSuccess(@io.reactivex.annotations.NonNull Boolean isSendPassword)
@@ -176,7 +171,7 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
             if (isSendPassword) {
                 makeToast(activity, R.string.password_new_in_login);
             }
-            new ActivityInitiator(activity).initAcFromListener(new Bundle(0), listener.getClass());
+            initAcFromListener(null, sendNewPswd);
         }
 
         @Override
@@ -184,36 +179,6 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         {
             Timber.d("onError");
             onErrorInObserver(e);
-        }
-    }
-
-    // ............................ HELPER CLASSES AND METHODS ..................................
-
-    @SuppressWarnings("WeakerAccess")
-    public class ModifyPswdButtonListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v)
-        {
-            Timber.d("onClick()");
-            if (checkLoginData()) {
-                controller.changePassword(
-                        new PswdChangeCompletableObserver(this),
-                        oldUserPswd.get(),
-                        usuarioBean.get().getUsuario()
-                );
-            }
-        }
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public class SendNewPswdButtonListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view)
-        {
-            Timber.d("onClick()");
-            controller.sendNewPassword(
-                    new PswdSendSingleObserver(this),
-                    new Usuario.UsuarioBuilder().userName(userName).build());
         }
     }
 }

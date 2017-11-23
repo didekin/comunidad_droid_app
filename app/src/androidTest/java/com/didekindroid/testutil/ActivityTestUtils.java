@@ -408,7 +408,7 @@ public final class ActivityTestUtils {
         }
         final Bundle finalBundle = bundle;
 
-        viewer.getActivity().runOnUiThread(() -> new ActivityInitiator(viewer.getActivity()).initAcWithBundle(finalBundle));
+        viewer.getActivity().runOnUiThread(() -> new ActivityInitiator(viewer.getActivity()).initAcFromActivity(finalBundle));
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(resorceIdNextView)));
     }
 

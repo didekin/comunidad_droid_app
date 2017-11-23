@@ -107,13 +107,7 @@ public class ViewerPasswordChangeTest {
         // Caso WRONG: We test the change to false.
         typePswdData("password1", "password2");
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.checkLoginData();
-            }
-        });
+        activity.runOnUiThread(() -> viewer.checkLoginData());
         waitAtMost(4L, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.password_different));
     }
 
@@ -123,13 +117,7 @@ public class ViewerPasswordChangeTest {
         // Caso WRONG: wrong format for current password.
         typePswdDataWithPswdValidation("password1", "password1", "wrong+password");
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.checkLoginData();
-            }
-        });
+        activity.runOnUiThread(() -> viewer.checkLoginData());
         waitAtMost(4L, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 
@@ -140,13 +128,7 @@ public class ViewerPasswordChangeTest {
         final AtomicBoolean isPswdDataOk = new AtomicBoolean(false);
         typePswdDataWithPswdValidation("password1", "password1", USER_PEPE.getPassword());
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(isPswdDataOk.getAndSet(viewer.checkLoginData()), is(false));
-            }
-        });
+        activity.runOnUiThread(() -> assertThat(isPswdDataOk.getAndSet(viewer.checkLoginData()), is(false)));
         waitAtMost(2, SECONDS).untilTrue(isPswdDataOk);
     }
 
@@ -162,13 +144,7 @@ public class ViewerPasswordChangeTest {
     @Test
     public void testOnErrorInObserver_1() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
-            }
-        });
+        activity.runOnUiThread(() -> viewer.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND))));
         waitAtMost(3, SECONDS).until(isToastInView(R.string.user_email_wrong, activity));
         onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
     }
@@ -176,13 +152,7 @@ public class ViewerPasswordChangeTest {
     @Test
     public void testOnErrorInObserver_2() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onErrorInObserver(new UiException(new ErrorBean(PASSWORD_NOT_SENT)));
-            }
-        });
+        activity.runOnUiThread(() -> viewer.onErrorInObserver(new UiException(new ErrorBean(PASSWORD_NOT_SENT))));
         waitAtMost(3, SECONDS).until(isToastInView(R.string.user_email_wrong, activity));
         onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
     }
@@ -190,13 +160,7 @@ public class ViewerPasswordChangeTest {
     @Test
     public void testOnErrorInObserver_3() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onErrorInObserver(new UiException(new ErrorBean(BAD_REQUEST)));
-            }
-        });
+        activity.runOnUiThread(() -> viewer.onErrorInObserver(new UiException(new ErrorBean(BAD_REQUEST))));
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_wrong, activity));
         onView(withId(pswdChangeAcRsId)).check(matches(isDisplayed()));
     }
@@ -206,13 +170,7 @@ public class ViewerPasswordChangeTest {
     @Test
     public void test_PswdChangeCompletableObserver_Complete()
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                complete().subscribeWith(viewer.new PswdChangeCompletableObserver(viewer.new ModifyPswdButtonListener()));
-            }
-        });
+        activity.runOnUiThread(() -> complete().subscribeWith(viewer.new PswdChangeCompletableObserver()));
         waitAtMost(2, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
@@ -220,13 +178,7 @@ public class ViewerPasswordChangeTest {
     @Test
     public void test_PswdSendSingleObserver_Succcess()
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                just(true).subscribeWith(viewer.new PswdSendSingleObserver(viewer.new SendNewPswdButtonListener()));
-            }
-        });
+        activity.runOnUiThread(() -> just(true).subscribeWith(viewer.new PswdSendSingleObserver()));
         waitAtMost(2, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
     }

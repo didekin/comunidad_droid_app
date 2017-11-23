@@ -13,9 +13,6 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.edit.IncidEditAc;
-import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;
@@ -39,6 +36,10 @@ import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidenci
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.closeIncidencia;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.closeIncidenciaError;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.modifyResolucion;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.modifyResolucionError;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
@@ -65,26 +66,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_resolucion_edit_fr, container, false);
         resolucionBean = new ResolucionBean();
-        fechaViewForPicker = initFechaViewForPicker(this, (TextView) frView.findViewById(R.id.incid_resolucion_fecha_view));
+        fechaViewForPicker = initFechaViewForPicker(this, frView.findViewById(R.id.incid_resolucion_fecha_view));
 
         Button mModifyButton = frView.findViewById(R.id.incid_resolucion_fr_modif_button);
-        mModifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-                modifyResolucion(false);
-            }
-        });
+        mModifyButton.setOnClickListener(v -> modifyResolucion(false));
         Button mCloseIncidButton = frView.findViewById(R.id.incid_resolucion_edit_fr_close_button);
-        mCloseIncidButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-                modifyResolucion(true);
-            }
-        });
+        mCloseIncidButton.setOnClickListener(v -> modifyResolucion(true));
 
         return frView;
     }
@@ -219,14 +206,14 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
+                Intent intent = new Intent(getActivity(), modifyResolucionError.getActivityToGo());
                 intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
-                Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                intent.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                startActivity(intent);
+                Bundle bundle = new Bundle(1);
+                bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
+                initAcFromListener(bundle, modifyResolucion);
             }
         }
     }
@@ -258,13 +245,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
+                Intent intent = new Intent(getActivity(), closeIncidenciaError.getActivityToGo());
                 intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
-                Intent intent = new Intent(getActivity(), IncidSeeClosedByComuAc.class);
-                startActivity(intent);
+                initAcFromListener(null, closeIncidencia);
             }
         }
     }

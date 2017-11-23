@@ -13,7 +13,7 @@ import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -33,7 +33,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> implements
-        ModIncidImportanciaCallableBack {
+        ModIncidImportanciaCallableBack, ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;
     IncidenciaBean incidenciaBean;
@@ -66,14 +66,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
         ((TextView) view.findViewById(R.id.incid_comunidad_txt)).setText(resolBundle.getIncidImportancia().getIncidencia().getComunidad().getNombreComunidad());
 
         Button buttonModify = view.findViewById(R.id.incid_edit_fr_modif_button);
-        buttonModify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("onClickLinkToImportanciaUsers()");
-                onClickButtonModify();
-            }
-        });
+        buttonModify.setOnClickListener(v -> onClickButtonModify());
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -97,7 +90,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
     public void onSuccessModifyIncidImportancia(int rowInserted)
     {
         Timber.d("onSuccessModifyIncidImportancia()");
-        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+        initAcFromActivity(new Bundle(0));
     }
 
     //    ============================  LIFE CYCLE   ===================================

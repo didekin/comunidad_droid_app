@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -30,7 +30,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegEditFr> {
+public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegEditFr> implements ActivityInitiatorIf {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
@@ -57,7 +57,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
 
         viewerFirebaseToken.checkGcmTokenAsync();
-        Button registerButton = (Button) activity.findViewById(R.id.incid_reg_ac_button);
+        Button registerButton = activity.findViewById(R.id.incid_reg_ac_button);
         registerButton.setOnClickListener(new RegButtonOnClickListener());
     }
 
@@ -79,7 +79,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
     public void onSuccessRegisterIncidImportancia()
     {
         Timber.d("onSuccessRegisterIncidImportancia()");
-        replaceComponent(new Bundle());
+        initAcFromActivity(null);
     }
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)
@@ -94,12 +94,6 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
     }
 
 //  ................................... HELPERS ......................................
-
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initAcWithBundle(bundle);
-    }
 
     @SuppressWarnings("WeakerAccess")
     class RegButtonOnClickListener implements View.OnClickListener {

@@ -199,14 +199,10 @@ public class UserDataAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnStop(activity);
-                // Check.
-                assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
-            }
+        activity.runOnUiThread(() -> {
+            getInstrumentation().callActivityOnStop(activity);
+            // Check.
+            assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
         });
     }
 

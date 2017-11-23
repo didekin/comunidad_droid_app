@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -27,6 +25,8 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.regResolucion;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.regResolucionDuplicate;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -51,17 +51,10 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_resolucion_reg_frg, container, false);
         resolucionBean = new ResolucionBean();
-        fechaViewForPicker = initFechaViewForPicker(this, (TextView) frView.findViewById(R.id.incid_resolucion_fecha_view));
+        fechaViewForPicker = initFechaViewForPicker(this, frView.findViewById(R.id.incid_resolucion_fecha_view));
 
         Button mConfirmButton = frView.findViewById(R.id.incid_resolucion_reg_ac_button);
-        mConfirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-                registerResolucion();
-            }
-        });
+        mConfirmButton.setOnClickListener(v -> registerResolucion());
         return frView;
     }
 
@@ -128,14 +121,10 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 //    .................................... INNER CLASSES .................................
 //    ============================================================================================
 
-    private class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
+    class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;
         Resolucion resolucion;
-
-        ResolucionRegister()
-        {
-        }
 
         @Override
         protected Integer doInBackground(Resolucion... params)
@@ -161,16 +150,16 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
             if (uiException != null) {
                 Intent intent = null;
-                if (uiException.getErrorBean().getMessage().equals(RESOLUCION_DUPLICATE.getHttpMessage())){
-                    intent = new Intent(getActivity(), IncidEditAc.class);
+                if (uiException.getErrorBean().getMessage().equals(RESOLUCION_DUPLICATE.getHttpMessage())) {
+                    intent = new Intent(getActivity(), regResolucionDuplicate.getActivityToGo());
                     intent.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null));
                 }
                 uiException.processMe(getActivity(), intent == null ? new Intent() : intent);
             } else {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
-                Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                intent.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                startActivity(intent);
+                Bundle bundle = new Bundle(1);
+                bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
+                initAcFromListener(bundle, regResolucion);
             }
         }
     }

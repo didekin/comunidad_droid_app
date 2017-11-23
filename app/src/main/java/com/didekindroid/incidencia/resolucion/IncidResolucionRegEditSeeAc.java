@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.router.FragmentInitiator;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -75,9 +76,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         }
 
         fragmentToAdd.setArguments(argsFragment);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.incid_resolucion_fragment_container_ac, fragmentToAdd, incid_resolucion_ac_frgs_tag)
-                .commit();
+        new FragmentInitiator(this, R.id.incid_resolucion_fragment_container_ac).initFragment(fragmentToAdd, incid_resolucion_ac_frgs_tag);
     }
 
     @Override

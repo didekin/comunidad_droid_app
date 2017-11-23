@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -52,7 +52,7 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
     static ViewerDrawerMain newViewerDrawerMain(AppCompatActivity activity)
     {
         Timber.d("newViewerDrawerMain()");
-        ViewerDrawerMain instance = new ViewerDrawerMain(activity.<DrawerLayout>findViewById(R.id.drawer_main_layout), activity);
+        ViewerDrawerMain instance = new ViewerDrawerMain(activity.findViewById(R.id.drawer_main_layout), activity);
         instance.setController(new CtrlerUsuario());
         return instance;
     }
@@ -128,7 +128,7 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
         confidencialidad(R.id.confidencialidad_ac_mn),
         default_menu(-11) {
             @Override
-            void processMenu(Activity activity, MenuItem menuItem)
+            void processMenu(DrawerMainMnItemSelListener activity, MenuItem menuItem)
             {
                 doWrongMenuItem(menuItem);
             }
@@ -154,13 +154,13 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
             resourceId = itemRsId;
         }
 
-        void processMenu(Activity activity, MenuItem menuItem)
+        void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
         {
-            new ActivityInitiator(activity).initAcFromMnNewIntent(resourceId);
+            listener.initAcFromMenu(resourceId);
         }
     }
 
-    class DrawerMainMnItemSelListener implements NavigationView.OnNavigationItemSelectedListener {
+    class DrawerMainMnItemSelListener implements NavigationView.OnNavigationItemSelectedListener, ActivityInitiatorIf {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item)
@@ -168,10 +168,18 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
             Timber.d("onNavigationItemSelected()");
             item.setChecked(true);
 
-            rsIdToMenuItem.get(item.getItemId(), default_menu).processMenu(activity, item);
+            rsIdToMenuItem.get(item.getItemId(), default_menu).processMenu(this, item);
             /* Closing drawer on item click*/
             view.closeDrawer(START);
             return true;
+        }
+
+        // ====================  ActivityInitiatorIf  ===============
+
+        @Override
+        public Activity getActivity()
+        {
+            return activity;
         }
     }
 }

@@ -123,13 +123,9 @@ public class ViewerUserDataTest {
     @Test
     public void testProcessBackUserDataLoaded() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.viewer.processBackUserDataLoaded(usuario);
-                checkUserDataLoaded();
-            }
+        activity.runOnUiThread(() -> {
+            activity.viewer.processBackUserDataLoaded(usuario);
+            checkUserDataLoaded();
         });
     }
 
@@ -193,13 +189,7 @@ public class ViewerUserDataTest {
     @Test
     public void testProcessControllerError_1() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.viewer.onErrorInObserver(new UiException(new ErrorBean(BAD_REQUEST)));
-            }
-        });
+        activity.runOnUiThread(() -> activity.viewer.onErrorInObserver(new UiException(new ErrorBean(BAD_REQUEST))));
         waitAtMost(3, SECONDS).until(isToastInView(R.string.password_wrong, activity));
         onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
     }
@@ -207,13 +197,7 @@ public class ViewerUserDataTest {
     @Test
     public void test_ReplaceComponent() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.viewer.replaceComponent(new Bundle(0));
-            }
-        });
+        activity.runOnUiThread(() -> activity.viewer.initAcFromActivity(new Bundle(0)));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 
@@ -232,26 +216,16 @@ public class ViewerUserDataTest {
     public void runModifyUser(final UserChangeToMake change)
     {
         final AtomicBoolean isModified = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                isModified.compareAndSet(false, activity.viewer.modifyUserData(change));
-            }
-        });
+        activity.runOnUiThread(() -> isModified.compareAndSet(false, activity.viewer.modifyUserData(change)));
         waitAtMost(4, SECONDS).untilTrue(isModified);
     }
 
     public void runCheckUserData(final boolean isOk)
     {
         final AtomicBoolean isChecked = new AtomicBoolean(!isOk);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                boolean isUserDataOk = activity.viewer.checkUserData();
-                isChecked.compareAndSet(!isOk, isUserDataOk);
-            }
+        activity.runOnUiThread(() -> {
+            boolean isUserDataOk = activity.viewer.checkUserData();
+            isChecked.compareAndSet(!isOk, isUserDataOk);
         });
         waitAtMost(6, SECONDS).untilAtomic(isChecked, is(isOk));
     }
@@ -259,14 +233,10 @@ public class ViewerUserDataTest {
     public void runWhatDataChange(final UserChangeToMake changeToMake)
     {
         final AtomicReference<UserChangeToMake> atomicChange = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.viewer.checkUserData();
-                activity.viewer.whatDataChangeToMake();
-                atomicChange.compareAndSet(null, changeToMake);
-            }
+        activity.runOnUiThread(() -> {
+            activity.viewer.checkUserData();
+            activity.viewer.whatDataChangeToMake();
+            atomicChange.compareAndSet(null, changeToMake);
         });
         waitAtMost(6, SECONDS).untilAtomic(atomicChange, is(changeToMake));
     }

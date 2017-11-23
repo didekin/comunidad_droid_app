@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.view.View;
 import android.widget.Adapter;
@@ -8,7 +7,6 @@ import android.widget.AdapterView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ActivityNextMock;
 import com.didekindroid.api.ListMockFr;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -144,13 +142,6 @@ public class ViewerComuSearchResultsFrTest {
         waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(1));
         assertThat(viewer.getViewInViewer().getAdapter().getItem(0), is(comunidadToSearch));
-    }
-
-    @Test
-    public void test_ReplaceComponent() throws Exception
-    {
-        viewer.replaceComponent(new Bundle(0), ActivityNextMock.class);
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.next_mock_ac_layout));
     }
 
     @Test

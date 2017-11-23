@@ -1,5 +1,6 @@
 package com.didekindroid.comunidad;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -7,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
@@ -50,7 +51,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * ------ provincia: provinciaId, nombre.
  * -- usuarioComunidad: portal, escalera, planta, puerta, roles.
  */
-public class ComuSearchResultsAc extends AppCompatActivity {
+public class ComuSearchResultsAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     ViewerComuSearchResultAc viewer;
     ComuSearchResultsListFr comuSearchResultListFr;
@@ -81,6 +82,14 @@ public class ComuSearchResultsAc extends AppCompatActivity {
         viewer.clearSubscriptions();
     }
 
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
     // ============================================================
     //    ..... ACTION BAR ....
     // ============================================================
@@ -105,7 +114,6 @@ public class ComuSearchResultsAc extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
-        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
@@ -113,7 +121,7 @@ public class ComuSearchResultsAc extends AppCompatActivity {
                 return true;
             case R.id.reg_nueva_comunidad_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
-                activityInitiator.initAcFromMnNewIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

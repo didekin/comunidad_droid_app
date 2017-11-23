@@ -11,7 +11,6 @@ import com.didekindroid.api.Viewer;
 import com.didekindroid.security.CtrlerAuthToken;
 import com.didekindroid.security.CtrlerAuthTokenIf;
 import com.didekindroid.testutil.ViewerTestWrapper;
-import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -123,9 +122,9 @@ public class ViewerComuSearchAcTest {
         ViewerRegComuFr viewerRegComuFrOld = activity.viewerAc.getChildViewer(ViewerRegComuFr.class);
         activity.viewerAc = new ViewerComuSearchAc(activity.acView, activity) {
             @Override
-            public void replaceComponent(@NonNull Bundle bundle)
+            public void initAcFromActivity(@NonNull Bundle bundle)
             {
-                assertThat((Comunidad) bundle.getSerializable(COMUNIDAD_SEARCH.key), is(COMU_REAL));
+                assertThat(bundle.getSerializable(COMUNIDAD_SEARCH.key), is(COMU_REAL));
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
             }
         };

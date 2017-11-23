@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +10,10 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.FragmentInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -39,7 +41,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
 
     View acView;
     ViewerIncidEditAc viewer;
@@ -72,20 +74,17 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
             return;
         }
 
-        Bundle argsFragment = new Bundle();
-
         if (incidImportancia.isIniciadorIncidencia() || incidImportancia.getUserComu().hasAdministradorAuthority()) {
             fragmentToAdd = new IncidEditMaxFr();
         } else {
             fragmentToAdd = new IncidEditMinFr();
         }
 
+        Bundle argsFragment = new Bundle();
         argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         fragmentToAdd.setArguments(argsFragment);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag)
-                .commit();
 
+        new FragmentInitiator(this, R.id.incid_edit_fragment_container_ac).initFragment(fragmentToAdd, incid_edit_ac_frgs_tag);
         initViewer();
     }
 
@@ -119,6 +118,14 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
     {
         Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(childViewer);
+    }
+
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
     }
 
 //    ......................... HELPERS ..........................
@@ -158,7 +165,7 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
                 setIntent(intent);
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 // We don't reuse flag for resolucion: the state might have changed. We checked DB.

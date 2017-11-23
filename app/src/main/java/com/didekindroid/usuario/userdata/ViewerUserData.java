@@ -11,10 +11,10 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
+import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -40,7 +40,7 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
  * Date: 22/03/17
  * Time: 10:27
  */
-final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf {
+final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf, ActivityInitiatorIf {
 
     final EditText emailView;
     final EditText aliasView;
@@ -187,7 +187,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
                             {
                                 Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
                                 assertTrue(isCompleted, "AbstractSingleObserver.onSuccess() should be TRUE");
-                                replaceComponent(new Bundle());
+                                initAcFromActivity(null);
                             }
                         },
                         oldUser.get(),
@@ -207,11 +207,5 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         } else {
             super.onErrorInObserver(error);
         }
-    }
-
-    public void replaceComponent(Bundle bundle)
-    {
-        Timber.d("initAcWithBundle()");
-        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 }

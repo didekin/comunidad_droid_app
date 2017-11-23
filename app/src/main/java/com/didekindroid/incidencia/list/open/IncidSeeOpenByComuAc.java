@@ -1,12 +1,14 @@
 package com.didekindroid.incidencia.list.open;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.FragmentInitiator;
 
 import timber.log.Timber;
 
@@ -27,7 +29,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
-public class IncidSeeOpenByComuAc extends AppCompatActivity {
+public class IncidSeeOpenByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     IncidSeeOpenByComuFr fragment;
 
@@ -48,9 +50,16 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity {
         // We create an argument for the fragment even if the intent extra doesn't exist in the activity.
         argsFragment.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
         fragment.setArguments(argsFragment);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.incid_see_open_by_comu_ac, fragment, incid_see_by_comu_list_fr_tag)
-                .commit();
+
+        new FragmentInitiator(this, R.id.incid_see_open_by_comu_ac).initFragment(fragment, incid_see_by_comu_list_fr_tag);
+    }
+
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
     }
 
     // ============================================================
@@ -78,7 +87,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity {
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

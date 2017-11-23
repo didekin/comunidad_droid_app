@@ -109,47 +109,35 @@ public class ViewerIncidSeeCloseTest {
     {
         final List<IncidenciaUser> list = IncidDataTestUtils.doIncidenciaUsers(incidImportancia);
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.setItemSelectedId(22L);
-                viewer.onSuccessLoadItemList(list);
-                assertThat(viewer.getViewInViewer().getHeaderViewsCount(), is(1));
-                // ListView.getCount() and Adapter.getCount() take into account header views.
-                assertThat(viewer.getViewInViewer().getCount(), is(4));
-                assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(4));
-                assertThat(viewer.getViewInViewer().getCheckedItemPosition(), is(3));
-                assertThat(viewer.getViewInViewer().getItemAtPosition(viewer.getViewInViewer().getCheckedItemPosition()),
-                        allOf(notNullValue(), instanceOf(IncidenciaUser.class)));
+        activity.runOnUiThread(() -> {
+            viewer.setItemSelectedId(22L);
+            viewer.onSuccessLoadItemList(list);
+            assertThat(viewer.getViewInViewer().getHeaderViewsCount(), is(1));
+            // ListView.getCount() and Adapter.getCount() take into account header views.
+            assertThat(viewer.getViewInViewer().getCount(), is(4));
+            assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(4));
+            assertThat(viewer.getViewInViewer().getCheckedItemPosition(), is(3));
+            assertThat(viewer.getViewInViewer().getItemAtPosition(viewer.getViewInViewer().getCheckedItemPosition()),
+                    allOf(notNullValue(), instanceOf(IncidenciaUser.class)));
 
-            }
         });
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.setItemSelectedId(0L);
-                viewer.onSuccessLoadItemList(list);
-                // When itemSelectedId == 0, no checkedItem.
-                assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
+        activity.runOnUiThread(() -> {
+            viewer.setItemSelectedId(0L);
+            viewer.onSuccessLoadItemList(list);
+            // When itemSelectedId == 0, no checkedItem.
+            assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
 
-            }
         });
 
         final List<IncidenciaUser> listEmpty = new ArrayList<>(0);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.setItemSelectedId(22L);
-                viewer.onSuccessLoadItemList(listEmpty);
-                // No se cumple la condición view.getCount() > view.getHeaderViewsCount(): no se llama  view.setItemChecked().
-                assertThat(viewer.getViewInViewer().getCount() <= viewer.getViewInViewer().getHeaderViewsCount(), is(true));
-                // When list is empty, no checkedItem.
-                assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
-            }
+        activity.runOnUiThread(() -> {
+            viewer.setItemSelectedId(22L);
+            viewer.onSuccessLoadItemList(listEmpty);
+            // No se cumple la condición view.getCount() > view.getHeaderViewsCount(): no se llama  view.setItemChecked().
+            assertThat(viewer.getViewInViewer().getCount() <= viewer.getViewInViewer().getHeaderViewsCount(), is(true));
+            // When list is empty, no checkedItem.
+            assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
         });
     }
 
@@ -243,17 +231,13 @@ public class ViewerIncidSeeCloseTest {
     {
         final List<IncidenciaUser> list = IncidDataTestUtils.doIncidenciaUsers(incidImportancia1);
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                fragment.viewer.onSuccessLoadItemList(list);
-                assertThat(fragment.viewer.getSelectedPositionFromItemId(33L), is(1));
-                assertThat(fragment.viewer.getSelectedPositionFromItemId(11L), is(2));
-                assertThat(fragment.viewer.getSelectedPositionFromItemId(22L), is(3));
-                // No se encuentra la incidencia en la lista.
-                assertThat(fragment.viewer.getSelectedPositionFromItemId(93L), is(0));
-            }
+        activity.runOnUiThread(() -> {
+            fragment.viewer.onSuccessLoadItemList(list);
+            assertThat(fragment.viewer.getSelectedPositionFromItemId(33L), is(1));
+            assertThat(fragment.viewer.getSelectedPositionFromItemId(11L), is(2));
+            assertThat(fragment.viewer.getSelectedPositionFromItemId(22L), is(3));
+            // No se encuentra la incidencia en la lista.
+            assertThat(fragment.viewer.getSelectedPositionFromItemId(93L), is(0));
         });
     }
 

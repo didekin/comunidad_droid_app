@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.listbyuser;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,17 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -31,7 +32,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- the rest of data of an object UsuarioComunidad fully initialized.
  */
 public class SeeUserComuByUserAc extends AppCompatActivity implements
-        SeeUserComuByUserFr.SeeUserComuByUserFrListener {
+        SeeUserComuByUserFr.SeeUserComuByUserFrListener, ActivityInitiatorIf {
 
     SeeUserComuByUserFr mFragment;
     IdentityCacher identityCacher;
@@ -49,6 +50,14 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
         mFragment = (SeeUserComuByUserFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
+    }
+
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
     }
 
     // ============================================================
@@ -75,7 +84,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
                 return true;
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

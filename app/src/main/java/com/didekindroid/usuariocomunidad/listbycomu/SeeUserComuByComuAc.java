@@ -1,12 +1,13 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
@@ -17,11 +18,11 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * User: pedro@didekin
  * Date: 25/08/15
  * Time: 16:30
- *
- *  Preconditions:
- *  1. a long comunidadId is passed as an intent key.
+ * <p>
+ * Preconditions:
+ * 1. a long comunidadId is passed as an intent key.
  */
-public class SeeUserComuByComuAc extends AppCompatActivity {
+public class SeeUserComuByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     SeeUserComuByComuFr fragment;
 
@@ -35,6 +36,14 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
         doToolBar(this, true);
 
         fragment = (SeeUserComuByComuFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
+    }
+
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
     }
 
     // ============================================================
@@ -55,14 +64,14 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-        switch (resourceId){
+        switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

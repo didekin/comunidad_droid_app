@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -25,7 +25,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidEditAc> {
+class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidEditAc> implements ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;
 
@@ -86,7 +86,7 @@ class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidEditAc> {
             }
         }
         activity.setIntent(intent);
-        new ActivityInitiator(activity).initAcFromMnKeepIntent(resourceIdItemMn);
+        initAcFromMenu(resourceIdItemMn);
     }
 
     @SuppressWarnings("WeakerAccess")

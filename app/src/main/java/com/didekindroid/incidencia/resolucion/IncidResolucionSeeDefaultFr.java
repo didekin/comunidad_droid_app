@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
@@ -27,7 +27,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionSeeDefaultFr extends Fragment {
+public class IncidResolucionSeeDefaultFr extends Fragment implements ActivityInitiatorIf {
 
     View mFragmentView;
 
@@ -80,7 +80,7 @@ public class IncidResolucionSeeDefaultFr extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key));
                 getActivity().setIntent(intent);
-                new ActivityInitiator(getActivity()).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

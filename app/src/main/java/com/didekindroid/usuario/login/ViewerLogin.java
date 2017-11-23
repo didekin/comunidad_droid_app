@@ -2,7 +2,6 @@ package com.didekindroid.usuario.login;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
@@ -23,10 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.notSendNewPswd;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
-import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
+import static com.didekindroid.usuario.login.ViewerLogin.PasswordMailDialog.newInstance;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
@@ -39,7 +38,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
+public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ActivityInitiatorIf {
 
     final AtomicReference<UsuarioBean> usuarioBean;
     private AtomicInteger counterWrong;
@@ -67,8 +66,26 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         if (viewBean != null) {
             ((EditText) view.findViewById(R.id.reg_usuario_email_editT)).setText(String.class.cast(viewBean));
         }
+
         Button mLoginButton = view.findViewById(R.id.login_ac_button);
-        mLoginButton.setOnClickListener(new LoginButtonListener());
+        mLoginButton.setOnClickListener(
+                v -> {
+                    Timber.d("onClick()");
+                    if (checkLoginData()) {
+                        controller.validateLogin(
+                                new LoginObserver() {
+                                    @Override
+                                    public void onSuccess(Boolean isLoginOk)
+                                    {
+                                        processLoginBackInView(isLoginOk);
+                                    }
+                                },
+                                usuarioBean.get().getUsuario()
+                        );
+                    }
+                }
+        );
+
         if (savedState != null) {
             counterWrong.set(savedState.getInt(login_counter_atomic_int.key));
         }
@@ -106,7 +123,8 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
 
         if (isLoginOk) {
             Timber.d("login OK");
-            replaceComponent(new Bundle());
+            initAcFromActivity(null);
+            activity.finish();
         } else {
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
@@ -118,41 +136,19 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         }
     }
 
-    private void showDialogAfterErrors()
+    void showDialogAfterErrors()
     {
         Timber.d("showDialogAfterErrors()");
         DialogFragment newFragment = newInstance(usuarioBean.get().getUsuario());
         newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
-    AppCompatDialog doDialogInViewer(final LoginAc.PasswordMailDialog dialogFragment)
-    {
-        Timber.d("doDialogInViewer()");
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.alertDialogTheme);
-
-        builder.setMessage(R.string.send_password_by_mail_dialog)
-                .setPositiveButton(
-                        R.string.send_password_by_mail_YES,
-                        (dialog, id) -> {
-                            dialog.dismiss();
-                            doDialogPositiveClick((Usuario) dialogFragment.getArguments().getSerializable(usuario_object.key));
-                        }
-                )
-                .setNegativeButton(
-                        R.string.send_password_by_mail_NO,
-                        (dialog, id) -> {
-                            dialog.dismiss();
-                            makeToast(getActivity(), R.string.login_wrong_no_mail);
-                            doDialogNegativeClick();
-                        }
-                );
-        return builder.create();
-    }
-
     void doDialogNegativeClick()
     {
         Timber.d("doDialogNegativeClick()");
-        replaceComponent(new Bundle());
+        makeToast(getActivity(), R.string.login_wrong_no_mail);
+        initAcFromListener(null, notSendNewPswd);
+        activity.finish();
     }
 
     void doDialogPositiveClick(Usuario usuario)
@@ -162,7 +158,6 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
             @Override
             public void onSuccess(Boolean isSentPassword)
             {
-                Timber.d("onSuccess()");
                 processBackSendPswdInView(isSentPassword);
             }
         }, usuario);
@@ -189,6 +184,8 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         }
     }
 
+    // =========================  LyfeCicle  =========================
+
     @Override
     public void saveState(Bundle savedState)
     {
@@ -199,42 +196,59 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         savedState.putInt(login_counter_atomic_int.key, counterWrong.get());
     }
 
+    // =========================  HELPERS  =========================
+
     AtomicInteger getCounterWrong()
     {
         Timber.d("getCounterWrong()");
         return counterWrong;
     }
 
-    // ==================================  HELPERS  =================================
+    // ============================================================
+    //    ................ ERROR DIALOG .................
+    // ============================================================
 
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK);
-        activity.finish();
-    }
+    public static class PasswordMailDialog extends DialogFragment {
 
-    @SuppressWarnings("WeakerAccess")
-    class LoginButtonListener implements View.OnClickListener {
+        public static PasswordMailDialog newInstance(Usuario usuario)
+        {
+            Timber.d("newInstance()");
+            PasswordMailDialog dialog = new PasswordMailDialog();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(usuario_object.key, usuario);
+            dialog.setArguments(bundle);
+            return dialog;
+        }
 
         @Override
-        public void onClick(View v)
+        public AppCompatDialog onCreateDialog(Bundle savedInstanceState)
         {
-            Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-            if (checkLoginData()) {
-                controller.validateLogin(new LoginObserver() {
-                    @Override
-                    public void onSuccess(Boolean isLoginOk)
-                    {
-                        Timber.d("onSuccess()");
-                        processLoginBackInView(isLoginOk);
-                    }
-                }, usuarioBean.get().getUsuario());
-            }
+            Timber.d("onCreateDialog()");
+            final ViewerLogin viewerLogin = ((LoginAc) getActivity()).viewerLogin;
+            AlertDialog.Builder builder = new AlertDialog.Builder(viewerLogin.getActivity(), R.style.alertDialogTheme);
+
+            builder.setMessage(R.string.send_password_by_mail_dialog)
+                    .setPositiveButton(
+                            R.string.send_password_by_mail_YES,
+                            (dialog, id) -> {
+                                dialog.dismiss();
+                                viewerLogin.doDialogPositiveClick((Usuario) getArguments().getSerializable(usuario_object.key));
+                            }
+                    )
+                    .setNegativeButton(
+                            R.string.send_password_by_mail_NO,
+                            (dialog, id) -> {
+                                dialog.dismiss();
+                                viewerLogin.doDialogNegativeClick();
+                            }
+                    );
+            return builder.create();
         }
     }
 
-    // ............................ SUBSCRIBERS ..................................
+    // ============================================================
+    // ....................... SUBSCRIBERS ...................
+    // ============================================================
 
     abstract class LoginObserver extends DisposableSingleObserver<Boolean> {
 

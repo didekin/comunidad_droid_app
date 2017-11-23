@@ -1,6 +1,6 @@
 package com.didekindroid.incidencia.comment;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
@@ -36,7 +37,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * 2. A comment is persisted, associated the usuarioComunidad and incidencia implicits in the
  * incidenciaUser in the received intent.
  */
-public class IncidCommentRegAc extends AppCompatActivity {
+public class IncidCommentRegAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     Incidencia mIncidencia;
     Button mComentarButton;
@@ -55,20 +56,13 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
         mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
         ((TextView) findViewById(R.id.incid_reg_desc_txt)).setText(mIncidencia.getDescripcion());
-        mComentarButton = (Button) findViewById(R.id.incid_comment_reg_button);
-        mComentarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("onClickLinkToImportanciaUsers()");
-                registerComment();
-            }
-        });
+        mComentarButton = findViewById(R.id.incid_comment_reg_button);
+        mComentarButton.setOnClickListener(v -> registerComment());
     }
 
 // ============================================================
 //    ..... ACTION BAR ....
-/* ============================================================*/
+// ============================================================
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -87,7 +81,17 @@ public class IncidCommentRegAc extends AppCompatActivity {
     }
 
 //    ============================================================
-//              .......... HELPER METHDOS .......
+//    .................... ActivityInitiatorIf ....................
+/*    ============================================================*/
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
+//    ============================================================
+//              .......... HELPERS .......
 //    ============================================================
 
     void registerComment()
@@ -107,9 +111,9 @@ public class IncidCommentRegAc extends AppCompatActivity {
         }
     }
 
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    //    ============================================================
+//    ============================================================
+//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
+//    ============================================================
 
     @SuppressWarnings("WeakerAccess")
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
@@ -141,9 +145,9 @@ public class IncidCommentRegAc extends AppCompatActivity {
                 uiException.processMe(IncidCommentRegAc.this);
             } else if (!(isDestroyed() || isChangingConfigurations())) {
                 assertTrue(rowInserted == 1, comment_should_be_registered);
-                Intent intent = new Intent(IncidCommentRegAc.this, IncidCommentSeeAc.class);
-                intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
-                startActivity(intent);
+                Bundle bundle = new Bundle(1);
+                bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
+                initAcFromActivity(bundle);
             } else {
                 Timber.i("onPostExcecute(): activity destroyed");
             }

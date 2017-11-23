@@ -1,5 +1,6 @@
 package com.didekindroid.comunidad;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,10 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -30,7 +31,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. If the user has comunidad modification power, the comunidad data may have changed in DB.
  * 2. If user hasn't power, the data are merely shown.
  */
-public class ComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class ComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
 
     View acView;
     RegComuFr regComuFrg;
@@ -87,6 +88,14 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
         viewer.setChildViewer(viewerChild);
     }
 
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
 //    =========================================  MENU  =============================================
 
     @Override
@@ -111,7 +120,7 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
                 setIntent(intent);
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

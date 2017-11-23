@@ -219,7 +219,7 @@ public class ViewerUserComuDataAcTest {
         viewer.showComuDataMn.set(!upDateMenu);
         // Exec and check.
         just(1).subscribeWith(viewer.new ModifyUserComuObserver(upDateMenu));
-        waitAtMost(4, SECONDS).untilAtomic(viewer.showComuDataMn, is(upDateMenu));
+        waitAtMost(6, SECONDS).untilAtomic(viewer.showComuDataMn, is(upDateMenu));
         checkViewerReplaceComponent(viewer, seeUserComuByUserFrRsId, null);
     }
 }

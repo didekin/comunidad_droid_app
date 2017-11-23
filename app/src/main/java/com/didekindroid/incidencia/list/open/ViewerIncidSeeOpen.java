@@ -5,11 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeClose;
-import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -43,7 +41,7 @@ final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
         ViewerIncidSeeOpen parentInstance = new ViewerIncidSeeOpen(view, activity);
         parentInstance.setController(new CtrlerIncidSeeOpenByComu());
         parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
-        parentInstance.comuSpinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
+        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
         return parentInstance;
     }
 
@@ -75,14 +73,6 @@ final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     }
 
     // ==================================  HELPERS  =================================
-
-
-    @Override
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initAcWithBundle(bundle);
-    }
 
     ViewerComuSpinner getComuSpinner()
     {

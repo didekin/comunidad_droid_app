@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +10,7 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
-import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc;
-import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.register.RegUserComuAc;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -29,6 +23,11 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.comunidadFound_noRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.comunidadFound_regUser;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.comunidadFound_regUserComu;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.noComunidadFound_noRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.noComunidadFound_regUser;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.util.UIutils.makeToast;
 
@@ -37,11 +36,11 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 17/06/17
  * Time: 16:29
  */
-final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> {
+final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> implements ActivityInitiatorIf {
 
     private ViewerComuSearchResultsFr(@NonNull View frView, @NonNull AppCompatActivity activity)
     {
-        super((ListView) frView.findViewById(android.R.id.list), activity, null);
+        super(frView.findViewById(android.R.id.list), activity, null);
     }
 
     static ViewerComuSearchResultsFr newViewerComuSearchResultsFr(View frView, AppCompatActivity activity)
@@ -66,12 +65,6 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
 
     // ==================================  HELPERS =================================
 
-    public void replaceComponent(@NonNull Bundle bundle, Class<? extends Activity> nextActivity)
-    {
-        Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initAcWithBundle(bundle, nextActivity);
-    }
-
     void onSuccessLoadList(@NonNull List<Comunidad> comunidades)
     {
         Timber.d("onSuccessLoadList()");
@@ -87,9 +80,9 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidad);
         if (controller.isRegisteredUser()) {
-            replaceComponent(bundle, RegComuAndUserComuAc.class);
+            initAcFromListener(bundle, noComunidadFound_regUser);
         } else {
-            replaceComponent(bundle, RegComuAndUserAndUserComuAc.class);
+            initAcFromListener(bundle, noComunidadFound_noRegUser);
         }
         activity.finish();
     }
@@ -108,7 +101,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             if (!controller.isRegisteredUser()) {
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidadSelect);
-                replaceComponent(bundle, RegUserAndUserComuAc.class);
+                initAcFromListener(bundle, comunidadFound_noRegUser);
             } else {
                 controller.getUserComu(new UsuarioComunidadObserver(comunidadSelect), comunidadSelect);
             }
@@ -131,7 +124,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onSuccess()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
-            replaceComponent(bundle, UserComuDataAc.class);
+            initAcFromListener(bundle, comunidadFound_regUserComu);
         }
 
         @Override
@@ -147,7 +140,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onComplete()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            replaceComponent(bundle, RegUserComuAc.class);
+            initAcFromListener(bundle, comunidadFound_regUser);
         }
     }
 

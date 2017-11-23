@@ -3,10 +3,10 @@ package com.didekindroid.router;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.ArrayMap;
-import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.accesorio.ConfidencialidadAc;
+import com.didekindroid.api.RouterListener;
 import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
@@ -21,7 +21,6 @@ import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;
-import com.didekindroid.usuario.password.ViewerPasswordChange;
 import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
@@ -36,10 +35,13 @@ import java.util.Map;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static android.support.v4.app.NavUtils.getParentActivityIntent;
 import static android.support.v4.app.NavUtils.navigateUpTo;
 import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultNoRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultRegUser;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 /**
@@ -50,24 +52,19 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 public class ActivityRouter implements ActivityRouterIf {
 
+    // Singleton instance.
     static final ActivityRouter acRouter = new ActivityRouter();
 
-    static final Class<? extends Activity> acByDefaultRegUser = LoginAc.class;
-    static final Class<? extends Activity> acByDefaultNoRegUser = ComuSearchAc.class;
-    /**
-     * This constant is used as non-existent itemMenu. For example, when wanting to get the default menu router options.
-     */
-    static final int NULL_MENU_ITEM = -1;
     private static final Map<Integer, Class<? extends Activity>> menuIdMap = new ArrayMap<>();
     private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdMap = new ArrayMap<>();
     private static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
-    private static final Map<Class<? extends View.OnClickListener>, Class<? extends Activity>> onClickRouterMap = new ArrayMap<>();
 
-    // Activities
+    // Activity --> activity mapping (usually the default or the only option).
     static {
         acRouterMap.put(ComuDataAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(ComuSearchAc.class, ComuSearchResultsAc.class);
         acRouterMap.put(DeleteMeAc.class, ComuSearchAc.class);
+        acRouterMap.put(IncidCommentRegAc.class, IncidCommentSeeAc.class);
         acRouterMap.put(IncidEditAc.class, IncidSeeOpenByComuAc.class);
         acRouterMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
         acRouterMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
@@ -80,7 +77,7 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
     }
 
-    // Menu options.
+    // Menu options --> activity mapping
     static {
         // ACCESORIO
         menuIdMap.put(R.id.confidencialidad_ac_mn, ConfidencialidadAc.class);
@@ -103,17 +100,10 @@ public class ActivityRouter implements ActivityRouterIf {
         menuIdMap.put(R.id.user_data_ac_mn, UserDataAc.class);
 
         /* USUARIO NO REGISTRADO.*/
-        noUserRegMenuIdMap.put(R.id.confidencialidad_ac_mn, ConfidencialidadAc.class);
-        noUserRegMenuIdMap.put(R.id.login_ac_mn, LoginAc.class);
         noUserRegMenuIdMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class);
     }
 
-    // Links and buttons.
-    static {
-        // USUARIOS.
-        onClickRouterMap.put(ViewerPasswordChange.ModifyPswdButtonListener.class, SeeUserComuByUserAc.class);
-        onClickRouterMap.put(ViewerPasswordChange.SendNewPswdButtonListener.class, LoginAc.class);
-    }
+    // =====================  Instance fields and methods ======================
 
     private final IdentityCacher identityCacher;
 
@@ -131,7 +121,10 @@ public class ActivityRouter implements ActivityRouterIf {
     {
         Timber.d("doUpMenu()");
         if (shouldUpRecreateTask(activity, getParentActivityIntent(activity))) {
-            new ActivityInitiator(activity).initDefaultAcFromUp();
+            Intent intent =
+                    new Intent(activity, acRouter.identityCacher.isRegisteredUser() ? defaultRegUser.activityToGo : defaultNoRegUser.activityToGo);
+            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
             return;
         }
 
@@ -149,9 +142,9 @@ public class ActivityRouter implements ActivityRouterIf {
         Timber.d("nextActivityFromMn(), isRegisteredUser = %b", isRegistered);
 
         if (isRegistered) {
-            return menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : acByDefaultRegUser;
+            return menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : defaultRegUser.activityToGo;
         } else {
-            return noUserRegMenuIdMap.get(resourceId) != null ? noUserRegMenuIdMap.get(resourceId) : acByDefaultNoRegUser;
+            return noUserRegMenuIdMap.get(resourceId) != null ? noUserRegMenuIdMap.get(resourceId) : defaultNoRegUser.activityToGo;
         }
     }
 
@@ -162,10 +155,43 @@ public class ActivityRouter implements ActivityRouterIf {
         return acRouterMap.get(previousActivity);
     }
 
-    @Override
-    public Class<? extends Activity> nextActivityFromClick(Class<? extends View.OnClickListener> clickListener)
-    {
-        Timber.d("nextActivityFromClick()");
-        return onClickRouterMap.get(clickListener);
+    /* =========================  HELPERS CLASSES  =========================*/
+
+    public enum RouterToActivity implements RouterListener {
+
+        // General defaults.
+        defaultRegUser(LoginAc.class),
+        defaultNoRegUser(ComuSearchAc.class),
+        // Search comunidad.
+        comunidadFound_regUserComu(UserComuDataAc.class),
+        comunidadFound_regUser(RegUserComuAc.class),
+        comunidadFound_noRegUser(RegUserAndUserComuAc.class),
+        noComunidadFound_regUser(RegComuAndUserComuAc.class),
+        noComunidadFound_noRegUser(RegComuAndUserAndUserComuAc.class),
+        // Password.
+        modifyPswd(SeeUserComuByUserAc.class),
+        notSendNewPswd(ComuSearchAc.class),
+        sendNewPswd(LoginAc.class),
+        // Resolución.
+        regResolucion(IncidEditAc.class),
+        regResolucionDuplicate(regResolucion.activityToGo),
+        modifyResolucion(IncidEditAc.class),
+        modifyResolucionError(IncidSeeOpenByComuAc.class),
+        closeIncidencia(IncidSeeClosedByComuAc.class),
+        closeIncidenciaError(IncidSeeOpenByComuAc.class),
+        ;
+
+        final Class<? extends Activity> activityToGo;
+
+        RouterToActivity(Class<? extends Activity> activityToGo)
+        {
+            this.activityToGo = activityToGo;
+        }
+
+        @Override
+        public Class<? extends Activity> getActivityToGo()
+        {
+            return activityToGo;
+        }
     }
 }

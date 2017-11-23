@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
@@ -31,7 +31,7 @@ import static com.didekindroid.util.UIutils.getStringFromInteger;
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionSeeFr extends Fragment {
+public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorIf {
 
     View frView;
     Resolucion resolucion;
@@ -86,7 +86,7 @@ public class IncidResolucionSeeFr extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
                 getActivity().setIntent(intent);
-                new ActivityInitiator(getActivity()).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

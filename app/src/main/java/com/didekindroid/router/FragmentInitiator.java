@@ -2,6 +2,7 @@ package com.didekindroid.router;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
@@ -24,15 +25,23 @@ public class FragmentInitiator {
         this.containerId = containerId;
     }
 
-    public void initFragment(@NonNull Bundle bundle, Fragment fragment, String fragmentTag)
+    public void initReplaceFragment(@Nullable Bundle bundle, Fragment fragment, String fragmentTag)
     {
-        {
-            Timber.d("initAcWithBundle()");
+        Timber.d("initReplaceFragment()");
+        if (bundle != null){
             fragment.setArguments(bundle);
-            activity.getSupportFragmentManager().beginTransaction()
-                    .replace(containerId, fragment, fragmentTag)
-                    .addToBackStack(fragment.getClass().getName())
-                    .commit();
         }
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(containerId, fragment, fragmentTag)
+                .addToBackStack(fragment.getClass().getName())
+                .commit();
+    }
+
+    public void initFragment(Fragment fragment, String fragmentTag)
+    {
+        Timber.d("initReplaceFragment()");
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(containerId, fragment, fragmentTag)
+                .commit();
     }
 }

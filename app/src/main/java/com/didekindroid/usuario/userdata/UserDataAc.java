@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.userdata;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -7,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
@@ -22,7 +23,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity {
+public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     ViewerUserData viewer;
     View acView;
@@ -48,10 +49,12 @@ public class UserDataAc extends AppCompatActivity {
         viewer.clearSubscriptions();
     }
 
-    public void replaceComponent(Bundle bundle)
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
     {
-        Timber.d("initAcWithBundle()");
-        new ActivityInitiator(this).initAcWithBundle(bundle);
+        return this;
     }
 
 //    ============================================================
@@ -88,7 +91,7 @@ public class UserDataAc extends AppCompatActivity {
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:
             case R.id.incid_see_open_by_comu_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

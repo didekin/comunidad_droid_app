@@ -90,16 +90,12 @@ public class ViewerComuSpinnerTest {
         activity = activityRule.getActivity();
 
         atomicViewer = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
-                        .commitNow();
-                spinner = activity.findViewById(R.id.comunidad_spinner);
-                atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, new ViewerForTest(activity)));
-            }
+        activity.runOnUiThread(() -> {
+            activity.getSupportFragmentManager().beginTransaction()
+                    .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
+                    .commitNow();
+            spinner = activity.findViewById(R.id.comunidad_spinner);
+            atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, new ViewerForTest(activity)));
         });
         waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
         viewer = atomicViewer.get();
@@ -167,15 +163,11 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testGetSelectedPositionFromItemId() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadItemList(makeListComu());
-                assertThat(viewer.getSelectedPositionFromItemId(33L), is(1));
-                assertThat(viewer.getSelectedPositionFromItemId(22L), is(2));
-                assertThat(viewer.getSelectedPositionFromItemId(122L), is(0));
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadItemList(makeListComu());
+            assertThat(viewer.getSelectedPositionFromItemId(33L), is(1));
+            assertThat(viewer.getSelectedPositionFromItemId(22L), is(2));
+            assertThat(viewer.getSelectedPositionFromItemId(122L), is(0));
         });
     }
 
@@ -246,13 +238,9 @@ public class ViewerComuSpinnerTest {
     private void execLoadItems()
     {
         final AtomicBoolean isExec = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadItemList(makeListComu());
-                isExec.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadItemList(makeListComu());
+            isExec.compareAndSet(false, true);
         });
         waitAtMost(2, SECONDS).untilTrue(isExec);
     }

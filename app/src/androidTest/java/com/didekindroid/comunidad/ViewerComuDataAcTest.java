@@ -132,14 +132,6 @@ public class ViewerComuDataAcTest {
     }
 
     @Test
-    public void test_OnSuccessModifyComunidad() throws Exception
-    {
-        checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
-        viewer.onSuccessModifyComunidad();
-        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void testComuDataAcButtonListener()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.

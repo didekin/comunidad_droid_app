@@ -1,6 +1,7 @@
 package com.didekindroid.usuariocomunidad.data;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,10 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -40,7 +41,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * ComuSearchAc.
  */
 @SuppressWarnings("ConstantConditions")
-public class UserComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class UserComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
 
     ViewerUserComuDataAc viewer;
     RegUserComuFr regUserComuFr;
@@ -90,6 +91,14 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
         viewer.setChildViewer(childViewer);
     }
 
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
     // ============================================================
     //    ..... ACTION BAR ....
     // ============================================================
@@ -136,7 +145,7 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
                 setIntent(intent);
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

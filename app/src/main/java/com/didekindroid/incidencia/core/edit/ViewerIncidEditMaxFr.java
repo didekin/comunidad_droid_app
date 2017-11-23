@@ -11,7 +11,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
@@ -36,7 +36,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * 1. An incidencia with resolucion is not allowed to be erased.
  * 2. An incidencia can be erased by a user with adm function.
  */
-final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
+final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityInitiatorIf {
 
     ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
 
@@ -105,7 +105,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
     {
         Timber.d("onSuccessEraseIncidencia()");
         assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
-        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+        initAcFromActivity(new Bundle(0));
     }
 
     //    ============================  LIFE CYCLE   ===================================

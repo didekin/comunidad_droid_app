@@ -6,7 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
@@ -21,7 +21,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 16/11/2017
  * Time: 12:42
  */
-public class PasswordSentDialog extends DialogFragment {
+public class PasswordSentDialog extends DialogFragment implements ActivityInitiatorIf {
 
     public static PasswordSentDialog newInstance(Usuario usuario)
     {
@@ -51,7 +51,7 @@ public class PasswordSentDialog extends DialogFragment {
                             dialog.dismiss();
                             Bundle bundle = new Bundle(1);
                             bundle.putString(user_name.key, usuarioArg.getUserName());
-                            new ActivityInitiator(getActivity()).initAcWithBundle(bundle);
+                            initAcFromActivity(bundle);
                         }
                 );
         return builder.create();

@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.register;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,10 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -41,7 +42,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The activity SeeUserComuByComuAc is started.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegUserAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class RegUserAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
 
     View acView;
     ViewerRegUserAndUserComuAc viewer;
@@ -94,6 +95,14 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
         viewer.setChildViewer(viewerChild);
     }
 
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
 //    ============================================================
 //    ..... ACTION BAR ....
 //    ============================================================
@@ -129,7 +138,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
                 doUpMenu(this);
                 return true;
             case R.id.login_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

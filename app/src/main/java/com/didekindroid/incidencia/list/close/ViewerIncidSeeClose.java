@@ -166,11 +166,11 @@ public class ViewerIncidSeeClose extends
      * This method is called after the controller loads the data related with the incidencia selected (its resolucion, mainly).
      * Data are passed in a bundle to the next component.
      */
-    public void replaceComponent(@NonNull Bundle bundle)
+    void replaceComponent(@NonNull Bundle bundle)
     {
-        Timber.d("initAcWithBundle()");
+        Timber.d("replaceComponent()");
         new FragmentInitiator(activity, R.id.incid_see_closed_by_comu_ac)
-                .initFragment(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
+                .initReplaceFragment(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
     }
 
     @NonNull
