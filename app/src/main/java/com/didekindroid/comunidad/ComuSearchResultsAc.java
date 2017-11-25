@@ -121,7 +121,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements ActivityIn
                 return true;
             case R.id.reg_nueva_comunidad_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
-                initAcFromMenu(resourceId);
+                initAcFromMenu(null, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

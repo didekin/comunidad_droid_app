@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.core.edit;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.didekindroid.R;
@@ -34,7 +33,7 @@ final class ViewerIncidEditMinFr extends ViewerIncidEditFr {
         Timber.d("newViewerIncidEditMaxFr()");
         ViewerIncidEditMinFr instance = new ViewerIncidEditMinFr(frView, parentViewer);
         instance.viewerImportanciaSpinner =
-                newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), parentViewer.getActivity(), instance);
+                newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), instance);
         instance.setController(new CtrlerIncidRegEditFr());
         return instance;
     }

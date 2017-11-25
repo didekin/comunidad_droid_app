@@ -7,13 +7,10 @@ import com.didekindroid.api.Controller;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
-import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
@@ -38,23 +35,16 @@ public class CtrlerIncidSeeCloseByComu extends Controller implements
 
     static Single<Bundle> bundleWithResolucion(final Incidencia incidencia)
     {
-        return Single.fromCallable(new Callable<Resolucion>() {
-            @Override
-            public Resolucion call() throws Exception
-            {
-                return incidenciaDao.seeResolucion(incidencia.getIncidenciaId());
-            }
-        }).map(new Function<Resolucion, Bundle>() {
-            @Override
-            public Bundle apply(@NonNull Resolucion resolucion) throws Exception
-            {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
-                bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
-                bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
-                return bundle;
-            }
-        });
+        return Single.fromCallable(() -> incidenciaDao.seeResolucion(incidencia.getIncidenciaId()))
+                .map(
+                        resolucion -> {
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
+                            bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
+                            bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+                            return bundle;
+                        }
+                );
     }
 
     /**
@@ -62,13 +52,7 @@ public class CtrlerIncidSeeCloseByComu extends Controller implements
      */
     static Single<List<IncidenciaUser>> incidCloseList(final long comunidadId)
     {
-        return Single.fromCallable(new Callable<List<IncidenciaUser>>() {
-            @Override
-            public List<IncidenciaUser> call() throws Exception
-            {
-                return incidenciaDao.seeIncidsClosedByComu(comunidadId);
-            }
-        });
+        return Single.fromCallable(() -> incidenciaDao.seeIncidsClosedByComu(comunidadId));
     }
 
     // .................................... INSTANCE METHODS .................................

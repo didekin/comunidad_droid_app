@@ -28,14 +28,13 @@ public interface ActivityInitiatorIf {
         return acRouter;
     }
 
-    default void initAcFromMenu(int resourceId)
+    default void initAcFromMenu(@Nullable Bundle bundle, int resourceId)
     {
         Timber.d("initAcFromMenu()");
-        Intent intent = getActivity().getIntent();
-        if (intent == null) {
-            intent = new Intent();
+        Intent intent = new Intent(getActivity(), getRouter().nextActivityFromMn(resourceId));
+        if (bundle != null) {
+            intent.putExtras(bundle);
         }
-        intent.setClass(getActivity(), getRouter().nextActivityFromMn(resourceId));
         getActivity().startActivity(intent);
     }
 

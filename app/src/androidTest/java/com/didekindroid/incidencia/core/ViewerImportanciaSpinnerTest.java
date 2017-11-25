@@ -8,6 +8,7 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.SpinnerTextMockFr;
+import com.didekindroid.api.ViewerMock;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,10 +29,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -43,8 +44,6 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class ViewerImportanciaSpinnerTest {
-
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
@@ -59,16 +58,12 @@ public class ViewerImportanciaSpinnerTest {
         activity = activityRule.getActivity();
 
         final AtomicReference<ViewerImportanciaSpinner> atomicViewer = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
-                        .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.importancia_spinner);
-                atomicViewer.compareAndSet(null, newViewerImportanciaSpinner(spinner, activity, null));
-            }
+        activity.runOnUiThread(() -> {
+            activity.getSupportFragmentManager().beginTransaction()
+                    .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
+                    .commitNow();
+            spinner = activity.findViewById(R.id.importancia_spinner);
+            atomicViewer.compareAndSet(null, newViewerImportanciaSpinner(spinner, new ViewerMock(activity)));
         });
         waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
         viewer = atomicViewer.get();
@@ -77,7 +72,7 @@ public class ViewerImportanciaSpinnerTest {
     @Test
     public void tesNewViewerImportanciaSpinner() throws Exception
     {
-        assertThat(newViewerImportanciaSpinner(spinner, activity, null).getController(), notNullValue());
+        assertThat(newViewerImportanciaSpinner(spinner, new ViewerMock(activity)).getController(), notNullValue());
     }
 
     @Test
@@ -87,13 +82,9 @@ public class ViewerImportanciaSpinnerTest {
         viewer.setItemSelectedId(2);
 
         final AtomicBoolean isExec = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadItemList(importancias);
-                isExec.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadItemList(importancias);
+            isExec.compareAndSet(false, true);
         });
         waitAtMost(2, SECONDS).untilTrue(isExec);
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(4));
@@ -138,24 +129,19 @@ public class ViewerImportanciaSpinnerTest {
         bundle.putLong(keyBundle, importanciaArrItem);
 
         final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(bundle, incidImportanciaBean);
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.doViewInViewer(bundle, incidImportanciaBean);
+            isRun.compareAndSet(false, true);
         });
         waitAtMost(4, SECONDS).untilTrue(isRun);
 
         // Check call to initSelectedItemId().
         assertThat(viewer.getSelectedItemId(), allOf(
                 is(bundle.getLong(keyBundle)),
-                is((long)importanciaArrItem)
+                is((long) importanciaArrItem)
         ));
         // Check call to view.setOnItemSelectedListener().
-        ViewerImportanciaSpinner.ImportanciaSelectedListener listener =
-                (ViewerImportanciaSpinner.ImportanciaSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();
+        assertThat(viewer.getViewInViewer().getOnItemSelectedListener(), instanceOf(ViewerImportanciaSpinner.ImportanciaSelectedListener.class));
         // Check importanciaSpinner data are shown.
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),

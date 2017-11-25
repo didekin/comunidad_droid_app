@@ -95,7 +95,7 @@ public class ViewerComuSpinnerTest {
                     .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                     .commitNow();
             spinner = activity.findViewById(R.id.comunidad_spinner);
-            atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, new ViewerForTest(activity)));
+            atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, new ViewerForTest(activity)));
         });
         waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
         viewer = atomicViewer.get();
@@ -112,9 +112,7 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testNewViewerComuSpinner() throws Exception
     {
-        ViewerComuSpinner viewer = newViewerComuSpinner(spinner, activity, null);
-        assertThat(viewer, notNullValue());
-        assertThat(viewer.getController(), notNullValue());
+        assertThat(CtrlerComuSpinner.class.cast(viewer.getController()), notNullValue());
     }
 
     @Test
@@ -151,6 +149,11 @@ public class ViewerComuSpinnerTest {
         assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(13L));
         viewer.initSelectedItemId(savedState);
         assertThat(viewer.getSelectedItemId(), is(8L));
+
+        viewer.spinnerEvent = null;
+        savedState = null;
+        viewer.initSelectedItemId(savedState);
+        assertThat(viewer.getSelectedItemId(), is(0L)); // Default initialization.
     }
 
     @Test

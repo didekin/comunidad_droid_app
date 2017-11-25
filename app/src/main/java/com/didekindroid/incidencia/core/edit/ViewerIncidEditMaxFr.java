@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,21 +39,20 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityIn
 
     ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
 
-    private ViewerIncidEditMaxFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
+    private ViewerIncidEditMaxFr(View view, ParentViewerInjectedIf parentViewer)
     {
-        super(view, activity, parentViewer);
+        super(view, parentViewer.getActivity(), parentViewer);
     }
 
     static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
 
-        AppCompatActivity activity = parentViewer.getActivity();
-        ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, activity, parentViewer);
+        ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, parentViewer);
         instance.viewerAmbitoIncidSpinner =
-                newViewerAmbitoIncidSpinner(frView.findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
+                newViewerAmbitoIncidSpinner(frView.findViewById(R.id.incid_reg_ambito_spinner), instance);
         instance.viewerImportanciaSpinner =
-                newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
+                newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), instance);
         instance.setController(new CtrlerIncidRegEditFr());
         return instance;
     }

@@ -2,7 +2,6 @@ package com.didekindroid.usuariocomunidad.data;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -142,10 +141,9 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
             case R.id.comu_data_ac_mn:
             case R.id.incid_see_open_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                Intent intent = new Intent();
-                intent.putExtra(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
-                setIntent(intent);
-                initAcFromMenu(resourceId);
+                Bundle bundle = new Bundle(1);
+                bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
+                initAcFromMenu(bundle, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

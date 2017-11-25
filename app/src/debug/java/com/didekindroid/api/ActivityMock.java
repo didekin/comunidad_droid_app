@@ -3,12 +3,14 @@ package com.didekindroid.api;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 public class ActivityMock extends AppCompatActivity {
@@ -28,5 +30,4 @@ public class ActivityMock extends AppCompatActivity {
 
         defaultActivityClassToGo = ActivityNextMock.class;
     }
-
 }

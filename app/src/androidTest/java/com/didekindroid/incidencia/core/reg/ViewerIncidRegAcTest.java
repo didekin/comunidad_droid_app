@@ -14,7 +14,6 @@ import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,21 +22,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -57,7 +59,8 @@ public class ViewerIncidRegAcTest {
 
     final static AtomicReference<String> flagMethodExec_2 = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
-    UsuarioComunidad pepeUserComu;
+    Comunidad comuReal, comuPlazuela5;
+
 
     @Rule
     public ActivityTestRule<IncidRegAc> activityRule = new ActivityTestRule<IncidRegAc>(IncidRegAc.class) {
@@ -65,8 +68,10 @@ public class ViewerIncidRegAcTest {
         protected void beforeActivityLaunched()
         {
             try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
+                regTwoUserComuSameUser(makeListTwoUserComu());
+                List<Comunidad> comunidades = userComuDaoRemote.getComusByUser();
+                comuReal = comunidades.get(0);
+                comuPlazuela5 = comunidades.get(1);
             } catch (IOException | UiException e) {
                 fail();
             }
@@ -92,7 +97,7 @@ public class ViewerIncidRegAcTest {
     public void clearUp() throws UiException
     {
         viewer.clearSubscriptions();
-        cleanOptions(CLEAN_PEPE);
+        cleanOptions(CLEAN_JUAN);
     }
 
     //  ================================ TESTS ===================================
@@ -124,7 +129,10 @@ public class ViewerIncidRegAcTest {
     @Test
     public void testRegisterIncidencia_1() throws Exception
     {
-        assertThat(viewer.registerIncidencia(doIncidImportancia(), getErrorMsgBuilder(activity)), is(true));
+        // Check change of activity.
+        viewer.registerIncidencia(doIncidImportancia(), getErrorMsgBuilder(activity));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
+
     }
 
     @Test
@@ -133,14 +141,26 @@ public class ViewerIncidRegAcTest {
         final StringBuilder errors = getErrorMsgBuilder(activity);
         errors.append(activity.getResources().getString(R.string.incid_reg_importancia)).append(LINE_BREAK.getRegexp());
         activity.runOnUiThread(() -> assertThat(viewer.registerIncidencia(null, errors), is(false)));
+        // Check errors.
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.incid_reg_importancia, activity));
     }
 
     @Test
-    public void testOnSuccessRegisterIncidencia() throws Exception
+    public void testOnSuccessRegisterIncidencia_1() throws Exception
     {
-        viewer.onSuccessRegisterIncidImportancia();
+        viewer.onSuccessRegisterIncidImportancia(comuPlazuela5);
         // Check change of activity.
-        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
+        // Check comuSpinner initialization.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuPlazuela5.getNombreComunidad()));
+    }
+
+    @Test
+    public void testOnSuccessRegisterIncidencia_2() throws Exception
+    {
+        // Check spinner initialization with the other comunidad.
+        viewer.onSuccessRegisterIncidImportancia(comuReal);
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuReal.getNombreComunidad()));
     }
 
     @Test
@@ -166,8 +186,7 @@ public class ViewerIncidRegAcTest {
     {
         return new IncidImportancia.IncidImportanciaBuilder(
                 new Incidencia.IncidenciaBuilder()
-                        .comunidad(new Comunidad.ComunidadBuilder().c_id(11L).build())
-                        .incidenciaId(12L)
+                        .comunidad(new Comunidad.ComunidadBuilder().c_id(comuReal.getC_Id()).build())
                         .descripcion("Descripción válida")
                         .ambitoIncid(new AmbitoIncidencia((short) 4))
                         .build()

@@ -14,7 +14,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Time: 19:09
  */
 
-public class ComuAutonomaSpinnerEventItemSelect implements SpinnerEventItemSelectIf<ComunidadAutonoma> {
+public class ComuAutonomaSpinnerEventItemSelect implements SpinnerEventItemSelectIf {
 
     private final ComunidadAutonoma comunidadAutonoma;
 

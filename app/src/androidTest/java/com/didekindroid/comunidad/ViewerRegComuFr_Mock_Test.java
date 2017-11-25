@@ -35,6 +35,7 @@ public class ViewerRegComuFr_Mock_Test {
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, false, true);
+
     ViewerRegComuFr viewer;
     ActivityMock activity;
     SpinnerTextMockFr spinnerTextMockFr;

@@ -120,6 +120,7 @@ public class ActivityRouter implements ActivityRouterIf {
     public static void doUpMenu(Activity activity)
     {
         Timber.d("doUpMenu()");
+        // To check if the user presses the Up button after entering your activity from another app's task.
         if (shouldUpRecreateTask(activity, getParentActivityIntent(activity))) {
             Intent intent =
                     new Intent(activity, acRouter.identityCacher.isRegisteredUser() ? defaultRegUser.activityToGo : defaultNoRegUser.activityToGo);
@@ -132,6 +133,7 @@ public class ActivityRouter implements ActivityRouterIf {
         // We need both flags to reuse the parent activity.
         intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP);
         activity.setIntent(intent);
+        // Using navigateUpTo() is suitable only when your app is the owner of the current task (the user began this task from your app)
         navigateUpTo(activity, intent);
     }
 

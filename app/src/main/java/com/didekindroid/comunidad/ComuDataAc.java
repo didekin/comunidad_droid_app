@@ -1,7 +1,6 @@
 package com.didekindroid.comunidad;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -117,10 +116,9 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
                 doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
-                Intent intent = new Intent();
-                intent.putExtra(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
-                setIntent(intent);
-                initAcFromMenu(resourceId);
+                Bundle bundle = new Bundle(1);
+                bundle.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
+                initAcFromMenu(bundle, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

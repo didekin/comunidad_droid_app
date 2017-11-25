@@ -1,7 +1,8 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -30,16 +31,16 @@ public class ViewerComuSpinner extends
     final SpinnerEventListener eventListener;
     ComuSpinnerEventItemSelect spinnerEvent;
 
-    ViewerComuSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
+    ViewerComuSpinner(Spinner view, @NonNull ViewerIf parentViewer)
     {
-        super(view, activity, parentViewer);
+        super(view, parentViewer.getActivity(), parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
     }
 
-    public static ViewerComuSpinner newViewerComuSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
+    public static ViewerComuSpinner newViewerComuSpinner(Spinner view, @NonNull ViewerIf parentViewer)
     {
         Timber.d("newViewerComuSpinner()");
-        ViewerComuSpinner instance = new ViewerComuSpinner(view, activity, parentViewer);
+        ViewerComuSpinner instance = new ViewerComuSpinner(view, parentViewer);
         instance.setController(new CtrlerComuSpinner());
         return instance;
     }
@@ -47,13 +48,13 @@ public class ViewerComuSpinner extends
     // ==================================== ViewerSelectListIf ====================================
 
     @Override
-    public void initSelectedItemId(Bundle savedState)
+    public void initSelectedItemId(@Nullable Bundle savedState)
     {
         Timber.d("initSelectedItemId()");
 
         if (savedState != null && savedState.containsKey(COMUNIDAD_ID.key)) {
             itemSelectedId = savedState.getLong(COMUNIDAD_ID.key, 0);
-        } else if (spinnerEvent.getSpinnerItemIdSelect() > 0) {
+        } else if (spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() > 0) {
             itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         } else {
             itemSelectedId = 0;
@@ -87,7 +88,9 @@ public class ViewerComuSpinner extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        spinnerEvent = ComuSpinnerEventItemSelect.class.cast(viewBean);
+        if (viewBean != null){
+            spinnerEvent = ComuSpinnerEventItemSelect.class.cast(viewBean);
+        }
         view.setOnItemSelectedListener(new ComuSelectedListener());
         initSelectedItemId(savedState);
         controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));

@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.comment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -54,7 +53,7 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
         }
 
         mFragment = IncidCommentSeeListFr.newInstance(mIncidencia);
-        new FragmentInitiator(this, R.id.incid_comments_see_ac).initFragment(mFragment, incid_comments_see_list_fr_tag);
+        new FragmentInitiator(this, R.id.incid_comments_see_ac).initFragmentTx(mFragment, incid_comments_see_list_fr_tag);
     }
 
     // ==================================  ActivityInitiatorIf  =================================
@@ -100,9 +99,9 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
                 doUpMenu(this);
                 return true;
             case R.id.incid_comment_reg_ac_mn:
-                Intent intent = new Intent();
-                intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
-                initAcFromMenu(resourceId);
+                Bundle bundle = new Bundle(1);
+                bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
+                initAcFromMenu(bundle, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

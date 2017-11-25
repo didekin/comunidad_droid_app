@@ -5,6 +5,10 @@
     android:fitsSystemWindows="true"
     android:id="@+id/mock_ac_layout">
 
-    <!--<include layout="@layout/appbar_include_design"/>-->
+    <fragment
+        android:id="@+id/list_mock_frg"
+        android:name="com.didekindroid.api.ListMockFr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </android.support.design.widget.CoordinatorLayout>

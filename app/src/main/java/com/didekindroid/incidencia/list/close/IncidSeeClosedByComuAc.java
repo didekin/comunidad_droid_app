@@ -24,7 +24,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * even is the user was not registered in the comunidad when incidencia was open or closed.
  * 4. All incidencias closed MUST HAVE a bundleWithResolucion.
  * 5. An intent may be passed with a comunidadId, when a notification is sent when the
- * incidencia has been closed.
+ * incidencia has been closed or from a comuSpinner instance in a previous activity or fragment.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.
@@ -55,7 +55,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         argsFragment.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
         fragmentList.setArguments(argsFragment);
 
-        new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac).initFragment(fragmentList, incid_see_by_comu_list_fr_tag);
+        new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac).initFragmentTx(fragmentList, incid_see_by_comu_list_fr_tag);
     }
 
     // ==================================  ActivityInitiatorIf  =================================
@@ -88,7 +88,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         switch (resourceId) {
             case R.id.incid_see_open_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                initAcFromMenu(resourceId);
+                initAcFromMenu(null, resourceId);  // TODO: aquí es donde hay que pasar la comunidad a inicializar en el spinner de comunidad.
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

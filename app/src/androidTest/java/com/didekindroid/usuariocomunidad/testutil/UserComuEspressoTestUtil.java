@@ -6,7 +6,6 @@ import android.support.test.espresso.matcher.ViewMatchers;
 
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.RolUi;
-import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -31,11 +30,9 @@ import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -62,30 +59,6 @@ public final class UserComuEspressoTestUtil {
                 onView(withId(rolUi.resourceViewId)).perform(scrollTo(), click());
             }
         }
-    }
-
-    public static void validaTypedUserComuBean(UsuarioComunidadBean usuarioComunidadBean, String portal, String escalera, String planta, String puerta,
-                                               boolean isPre, boolean isAdm, boolean isPro, boolean isInq)
-    {
-        assertThat(usuarioComunidadBean, notNullValue());
-        assertThat(usuarioComunidadBean.getPortal(), is(portal));
-        assertThat(usuarioComunidadBean.getEscalera(), is(escalera));
-        assertThat(usuarioComunidadBean.getPlanta(), is(planta));
-        assertThat(usuarioComunidadBean.getPuerta(), is(puerta));
-        assertThat(usuarioComunidadBean.isPresidente(), is(isPre));
-        assertThat(usuarioComunidadBean.isAdministrador(), is(isAdm));
-        assertThat(usuarioComunidadBean.isPropietario(), is(isPro));
-        assertThat(usuarioComunidadBean.isInquilino(), is(isInq));
-    }
-
-    public static void validaTypedUsuarioComunidad(UsuarioComunidad usuarioComunidad, String portal, String escalera, String planta, String puerta, String roles)
-    {
-        assertThat(usuarioComunidad, notNullValue());
-        assertThat(usuarioComunidad.getPortal(), is(portal));
-        assertThat(usuarioComunidad.getEscalera(), is(escalera));
-        assertThat(usuarioComunidad.getPlanta(), is(planta));
-        assertThat(usuarioComunidad.getPuerta(), is(puerta));
-        assertThat(usuarioComunidad.getRoles(), is(roles));
     }
 
     public static DataInteraction checkUserComuByComuRol(UsuarioComunidad userComuRow)
@@ -128,7 +101,7 @@ public final class UserComuEspressoTestUtil {
         );
     }
 
-    public static DataInteraction checkUserComuNoPortalNoEscalera(UsuarioComunidad userComuRow, DataInteraction parent)
+    public static DataInteraction checkUserComuNoPortalNoEscalera(DataInteraction parent)
     {
         return parent.onChildView(allOf(
                 withId(R.id.usercomu_portal_escalera_block),
@@ -164,14 +137,6 @@ public final class UserComuEspressoTestUtil {
                         withEffectiveVisibility(ViewMatchers.Visibility.GONE))
                 ))
         );
-    }
-
-    public static DataInteraction checkUserComuNoPlantaNoPuerta(UsuarioComunidad userComuRow, DataInteraction parent)
-    {
-        return parent.onChildView(allOf(
-                withId(R.id.usercomu_planta_puerta_block),
-                withEffectiveVisibility(ViewMatchers.Visibility.GONE)
-        ));
     }
 
     public static void runFinalCheckUserComuByComu(DataInteraction parentDataInteraction)

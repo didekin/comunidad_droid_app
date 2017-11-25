@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.resolucion;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -83,10 +82,9 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
                 }
                 return true;
             case R.id.incid_comments_see_ac_mn:
-                Intent intent = new Intent();
-                intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
-                getActivity().setIntent(intent);
-                initAcFromMenu(resourceId);
+                Bundle bundle = new Bundle(1);
+                bundle.putSerializable(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
+                initAcFromMenu(bundle, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

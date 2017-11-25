@@ -51,7 +51,7 @@ public class ViewerTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        parentViewer = new ViewerMock<>(new View(activity), activity, null);
+        parentViewer = new ViewerMock<>(new View(activity), activity);
         viewInViewer = new View(activity);
         viewer = new Viewer<>(viewInViewer, activity, parentViewer);
     }

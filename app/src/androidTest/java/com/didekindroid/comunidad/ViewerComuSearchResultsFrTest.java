@@ -72,8 +72,10 @@ import static org.junit.Assert.assertThat;
 public class ViewerComuSearchResultsFrTest {
 
     final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
     @Rule
     public IntentsTestRule<ActivityMock> intentsTestRule = new IntentsTestRule<>(ActivityMock.class, false, true);
+
     ViewerComuSearchResultsFr viewer;
     ActivityMock activity;
     ListMockFr mockFr;

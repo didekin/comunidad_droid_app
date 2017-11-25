@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.core;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -33,15 +32,15 @@ public final class ViewerImportanciaSpinner extends
     @SuppressWarnings("WeakerAccess")
     IncidImportanciaBean bean;
 
-    private ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull AppCompatActivity activity, @NonNull ViewerIf parentViewer)
+    private ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull ViewerIf parentViewer)
     {
-        super(view, activity, parentViewer);
+        super(view, parentViewer.getActivity(), parentViewer);
     }
 
-    public static ViewerImportanciaSpinner newViewerImportanciaSpinner(@NonNull Spinner view, @NonNull AppCompatActivity activity, @NonNull ViewerIf parentViewer)
+    public static ViewerImportanciaSpinner newViewerImportanciaSpinner(@NonNull Spinner view, @NonNull ViewerIf parentViewer)
     {
         Timber.d("newViewerImportanciaSpinner()");
-        ViewerImportanciaSpinner instance = new ViewerImportanciaSpinner(view, activity, parentViewer);
+        ViewerImportanciaSpinner instance = new ViewerImportanciaSpinner(view, parentViewer);
         instance.setController(new CtrlerSelectList<String>() {
             @Override
             public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<String>> observer, Long... entityId)

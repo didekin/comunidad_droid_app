@@ -156,7 +156,7 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
         void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
         {
-            listener.initAcFromMenu(resourceId);
+            listener.initAcFromMenu(null, resourceId);
         }
     }
 

@@ -17,7 +17,8 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerIncidRegFr;
 
 /**
- *
+ * Preconditions:
+ * 1. The fragment has an argument for the comunidadId where the incidencia will be open.
  */
 public class IncidRegFr extends Fragment {
 
@@ -44,7 +45,7 @@ public class IncidRegFr extends Fragment {
         /* Initialization of viewers.*/
         viewerInjector = (ChildViewersInjectorIf) getActivity();
         viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getParentViewer());
-        final long comunidadId = getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
+        long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
         viewer.doViewInViewer(savedInstanceState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
         viewerInjector.setChildInParentViewer(viewer);
     }

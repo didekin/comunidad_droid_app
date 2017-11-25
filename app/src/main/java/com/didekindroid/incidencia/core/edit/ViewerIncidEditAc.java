@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.core.edit;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -76,17 +75,15 @@ class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidEditAc> im
     private void onAfterSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
     {
         Timber.d("onAfterSeeResolucion()");
-
-        Intent intent = new Intent();
-        intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
+        Bundle bundle = new Bundle(1);
+        bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
         if (resolucion != null) {
-            intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
+            bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
             for (ViewerIncidEditFr child : getChildViewersFromSuperClass(ViewerIncidEditFr.class)) {
                 child.setHasResolucion();
             }
         }
-        activity.setIntent(intent);
-        initAcFromMenu(resourceIdItemMn);
+        initAcFromMenu(bundle, resourceIdItemMn);
     }
 
     @SuppressWarnings("WeakerAccess")

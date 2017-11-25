@@ -110,7 +110,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
                 doUpMenu(this);
                 return true;
             case R.id.login_ac_mn:
-                initAcFromMenu(resourceId);
+                initAcFromMenu(null, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -155,13 +155,9 @@ public class ViewerIncidRegFrTest {
         final AtomicBoolean isRun = new AtomicBoolean(false);
 
         // Preconditions:
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(new Bundle(), null);
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.doViewInViewer(new Bundle(), null);
+            isRun.compareAndSet(false, true);
         });
         waitAtMost(4, SECONDS).untilTrue(isRun);
 
@@ -170,14 +166,10 @@ public class ViewerIncidRegFrTest {
         viewer.atomIncidBean.get().setCodAmbitoIncid((short) 29);
         viewer.atomIncidImportBean.get().setImportancia((short) 1);
         isRun.set(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                EditText editText = frgView.findViewById(R.id.incid_reg_desc_ed);
-                editText.setText("Descripción válida");
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            EditText editText = frgView.findViewById(R.id.incid_reg_desc_ed);
+            editText.setText("Descripción válida");
+            isRun.compareAndSet(false, true);
         });
         waitAtMost(1, SECONDS).untilTrue(isRun);
 

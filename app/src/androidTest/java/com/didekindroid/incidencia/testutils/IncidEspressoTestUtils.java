@@ -424,19 +424,17 @@ public final class IncidEspressoTestUtils {
 
     public static Callable<Boolean> isComuSpinnerWithText(final String textToCheck)
     {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    onView(allOf(
-                            withId(R.id.app_spinner_1_dropdown_item),
-                            withParent(withId(R.id.incid_reg_comunidad_spinner))
-                    )).check(matches(withText(is(textToCheck))
-                    )).check(matches(isDisplayed()));
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
-                }
+        return () -> {
+            try {
+                onView(
+                        allOf(
+                                withId(R.id.app_spinner_1_dropdown_item),
+                                withParent(withId(R.id.incid_reg_comunidad_spinner))
+                        )
+                ).check(matches(withText(is(textToCheck)))).check(matches(isDisplayed()));
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
             }
         };
     }

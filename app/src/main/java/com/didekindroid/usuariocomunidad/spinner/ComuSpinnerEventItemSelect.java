@@ -11,7 +11,7 @@ import timber.log.Timber;
  * Time: 14:17
  */
 
-public class ComuSpinnerEventItemSelect implements SpinnerEventItemSelectIf<Comunidad> {
+public class ComuSpinnerEventItemSelect implements SpinnerEventItemSelectIf {
 
     private Comunidad comunidadSelect;
 

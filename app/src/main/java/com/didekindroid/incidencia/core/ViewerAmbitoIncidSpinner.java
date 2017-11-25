@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.core;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -28,15 +28,15 @@ public final class ViewerAmbitoIncidSpinner extends
     @SuppressWarnings("WeakerAccess")
     IncidenciaBean incidenciaBean;
 
-    private ViewerAmbitoIncidSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
+    private ViewerAmbitoIncidSpinner(Spinner view, @NonNull ViewerIf parentViewer)
     {
-        super(view, activity, parentViewer);
+        super(view, parentViewer.getActivity(), parentViewer);
     }
 
-    public static ViewerAmbitoIncidSpinner newViewerAmbitoIncidSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
+    public static ViewerAmbitoIncidSpinner newViewerAmbitoIncidSpinner(Spinner view, @NonNull ViewerIf parentViewer)
     {
         Timber.d("newViewerAmbitoIncidSpinner()");
-        ViewerAmbitoIncidSpinner viewer = new ViewerAmbitoIncidSpinner(view, activity, parentViewer);
+        ViewerAmbitoIncidSpinner viewer = new ViewerAmbitoIncidSpinner(view, parentViewer);
         viewer.setController(new CtrlerAmbitoIncidSpinner());
         return viewer;
     }

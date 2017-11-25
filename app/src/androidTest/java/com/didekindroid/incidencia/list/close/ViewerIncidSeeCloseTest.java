@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.testutils.IncidDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -33,16 +32,20 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidenciaUsers;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidClosedListView;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -107,7 +110,7 @@ public class ViewerIncidSeeCloseTest {
     public static void checkOnSuccessLoadItems(IncidImportancia incidImportancia, Activity activity,
                                                final ViewerSelectListIf<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser> viewer)
     {
-        final List<IncidenciaUser> list = IncidDataTestUtils.doIncidenciaUsers(incidImportancia);
+        final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia);
 
         activity.runOnUiThread(() -> {
             viewer.setItemSelectedId(22L);
@@ -182,20 +185,7 @@ public class ViewerIncidSeeCloseTest {
         waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidResolucionSeeFrLayout)));
     }
 
-    @Test
-    public void testReplaceComponent() throws Exception
-    {
-        // Preconditions.
-        Bundle bundle = new Bundle(3);
-        bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
-        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolucion.getIncidencia());
-        bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
-
-        fragment.viewer.replaceComponent(bundle);
-        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidResolucionSeeFrLayout)));
-    }
-
-    //    ============================  TESTS  ===================================
+    //    ============================ UNIT TESTS  ===================================
 
     @Test
     public void testNewViewerIncidSeeClose() throws Exception
@@ -227,9 +217,24 @@ public class ViewerIncidSeeCloseTest {
     }
 
     @Test
+    public void test_OnSuccessLoadSelectedItem() throws Exception
+    {
+        // Preconditions.
+        Bundle bundle = new Bundle(3);
+        bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
+        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolucion.getIncidencia());
+        bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+        // Exec.
+        fragment.viewer.onSuccessLoadSelectedItem(bundle);
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
+        // Checkup
+        checkUp(incidSeeGenericFrLayout);
+    }
+
+    @Test
     public void test_GetSelectedPositionFromItemId() throws Exception
     {
-        final List<IncidenciaUser> list = IncidDataTestUtils.doIncidenciaUsers(incidImportancia1);
+        final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia1);
 
         activity.runOnUiThread(() -> {
             fragment.viewer.onSuccessLoadItemList(list);
@@ -240,6 +245,8 @@ public class ViewerIncidSeeCloseTest {
             assertThat(fragment.viewer.getSelectedPositionFromItemId(93L), is(0));
         });
     }
+
+    //    ============================ LIFE CYCLE TESTS  ===================================
 
     @Test
     public void testClearSubscriptions() throws Exception

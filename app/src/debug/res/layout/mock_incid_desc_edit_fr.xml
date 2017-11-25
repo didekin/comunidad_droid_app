@@ -6,6 +6,9 @@
               android:layout_marginTop="@dimen/app_bar_bottom_margin">
     <EditText
         android:id="@+id/incid_reg_desc_ed"
-        tools:ignore="LabelFor" android:layout_height="20dp" android:layout_width="match_parent"/>
+        tools:ignore="LabelFor"
+        android:layout_height="20dp"
+        android:layout_width="match_parent"
+        android:inputType="text"/>
 
 </LinearLayout>

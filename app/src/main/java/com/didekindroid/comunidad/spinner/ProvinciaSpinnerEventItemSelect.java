@@ -11,7 +11,7 @@ import timber.log.Timber;
  * Time: 20:36
  */
 
-public class ProvinciaSpinnerEventItemSelect implements SpinnerEventItemSelectIf<Provincia> {
+public class ProvinciaSpinnerEventItemSelect implements SpinnerEventItemSelectIf {
 
     private Provincia provincia;
 

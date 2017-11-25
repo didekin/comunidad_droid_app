@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -84,7 +83,7 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         fragmentToAdd.setArguments(argsFragment);
 
-        new FragmentInitiator(this, R.id.incid_edit_fragment_container_ac).initFragment(fragmentToAdd, incid_edit_ac_frgs_tag);
+        new FragmentInitiator(this, R.id.incid_edit_fragment_container_ac).initFragmentTx(fragmentToAdd, incid_edit_ac_frgs_tag);
         initViewer();
     }
 
@@ -162,10 +161,9 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
                 return true;
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
-                Intent intent = new Intent();
-                intent.putExtra(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
-                setIntent(intent);
-                initAcFromMenu(resourceId);
+                Bundle bundle = new Bundle(1);
+                bundle.putSerializable(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
+                initAcFromMenu(bundle, resourceId);
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 // We don't reuse flag for resolucion: the state might have changed. We checked DB.

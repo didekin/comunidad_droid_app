@@ -56,7 +56,7 @@ public class ViewerIncidSeeClose extends
         Timber.d("newViewerIncidSeeClose()");
         ViewerIncidSeeClose parentInstance = new ViewerIncidSeeClose(view, activity);
         parentInstance.setController(new CtrlerIncidSeeCloseByComu());
-        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
+        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), parentInstance);
         return parentInstance;
     }
 
@@ -137,12 +137,12 @@ public class ViewerIncidSeeClose extends
         onSuccessLoadItems(itemsList, getNewViewAdapter());
     }
 
-
     @Override
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        replaceComponent(bundle);
+        new FragmentInitiator<IncidResolucionSeeFr>(activity, R.id.incid_see_closed_by_comu_ac)
+                .initReplaceFragmentTx(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
     }
 
     // ==================================  SpinnerEventListener  =================================
@@ -161,17 +161,6 @@ public class ViewerIncidSeeClose extends
     }
 
     // ==================================  HELPERS  =================================
-
-    /**
-     * This method is called after the controller loads the data related with the incidencia selected (its resolucion, mainly).
-     * Data are passed in a bundle to the next component.
-     */
-    void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        new FragmentInitiator(activity, R.id.incid_see_closed_by_comu_ac)
-                .initReplaceFragment(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
-    }
 
     @NonNull
     private ArrayAdapter<IncidenciaUser> getNewViewAdapter()

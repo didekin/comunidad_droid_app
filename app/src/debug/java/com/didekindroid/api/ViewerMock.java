@@ -16,10 +16,10 @@ public class ViewerMock<T extends View, C extends ControllerIf> extends Viewer<T
 
     public ViewerMock(AppCompatActivity activity)
     {
-        this(null, activity, null);
+        this(null, activity);
     }
 
-    ViewerMock(T view, AppCompatActivity activity, ViewerIf<T, C> parentViewer)
+    ViewerMock(T view, AppCompatActivity activity)
     {
         super(view, activity, null);
     }

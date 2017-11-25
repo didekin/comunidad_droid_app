@@ -6,12 +6,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.router.FragmentInitiator;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegAc.newViewerIncidRegAc;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
@@ -24,7 +26,6 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. No intent passed.
  * <p>
  * This activity is a point of registration for receiving notifications of new incidencias.
- * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
 public class IncidRegAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
@@ -44,7 +45,9 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
 
         viewer = newViewerIncidRegAc(this);
         viewer.doViewInViewer(savedInstanceState, null);
-        incidRegFr = (IncidRegFr) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
+        Bundle bundle = new Bundle(1);
+        bundle.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
+        incidRegFr = new FragmentInitiator<IncidRegFr>(this).initFragmentById(bundle, R.id.incid_reg_frg);
     }
 
     @Override

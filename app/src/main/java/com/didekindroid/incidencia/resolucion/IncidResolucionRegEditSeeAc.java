@@ -76,7 +76,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         }
 
         fragmentToAdd.setArguments(argsFragment);
-        new FragmentInitiator(this, R.id.incid_resolucion_fragment_container_ac).initFragment(fragmentToAdd, incid_resolucion_ac_frgs_tag);
+        new FragmentInitiator(this, R.id.incid_resolucion_fragment_container_ac).initFragmentTx(fragmentToAdd, incid_resolucion_ac_frgs_tag);
     }
 
     @Override

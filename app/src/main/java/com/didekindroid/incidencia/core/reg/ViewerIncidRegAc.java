@@ -11,12 +11,14 @@ import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
@@ -76,10 +78,12 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
         viewerFirebaseToken.saveState(savedState);
     }
 
-    public void onSuccessRegisterIncidImportancia()
+    public void onSuccessRegisterIncidImportancia(Comunidad comunidad)
     {
         Timber.d("onSuccessRegisterIncidImportancia()");
-        initAcFromActivity(null);
+        Bundle bundle = new Bundle(1);
+        bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
+        initAcFromActivity(bundle);    // TODO: testar.
     }
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)
@@ -89,7 +93,10 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
             makeToast(activity, errorMsg);
             return false;
         } else {
-            return checkInternetConnected(activity) && controller.registerIncidImportancia(new RegIncidImportanciaObserver<>(this), incidImportancia);
+            return checkInternetConnected(activity) &&
+                    controller.registerIncidImportancia(
+                            new RegIncidImportanciaObserver<>(this, incidImportancia.getIncidencia().getComunidad()),
+                            incidImportancia);
         }
     }
 
@@ -103,6 +110,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
         {
             Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
             StringBuilder errorMsg = getErrorMsgBuilder(activity);
+
             IncidImportancia incidImportancia = getChildViewer(ViewerIncidRegFr.class).doIncidImportanciaFromView(errorMsg);
             registerIncidencia(incidImportancia, errorMsg);
         }

@@ -84,7 +84,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
                 return true;
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                initAcFromMenu(resourceId);
+                initAcFromMenu(null, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

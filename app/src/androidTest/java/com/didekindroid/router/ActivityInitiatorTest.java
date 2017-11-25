@@ -79,7 +79,7 @@ public class ActivityInitiatorTest {
     @Test
     public void testInitAcFromMenu() throws Exception
     {
-        activityInitiator.initAcFromMenu(1);
+        activityInitiator.initAcFromMenu(null, 1);
         onView(withId(R.id.mock_ac_layout)).check(matches(isDisplayed()));
         // Check extra from the activity.
         intended(hasExtra("keyTest_1", "Value_keyTest_1"));

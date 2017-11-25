@@ -224,7 +224,6 @@ public class ViewerSeeUserComuByComuTest {
                 checkUserComuPlantaNoPuerta(
                         usuarioComunidad3,
                         checkUserComuNoPortalNoEscalera(
-                                usuarioComunidad3,
                                 checkUserComuByComuRol(usuarioComunidad3)
                         )
                 )

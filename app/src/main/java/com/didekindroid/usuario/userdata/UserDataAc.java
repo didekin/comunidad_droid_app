@@ -91,7 +91,7 @@ public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:
             case R.id.incid_see_open_by_comu_ac_mn:
-                initAcFromMenu(resourceId);
+                initAcFromMenu(null, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -24,7 +24,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. The user is registered.
  * 2. The user is registered NOW in the comunidad whose open incidencias are shown.
  * 3. An intent may be passed with a comunidadId, when a notification is sent when the
- * incidencia has been opened.
+ * incidencia has been opened or when the previous activity has a comuSpinner instance.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
@@ -51,7 +51,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ActivityI
         argsFragment.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
         fragment.setArguments(argsFragment);
 
-        new FragmentInitiator(this, R.id.incid_see_open_by_comu_ac).initFragment(fragment, incid_see_by_comu_list_fr_tag);
+        new FragmentInitiator(this, R.id.incid_see_open_by_comu_ac).initFragmentTx(fragment, incid_see_by_comu_list_fr_tag);
     }
 
     // ==================================  ActivityInitiatorIf  =================================
@@ -87,7 +87,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ActivityI
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                initAcFromMenu(resourceId);
+                initAcFromMenu(null, resourceId);   // TODO: aquí es donde hay que pasar la comunidad a inicializar en el spinner de comunidad.
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
