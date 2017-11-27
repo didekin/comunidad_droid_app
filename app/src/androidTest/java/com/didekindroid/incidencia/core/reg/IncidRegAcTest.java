@@ -1,15 +1,15 @@
 package com.didekindroid.incidencia.core.reg;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
+import com.didekinlib.model.comunidad.Comunidad;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -25,6 +26,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
@@ -37,6 +39,7 @@ import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
@@ -58,18 +61,25 @@ import static org.junit.Assert.fail;
 public class IncidRegAcTest {
 
     final static AtomicReference<String> flagMethodExec_1 = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    List<Comunidad> comunidades;
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
 
         @Override
-        protected void beforeActivityLaunched()
+        protected Intent getActivityIntent()
         {
+            Intent intent = null;
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
+                comunidades = userComuDaoRemote.getComusByUser();
+                intent = new Intent();
+                assertThat(comunidades.get(0).getC_Id() > 0, is(true));
+                intent.putExtra(COMUNIDAD_ID.key, comunidades.get(0).getC_Id());
             } catch (IOException | UiException e) {
                 fail();
             }
+            return intent;
         }
     };
 
@@ -151,9 +161,9 @@ public class IncidRegAcTest {
     public void testOnCreate()
     {
         assertThat(activity.getParentViewer(), notNullValue());
-        IncidRegFr fragment = (IncidRegFr) activity.getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
-        assertThat(fragment.viewerInjector, instanceOf(IncidRegAc.class));
-        assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
+        assertThat(activity.incidRegFr.getArguments().getLong(COMUNIDAD_ID.key), is(comunidades.get(0).getC_Id()));
+        assertThat(activity.incidRegFr.viewerInjector, instanceOf(IncidRegAc.class));
+        assertThat(activity.incidRegFr.viewer.getParentViewer(), is(activity.viewer));
     }
 
     @Test
@@ -178,13 +188,7 @@ public class IncidRegAcTest {
                 return 0;
             }
         };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
+        activity.runOnUiThread(() -> getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0)));
         waitAtMost(1, SECONDS).untilAtomic(flagMethodExec_1, is(AFTER_METHOD_EXEC_A));
     }
 }

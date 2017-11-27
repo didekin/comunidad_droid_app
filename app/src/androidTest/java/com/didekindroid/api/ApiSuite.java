@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         ControllerTest.class,
         ObserverCacheCleanerTest.class,
+        ObserverSingleListTest.class,
         ObserverSingleSelectItemTest.class,
         ObserverSingleSelectListTest.class,
         ParentViewerInjectedTest.class,

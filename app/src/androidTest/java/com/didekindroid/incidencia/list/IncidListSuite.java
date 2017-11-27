@@ -22,15 +22,15 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         // list.close
         CtrlerIncidSeeCloseByComuTest.class,
+        ViewerIncidSeeCloseTest.class,
         IncidSeeClosedByComuAc_Mn_Test.class,
         IncidSeeClosedByComuAcTest.class,
-        ViewerIncidSeeCloseTest.class,
         // list.open
         CtrlerIncidSeeOpenByComuTest.class,
+        ViewerIncidSeeOpenTest.class,
         IncidSeeOpenByComuAc_GCM_Test.class,
         IncidSeeOpenByComuAc_Mn_Test.class,
         IncidSeeOpenByComuAcTest.class,
-        ViewerIncidSeeOpenTest.class,
 })
 public class IncidListSuite {
 }

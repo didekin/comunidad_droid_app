@@ -1,4 +1,4 @@
-package com.didekindroid.utils;
+package com.didekindroid.util;
 
 import com.didekindroid.R;
 

@@ -3,7 +3,8 @@
     android:id="@+id/incid_comments_see_fr_layout"
     style="@style/baseLayout.withPadding"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginTop="@dimen/app_bar_bottom_margin">
+    android:layout_marginTop="@dimen/app_bar_bottom_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListView
         android:id="@id/android:list"
@@ -18,5 +19,10 @@
         android:text="@string/incid_comments_see_no_comments"
         android:visibility="gone">
     </TextView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/incid_new_comment_fab"
+        style="@style/floatingButton"
+        app:srcCompat="@drawable/ic_create_black_24dp"/>
 
 </LinearLayout>

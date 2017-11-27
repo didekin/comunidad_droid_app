@@ -58,6 +58,20 @@
         <item name="android:paddingStart">@dimen/drawer_padding</item>
     </style>
 
+    <!-- ............... FloatingActionButton ................-->
+    <style name="floatingButton">
+        <item name="layout_width">wrap_content</item>
+        <item name="layout_height">wrap_content</item>
+        <item name="layout_gravity">end|bottom</item>
+        <item name="layout_marginBottom">16dp</item>
+        <item name="layout_marginEnd">16dp</item>
+        <item name="clickable">true</item>
+        <item name="focusable">true</item>
+        <item name="tint">@color/white</item>
+        <item name="fabSize">mini</item>
+        <item name="rippleColor">"@color/deep_orange_200</item>
+    </style>
+
     <!-- .............. EditTextFields ......... -->
     <style name="textBase.editField">
         <item name="android:textSize">@dimen/text_hint_size</item>

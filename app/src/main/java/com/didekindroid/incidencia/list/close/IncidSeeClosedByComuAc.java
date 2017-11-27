@@ -35,6 +35,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
 public class IncidSeeClosedByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     IncidSeeCloseByComuFr fragmentList;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,17 +45,18 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         setContentView(R.layout.incid_see_closed_by_comu_ac);
         doToolBar(this, true);
 
+        // ComunidadId in intent.
+        long comunidadId = getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
+        bundle = new Bundle();
+        bundle.putLong(COMUNIDAD_ID.key, comunidadId);
+
         if (savedInstanceState != null) {
             fragmentList = (IncidSeeCloseByComuFr) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
             return;
         }
 
         fragmentList = new IncidSeeCloseByComuFr();
-        Bundle argsFragment = new Bundle();
-        // We create an argument for the fragment even if the intent extra doesn't exist in the activity.
-        argsFragment.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
-        fragmentList.setArguments(argsFragment);
-
+        fragmentList.setArguments(bundle);
         new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac).initFragmentTx(fragmentList, incid_see_by_comu_list_fr_tag);
     }
 
@@ -88,7 +90,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         switch (resourceId) {
             case R.id.incid_see_open_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                initAcFromMenu(null, resourceId);  // TODO: aquí es donde hay que pasar la comunidad a inicializar en el spinner de comunidad.
+                initAcFromMenu(bundle, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

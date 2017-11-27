@@ -89,7 +89,7 @@ public abstract class Incidencia_GCM_Test {
     protected void checkNotification(int notificationId) throws InterruptedException
     {
         // Verifico recepción de notificación.
-        waitAtMost(10, SECONDS).until(notificationsSize(), is(1));
+        waitAtMost(12, SECONDS).until(notificationsSize(), is(1));
 
         StatusBarNotification barNotification = notificationManager.getActiveNotifications()[0];
         assertThat(barNotification.getId(), is(notificationId));

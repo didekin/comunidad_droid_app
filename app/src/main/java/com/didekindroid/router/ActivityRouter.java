@@ -2,6 +2,7 @@ package com.didekindroid.router;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
 import com.didekindroid.R;
@@ -42,6 +43,7 @@ import static android.support.v4.app.NavUtils.navigateUpTo;
 import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
 import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultNoRegUser;
 import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewComment;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 /**
@@ -82,7 +84,7 @@ public class ActivityRouter implements ActivityRouterIf {
         // ACCESORIO
         menuIdMap.put(R.id.confidencialidad_ac_mn, ConfidencialidadAc.class);
         // INCIDENCIAS.
-        menuIdMap.put(R.id.incid_comment_reg_ac_mn, IncidCommentRegAc.class);
+        menuIdMap.put(R.id.incid_comment_reg_ac_mn, writeNewComment.activityToGo);
         menuIdMap.put(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class);
         menuIdMap.put(R.id.incid_reg_ac_mn, IncidRegAc.class);
         menuIdMap.put(R.id.incid_resolucion_reg_ac_mn, IncidResolucionRegEditSeeAc.class);
@@ -117,7 +119,8 @@ public class ActivityRouter implements ActivityRouterIf {
         this.identityCacher = identityCacher;
     }
 
-    public static void doUpMenu(Activity activity)
+    @SuppressWarnings("ConstantConditions")
+    public static void doUpMenu(@NonNull Activity activity)
     {
         Timber.d("doUpMenu()");
         // To check if the user presses the Up button after entering your activity from another app's task.
@@ -174,14 +177,15 @@ public class ActivityRouter implements ActivityRouterIf {
         modifyPswd(SeeUserComuByUserAc.class),
         notSendNewPswd(ComuSearchAc.class),
         sendNewPswd(LoginAc.class),
+        // Incidencia
+        writeNewComment(IncidCommentRegAc.class),
         // Resolución.
         regResolucion(IncidEditAc.class),
         regResolucionDuplicate(regResolucion.activityToGo),
         modifyResolucion(IncidEditAc.class),
         modifyResolucionError(IncidSeeOpenByComuAc.class),
         closeIncidencia(IncidSeeClosedByComuAc.class),
-        closeIncidenciaError(IncidSeeOpenByComuAc.class),
-        ;
+        closeIncidenciaError(IncidSeeOpenByComuAc.class),;
 
         final Class<? extends Activity> activityToGo;
 

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -40,13 +39,9 @@ public class IncidSeeCloseByComuFr extends Fragment {
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedState);
-        /* Initialization of viewers.*/
-        final long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
-        ComuSpinnerEventItemSelect spinnerEvent = comunidadId > 0 ?
-                new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()) :
-                new ComuSpinnerEventItemSelect();
         viewer = newViewerIncidSeeClose(frView, (AppCompatActivity) getActivity());
-        viewer.doViewInViewer(savedState, spinnerEvent);
+        final long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
+        viewer.doViewInViewer(savedState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
     }
 
     @Override

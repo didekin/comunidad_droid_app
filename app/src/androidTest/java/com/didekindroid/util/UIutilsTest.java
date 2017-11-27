@@ -1,4 +1,4 @@
-package com.didekindroid.utils;
+package com.didekindroid.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;

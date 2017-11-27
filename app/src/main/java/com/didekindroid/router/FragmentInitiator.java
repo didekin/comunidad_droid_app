@@ -45,7 +45,7 @@ public class FragmentInitiator<T extends Fragment> {
 
     public void initFragmentTx(@NonNull Fragment fragment, String fragmentTag)
     {
-        Timber.d("initReplaceFragmentTx()");
+        Timber.d("initFragmentTx()");
         activity.getSupportFragmentManager().beginTransaction()
                 .add(containerId, fragment, fragmentTag)
                 .commit();

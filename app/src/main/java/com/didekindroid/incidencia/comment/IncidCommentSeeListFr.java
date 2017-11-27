@@ -3,6 +3,7 @@ package com.didekindroid.incidencia.comment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -20,6 +22,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewComment;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 
 /**
@@ -28,7 +31,7 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * <p/>
  * Postconditions:
  */
-public class IncidCommentSeeListFr extends Fragment {
+public class IncidCommentSeeListFr extends Fragment implements ActivityInitiatorIf {
 
     IncidCommentSeeAdapter mAdapter;
     View mView;
@@ -68,6 +71,7 @@ public class IncidCommentSeeListFr extends Fragment {
         return mView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
@@ -78,6 +82,13 @@ public class IncidCommentSeeListFr extends Fragment {
         mIncidencia = (Incidencia) getArguments().getSerializable(INCIDENCIA_OBJECT.key);
         new IncidCommentLoader().execute(mIncidencia);
         mListView = mView.findViewById(android.R.id.list);
+
+        FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
+        fab.setOnClickListener(v -> {
+            Bundle bundle = new Bundle(1);
+            bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
+            initAcFromListener(bundle, writeNewComment);
+        });
     }
 
     @Override
@@ -158,6 +169,7 @@ public class IncidCommentSeeListFr extends Fragment {
             return comments;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         protected void onPostExecute(List<IncidComment> incidComments)
         {

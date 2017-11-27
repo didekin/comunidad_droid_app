@@ -89,7 +89,7 @@ public class ViewerComuSpinner extends
     {
         Timber.d("doViewInViewer()");
         if (viewBean != null){
-            spinnerEvent = ComuSpinnerEventItemSelect.class.cast(viewBean);
+            spinnerEvent = new ComuSpinnerEventItemSelect(Comunidad.class.cast(viewBean));
         }
         view.setOnItemSelectedListener(new ComuSelectedListener());
         initSelectedItemId(savedState);

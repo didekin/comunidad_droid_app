@@ -43,6 +43,7 @@ import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_c
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -154,7 +155,7 @@ public class IncidSeeOpenByComuAcTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidEditAcLayout)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
         // Check intent.
         intended(hasExtras(
                 hasEntry(INCID_RESOLUCION_BUNDLE.key,

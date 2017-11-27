@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.list.close;
 
 import android.content.Intent;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
@@ -44,7 +46,7 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     Comunidad comunidadInIntent;
 
     @Rule
-    public ActivityTestRule<IncidSeeClosedByComuAc> activityRule = new ActivityTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class, true, true) {
+    public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class, true, true) {
 
         @Override
         protected Intent getActivityIntent()
@@ -98,6 +100,7 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(activity);
+        intended(hasExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()));
         checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
     }
 }

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeClose;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -52,6 +53,13 @@ final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     {
         Timber.d("onSuccessLoadItemList()");
         onSuccessLoadItems(itemsList, getNewViewAdapter());
+    }
+
+    @Override
+    public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
+    {
+        Timber.d("onSuccessLoadSelectedItem()");
+        new ActivityInitiator(activity).initAcFromActivity(bundle);
     }
 
     /* ==================================  VIEWER  =================================*/

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.didekindroid.R;
 
@@ -26,13 +25,7 @@ public class ConfidencialidadAc extends AppCompatActivity {
 
         // Adding Floating Action Button to bottom right of main view
         FloatingActionButton fab = findViewById(R.id.confidencialidad_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                doUpMenu(ConfidencialidadAc.this);
-            }
-        });
+        fab.setOnClickListener(v -> doUpMenu(this));
     }
 
     @Override

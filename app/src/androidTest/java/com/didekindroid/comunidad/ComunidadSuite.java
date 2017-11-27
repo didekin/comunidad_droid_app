@@ -32,6 +32,8 @@ import org.junit.runners.Suite;
         ViewerComuSearchAcTest.class,
         ViewerComuSearchResultAcTest.class,
         ViewerComuSearchResultsFrTest.class,
+        ViewerDrawerMain_NotReg_Test.class,
+        ViewerDrawerMain_Reg_Test.class,
         ViewerRegComuFr_Mock_Test.class,
         ViewerRegComuFrTest.class,
         // repository
@@ -42,8 +44,6 @@ import org.junit.runners.Suite;
         CtrlerProvinciaSpinnerTest.class,
         CtrlerTipoViaSpinnerTest.class,
         ViewerComuAutonomaSpinnerTest.class,
-        ViewerDrawerMain_NotReg_Test.class,
-        ViewerDrawerMain_Reg_Test.class,
         ViewerMunicipioSpinnerTest.class,
         ViewerProvinciaSpinnerTest.class,
         ViewerTipoViaSpinnerTest.class,
