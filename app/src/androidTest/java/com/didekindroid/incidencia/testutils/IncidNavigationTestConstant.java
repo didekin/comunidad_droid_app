@@ -10,8 +10,11 @@ import com.didekindroid.R;
 
 public final class IncidNavigationTestConstant {
 
-    public static final int incidResolucionSeeFrLayout = R.id.incid_resolucion_see_fr_layout;
+    public static final int incidCommentRegAcLayout = R.id.incid_comment_reg_ac_layout;
+    public static final int incidCommentsSeeFrLayout = R.id.incid_comments_see_fr_layout;
     public static final int incidEditAcLayout = R.id.incid_edit_fragment_container_ac;
+    public static final int incidRegAcLayout = R.id.incid_reg_ac_layout;
+    public static final int incidResolucionSeeFrLayout = R.id.incid_resolucion_see_fr_layout;
     public static final int incidSeeCloseAcLayout = R.id.incid_see_closed_by_comu_ac;
     public static final int incidSeeOpenAcLayout = R.id.incid_see_open_by_comu_ac;
     public static final int incidSeeGenericFrLayout = R.id.incid_see_generic_layout;

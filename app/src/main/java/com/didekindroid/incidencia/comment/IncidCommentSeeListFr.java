@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.comment;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -49,25 +48,14 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
     }
 
     @Override
-    public void onAttach(Context context)
-    {
-        Timber.d("onAttach()");
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        Timber.d("onCreate()");
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
         mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
+        // Floating button.
+        FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
+        fab.setOnClickListener(v -> initAcFromListener(getArguments(), writeNewComment));
         return mView;
     }
 
@@ -82,69 +70,6 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
         mIncidencia = (Incidencia) getArguments().getSerializable(INCIDENCIA_OBJECT.key);
         new IncidCommentLoader().execute(mIncidencia);
         mListView = mView.findViewById(android.R.id.list);
-
-        FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
-        fab.setOnClickListener(v -> {
-            Bundle bundle = new Bundle(1);
-            bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
-            initAcFromListener(bundle, writeNewComment);
-        });
-    }
-
-    @Override
-    public void onStart()
-    {
-        Timber.d("Enters onStart()");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume()
-    {
-        Timber.d("Enters onResume()");
-        super.onResume();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onPause()
-    {
-        Timber.d("onPause()");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        Timber.d("onDestroyView()");
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach()
-    {
-        Timber.d("onDetach()");
-        super.onDetach();
     }
 
     //    ============================================================
@@ -187,7 +112,6 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
                 mAdapter.addAll(incidComments);
                 mListView.setAdapter(mAdapter);
             } else {
-                //TextView for no result.
                 mListView.setEmptyView(mView.findViewById(android.R.id.empty));
             }
         }

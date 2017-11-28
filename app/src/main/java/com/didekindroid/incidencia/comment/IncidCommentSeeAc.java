@@ -13,6 +13,7 @@ import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.comment.IncidCommentSeeListFr.newInstance;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_initialized;
@@ -24,7 +25,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
 /**
  * Preconditions:
  * 1. The user is registered.
- * 1. An intent key is received with an IncidenciaUser instance.
+ * 1. An intent key is received with an Incidencia instance.
  * Postconditions:
  * 1. An intent key is passed with an IncidenciaUser instance on to the option menu 'incid_comment_reg_mn'.
  */
@@ -52,7 +53,7 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
             return;
         }
 
-        mFragment = IncidCommentSeeListFr.newInstance(mIncidencia);
+        mFragment = newInstance(mIncidencia);
         new FragmentInitiator(this, R.id.incid_comments_see_ac).initFragmentTx(mFragment, incid_comments_see_list_fr_tag);
     }
 

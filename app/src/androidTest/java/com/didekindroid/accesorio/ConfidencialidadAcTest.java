@@ -23,6 +23,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -69,8 +70,9 @@ public class ConfidencialidadAcTest {
     @Test
     public void test_FabOk()
     {
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.confidencialidad_fab)));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.confidencialidad_fab), click()));
+            onView(withId(R.id.confidencialidad_fab)).perform(click());
             waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
         }
     }

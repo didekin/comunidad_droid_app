@@ -13,7 +13,8 @@ import com.didekindroid.router.FragmentInitiator;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.list.open.IncidSeeOpenByComuFr.newInstance;
+import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_open_by_comu_list_fr_tag;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -32,7 +33,6 @@ import static com.didekindroid.util.UIutils.doToolBar;
 public class IncidSeeOpenByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     IncidSeeOpenByComuFr fragment;
-    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,18 +42,14 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ActivityI
         setContentView(R.layout.incid_see_open_by_comu_ac);
         doToolBar(this, true);
 
-        // ComunidadId in intent.
-        long comunidadId = getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
-        bundle = new Bundle();
-        bundle.putLong(COMUNIDAD_ID.key, comunidadId);
-
         if (savedInstanceState != null) {
-            fragment = (IncidSeeOpenByComuFr) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+            fragment = (IncidSeeOpenByComuFr) getSupportFragmentManager().findFragmentByTag(incid_see_open_by_comu_list_fr_tag);
             return;
         }
-        fragment = new IncidSeeOpenByComuFr();
-        fragment.setArguments(bundle);
-        new FragmentInitiator(this, R.id.incid_see_open_by_comu_ac).initFragmentTx(fragment, incid_see_by_comu_list_fr_tag);
+
+        // ComunidadId in intent.
+        fragment = newInstance(getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
+        new FragmentInitiator(this, R.id.incid_see_open_by_comu_ac).initFragmentTx(fragment, incid_see_open_by_comu_list_fr_tag);
     }
 
     // ==================================  ActivityInitiatorIf  =================================
@@ -89,7 +85,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ActivityI
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                initAcFromMenu(bundle, resourceId);
+                initAcFromMenu(getIntent().getExtras(), resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -111,7 +111,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-messaging:11.6.0'
+    implementation 'com.google.firebase:firebase-messaging:11.6.2'
     implementation rootProject.ext.didekinlib_model
     implementation rootProject.ext.didekinlib_http
     implementation rootProject.ext.timber

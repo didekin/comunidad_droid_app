@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
@@ -24,12 +25,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
@@ -89,15 +92,25 @@ public class IncidSeeOpenByComuAc_Mn_Test {
     public void testOnCreate() throws Exception
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-
         onView(withId(incidSeeOpenAcLayout)).check(matches(isDisplayed()));
         onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
         // No hay incidencias registradas.
         SECONDS.sleep(2);
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
-        waitAtMost(3, SECONDS).until(isComuSpinnerWithText(comunidadInIntent.getNombreComunidad()));
+        // Spinner
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comunidadInIntent.getNombreComunidad()));
+        // FloatingButton
+        onView(withId(R.id.incid_new_incid_fab)).perform(click());
+        onView(withId(incidRegAcLayout)).check(matches(isDisplayed()));
+        checkUp(incidSeeOpenAcLayout, incidSeeGenericFrLayout);
+    }
 
-        clickNavigateUp();
+    @Test
+    public void test_newIncidenciaButton() throws InterruptedException
+    {
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
+        checkUp(incidSeeOpenAcLayout);
     }
 
 //  ================================== MENU TESTS ====================================

@@ -105,25 +105,15 @@ public class ViewerIncidSeeUserComuImportanciaTest {
 
         // Preconditions.
         waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.getViewInViewer().setAdapter(null);
-            }
-        });
+        activity.runOnUiThread(() -> viewer.getViewInViewer().setAdapter(null));
 
         final List<ImportanciaUser> listUsers = Arrays.asList(new ImportanciaUser(USER_PEPE.getAlias(), (short) 3),
                 new ImportanciaUser(USER_JUAN.getAlias(), (short) 1));
 
         final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadItemList(listUsers);
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadItemList(listUsers);
+            isRun.compareAndSet(false, true);
         });
         waitAtMost(4, SECONDS).untilTrue(isRun);
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(2));

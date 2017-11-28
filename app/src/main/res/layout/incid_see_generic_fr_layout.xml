@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/incid_see_generic_layout"
-    style="@style/baseLayout.withPadding"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/incid_see_generic_fr"
+    style="@style/baseLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginTop="@dimen/app_bar_bottom_margin">
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/incid_see_generic_layout"
+        style="@style/baseLayout.withPadding"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_marginTop="@dimen/app_bar_bottom_margin">
 
     <TextView
         android:id="@+id/incid_comunidad_rot"
         style="@style/textBase.textFieldLabel1"
         android:text="@string/incid_comunidad_rot"/>
 
-     <Spinner
-         android:id="@+id/incid_reg_comunidad_spinner"
-         style="@style/spinnerBase"/>
+    <Spinner
+        android:id="@+id/incid_reg_comunidad_spinner"
+        style="@style/spinnerBase"/>
 
     <TextView
         android:id="@+id/incid_see_incidencias_rot"
@@ -32,4 +39,13 @@
         android:visibility="gone">
     </TextView>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/incid_new_incid_fab"
+        style="@style/floatingButton"
+        app:fabSize="mini"
+        app:rippleColor="@color/deep_orange_200"
+        app:srcCompat="@drawable/ic_create_black_24dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

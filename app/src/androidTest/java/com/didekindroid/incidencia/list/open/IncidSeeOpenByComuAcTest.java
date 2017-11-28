@@ -3,6 +3,7 @@ package com.didekindroid.incidencia.list.open;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -36,13 +37,15 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_open_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -113,7 +116,7 @@ public class IncidSeeOpenByComuAcTest {
     {
         activity = activityRule.getActivity();
         fragment = (IncidSeeOpenByComuFr) activity.getSupportFragmentManager()
-                .findFragmentByTag(incid_see_by_comu_list_fr_tag);
+                .findFragmentByTag(incid_see_open_by_comu_list_fr_tag);
         assertThat(fragment, notNullValue());
     }
 
@@ -173,7 +176,7 @@ public class IncidSeeOpenByComuAcTest {
     @Test
     public void testOnSelectedNoResolucion() throws UiException, InterruptedException
     {
-        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
+        waitAtMost(3, SECONDS).until(isViewDisplayed(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
 
         // Cambiamos la comunidad en el spinner.
@@ -212,6 +215,16 @@ public class IncidSeeOpenByComuAcTest {
         checkBack(onView(withId(incidEditAcLayout)));
         waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
+    }
+
+    @Test
+    public void test_newIncidenciaButton() throws InterruptedException
+    {
+        waitAtMost(3, SECONDS).until(isViewDisplayed(
+                checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
+        checkUp(incidSeeOpenAcLayout);
     }
 
     //  ======================================== UNIT TESTS  =======================================

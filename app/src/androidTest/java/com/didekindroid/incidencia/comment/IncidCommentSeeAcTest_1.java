@@ -21,22 +21,28 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentsSeeFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -47,7 +53,7 @@ import static org.junit.Assert.assertThat;
  * User: pedro@didekin
  * Date: 08/02/16
  * Time: 10:28
- *
+ * <p>
  * Tests sin comentarios registrados.
  */
 @RunWith(AndroidJUnit4.class)
@@ -84,8 +90,6 @@ public class IncidCommentSeeAcTest_1 {
             return intent;
         }
     };
-    int activityLayoutId = R.id.incid_comments_see_ac;
-    int fragmentLayoutId = R.id.incid_comments_see_fr_layout;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -111,8 +115,9 @@ public class IncidCommentSeeAcTest_1 {
         assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
+        onView(withId(incidCommentsSeeFrLayout)).check(matches(isDisplayed()));
+        // FloatingButton
+        onView(withId(R.id.incid_new_comment_fab)).check(matches(isDisplayed()));
 
         // Verificamos visibilidad del menú cuando la incidencia está abierta.
         assertThat(incidJuanReal1.getIncidencia().getFechaCierre(), nullValue());
@@ -121,18 +126,24 @@ public class IncidCommentSeeAcTest_1 {
         // No hay comentarios registrados.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
-
-        clickNavigateUp();
     }
+
+    @Test
+    public void test_newCommentButton() throws InterruptedException
+    {
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_comment_fab), click()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidCommentRegAcLayout));
+        checkUp(incidCommentsSeeFrLayout);
+    }
+
 
 //  ============================ MENU ======================================
 
     @Test
     public void testIncidCommentRegMn() throws InterruptedException
     {
-
         INCID_COMMENT_REG_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
-        checkUp(activityLayoutId, fragmentLayoutId);
+        checkUp(incidCommentsSeeFrLayout);
     }
 }

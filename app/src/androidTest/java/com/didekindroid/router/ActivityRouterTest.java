@@ -9,6 +9,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.accesorio.ConfidencialidadAc;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ActivityNextMock;
 import com.didekindroid.comunidad.ComuDataAc;
@@ -70,6 +71,7 @@ public class ActivityRouterTest {
         assertThat(TKhandler.isRegisteredUser(), is(false));
         assertThat(acRouter.nextActivityFromMn(-1).equals(defaultNoRegUser.activityToGo), is(true));
         assertThat(acRouter.nextActivityFromMn(R.id.reg_nueva_comunidad_ac_mn).equals(RegComuAndUserAndUserComuAc.class), is(true));
+        assertThat(acRouter.nextActivityFromMn(R.id.confidencialidad_ac_mn).equals(ConfidencialidadAc.class), is(true));
 
         // Registered user.
         TKhandler.updateIsRegistered(true);

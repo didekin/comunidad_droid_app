@@ -42,7 +42,7 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_close_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
@@ -150,7 +150,7 @@ public class ViewerIncidSeeCloseTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_close_by_comu_list_fr_tag);
         // Wait until list is made.
         waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
     }

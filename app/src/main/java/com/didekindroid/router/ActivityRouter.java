@@ -44,6 +44,7 @@ import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
 import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultNoRegUser;
 import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultRegUser;
 import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewComment;
+import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewIncidencia;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 /**
@@ -86,7 +87,7 @@ public class ActivityRouter implements ActivityRouterIf {
         // INCIDENCIAS.
         menuIdMap.put(R.id.incid_comment_reg_ac_mn, writeNewComment.activityToGo);
         menuIdMap.put(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class);
-        menuIdMap.put(R.id.incid_reg_ac_mn, IncidRegAc.class);
+        menuIdMap.put(R.id.incid_reg_ac_mn, writeNewIncidencia.activityToGo);
         menuIdMap.put(R.id.incid_resolucion_reg_ac_mn, IncidResolucionRegEditSeeAc.class);
         menuIdMap.put(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeClosedByComuAc.class);
         menuIdMap.put(R.id.incid_see_open_by_comu_ac_mn, IncidSeeOpenByComuAc.class);
@@ -149,7 +150,11 @@ public class ActivityRouter implements ActivityRouterIf {
         if (isRegistered) {
             return menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : defaultRegUser.activityToGo;
         } else {
-            return noUserRegMenuIdMap.get(resourceId) != null ? noUserRegMenuIdMap.get(resourceId) : defaultNoRegUser.activityToGo;
+            Class<? extends Activity> activityClass = noUserRegMenuIdMap.get(resourceId);
+            if (activityClass == null){
+                activityClass = menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : defaultNoRegUser.activityToGo;
+            }
+            return activityClass;
         }
     }
 
@@ -179,6 +184,7 @@ public class ActivityRouter implements ActivityRouterIf {
         sendNewPswd(LoginAc.class),
         // Incidencia
         writeNewComment(IncidCommentRegAc.class),
+        writeNewIncidencia(IncidRegAc.class),
         // Resolución.
         regResolucion(IncidEditAc.class),
         regResolucionDuplicate(regResolucion.activityToGo),

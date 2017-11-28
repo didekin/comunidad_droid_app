@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/incid_comments_see_ac"
+    style="@style/baseLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/baseLayout"
     android:fitsSystemWindows="true"
-    tools:context=".incidencia.comment.IncidCommentSeeAc"
-    android:id="@+id/incid_comments_see_ac">
+    tools:context=".incidencia.comment.IncidCommentSeeAc">
 
     <include layout="@layout/appbar_include_design"/>
 

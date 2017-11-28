@@ -13,7 +13,7 @@ import com.didekindroid.router.FragmentInitiator;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_close_by_comu_list_fr_tag;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -51,13 +51,13 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         bundle.putLong(COMUNIDAD_ID.key, comunidadId);
 
         if (savedInstanceState != null) {
-            fragmentList = (IncidSeeCloseByComuFr) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+            fragmentList = (IncidSeeCloseByComuFr) getSupportFragmentManager().findFragmentByTag(incid_see_close_by_comu_list_fr_tag);
             return;
         }
 
         fragmentList = new IncidSeeCloseByComuFr();
         fragmentList.setArguments(bundle);
-        new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac).initFragmentTx(fragmentList, incid_see_by_comu_list_fr_tag);
+        new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac).initFragmentTx(fragmentList, incid_see_close_by_comu_list_fr_tag);
     }
 
     // ==================================  ActivityInitiatorIf  =================================
