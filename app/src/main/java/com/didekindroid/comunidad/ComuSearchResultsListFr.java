@@ -49,6 +49,7 @@ public class ComuSearchResultsListFr extends Fragment {
         return frView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {

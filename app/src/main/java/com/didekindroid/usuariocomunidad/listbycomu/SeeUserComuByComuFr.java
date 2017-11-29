@@ -41,12 +41,12 @@ public class SeeUserComuByComuFr extends Fragment {
         return frView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
-        /* Initialization of viewers.*/
         // Precondition:
         assertTrue(getActivity().getIntent().hasExtra(COMUNIDAD_ID.key), intent_extra_should_be_initialized);
         ComunidadBean comunidadBean = new ComunidadBean();

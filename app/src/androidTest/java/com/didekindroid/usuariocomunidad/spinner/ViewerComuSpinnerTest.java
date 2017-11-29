@@ -210,7 +210,7 @@ public class ViewerComuSpinnerTest {
         assertThat(viewer.getSelectedItemId(), is(0L));
 
         // Action.
-        viewer.doViewInViewer(new Bundle(0), new ComuSpinnerEventItemSelect());
+        viewer.doViewInViewer(new Bundle(0), null);
         /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() --> ComuSelectedListener.onItemSelected() */
         // Check
         waitAtMost(8, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());

@@ -111,6 +111,7 @@ public class SeeUserComuByUserFr extends Fragment {
             return usuarioComunidades;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {

@@ -20,7 +20,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Maybe;
@@ -85,16 +84,7 @@ public class ViewerComuSearchResultsFrTest {
     public void setUp()
     {
         activity = intentsTestRule.getActivity();
-        mockFr = new ListMockFr();
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(() -> {
-            activity.getSupportFragmentManager().beginTransaction()
-                    .add(R.id.mock_ac_layout, mockFr, "mockFr")
-                    .commitNow();
-            mockFr = (ListMockFr) activity.getSupportFragmentManager().findFragmentByTag("mockFr");
-            isRun.compareAndSet(false, true);
-        });
-        waitAtMost(4, SECONDS).untilTrue(isRun);
+        mockFr = (ListMockFr) activity.getSupportFragmentManager().findFragmentById(R.id.list_mock_frg);
         viewer = ViewerComuSearchResultsFr.newViewerComuSearchResultsFr(mockFr.getView(), activity);
 
         isPepeToDelete = false;
@@ -152,7 +142,7 @@ public class ViewerComuSearchResultsFrTest {
         final List<Comunidad> comunidades = asList(COMU_REAL, COMU_EL_ESCORIAL);
         activity.runOnUiThread(() -> viewer.onSuccessLoadList(comunidades));
 
-        waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
+        waitAtMost(6, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(2));
         onView(withId(android.R.id.list)).check(
                 matches(withAdaptedData(is(COMU_REAL))));

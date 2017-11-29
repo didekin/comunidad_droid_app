@@ -9,8 +9,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ActivityNextMock;
+import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.security.IdentityCacher;
-import com.didekindroid.usuario.login.LoginAc;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,6 +33,7 @@ import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultReg
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 /**
  * User: pedro@didekin
@@ -82,7 +83,12 @@ public class ActivityInitiatorTest {
         activityInitiator.initAcFromMenu(null, 1);
         onView(withId(R.id.mock_ac_layout)).check(matches(isDisplayed()));
         // Check extra from the activity.
-        intended(hasExtra("keyTest_1", "Value_keyTest_1"));
+        intended(not(hasExtra("keyTest_1", "value_Test_1")));
+        // Run with bundle.
+        Bundle bundle = new Bundle(1);
+        bundle.putString("keyTest_1", "value_Test_1");
+        activityInitiator.initAcFromMenu(bundle, 1);
+        intended(hasExtra("keyTest_1", "value_Test_1"));
     }
 
     @Test
@@ -94,14 +100,14 @@ public class ActivityInitiatorTest {
         activityInitiator.initAcFromListener(null, defaultNoRegUser);
         // Check.
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
-        intended(hasComponent(LoginAc.class.getName()));
+        intended(hasComponent(ComuSearchAc.class.getName()));
 
         // Precondition:
         identityCacher.updateIsRegistered(true);
         Bundle bundle = new Bundle(1);
         bundle.putString("testKey", "stringTestKey");
         // Exec,
-        activityInitiator.initAcFromListener(null, defaultRegUser);
+        activityInitiator.initAcFromListener(bundle, defaultRegUser);
         // Check.
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
         intended(hasExtra("testKey", "stringTestKey"));

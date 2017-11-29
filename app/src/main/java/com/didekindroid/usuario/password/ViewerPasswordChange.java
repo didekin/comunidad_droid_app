@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.ActionForUiException;
 import com.didekindroid.exception.UiException;
@@ -41,29 +42,51 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * User: pedro@didekin
  * Date: 21/03/17
  * Time: 20:08
+ *
+ * Preconditions:
+ * 1. An intent is received with the userName. If not, the viewer accessed user data directly.
  */
 public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> implements ActivityInitiatorIf {
 
-    @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<Usuario> oldUserPswd;
-    final String userName;
+    final AtomicReference<String> userName;
 
     private ViewerPasswordChange(PasswordChangeAc activity)
     {
         super(activity.acView, activity, null);
         usuarioBean = new AtomicReference<>(null);
         oldUserPswd = new AtomicReference<>(null);
-        userName = activity.getIntent().getStringExtra(user_name.key);
+        userName = new AtomicReference<>(null);
+        if (activity.getIntent().hasExtra(user_name.key)) {
+            userName.set(activity.getIntent().getStringExtra(user_name.key));
+        }
     }
 
     static ViewerPasswordChange newViewerPswdChange(PasswordChangeAc activity)
     {
         Timber.d("newViewerPswdChange()");
-        ViewerPasswordChange instance = new ViewerPasswordChange(activity);
+        final ViewerPasswordChange instance = new ViewerPasswordChange(activity);
         instance.setController(new CtrlerUsuario());
+        // Check for userName
+        if (instance.userName.get() == null) {
+            instance.controller.loadUserData(new AbstractSingleObserver<Usuario>(instance) {
+                @Override
+                public void onSuccess(Usuario usuario)
+                {
+                    instance.processBackUserDataLoaded(usuario);
+                }
+            });
+        }
         return instance;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    void processBackUserDataLoaded(Usuario usuario)
+    {
+        Timber.d("processBackUserDataLoaded()");
+        userName.compareAndSet(null, usuario.getUserName());
     }
 
     @Override
@@ -88,7 +111,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
 
         Button sendPswdButton = view.findViewById(R.id.password_send_ac_button);
         sendPswdButton.setOnClickListener(
-                v -> controller.sendNewPassword(new PswdSendSingleObserver(), new Usuario.UsuarioBuilder().userName(userName).build())
+                v -> controller.sendNewPassword(new PswdSendSingleObserver(), new Usuario.UsuarioBuilder().userName(userName.get()).build())
         );
     }
 
@@ -96,8 +119,8 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
     {
         Timber.i("checkLoginData()");
 
-        usuarioBean.set(new UsuarioBean(userName, null, getPswdDataFromView()[0], getPswdDataFromView()[1]));
-        oldUserPswd.set(new Usuario.UsuarioBuilder().userName(userName).password(getPswdDataFromView()[2]).build());
+        usuarioBean.set(new UsuarioBean(userName.get(), null, getPswdDataFromView()[0], getPswdDataFromView()[1]));
+        oldUserPswd.set(new Usuario.UsuarioBuilder().userName(userName.get()).password(getPswdDataFromView()[2]).build());
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
 
         if (!usuarioBean.get().validateWithoutAlias(activity.getResources(), errorBuilder)) {

@@ -218,7 +218,6 @@ public class UserDataAcTest {
     public void testComuSearchMn() throws InterruptedException
     {
         COMU_SEARCH_AC.checkItemRegisterUser(activity);
-        intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         // NO navigate-up.
     }
 
@@ -226,7 +225,6 @@ public class UserDataAcTest {
     public void testDeleteMeMn() throws InterruptedException
     {
         DELETE_ME_AC.checkItemRegisterUser(activity);
-        intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
 
@@ -243,7 +241,6 @@ public class UserDataAcTest {
     public void testUserComuByUserMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
-        intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
@@ -254,7 +251,6 @@ public class UserDataAcTest {
     public void testIncidSeeByComuMn() throws InterruptedException
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
-        intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(userComuDataLayout);
         }

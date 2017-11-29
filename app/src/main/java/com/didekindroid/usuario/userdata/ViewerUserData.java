@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.userdata;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,6 @@ import timber.log.Timber;
 
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_uID_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
@@ -78,8 +76,6 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
             @Override
             public void onSuccess(Usuario usuario)
             {
-                Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
-                assertTrue(usuario.getuId() > 0L && usuario.getUserName() != null, user_name_uID_should_be_initialized);
                 processBackUserDataLoaded(usuario);
             }
         });
@@ -102,7 +98,6 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         emailView.setText(oldUser.get().getUserName());
         aliasView.setText(oldUser.get().getAlias());
         passwordView.setHint(R.string.user_data_ac_password_hint);
-        activity.setIntent(new Intent().putExtra(user_name.key, oldUser.get().getUserName()));
     }
 
     /**

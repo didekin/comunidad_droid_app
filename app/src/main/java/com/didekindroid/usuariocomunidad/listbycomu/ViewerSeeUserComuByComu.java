@@ -36,7 +36,7 @@ public final class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserCo
 
     private ViewerSeeUserComuByComu(View frView, AppCompatActivity activity)
     {
-        super((ListView) frView.findViewById(list), activity, null);
+        super(frView.findViewById(list), activity, null);
         nombreComuView = frView.findViewById(R.id.see_usercomu_by_comu_list_header);
         // To get visible a divider on top of the list.
         view.addHeaderView(new View(activity), null, true);

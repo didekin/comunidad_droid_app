@@ -13,6 +13,7 @@ import com.didekindroid.router.ActivityInitiatorIf;
 import timber.log.Timber;
 
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -70,13 +71,6 @@ public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        Timber.d("onPrepareOptionsMenu()");
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
@@ -87,6 +81,9 @@ public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf
                 doUpMenu(this);
                 return true;
             case R.id.password_change_ac_mn:
+                Bundle bundle = new Bundle(1);
+                bundle.putString(user_name.key, viewer.oldUser.get().getUserName());
+                initAcFromMenu(bundle,resourceId);
             case R.id.delete_me_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:
