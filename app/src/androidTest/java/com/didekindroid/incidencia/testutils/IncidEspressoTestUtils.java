@@ -360,14 +360,6 @@ public final class IncidEspressoTestUtils {
         checkDataResolucion(resolucion, R.id.incid_resolucion_coste_prev_view);
     }
 
-    public static void checkScreenResolucionSeeDefaultFr()
-    {
-        /* CASO OK: se muestra el fragmento/mensaje por defecto.*/
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_see_default_fr)).check(matches(isDisplayed()));
-    }
-
     private static void checkAvancesList(Resolucion resolucionIntent)
     {
         if (resolucionIntent != null && !resolucionIntent.getAvances().isEmpty()) {

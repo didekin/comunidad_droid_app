@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.list.close.ViewerIncidSeeClose;
+import com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseFr;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
@@ -27,19 +26,19 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * Time: 12:33
  */
 
-final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
+final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
-    private ViewerIncidSeeOpen(View frView, AppCompatActivity activity)
+    private ViewerIncidSeeOpenFr(View frView, AppCompatActivity activity)
     {
         super(frView, activity);
     }
 
-    static ViewerIncidSeeOpen newViewerIncidSeeOpen(View view, AppCompatActivity activity)
+    static ViewerIncidSeeOpenFr newViewerIncidSeeOpen(View view, AppCompatActivity activity)
     {
         Timber.d("newViewerIncidSeeOpen()");
-        ViewerIncidSeeOpen parentInstance = new ViewerIncidSeeOpen(view, activity);
+        ViewerIncidSeeOpenFr parentInstance = new ViewerIncidSeeOpenFr(view, activity);
         parentInstance.setController(new CtrlerIncidSeeOpenByComu());
         parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
         parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), parentInstance);
@@ -52,7 +51,7 @@ final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
     {
         Timber.d("onSuccessLoadItemList()");
-        onSuccessLoadItems(itemsList, getNewViewAdapter());
+        onSuccessLoadItems(itemsList, new AdapterIncidSeeOpenByComu(activity));
     }
 
     @Override
@@ -88,10 +87,4 @@ final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
         return comuSpinnerViewer;
     }
 
-    @NonNull
-    private ArrayAdapter<IncidenciaUser> getNewViewAdapter()
-    {
-        Timber.d("getNewViewAdapter()");
-        return new AdapterIncidSeeOpenByComu(activity);
-    }
 }

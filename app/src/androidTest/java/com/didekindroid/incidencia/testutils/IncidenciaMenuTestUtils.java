@@ -23,7 +23,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_COMMENT_REG_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkMenuItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.incid_comment_reg_ac_mn, R.id.incid_comment_reg_ac_layout);
         }
@@ -31,7 +31,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_COMMENTS_SEE_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkMenuItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_fr_layout);
         }
@@ -39,7 +39,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_REG_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkMenuItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.incid_reg_ac_mn, R.id.incid_reg_ac_layout);
         }
@@ -47,7 +47,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_RESOLUCION_REG_EDIT_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkMenuItem(Activity activity)
         {
             onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
             waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_fragment_container_ac));
@@ -56,7 +56,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_SEE_OPEN_BY_COMU_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkMenuItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.incid_open_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
         }
@@ -64,12 +64,12 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_SEE_CLOSED_BY_COMU_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkMenuItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.incid_closed_see_by_comu_ac_mn, R.id.incid_see_closed_by_comu_ac);
         }
     },;
 
-    public abstract void checkMenuItem_WTk(Activity activity) throws InterruptedException;
+    public abstract void checkMenuItem(Activity activity) throws InterruptedException;
 
 }

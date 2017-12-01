@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -25,8 +26,8 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.regResolucion;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.regResolucionDuplicate;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.editIncidencia;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.regResolucionDuplicate;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -40,9 +41,19 @@ import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RES
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
+public class IncidResolucionRegFr extends IncidResolucionFrAbstract implements ActivityInitiatorIf {
 
     IncidImportancia incidImportancia;
+
+    static IncidResolucionRegFr newInstance(IncidImportancia incidImportancia)
+    {
+        Timber.d("newInstance()");
+        IncidResolucionRegFr fr = new IncidResolucionRegFr();
+        Bundle args = new Bundle(1);
+        args.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+        fr.setArguments(args);
+        return fr;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +69,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         return frView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
@@ -141,6 +153,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
             return rowInserted;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
@@ -159,7 +172,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                initAcFromListener(bundle, regResolucion);
+                initAcFromRouter(bundle, editIncidencia);
             }
         }
     }

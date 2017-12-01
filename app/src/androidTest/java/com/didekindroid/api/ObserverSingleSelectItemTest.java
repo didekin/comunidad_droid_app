@@ -48,33 +48,28 @@ public class ObserverSingleSelectItemTest {
     {
         final AppCompatActivity activity = activityRule.getActivity();
         final AtomicReference<ObserverSingleSelectItem<ViewerSelectList<Spinner, CtrlerSelectList<String>, String>, String>> atomicObserver = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                atomicObserver.compareAndSet(null,
-                        new ObserverSingleSelectItem<ViewerSelectList<Spinner, CtrlerSelectList<String>, String>, String>(
-                                new ViewerSelectList<Spinner, CtrlerSelectList<String>, String>(new Spinner(activity), activity, null) {
-                                    @Override
-                                    public void initSelectedItemId(Bundle savedState)
-                                    {
-                                    }
+        activity.runOnUiThread(() -> atomicObserver.compareAndSet(
+                null,
+                new ObserverSingleSelectItem<>(
+                        new ViewerSelectList<Spinner, CtrlerSelectList<String>, String>(new Spinner(activity), activity, null) {
+                            @Override
+                            public void initSelectedItemId(Bundle savedState)
+                            {
+                            }
 
-                                    @Override
-                                    public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
-                                    {
-                                        assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                                    }
+                            @Override
+                            public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
+                            {
+                                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                            }
 
-                                    @Override
-                                    public void onErrorInObserver(Throwable error)
-                                    {
-                                        assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
-                                    }
-                                }
-                        ));
-            }
-        });
+                            @Override
+                            public void onErrorInObserver(Throwable error)
+                            {
+                                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
+                            }
+                        }
+                )));
         waitAtMost(2, SECONDS).untilAtomic(atomicObserver, notNullValue());
         observer = atomicObserver.get();
     }

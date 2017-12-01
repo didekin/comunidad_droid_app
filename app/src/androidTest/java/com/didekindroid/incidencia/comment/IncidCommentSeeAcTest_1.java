@@ -142,7 +142,7 @@ public class IncidCommentSeeAcTest_1 {
     @Test
     public void testIncidCommentRegMn() throws InterruptedException
     {
-        INCID_COMMENT_REG_AC.checkMenuItem_WTk(mActivity);
+        INCID_COMMENT_REG_AC.checkMenuItem(mActivity);
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
         checkUp(incidCommentsSeeFrLayout);
     }

@@ -15,8 +15,6 @@ import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerSelectList;
-import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
-import com.didekindroid.router.FragmentInitiator;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -26,7 +24,6 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 import static com.didekindroid.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -36,14 +33,14 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 18/03/17
  * Time: 11:01
  */
-public class ViewerIncidSeeClose extends
+public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
         implements SpinnerEventListener {
 
     protected ViewerComuSpinner comuSpinnerViewer;
     private View emptyListView;
 
-    protected ViewerIncidSeeClose(View frView, AppCompatActivity activity)
+    protected ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
     {
         super(frView.findViewById(android.R.id.list), activity, null);
         emptyListView = frView.findViewById(android.R.id.empty);
@@ -51,10 +48,10 @@ public class ViewerIncidSeeClose extends
         view.addHeaderView(new View(activity), null, true);
     }
 
-    static ViewerIncidSeeClose newViewerIncidSeeClose(View view, AppCompatActivity activity)
+    static ViewerIncidSeeCloseFr newViewerIncidSeeClose(View view, AppCompatActivity activity)
     {
         Timber.d("newViewerIncidSeeClose()");
-        ViewerIncidSeeClose parentInstance = new ViewerIncidSeeClose(view, activity);
+        ViewerIncidSeeCloseFr parentInstance = new ViewerIncidSeeCloseFr(view, activity);
         parentInstance.setController(new CtrlerIncidSeeCloseByComu());
         parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), parentInstance);
         return parentInstance;
@@ -134,15 +131,27 @@ public class ViewerIncidSeeClose extends
     public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
     {
         Timber.d("onSuccessLoadItemList()");
-        onSuccessLoadItems(itemsList, getNewViewAdapter());
+        onSuccessLoadItems(itemsList, new AdapterIncidSeeClosedByComu(activity));
     }
 
     @Override
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        new FragmentInitiator<IncidResolucionSeeFr>(activity, R.id.incid_see_closed_by_comu_ac)
-                .initReplaceFragmentTx(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
+
+//        new FragmentInitiator<IncidResolucionSeeFr>(activity, R.id.incid_see_closed_by_comu_ac)
+//                .initReplaceFragmentTx(bundle, new IncidResolucionSeeFr(), IncidResolucionSeeFr.class.getName());     // TODO: descomentar.
+    }
+
+    protected void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
+    {
+        Timber.d("onSuccessLoadItems_protected()");
+        adapter.addAll(incidCloseList);
+        view.setAdapter(adapter);
+        view.setEmptyView(emptyListView);
+        if (view.getCount() > view.getHeaderViewsCount() && itemSelectedId > 0L) {
+            view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
+        }
     }
 
     // ==================================  SpinnerEventListener  =================================
@@ -162,24 +171,6 @@ public class ViewerIncidSeeClose extends
 
     // ==================================  HELPERS  =================================
 
-    @NonNull
-    private ArrayAdapter<IncidenciaUser> getNewViewAdapter()
-    {
-        Timber.d("getNewViewAdapter()");
-        return new AdapterIncidSeeClosedByComu(activity);
-    }
-
-    protected void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
-    {
-        Timber.d("onSuccessLoadItems_protected()");
-        adapter.addAll(incidCloseList);
-        view.setAdapter(adapter);
-        view.setEmptyView(emptyListView);
-        if (view.getCount() > view.getHeaderViewsCount() && itemSelectedId > 0L) {
-            view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
-        }
-    }
-
     @SuppressWarnings("WeakerAccess")
     public class ListItemOnClickListener implements AdapterView.OnItemClickListener {
         @Override
@@ -191,7 +182,7 @@ public class ViewerIncidSeeClose extends
             viewClick.setSelected(true);
             IncidenciaUser incidenciaUser = (IncidenciaUser) view.getItemAtPosition(position);
             itemSelectedId = incidenciaUser.getIncidencia().getIncidenciaId();
-            controller.selectItem(new ObserverSingleSelectItem<>(ViewerIncidSeeClose.this), incidenciaUser);
+            controller.selectItem(new ObserverSingleSelectItem<>(ViewerIncidSeeCloseFr.this), incidenciaUser);
         }
     }
 }

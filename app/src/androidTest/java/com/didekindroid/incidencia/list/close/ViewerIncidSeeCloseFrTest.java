@@ -42,7 +42,6 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_close_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
@@ -69,7 +68,7 @@ import static org.junit.Assert.fail;
  * Time: 18:08
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerIncidSeeCloseTest {
+public class ViewerIncidSeeCloseFrTest {
 
     IncidImportancia incidImportancia1;
     Resolucion resolucion;
@@ -150,7 +149,7 @@ public class ViewerIncidSeeCloseTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_close_by_comu_list_fr_tag);
+        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeCloseByComuFr.class.getName());
         // Wait until list is made.
         waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
     }
@@ -170,7 +169,7 @@ public class ViewerIncidSeeCloseTest {
         assertThat(fragment.viewer.getSelectedItemId(), is(0L));
         // When itemSelectedId == 0, no checkedItem.
         assertThat(fragment.viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
-        assertThat(fragment.viewer.getViewInViewer().getOnItemClickListener(), instanceOf(ViewerIncidSeeClose.ListItemOnClickListener.class));
+        assertThat(fragment.viewer.getViewInViewer().getOnItemClickListener(), instanceOf(ViewerIncidSeeCloseFr.ListItemOnClickListener.class));
         // Comunidad spinner.
         waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
     }

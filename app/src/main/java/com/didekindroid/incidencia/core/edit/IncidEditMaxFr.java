@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr.newViewerIncidEditMaxFr;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 
 /**
  * User: pedro@didekin
@@ -21,6 +23,16 @@ import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr.newView
 public class IncidEditMaxFr extends IncidEditFr {
 
     ViewerIncidEditMaxFr viewer;
+
+    static IncidEditMaxFr newInstance(IncidAndResolBundle resolBundle)
+    {
+        Timber.d("newInstance()");
+        IncidEditMaxFr fr = new IncidEditMaxFr();
+        Bundle argsFragment = new Bundle();
+        argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle);
+        fr.setArguments(argsFragment);
+        return fr;
+    }
 
     @Override
     protected ViewerIncidEditFr getViewerIncidEdit()

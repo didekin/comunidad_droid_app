@@ -184,8 +184,6 @@
     <string name="incid_resolucion_coste_prev_rot">Coste estimado EUR:</string>
     <string name="incid_resolucion_coste_prev_hint">-- tu estimación --</string>
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
-    <!-- ====== IncidResolucionSeeDefaultFr ====== -->
-    <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
     <!-- ===================== IncidSeeOpenByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_apertura_rot">Apertura:</string>

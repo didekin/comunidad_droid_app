@@ -331,6 +331,33 @@ public final class ActivityTestUtils {
         }
     }
 
+    public static void checkAppBarMenuOnView(Activity activity, int menuResourceId, int actionResourceId)
+    {
+        try {
+            onView(withText(menuResourceId)).check(matches(isDisplayed()));
+        } catch (Throwable e) {
+            openActionBarOverflowOrOptionsMenu(activity);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                fail();
+            }
+            onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
+        } finally {
+            waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
+        }
+    }
+
+    public static void checkAppBarMnNotExist(Activity activity, int menuResourceId)
+    {
+        onView(withText(menuResourceId)).check(doesNotExist());
+        try {
+            openActionBarOverflowOrOptionsMenu(activity);
+        } catch (NoMatchingViewException e) {
+        }
+        waitAtMost(4, SECONDS).until(isTextIdNonExist(menuResourceId));
+    }
+
     public static void checkDrawerMenu(int drawerLayoutId, int navigationViewId, int menuResourceId, int actionResourceId)
     {
         onView(withId(drawerLayoutId)).check(matches(isClosed(Gravity.LEFT))).perform(open());
@@ -484,7 +511,5 @@ public final class ActivityTestUtils {
         activity.setChildInParentViewer(viewerChild);
         assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), is(viewerChild));
     }
-
-    //    ============================ HELPERS ============================
 }
 

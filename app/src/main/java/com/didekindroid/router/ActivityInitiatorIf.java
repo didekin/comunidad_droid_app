@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.didekindroid.api.RouterListener;
+import com.didekindroid.api.RouterToAcIf;
 
 import timber.log.Timber;
 
@@ -38,10 +38,10 @@ public interface ActivityInitiatorIf {
         getActivity().startActivity(intent);
     }
 
-    default void initAcFromListener(@Nullable Bundle bundle, RouterListener listener)
+    default void initAcFromRouter(@Nullable Bundle bundle, RouterToAcIf router)
     {
-        Timber.d("initAcFromListener()");
-        Intent intent = new Intent(getActivity(), listener.getActivityToGo());
+        Timber.d("initAcFromRouter()");
+        Intent intent = new Intent(getActivity(), router.getActivityToGo());
         if (bundle != null) {
             intent.putExtras(bundle);
         }

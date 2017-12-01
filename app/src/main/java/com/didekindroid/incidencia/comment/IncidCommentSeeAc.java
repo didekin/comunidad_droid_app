@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.comment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,14 +7,13 @@ import android.view.MenuItem;
 
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiatorIf;
-import com.didekindroid.router.FragmentInitiator;
+import com.didekindroid.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.comment.IncidCommentSeeListFr.newInstance;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_initialized;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.CommonAssertionMsg.fragment_should_be_initialized;
@@ -29,10 +27,11 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. An intent key is passed with an IncidenciaUser instance on to the option menu 'incid_comment_reg_mn'.
  */
-public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInitiatorIf,
+        FragmentInitiatorIf<IncidCommentSeeListFr> {
 
-    IncidCommentSeeListFr mFragment;
-    Incidencia mIncidencia;
+    IncidCommentSeeListFr fragment;
+    Incidencia incidencia;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -45,24 +44,30 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
 
         // Preconditions.
         assertTrue(getIntent().hasExtra(INCIDENCIA_OBJECT.key), incidencia_should_be_initialized);
-        mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
+        incidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
 
         if (savedInstanceState != null) {
-            assertTrue((mFragment = (IncidCommentSeeListFr) getSupportFragmentManager().
-                    findFragmentByTag(incid_comments_see_list_fr_tag)) != null, fragment_should_be_initialized);
+            assertTrue((fragment = (IncidCommentSeeListFr) getSupportFragmentManager().
+                    findFragmentByTag(IncidCommentSeeListFr.class.getName())) != null, fragment_should_be_initialized);
             return;
         }
-
-        mFragment = newInstance(mIncidencia);
-        new FragmentInitiator(this, R.id.incid_comments_see_ac).initFragmentTx(mFragment, incid_comments_see_list_fr_tag);
+        initFragmentTx(newInstance(incidencia));
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
+// =====================  ActivityInitiatorIf  ===================
 
     @Override
-    public Activity getActivity()
+    public AppCompatActivity getActivity()
     {
         return this;
+    }
+
+// =====================  FragmentInitiatorIf  ===================
+
+    @Override
+    public int getContainerId()
+    {
+        return R.id.incid_comments_see_ac;
     }
 
 // ============================================================
@@ -74,7 +79,7 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
     {
         Timber.d("onPrepareOptionsMenu()");
         // Mostramos el menú si la incidencia está abierta.
-        if (mIncidencia.getFechaCierre() == null) {
+        if (incidencia.getFechaCierre() == null) {
             menu.findItem(R.id.incid_comment_reg_ac_mn).setVisible(true);
         }
         return true;
@@ -101,7 +106,7 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
                 return true;
             case R.id.incid_comment_reg_ac_mn:
                 Bundle bundle = new Bundle(1);
-                bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
+                bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
                 initAcFromMenu(bundle, resourceId);
                 return true;
             default:

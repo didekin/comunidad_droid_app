@@ -28,8 +28,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultNoRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultNoRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultRegUser;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static org.hamcrest.CoreMatchers.is;
@@ -97,7 +97,7 @@ public class ActivityInitiatorTest {
         // Precondition:
         assertThat(identityCacher.isRegisteredUser(), is(false));
         // Exec.
-        activityInitiator.initAcFromListener(null, defaultNoRegUser);
+        activityInitiator.initAcFromRouter(null, defaultNoRegUser);
         // Check.
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
         intended(hasComponent(ComuSearchAc.class.getName()));
@@ -107,7 +107,7 @@ public class ActivityInitiatorTest {
         Bundle bundle = new Bundle(1);
         bundle.putString("testKey", "stringTestKey");
         // Exec,
-        activityInitiator.initAcFromListener(bundle, defaultRegUser);
+        activityInitiator.initAcFromRouter(bundle, defaultRegUser);
         // Check.
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
         intended(hasExtra("testKey", "stringTestKey"));

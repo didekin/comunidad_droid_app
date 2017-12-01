@@ -3,7 +3,7 @@ package com.didekindroid.incidencia.list;
 import com.didekindroid.incidencia.list.close.CtrlerIncidSeeCloseByComuTest;
 import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAcTest;
 import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc_Mn_Test;
-import com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseTest;
+import com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseFrTest;
 import com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComuTest;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAcTest;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc_GCM_Test;
@@ -22,7 +22,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         // list.close
         CtrlerIncidSeeCloseByComuTest.class,
-        ViewerIncidSeeCloseTest.class,
+        ViewerIncidSeeCloseFrTest.class,
         IncidSeeClosedByComuAc_Mn_Test.class,
         IncidSeeClosedByComuAcTest.class,
         // list.open

@@ -21,7 +21,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewComment;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewComment;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 
 /**
@@ -55,7 +55,7 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
         mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
         // Floating button.
         FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
-        fab.setOnClickListener(v -> initAcFromListener(getArguments(), writeNewComment));
+        fab.setOnClickListener(v -> initAcFromRouter(getArguments(), writeNewComment));
         return mView;
     }
 

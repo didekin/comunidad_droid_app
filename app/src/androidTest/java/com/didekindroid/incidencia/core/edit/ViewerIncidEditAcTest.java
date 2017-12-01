@@ -18,20 +18,16 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.Maybe;
 import io.reactivex.observers.DisposableMaybeObserver;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -40,9 +36,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static io.reactivex.Maybe.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -118,46 +112,25 @@ public class ViewerIncidEditAcTest {
         // Preconditions.
         viewer.setController(controllerLocal);
         // Execute.
-        viewer.checkResolucion(123);
+        viewer.checkResolucion();
         // Check.
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 
     @Test
-    public void test_OnSuccessSeeResolucion() throws Exception
+    public void test_ResolucionObserver_1() throws UiException
     {
-        Resolucion resolucion = insertGetResolucionNoAdvances(viewer.resolBundle.getIncidImportancia());
-        viewer.onSuccessCheckResolucion(resolucion, R.id.incid_resolucion_reg_ac_mn);
-
-        intended(allOf(
-                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.resolBundle.getIncidImportancia()),
-                hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion)
-        ));
-        assertThat(viewer.getChildViewer(ViewerIncidEditMaxFr.class).hasResolucion.get(), is(true));
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test_OnCompleteSeeResolucion() throws Exception
-    {
-        // Preconditions.
-        assertThat(viewer.resolBundle, notNullValue());
-
-        viewer.onCompleteCheckResolucion(R.id.incid_resolucion_reg_ac_mn);
-
-        assertThat(viewer.getChildViewer(ViewerIncidEditMaxFr.class).hasResolucion.get(), is(false));
-        intended(allOf(
-                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.resolBundle.getIncidImportancia()),
-                not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key))
-        ));
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test_ResolucionObserver() throws UiException
-    {
+        // Usuario ADM, con resolución.
         Resolucion resolucion = insertGetResolucionNoAdvances(resolBundle.getIncidImportancia());
-        just(resolucion).subscribeWith(viewer.new ResolucionObserver(R.id.incid_resolucion_reg_ac_mn));
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        just(resolucion).subscribeWith(viewer.new ResolucionObserver());
+        onView(withId(R.id.incid_resolucion_edit_fr_layout)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void test_ResolucionObserver_2() throws UiException
+    {
+        // Usuario ADM, sin resolución.
+        Maybe.<Resolucion>empty().subscribeWith(viewer.new ResolucionObserver());
+        onView(withId(R.id.incid_resolucion_reg_frg_layout)).check(matches(isDisplayed()));
     }
 }

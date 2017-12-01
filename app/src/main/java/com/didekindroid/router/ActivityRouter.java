@@ -7,7 +7,7 @@ import android.util.ArrayMap;
 
 import com.didekindroid.R;
 import com.didekindroid.accesorio.ConfidencialidadAc;
-import com.didekindroid.api.RouterListener;
+import com.didekindroid.api.RouterToAcIf;
 import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
@@ -17,7 +17,8 @@ import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
-import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
+import com.didekindroid.incidencia.resolucion.IncidResolucionEditAc;
+import com.didekindroid.incidencia.resolucion.IncidResolucionRegAc;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
@@ -41,10 +42,11 @@ import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static android.support.v4.app.NavUtils.getParentActivityIntent;
 import static android.support.v4.app.NavUtils.navigateUpTo;
 import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultNoRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.defaultRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewComment;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewIncidencia;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultNoRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultRegUser;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.editIncidencia;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewComment;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewIncidencia;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 /**
@@ -70,7 +72,7 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(IncidCommentRegAc.class, IncidCommentSeeAc.class);
         acRouterMap.put(IncidEditAc.class, IncidSeeOpenByComuAc.class);
         acRouterMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
-        acRouterMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
+        acRouterMap.put(IncidSeeOpenByComuAc.class, editIncidencia.activityToGo);
         acRouterMap.put(LoginAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegComuAndUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
@@ -88,7 +90,6 @@ public class ActivityRouter implements ActivityRouterIf {
         menuIdMap.put(R.id.incid_comment_reg_ac_mn, writeNewComment.activityToGo);
         menuIdMap.put(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class);
         menuIdMap.put(R.id.incid_reg_ac_mn, writeNewIncidencia.activityToGo);
-        menuIdMap.put(R.id.incid_resolucion_reg_ac_mn, IncidResolucionRegEditSeeAc.class);
         menuIdMap.put(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeClosedByComuAc.class);
         menuIdMap.put(R.id.incid_see_open_by_comu_ac_mn, IncidSeeOpenByComuAc.class);
         // USUARIO REGISTRADO.
@@ -167,7 +168,7 @@ public class ActivityRouter implements ActivityRouterIf {
 
     /* =========================  HELPERS CLASSES  =========================*/
 
-    public enum RouterToActivity implements RouterListener {
+    public enum RouterToAc implements RouterToAcIf {
 
         // General defaults.
         defaultRegUser(LoginAc.class),
@@ -185,8 +186,10 @@ public class ActivityRouter implements ActivityRouterIf {
         // Incidencia
         writeNewComment(IncidCommentRegAc.class),
         writeNewIncidencia(IncidRegAc.class),
+        editIncidencia(IncidEditAc.class),
         // Resolución.
-        regResolucion(IncidEditAc.class),
+        regResolucion(IncidResolucionRegAc.class),
+        editResolucion(IncidResolucionEditAc.class),
         regResolucionDuplicate(regResolucion.activityToGo),
         modifyResolucion(IncidEditAc.class),
         modifyResolucionError(IncidSeeOpenByComuAc.class),
@@ -195,7 +198,7 @@ public class ActivityRouter implements ActivityRouterIf {
 
         final Class<? extends Activity> activityToGo;
 
-        RouterToActivity(Class<? extends Activity> activityToGo)
+        RouterToAc(Class<? extends Activity> activityToGo)
         {
             this.activityToGo = activityToGo;
         }

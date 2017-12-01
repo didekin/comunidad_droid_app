@@ -16,8 +16,8 @@ import com.didekinlib.model.comunidad.Comunidad;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.list.close.ViewerIncidSeeClose.newViewerIncidSeeClose;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewIncidencia;
+import static com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseFr.newViewerIncidSeeClose;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewIncidencia;
 
 /**
  * Preconditions:
@@ -26,7 +26,7 @@ import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewIn
 public class IncidSeeCloseByComuFr extends Fragment implements ActivityInitiatorIf {
 
     View frView;
-    ViewerIncidSeeClose viewer;
+    ViewerIncidSeeCloseFr viewer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState)
@@ -34,7 +34,7 @@ public class IncidSeeCloseByComuFr extends Fragment implements ActivityInitiator
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         FloatingActionButton fab = frView.findViewById(R.id.incid_new_incid_fab);
-        fab.setOnClickListener(v -> initAcFromListener(getArguments(), writeNewIncidencia));
+        fab.setOnClickListener(v -> initAcFromRouter(getArguments(), writeNewIncidencia));
         return frView;
     }
 

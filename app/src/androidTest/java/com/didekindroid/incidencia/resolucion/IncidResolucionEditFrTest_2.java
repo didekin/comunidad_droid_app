@@ -66,9 +66,9 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     }
 
     @Override
-    IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
+    IntentsTestRule<IncidResolucionEditAc> doIntentRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
 
             /**
              * Preconditions:

@@ -10,6 +10,6 @@ import android.app.Activity;
  * Mark interface to be used by ActivityRouter.
  */
 @FunctionalInterface
-public interface RouterListener {
+public interface RouterToAcIf {
     Class<? extends Activity> getActivityToGo();
 }

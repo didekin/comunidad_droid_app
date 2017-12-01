@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.FragmentInitiator;
+import com.didekindroid.router.FragmentInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -16,7 +16,6 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.UIutils.doToolBar;
@@ -25,8 +24,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * This activity is a point of registration for receiving GCM notifications of new incidents.
  * <p>
  * Preconditions:
- * 1. An intent key is received with an IncidImportancia belonging to a user with function 'adm'.
- * 2. An intent key with a Resolucion instance MAY be received.
+ * 1. An intent key is received with an IncidImportancia belonging.
+ * 2. An intent key with a Resolucion instance is received.v
  * Postconditions:
  * 1. If NOT Resolucion intent is received and the user has authority 'adm':
  * 1.1. An incidencia resolution is registered in BD, associated to its author.
@@ -41,7 +40,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
  * 4.1 The data are shown.
  */
-public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
+public class IncidResolucionEditAc extends AppCompatActivity implements FragmentInitiatorIf<Fragment> {
 
     IncidImportancia incidImportancia;
     Resolucion resolucion;
@@ -56,7 +55,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         resolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
 
-        View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
+        View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
 
@@ -68,15 +67,15 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
         Fragment fragmentToAdd;
 
-        if(resolucion != null){
+        if (resolucion != null) {
             argsFragment.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
-            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ?  new IncidResolucionEditFr() : new IncidResolucionSeeFr();
+            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ? new IncidResolucionEditFr() : new IncidResolucionSeeFr();
         } else {
-            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ? new IncidResolucionRegFr() : new IncidResolucionSeeDefaultFr();
+            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ? new IncidResolucionRegFr() : null;      // TODO: simplificar.
         }
 
-        fragmentToAdd.setArguments(argsFragment);
-        new FragmentInitiator(this, R.id.incid_resolucion_fragment_container_ac).initFragmentTx(fragmentToAdd, incid_resolucion_ac_frgs_tag);
+        fragmentToAdd.setArguments(argsFragment);    // TODO: constructor for fr.
+        initFragmentTx(fragmentToAdd);
     }
 
     @Override
@@ -114,6 +113,22 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         Timber.d("onStop()");
         super.onStop();
         viewerFirebaseToken.clearSubscriptions();
+    }
+
+//    ============================================================
+//    ................... FragmentInitiatorIf ....................
+//    ============================================================
+
+    @Override
+    public AppCompatActivity getActivity()
+    {
+        return this;
+    }
+
+    @Override
+    public int getContainerId()
+    {
+        return R.id.incid_resolucion_fragment_container_ac;
     }
 
 //    ============================================================

@@ -41,7 +41,6 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_open_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -116,7 +115,7 @@ public class IncidSeeOpenByComuAcTest {
     {
         activity = activityRule.getActivity();
         fragment = (IncidSeeOpenByComuFr) activity.getSupportFragmentManager()
-                .findFragmentByTag(incid_see_open_by_comu_list_fr_tag);
+                .findFragmentByTag(IncidSeeOpenByComuFr.class.getName());
         assertThat(fragment, notNullValue());
     }
 

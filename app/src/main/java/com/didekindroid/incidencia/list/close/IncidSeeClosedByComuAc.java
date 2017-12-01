@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.list.close;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,12 +7,11 @@ import android.view.MenuItem;
 
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiatorIf;
-import com.didekindroid.router.FragmentInitiator;
+import com.didekindroid.router.FragmentInitiatorIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_close_by_comu_list_fr_tag;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -32,7 +30,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- Arguments with incidImportancia, bundleWithResolucion and a toShowMenu flag are passed to the bundleWithResolucion
  * fragment.
  */
-public class IncidSeeClosedByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class IncidSeeClosedByComuAc extends AppCompatActivity implements ActivityInitiatorIf,
+        FragmentInitiatorIf<IncidSeeCloseByComuFr> {
 
     IncidSeeCloseByComuFr fragmentList;
     Bundle bundle;
@@ -51,21 +50,29 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         bundle.putLong(COMUNIDAD_ID.key, comunidadId);
 
         if (savedInstanceState != null) {
-            fragmentList = (IncidSeeCloseByComuFr) getSupportFragmentManager().findFragmentByTag(incid_see_close_by_comu_list_fr_tag);
+            fragmentList = (IncidSeeCloseByComuFr) getSupportFragmentManager().findFragmentByTag(IncidSeeCloseByComuFr.class.getName());
             return;
         }
 
         fragmentList = new IncidSeeCloseByComuFr();
         fragmentList.setArguments(bundle);
-        new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac).initFragmentTx(fragmentList, incid_see_close_by_comu_list_fr_tag);
+        initFragmentTx(fragmentList);    // TODO: constructor para fragmento.
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
+// ======================  ActivityInitiatorIf  ===================
 
     @Override
-    public Activity getActivity()
+    public AppCompatActivity getActivity()
     {
         return this;
+    }
+
+// ======================  FragmentInitiatorIf  ===================
+
+    @Override
+    public int getContainerId()
+    {
+        return R.id.incid_see_closed_by_comu_ac;
     }
 
     // ============================================================

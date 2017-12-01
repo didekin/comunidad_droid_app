@@ -207,7 +207,7 @@
                 android:value=".incidencia.list.open.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
-            android:name=".incidencia.resolucion.IncidResolucionRegEditSeeAc"
+            android:name=".incidencia.resolucion.IncidResolucionEditAc"
             android:label="@string/incid_resolution_ac_label"
             android:parentActivityName=".incidencia.core.edit.IncidEditAc"
             android:windowSoftInputMode="stateHidden">
@@ -231,6 +231,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuariocomunidad.data.UserComuDataAc"/>
         </activity>
+        <activity android:name=".incidencia.resolucion.IncidResolucionRegAc"/>
         <!-- .......... GCM services ......... -->
         <service
             android:name=".incidencia.firebase.IncidFireBaseMsgService"

@@ -20,7 +20,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,8 +33,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 public abstract class IncidResolucionAbstractTest {
 
     @Rule
-    public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = doIntentRule();
-    IncidResolucionRegEditSeeAc activity;
+    public IntentsTestRule<IncidResolucionEditAc> intentRule = doIntentRule();
+    IncidResolucionEditAc activity;
     Fragment incidEditFr;
     IncidImportancia incidImportancia;
     Resolucion resolucion;
@@ -48,7 +47,7 @@ public abstract class IncidResolucionAbstractTest {
         activity = intentRule.getActivity();
         assertThat(activity, notNullValue());
         onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-        incidEditFr = activity.getSupportFragmentManager().findFragmentByTag(incid_resolucion_ac_frgs_tag);
+//        incidEditFr = activity.getSupportFragmentManager().findFragmentByTag(incid_resolucion_reg_fr_tag);  // TODO: descomentar.
         assertThat(incidEditFr, notNullValue());
         // Intent extras in activity.
         incidImportanciaIntent = (IncidImportancia) activity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
@@ -62,7 +61,7 @@ public abstract class IncidResolucionAbstractTest {
         } else if (!incidImportanciaIntent.getUserComu().hasAdministradorAuthority() && resolucionIntent != null) {
             assertThat(incidEditFr, instanceOf(IncidResolucionSeeFr.class));
         } else {
-            assertThat(incidEditFr, instanceOf(IncidResolucionSeeDefaultFr.class));
+           // TODO: simplificar.
         }
         assertThat(incidEditFr.getArguments(), hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidImportanciaIntent)));
         if (resolucion != null) {
@@ -76,7 +75,7 @@ public abstract class IncidResolucionAbstractTest {
         cleanOptions(whatToClean());
     }
 
-    abstract IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule();
+    abstract IntentsTestRule<IncidResolucionEditAc> doIntentRule();
 
     abstract UsuarioDataTestUtils.CleanUserEnum whatToClean();
 }

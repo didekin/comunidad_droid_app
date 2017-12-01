@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.testutils.IncidEspressoTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -30,7 +29,6 @@ import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
@@ -47,9 +45,9 @@ import static org.junit.Assert.assertThat;
 public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
 
     @Override
-    IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
+    IntentsTestRule<IncidResolucionEditAc> doIntentRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
 
             /**
              * Preconditions:

@@ -16,19 +16,20 @@ import com.didekinlib.model.comunidad.Comunidad;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.list.open.ViewerIncidSeeOpen.newViewerIncidSeeOpen;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.writeNewIncidencia;
+import static com.didekindroid.incidencia.list.open.ViewerIncidSeeOpenFr.newViewerIncidSeeOpen;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewIncidencia;
 
 /**
  * Preconditions:
- * A list of IncidenciaUser instances is retrieved with the incidencia and the registering user data.
+ * 1. An argument is passed with comunidadId.
+ * 2. A list of IncidenciaUser instances is retrieved with the incidencia and the registering user data.
  * <p/>
  * Postconditions:
  */
 public class IncidSeeOpenByComuFr extends Fragment implements ActivityInitiatorIf {
 
     View frView;
-    ViewerIncidSeeOpen viewer;
+    ViewerIncidSeeOpenFr viewer;
 
     static IncidSeeOpenByComuFr newInstance(long comunidadId)
     {
@@ -46,7 +47,7 @@ public class IncidSeeOpenByComuFr extends Fragment implements ActivityInitiatorI
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         FloatingActionButton fab = frView.findViewById(R.id.incid_new_incid_fab);
-        fab.setOnClickListener(v -> initAcFromListener(getArguments(), writeNewIncidencia));
+        fab.setOnClickListener(v -> initAcFromRouter(getArguments(), writeNewIncidencia));
         return frView;
     }
 

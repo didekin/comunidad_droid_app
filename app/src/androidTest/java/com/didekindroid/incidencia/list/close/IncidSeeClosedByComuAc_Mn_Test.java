@@ -105,14 +105,14 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     @Test
     public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
         checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
-        INCID_REG_AC.checkMenuItem_WTk(activity);
+        INCID_REG_AC.checkMenuItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()));
         checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
     }

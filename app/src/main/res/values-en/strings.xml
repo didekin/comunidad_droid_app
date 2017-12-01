@@ -175,8 +175,6 @@
     <string name="incid_resolucion_coste_prev_rot">Estimated cost EUR:</string>
     <string name="incid_resolucion_coste_prev_hint">-- Your estimation --</string>
     <string name="incid_resolucion_coste_prev_msg">Estimated cost</string>
-    <!-- ====== IncidResolucionSeeDefaultFr ====== -->
-    <string name="incid_resolucion_see_default_txt">The resolution process has not yet begun</string>
     <!-- ===================== IncidSeeOpenByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Your incidents</string>
     <string name="incid_apertura_rot">Opening:</string>

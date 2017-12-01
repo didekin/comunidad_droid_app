@@ -4,15 +4,12 @@ import android.os.Bundle;
 
 import com.didekindroid.api.Controller;
 import com.didekindroid.api.CtrlerSelectListIf;
-import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
@@ -36,32 +33,17 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
 
     static Single<List<IncidenciaUser>> incidOpenList(final long comunidadId)
     {
-        return Single.fromCallable(new Callable<List<IncidenciaUser>>() {
-            @Override
-            public List<IncidenciaUser> call() throws Exception
-            {
-                return incidenciaDao.seeIncidsOpenByComu(comunidadId);
-            }
-        });
+        return Single.fromCallable(() -> incidenciaDao.seeIncidsOpenByComu(comunidadId));
     }
 
     static Single<Bundle> incidImportancia(final Incidencia incidencia)
     {
-        return fromCallable(new Callable<IncidAndResolBundle>() {
-            @Override
-            public IncidAndResolBundle call() throws Exception
-            {
-                return incidenciaDao.seeIncidImportancia(incidencia.getIncidenciaId());
-            }
-        }).map(new Function<IncidAndResolBundle, Bundle>() {
-            @Override
-            public Bundle apply(IncidAndResolBundle incidResol) throws Exception
-            {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, incidResol);
-                return bundle;
-            }
-        });
+        return fromCallable(() -> incidenciaDao.seeIncidImportancia(incidencia.getIncidenciaId()))
+                .map(incidResol -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, incidResol);
+                    return bundle;
+                });
     }
 
     // .................................... INSTANCE METHODS .................................

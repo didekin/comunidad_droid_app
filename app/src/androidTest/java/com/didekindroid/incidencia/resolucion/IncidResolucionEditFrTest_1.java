@@ -51,6 +51,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -67,9 +68,9 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Override
-    IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
+    IntentsTestRule<IncidResolucionEditAc> doIntentRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
             /**
              * Preconditions:
              * 1. A user WITH powers 'adm' in sesssion.
@@ -85,7 +86,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
 
                 } catch (InterruptedException | IOException | UiException e) {
-                    e.printStackTrace();
+                    fail();
                 }
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
@@ -113,6 +114,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
                 withId(android.R.id.empty),
                 withText(R.string.incid_resolucion_no_avances_message)
         )).check(matches(isDisplayed()));
+        // TODO: checkUp a edición incidencia.
     }
 
     @Test
@@ -120,7 +122,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     {
         // Caso OK: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-        checKOk();
+        checKOk(); // TODO: cambiar a check de edición de la resolución no de la incidencia.
         Resolucion resolucionDb = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.equals(resolucion), is(true));
         assertThat(abs(resolucionDb.getFechaPrev().getTime() - resolucion.getFechaPrev().getTime()) < 1000, is(true));

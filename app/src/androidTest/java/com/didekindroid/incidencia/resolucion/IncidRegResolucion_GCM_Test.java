@@ -67,7 +67,7 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_Test {
     @Override
     protected IntentsTestRule<? extends Activity> doIntentsTestRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
             /**
              * Preconditions:
              * 1. A user WITH powers 'adm' in sesssion.

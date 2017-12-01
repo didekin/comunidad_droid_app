@@ -34,7 +34,6 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doInciden
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentsSeeFrLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
@@ -113,7 +112,7 @@ public class IncidCommentSeeAcTest_2 {
     {
         mActivity = activityRule.getActivity();
         Thread.sleep(2000);
-        mAdapter = ((IncidCommentSeeListFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)).mAdapter;
+        mAdapter = ((IncidCommentSeeListFr) mActivity.getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName())).mAdapter;
     }
 
     @After

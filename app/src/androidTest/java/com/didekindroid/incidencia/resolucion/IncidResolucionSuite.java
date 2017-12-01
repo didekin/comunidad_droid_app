@@ -14,7 +14,6 @@ import org.junit.runners.Suite;
         IncidResolucionEditFrTest_1.class,
         IncidResolucionEditFrTest_2.class,
         IncidResolucionRegFrTest.class,
-        IncidResolucionSeeDefaultFrTest.class,
         IncidResolucionSeeFrTest_1.class,
         IncidResolucionSeeFrTest_2.class,
 })

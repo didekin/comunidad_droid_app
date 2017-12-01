@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
-import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.util.FechaPickerUser;
 
 import timber.log.Timber;
@@ -16,7 +15,7 @@ import timber.log.Timber;
  * Time: 14:25
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class IncidResolucionFrAbstract extends Fragment implements FechaPickerUser, ActivityInitiatorIf {
+public abstract class IncidResolucionFrAbstract extends Fragment implements FechaPickerUser {
 
     ResolucionBean resolucionBean;
     View frView;

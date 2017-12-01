@@ -36,14 +36,14 @@ public class FragmentInitiatorTest {
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, false, true);
 
     AppCompatActivity activity;
-    FragmentInitiator initiator;
+    FragmentInitiator<Fragment> initiator;
     AtomicBoolean isRun;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        initiator = new FragmentInitiator(activity, R.id.mock_ac_layout);
+        initiator = new FragmentInitiator<>(activity, R.id.mock_ac_layout);
         isRun = new AtomicBoolean(false);
     }
 
@@ -56,7 +56,7 @@ public class FragmentInitiatorTest {
         Fragment mockFr = new ListMockFr();
         // Exec.
         activity.runOnUiThread(() -> {
-            initiator.initReplaceFragmentTx(bundle, mockFr, "listFrTag");
+            initiator.initReplaceFragmentTx(bundle, mockFr);
             isRun.compareAndSet(false, true);
         });
         // Check.
@@ -72,7 +72,7 @@ public class FragmentInitiatorTest {
         Fragment mockFr = new ListMockFr();
         // Exec.
         activity.runOnUiThread(() -> {
-            initiator.initFragmentTx(mockFr, "listSimpleFrTag");
+            initiator.initFragmentTx(mockFr);
             isRun.compareAndSet(false, true);
         });
         // Check.

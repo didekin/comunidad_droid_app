@@ -9,7 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.router.FragmentInitiator;
+import com.didekindroid.router.FragmentInitiatorIf;
 
 import timber.log.Timber;
 
@@ -27,7 +27,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * <p>
  * This activity is a point of registration for receiving notifications of new incidencias.
  */
-public class IncidRegAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class IncidRegAc extends AppCompatActivity implements ChildViewersInjectorIf, FragmentInitiatorIf<IncidRegFr> {
 
     IncidRegFr incidRegFr;
     ViewerIncidRegAc viewer;
@@ -47,7 +47,7 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
         viewer.doViewInViewer(savedInstanceState, null);
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
-        incidRegFr = new FragmentInitiator<IncidRegFr>(this).initFragmentById(bundle, R.id.incid_reg_frg);
+        incidRegFr = initFragmentById(bundle, R.id.incid_reg_frg);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
         viewer.saveState(outState);
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+// ===================  ChildViewersInjectorIf  ===================
 
     @Override
     public ParentViewerInjectedIf getParentViewer()
@@ -80,6 +80,16 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
     {
         Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(childViewer);
+    }
+
+//    ============================================================
+//    ................... FragmentInitiatorIf ....................
+//    ============================================================
+
+    @Override
+    public AppCompatActivity getActivity()
+    {
+        return this;
     }
 
     // ============================================================

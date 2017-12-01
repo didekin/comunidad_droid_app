@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;
@@ -36,10 +37,10 @@ import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidenci
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.closeIncidencia;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.closeIncidenciaError;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.modifyResolucion;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.modifyResolucionError;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.closeIncidencia;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.closeIncidenciaError;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyResolucion;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyResolucionError;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
@@ -54,7 +55,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
+public class IncidResolucionEditFr extends IncidResolucionFrAbstract implements ActivityInitiatorIf {
 
     Resolucion resolucion;
     IncidImportancia incidImportancia;
@@ -198,6 +199,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             return rowModified;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         protected void onPostExecute(Integer rowModified)
         {
@@ -213,7 +215,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                initAcFromListener(bundle, modifyResolucion);
+                initAcFromRouter(bundle, modifyResolucion);
             }
         }
     }
@@ -237,6 +239,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             return incidenciaCancelled;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         protected void onPostExecute(Integer incidenciaCancelled)
         {
@@ -250,7 +253,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
-                initAcFromListener(null, closeIncidencia);
+                initAcFromRouter(null, closeIncidencia);
             }
         }
     }

@@ -183,14 +183,14 @@ public class UserComuDataAcTest {
     @Test
     public void testIncidSeeByComuMn() throws InterruptedException
     {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
         checkUp(userComuDataLayout);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
-        INCID_REG_AC.checkMenuItem_WTk(activity);
+        INCID_REG_AC.checkMenuItem(activity);
         checkUp(userComuDataLayout);
     }
 }

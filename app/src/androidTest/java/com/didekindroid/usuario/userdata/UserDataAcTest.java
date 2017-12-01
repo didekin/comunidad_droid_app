@@ -123,7 +123,6 @@ public class UserDataAcTest {
         activity = (UserDataAc) mActivityRule.getActivity();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @After
     public void tearDown() throws Exception
     {
@@ -250,7 +249,7 @@ public class UserDataAcTest {
     @Test
     public void testIncidSeeByComuMn() throws InterruptedException
     {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(userComuDataLayout);
         }

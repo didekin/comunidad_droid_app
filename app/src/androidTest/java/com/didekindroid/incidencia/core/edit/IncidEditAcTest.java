@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -35,19 +34,15 @@ abstract class IncidEditAcTest {
     @Test
     public void test_OnCreate() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-                assertThat(activity.acView, notNullValue());
-                assertThat(activity.resolBundle, notNullValue());
-                assertThat(activity.viewer, notNullValue());
-                IncidEditFr fragmentToAdd = (IncidEditFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
-                assertThat(fragmentToAdd, notNullValue());
-                assertThat(fragmentToAdd.resolBundle, notNullValue());
-                assertThat(fragmentToAdd.frView, notNullValue());
-            }
+        activity.runOnUiThread(() -> {
+            getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
+            assertThat(activity.acView, notNullValue());
+            assertThat(activity.resolBundle, notNullValue());
+            assertThat(activity.viewer, notNullValue());
+            IncidEditFr fragmentToAdd = (IncidEditFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditFr.class.getName());
+            assertThat(fragmentToAdd, notNullValue());
+            assertThat(fragmentToAdd.resolBundle, notNullValue());
+            assertThat(fragmentToAdd.frView, notNullValue());
         });
     }
 
@@ -67,13 +62,7 @@ abstract class IncidEditAcTest {
                 return 0;
             }
         };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
+        activity.runOnUiThread(() -> getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0)));
         waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
     }
 

@@ -1,12 +1,7 @@
 package com.didekindroid.router;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-
-import timber.log.Timber;
 
 /**
  * User: pedro@didekin
@@ -14,12 +9,12 @@ import timber.log.Timber;
  * Time: 11:12
  */
 
-public class FragmentInitiator<T extends Fragment> {
+public class FragmentInitiator<T extends Fragment> implements FragmentInitiatorIf<T> {
 
     private final AppCompatActivity activity;
     private final int containerId;
 
-    public FragmentInitiator(AppCompatActivity activity)
+    FragmentInitiator(AppCompatActivity activity)
     {
         this.activity = activity;
         containerId = 0;
@@ -31,32 +26,13 @@ public class FragmentInitiator<T extends Fragment> {
         this.containerId = containerId;
     }
 
-    public void initReplaceFragmentTx(@Nullable Bundle bundle, @NonNull Fragment fragment, String fragmentTag)
+    public AppCompatActivity getActivity()
     {
-        Timber.d("initReplaceFragmentTx()");
-        if (bundle != null) {
-            fragment.setArguments(bundle);
-        }
-        activity.getSupportFragmentManager().beginTransaction()
-                .replace(containerId, fragment, fragmentTag)
-                .addToBackStack(fragment.getClass().getName())
-                .commit();
+        return activity;
     }
 
-    public void initFragmentTx(@NonNull Fragment fragment, String fragmentTag)
+    public int getContainerId()
     {
-        Timber.d("initFragmentTx()");
-        activity.getSupportFragmentManager().beginTransaction()
-                .add(containerId, fragment, fragmentTag)
-                .commit();
-    }
-
-    @SuppressWarnings("unchecked")
-    public T initFragmentById(Bundle bundle, int fragmentId)
-    {
-        Timber.d("initFragmentById()");
-        T fragment = (T) activity.getSupportFragmentManager().findFragmentById(fragmentId);
-        fragment.setArguments(bundle);
-        return fragment;
+        return containerId;
     }
 }

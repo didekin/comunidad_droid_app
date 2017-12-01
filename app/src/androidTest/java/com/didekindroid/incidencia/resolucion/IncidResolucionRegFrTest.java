@@ -67,9 +67,9 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     }
 
     @Override
-    IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
+    IntentsTestRule<IncidResolucionEditAc> doIntentRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
             /**
              * Preconditions:
              * 1. A user WITH powers 'adm' in session.

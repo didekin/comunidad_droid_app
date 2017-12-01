@@ -53,9 +53,9 @@ import static org.junit.Assert.assertThat;
 public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
 
     @Override
-    IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
+    IntentsTestRule<IncidResolucionEditAc> doIntentRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
             /**
              * Preconditions:
              * 1. A user WITHOUT powers to edit a resolucion is received.

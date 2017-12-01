@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
@@ -13,7 +12,6 @@ import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,7 +27,6 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
@@ -101,7 +98,7 @@ public class ViewerIncidEditMinFrTest {
     {
         activity = activityRule.getActivity();
         dbHelper = new IncidenciaDataDbHelper(activity);
-        IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMinFr.class.getName());
 
         AtomicReference<ViewerIncidEditMinFr> viewerAtomic = new AtomicReference<>(null);
         viewerAtomic.compareAndSet(null, fragment.viewer);
@@ -123,7 +120,7 @@ public class ViewerIncidEditMinFrTest {
     {
         assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
         assertThat(viewer.getParentViewer(), allOf(
-                CoreMatchers.<ViewerIf>is(activity.getParentViewer()),
+                is(activity.getParentViewer()),
                 notNullValue()
         ));
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
@@ -148,13 +145,9 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testOnClickButtonModify_1() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.incidImportanciaBean.setImportancia((short) 1);
-                viewer.onClickButtonModify();
-            }
+        activity.runOnUiThread(() -> {
+            viewer.incidImportanciaBean.setImportancia((short) 1);
+            viewer.onClickButtonModify();
         });
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }

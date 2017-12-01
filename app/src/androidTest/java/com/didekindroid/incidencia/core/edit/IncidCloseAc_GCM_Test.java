@@ -9,7 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.Incidencia_GCM_Test;
-import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
+import com.didekindroid.incidencia.resolucion.IncidResolucionEditAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -61,7 +61,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
     @Override
     protected IntentsTestRule<? extends Activity> doIntentsTestRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
 
             /**
              * Preconditions:

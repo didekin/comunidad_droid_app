@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFr.newViewerIncidEditMinFr;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 
 /**
  * User: pedro@didekin
@@ -21,6 +23,16 @@ import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFr.newView
 public class IncidEditMinFr extends IncidEditFr {
 
     ViewerIncidEditMinFr viewer;
+
+    static IncidEditMinFr newInstance(IncidAndResolBundle resolBundle)
+    {
+        Timber.d("newInstance()");
+        IncidEditMinFr fr = new IncidEditMinFr();
+        Bundle argsFragment = new Bundle();
+        argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle);
+        fr.setArguments(argsFragment);
+        return fr;
+    }
 
     @Override
     protected ViewerIncidEditFr getViewerIncidEdit()

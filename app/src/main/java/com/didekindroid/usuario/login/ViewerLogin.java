@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.notSendNewPswd;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.notSendNewPswd;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.usuario.login.ViewerLogin.PasswordMailDialog.newInstance;
@@ -147,7 +147,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
     {
         Timber.d("doDialogNegativeClick()");
         makeToast(getActivity(), R.string.login_wrong_no_mail);
-        initAcFromListener(null, notSendNewPswd);
+        initAcFromRouter(null, notSendNewPswd);
         activity.finish();
     }
 

@@ -7,7 +7,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
@@ -18,7 +17,6 @@ import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,7 +35,6 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -90,7 +87,7 @@ public class ViewerIncidEditMaxFrTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        IncidEditMaxFr fragment = (IncidEditMaxFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        IncidEditMaxFr fragment = (IncidEditMaxFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMaxFr.class.getName());
         dbHelper = new IncidenciaDataDbHelper(activity);
 
         AtomicReference<ViewerIncidEditMaxFr> viewerAtomic = new AtomicReference<>(null);
@@ -112,7 +109,7 @@ public class ViewerIncidEditMaxFrTest {
     public void testNewViewerIncidEditMaxFr() throws Exception
     {
         assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
-        assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.getParentViewer()));
+        assertThat(viewer.getParentViewer(), is(activity.getParentViewer()));
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
     }
@@ -138,13 +135,7 @@ public class ViewerIncidEditMaxFrTest {
         // Preconditions.
         final IncidAndResolBundle newResolBundle = new IncidAndResolBundle(resolBundle.getIncidImportancia(), true);
         // Exec.
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(new Bundle(0), newResolBundle);
-            }
-        });
+        activity.runOnUiThread(() -> viewer.doViewInViewer(new Bundle(0), newResolBundle));
         // Checks: NOT erase button.
         waitAtMost(4, SECONDS).untilTrue(viewer.hasResolucion);
         checkScreenEditMaxPowerFrNotErase(newResolBundle);
@@ -153,13 +144,9 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testOnClickButtonModify_1() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.incidImportanciaBean.setImportancia((short) 11);
-                viewer.onClickButtonModify();
-            }
+        activity.runOnUiThread(() -> {
+            viewer.incidImportanciaBean.setImportancia((short) 11);
+            viewer.onClickButtonModify();
         });
         waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_importancia));
     }
@@ -167,13 +154,9 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testOnClickButtonModify_2() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.incidImportanciaBean.setImportancia((short) 1);
-                viewer.onClickButtonModify();
-            }
+        activity.runOnUiThread(() -> {
+            viewer.incidImportanciaBean.setImportancia((short) 1);
+            viewer.onClickButtonModify();
         });
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }
@@ -185,13 +168,9 @@ public class ViewerIncidEditMaxFrTest {
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
         final AtomicBoolean isRun = new AtomicBoolean(false);
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onClickButtonErase();
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onClickButtonErase();
+            isRun.compareAndSet(false, true);
         });
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }

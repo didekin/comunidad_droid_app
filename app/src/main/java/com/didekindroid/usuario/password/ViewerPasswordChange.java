@@ -24,8 +24,8 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.modifyPswd;
-import static com.didekindroid.router.ActivityRouter.RouterToActivity.sendNewPswd;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyPswd;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.sendNewPswd;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
@@ -174,7 +174,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
         {
             Timber.d("onComplete(), Thread: %s", Thread.currentThread().getName());
             makeToast(activity, R.string.password_remote_change);
-            initAcFromListener(null, modifyPswd);
+            initAcFromRouter(null, modifyPswd);
         }
 
         @Override
@@ -194,7 +194,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
             if (isSendPassword) {
                 makeToast(activity, R.string.password_new_in_login);
             }
-            initAcFromListener(null, sendNewPswd);
+            initAcFromRouter(null, sendNewPswd);
         }
 
         @Override
