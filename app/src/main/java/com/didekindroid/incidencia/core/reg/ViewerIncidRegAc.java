@@ -83,7 +83,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
         Timber.d("onSuccessRegisterIncidImportancia()");
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
-        initAcFromActivity(bundle);    // TODO: testar.
+        initAcFromActivity(bundle);
     }
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)

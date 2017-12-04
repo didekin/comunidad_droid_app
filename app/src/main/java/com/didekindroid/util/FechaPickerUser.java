@@ -1,16 +1,35 @@
 package com.didekindroid.util;
 
-import android.app.Activity;
 import android.widget.TextView;
+
+import com.didekindroid.incidencia.resolucion.ResolucionBean;
 
 /**
  * User: pedro@didekin
- * Date: 10/03/16
- * Time: 10:27
+ * Date: 01/12/2017
+ * Time: 15:15
  */
-public interface FechaPickerUser {
 
-    TextView getFechaView();
-    Activity getActivity();
-    FechaPickerBean getBean();
+public class FechaPickerUser implements FechaPickerUserIf {
+
+    private final TextView fechaView;
+    private final FechaPickerBean pickerBean;
+
+    public FechaPickerUser(TextView fechaView, ResolucionBean pickerBean)
+    {
+        this.fechaView = fechaView;
+        this.pickerBean = pickerBean;
+    }
+
+    @Override
+    public TextView getFechaView()
+    {
+        return fechaView;
+    }
+
+    @Override
+    public FechaPickerBean getPickerBean()
+    {
+        return pickerBean;
+    }
 }

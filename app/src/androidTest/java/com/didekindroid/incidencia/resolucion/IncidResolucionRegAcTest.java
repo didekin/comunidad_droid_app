@@ -8,11 +8,13 @@ import android.widget.DatePicker;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,21 +35,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.closeDatePicker;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.reSetDatePicker;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.util.UIutils.formatTimeToString;
 import static com.didekindroid.util.UIutils.isCalendarPreviousTimeStamp;
 import static java.lang.Thread.sleep;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -58,43 +58,38 @@ import static org.junit.Assert.assertThat;
  * Time: 15:14
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
+public class IncidResolucionRegAcTest {
 
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        sleep(2000);
-    }
+    IncidResolucionRegAc activity;
+    IncidImportancia incidImportancia;
 
-    @Override
-    IntentsTestRule<IncidResolucionEditAc> doIntentRule()
-    {
-        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
-            /**
-             * Preconditions:
-             * 1. A user WITH powers 'adm' in session.
-             * 2. Resolucion intent == null.
-             * */
-            @Override
-            protected Intent getActivityIntent()
-            {
-                try {
-                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-                } catch (IOException | UiException e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-                intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-                return intent;
+    @Rule
+    public IntentsTestRule<IncidResolucionRegAc> testRule = new IntentsTestRule<IncidResolucionRegAc>(IncidResolucionRegAc.class) {
+        @Override
+        protected Intent getActivityIntent()
+        {
+            try {
+                // A user WITH powers 'adm'.
+                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+            } catch (IOException | UiException e) {
+                e.printStackTrace();
             }
-        };
+            Intent intent = new Intent();
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+            return intent;
+        }
+    };
+
+    @Before
+    public void setUp() throws Exception
+    {
+        activity = testRule.getActivity();
     }
 
-    @Override
-    UsuarioDataTestUtils.CleanUserEnum whatToClean()
+    @After
+    public void tearDown() throws Exception
     {
-        return CLEAN_JUAN;
+        cleanOptions(CLEAN_JUAN);
     }
 
     //  ===============================  TESTS ================================
@@ -143,104 +138,41 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @Test
     public void test_registerResolucion_2() throws InterruptedException
     {
-        assertThat(isCalendarPreviousTimeStamp(setFechaEnPicker(0, 1), incidImportancia.getFechaAlta()), is(false));
-
-        // NOT OK: Descripción errónea.
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
-
+        // NOT OK: Fecha inferior a fecha_alta incidencia. Descripción ausente. Coste erróneo.
+        Calendar fechaPrev = setFechaEnPicker(0, -1);
+        assertThat(isCalendarPreviousTimeStamp(fechaPrev, incidImportancia.getFechaAlta()), is(true));
+        onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, activity,
-                R.string.incid_resolucion_descrip_msg);
+                R.string.incid_resolucion_fecha_prev_msg,
+                R.string.incid_resolucion_descrip_msg,
+                R.string.incid_resolucion_coste_prev_msg);
 
         sleep(2000);
-    }
 
-    @Test
-    public void test_registerResolucion_3() throws InterruptedException
-    {
-        assertThat(isCalendarPreviousTimeStamp(setFechaEnPicker(0, 1), incidImportancia.getFechaAlta()), is(false));
+        // Intentamos corregir: fecha de hoy.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));
-
-        // NOT OK: Coste erróneo.
-        onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
-
+        fechaPrev = setFechaEnPicker(0, 0);
+        assertThat(isCalendarPreviousTimeStamp(fechaPrev, incidImportancia.getFechaAlta()), is(false));
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
+        // Check coste erróneo.
         checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.incid_resolucion_coste_prev_msg);
 
         sleep(2000);
     }
 
-
     @Test
-    public void test_registerResolucion_4() throws InterruptedException
+    public void test_registerResolucion_3()
     {
-        assertThat(isCalendarPreviousTimeStamp(setFechaEnPicker(0, 1), incidImportancia.getFechaAlta()), is(false));
-        // NOT OK: Coste y descripción erróneos.
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
-        onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
-
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        checkToastInTest(R.string.error_validation_msg, activity,
-                R.string.incid_resolucion_coste_prev_msg,
-                R.string.incid_resolucion_descrip_msg);
-
-        sleep(2000);
-    }
-
-    @Test
-    public void test_registerResolucion_5() throws InterruptedException
-    {
-        // NOT OK: Fecha inferior a fecha_alta incidencia. Descripción ausente.
-        Calendar fechaPrev = setFechaEnPicker(0, -1);
-        assertThat(isCalendarPreviousTimeStamp(fechaPrev, incidImportancia.getFechaAlta()), is(true));
-
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        checkToastInTest(R.string.error_validation_msg, activity,
-                R.string.incid_resolucion_fecha_prev_msg,
-                R.string.incid_resolucion_descrip_msg);
-
-        sleep(2000);
-
-        // Intentamos corregir:
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));
-        fechaPrev = setFechaEnPicker(0, 0);
-
-        assertThat(isCalendarPreviousTimeStamp(fechaPrev, incidImportancia.getFechaAlta()), is(false));
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-
-        checkRegResolucionOk();
-    }
-
-    @Test
-    public void test_registerResolucion_6() throws InterruptedException
-    {
-        // OK: fecha de hoy.
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));
-        Calendar fechaPrev = setFechaEnPicker(0, 0);
-        assertThat(isCalendarPreviousTimeStamp(fechaPrev, incidImportancia.getFechaAlta()), is(false));
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-
-        checkRegResolucionOk();
-    }
-
-    @Test
-    public void test_registerResolucion_7()
-    {
-        //Caso: OK
-
+        /*Caso: OK*/
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
         setFechaEnPicker(0, 2);
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
 
         checkRegResolucionOk();
-
-        // Test de error resolución duplicada.
-        setFechaEnPicker(0, 2);
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        waitAtMost(8, SECONDS).until(isToastInView(R.string.resolucion_duplicada, activity));
-        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
+        // TODO: checkUp.
     }
 
 //    ============================= HELPER METHODS ===========================
@@ -256,12 +188,9 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
 
     private void checkRegResolucionOk()
     {
-        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
+        onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
+        onView(withId(incideEditMaxPowerFrLayout)).check(matches(isDisplayed()));
         // hasResolucion == true, because it has been registered.
         intended(hasExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true)));
-
-        checkUp();
-        checkScreenResolucionRegFr();
     }
 }

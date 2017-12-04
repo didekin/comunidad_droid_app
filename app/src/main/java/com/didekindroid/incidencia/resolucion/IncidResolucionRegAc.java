@@ -39,7 +39,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements FragmentI
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)      // TODO: test.
+    protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);

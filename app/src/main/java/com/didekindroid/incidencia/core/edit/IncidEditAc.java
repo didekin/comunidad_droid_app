@@ -17,7 +17,6 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.core.edit.IncidEditMaxFr.newInstance;
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditAc.newViewerIncidEditAc;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
@@ -66,7 +65,7 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         }
 
         if (incidImportancia.isIniciadorIncidencia() || incidImportancia.getUserComu().hasAdministradorAuthority()) {
-            initFragmentTx(newInstance(resolBundle));
+            initFragmentTx(IncidEditMaxFr.newInstance(resolBundle));
         } else {
             initFragmentTx(IncidEditMinFr.newInstance(resolBundle));
         }

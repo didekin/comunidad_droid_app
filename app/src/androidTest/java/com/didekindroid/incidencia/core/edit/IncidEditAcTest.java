@@ -39,10 +39,6 @@ abstract class IncidEditAcTest {
             assertThat(activity.acView, notNullValue());
             assertThat(activity.resolBundle, notNullValue());
             assertThat(activity.viewer, notNullValue());
-            IncidEditFr fragmentToAdd = (IncidEditFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditFr.class.getName());
-            assertThat(fragmentToAdd, notNullValue());
-            assertThat(fragmentToAdd.resolBundle, notNullValue());
-            assertThat(fragmentToAdd.frView, notNullValue());
         });
     }
 

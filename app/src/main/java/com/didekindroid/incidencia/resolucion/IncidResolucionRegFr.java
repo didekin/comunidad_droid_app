@@ -3,15 +3,19 @@ package com.didekindroid.incidencia.resolucion;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.util.FechaPickerFr;
+import com.didekindroid.util.FechaPickerUser;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -26,10 +30,9 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.editIncidencia;
+import static com.didekindroid.router.ActivityRouter.RouterToAc.afterResolucionReg;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.regResolucionDuplicate;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -41,9 +44,12 @@ import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RES
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionRegFr extends IncidResolucionFrAbstract implements ActivityInitiatorIf {
+public class IncidResolucionRegFr extends Fragment implements ActivityInitiatorIf {
 
     IncidImportancia incidImportancia;
+    ResolucionBean resolucionBean;
+    TextView fechaViewForPicker;
+    View frView;
 
     static IncidResolucionRegFr newInstance(IncidImportancia incidImportancia)
     {
@@ -62,7 +68,11 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract implements A
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_resolucion_reg_frg, container, false);
         resolucionBean = new ResolucionBean();
-        fechaViewForPicker = initFechaViewForPicker(this, frView.findViewById(R.id.incid_resolucion_fecha_view));
+        fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
+        fechaViewForPicker.setOnClickListener(clickListener -> {
+            FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerUser(fechaViewForPicker, resolucionBean));
+            fechaPicker.show(getActivity().getFragmentManager(), "fechaPicker");
+        });
 
         Button mConfirmButton = frView.findViewById(R.id.incid_resolucion_reg_ac_button);
         mConfirmButton.setOnClickListener(v -> registerResolucion());
@@ -172,7 +182,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract implements A
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                initAcFromRouter(bundle, editIncidencia);
+                initAcFromRouter(bundle, afterResolucionReg);
             }
         }
     }

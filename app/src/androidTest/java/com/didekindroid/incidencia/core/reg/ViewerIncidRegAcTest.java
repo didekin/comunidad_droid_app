@@ -146,7 +146,7 @@ public class ViewerIncidRegAcTest {
     }
 
     @Test
-    public void testOnSuccessRegisterIncidencia_1() throws Exception
+    public void testOnSuccessRegisterIncidImportancia_1() throws Exception
     {
         viewer.onSuccessRegisterIncidImportancia(comuPlazuela5);
         // Check change of activity.
@@ -156,7 +156,7 @@ public class ViewerIncidRegAcTest {
     }
 
     @Test
-    public void testOnSuccessRegisterIncidencia_2() throws Exception
+    public void testOnSuccessRegisterIncidImportancia_2() throws Exception
     {
         // Check spinner initialization with the other comunidad.
         viewer.onSuccessRegisterIncidImportancia(comuReal);

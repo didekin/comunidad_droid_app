@@ -44,7 +44,6 @@ import static android.support.v4.app.NavUtils.navigateUpTo;
 import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultNoRegUser;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.editIncidencia;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewComment;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewIncidencia;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
@@ -72,7 +71,7 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(IncidCommentRegAc.class, IncidCommentSeeAc.class);
         acRouterMap.put(IncidEditAc.class, IncidSeeOpenByComuAc.class);
         acRouterMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
-        acRouterMap.put(IncidSeeOpenByComuAc.class, editIncidencia.activityToGo);
+        acRouterMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
         acRouterMap.put(LoginAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegComuAndUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
@@ -152,7 +151,7 @@ public class ActivityRouter implements ActivityRouterIf {
             return menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : defaultRegUser.activityToGo;
         } else {
             Class<? extends Activity> activityClass = noUserRegMenuIdMap.get(resourceId);
-            if (activityClass == null){
+            if (activityClass == null) {
                 activityClass = menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : defaultNoRegUser.activityToGo;
             }
             return activityClass;
@@ -186,8 +185,8 @@ public class ActivityRouter implements ActivityRouterIf {
         // Incidencia
         writeNewComment(IncidCommentRegAc.class),
         writeNewIncidencia(IncidRegAc.class),
-        editIncidencia(IncidEditAc.class),
         // Resolución.
+        afterResolucionReg(IncidEditAc.class),
         regResolucion(IncidResolucionRegAc.class),
         editResolucion(IncidResolucionEditAc.class),
         regResolucionDuplicate(regResolucion.activityToGo),

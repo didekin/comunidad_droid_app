@@ -215,6 +215,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.core.edit.IncidEditAc"/>
         </activity>
+        <activity android:name=".incidencia.resolucion.IncidResolucionRegAc"
+                  android:label="@string/incid_resolution_ac_label"
+                  android:parentActivityName=".incidencia.core.edit.IncidEditAc"
+                  android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".incidencia.core.edit.IncidEditAc"/>
+        </activity>
         <activity
             android:name=".incidencia.list.close.IncidSeeClosedByComuAc"
             android:label="@string/incid_closed_by_user_ac_label"
@@ -231,7 +239,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuariocomunidad.data.UserComuDataAc"/>
         </activity>
-        <activity android:name=".incidencia.resolucion.IncidResolucionRegAc"/>
         <!-- .......... GCM services ......... -->
         <service
             android:name=".incidencia.firebase.IncidFireBaseMsgService"

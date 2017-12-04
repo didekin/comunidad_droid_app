@@ -13,11 +13,13 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
@@ -34,6 +36,17 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
 
     View frView;
     Resolucion resolucion;
+
+    static IncidResolucionSeeFr newInstance(IncidImportancia incidImportancia, Resolucion resolucion)
+    {
+        Timber.d("newInstance()");
+        IncidResolucionSeeFr fr = new IncidResolucionSeeFr();
+        Bundle args = new Bundle(1);
+        args.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+        args.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+        fr.setArguments(args);
+        return fr;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

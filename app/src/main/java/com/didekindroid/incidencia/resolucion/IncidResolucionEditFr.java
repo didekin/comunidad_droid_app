@@ -3,6 +3,7 @@ package com.didekindroid.incidencia.resolucion;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.util.FechaPickerFr;
+import com.didekindroid.util.FechaPickerUser;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -41,7 +44,6 @@ import static com.didekindroid.router.ActivityRouter.RouterToAc.closeIncidencia;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.closeIncidenciaError;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyResolucion;
 import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyResolucionError;
-import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
@@ -55,10 +57,24 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionEditFr extends IncidResolucionFrAbstract implements ActivityInitiatorIf {
+public class IncidResolucionEditFr extends Fragment implements ActivityInitiatorIf {
 
     Resolucion resolucion;
     IncidImportancia incidImportancia;
+    ResolucionBean resolucionBean;
+    TextView fechaViewForPicker;
+    View frView;
+
+    static IncidResolucionEditFr newInstance(IncidImportancia incidImportancia, Resolucion resolucion)
+    {
+        Timber.d("newInstance()");
+        IncidResolucionEditFr fr = new IncidResolucionEditFr();
+        Bundle args = new Bundle(1);
+        args.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+        args.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+        fr.setArguments(args);
+        return fr;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,10 +83,16 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract implements 
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_resolucion_edit_fr, container, false);
         resolucionBean = new ResolucionBean();
-        fechaViewForPicker = initFechaViewForPicker(this, frView.findViewById(R.id.incid_resolucion_fecha_view));
+
+        fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
+        fechaViewForPicker.setOnClickListener(clickListener -> {
+            FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerUser(fechaViewForPicker, resolucionBean));
+            fechaPicker.show(getActivity().getFragmentManager(), "fechaPicker");
+        });
 
         Button mModifyButton = frView.findViewById(R.id.incid_resolucion_fr_modif_button);
         mModifyButton.setOnClickListener(v -> modifyResolucion(false));
+
         Button mCloseIncidButton = frView.findViewById(R.id.incid_resolucion_edit_fr_close_button);
         mCloseIncidButton.setOnClickListener(v -> modifyResolucion(true));
 

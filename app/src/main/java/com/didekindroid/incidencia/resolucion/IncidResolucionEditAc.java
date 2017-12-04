@@ -25,7 +25,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * <p>
  * Preconditions:
  * 1. An intent key is received with an IncidImportancia belonging.
- * 2. An intent key with a Resolucion instance is received.v
+ * 2. An intent key with a Resolucion instance may be received.
  * Postconditions:
  * 1. If NOT Resolucion intent is received and the user has authority 'adm':
  * 1.1. An incidencia resolution is registered in BD, associated to its author.
@@ -35,10 +35,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2.1. The resolucion is modified in BD, with a new avance record.
  * 2.2. If the user choose the 'close the incidencia' option, the incidencia is closed and a new
  * avance record is inserted too.
- * 3. If NOT Resolucion intent is received and the user hasn't got authority 'adm':
- * 3.1. A message informs that there is not resolución for the incidencia.
- * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
- * 4.1 The data are shown.
+ * 3. If a Resolucion intent is received and the user hasn't got authority 'adm':
+ * 3.1 The data are shown.
  */
 public class IncidResolucionEditAc extends AppCompatActivity implements FragmentInitiatorIf<Fragment> {
 
@@ -51,9 +49,10 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
-
+        // Preconditions.
         incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         resolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
+        boolean hasAdmRole = incidImportancia.getUserComu().hasAdministradorAuthority();
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_ac, null);
         setContentView(mAcView);
@@ -63,19 +62,15 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
             return;
         }
 
-        Bundle argsFragment = new Bundle();
-        argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-        Fragment fragmentToAdd;
-
         if (resolucion != null) {
-            argsFragment.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
-            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ? new IncidResolucionEditFr() : new IncidResolucionSeeFr();
+            if (hasAdmRole) {
+                initFragmentTx(IncidResolucionEditFr.newInstance(incidImportancia, resolucion));
+            } else {
+                initFragmentTx(IncidResolucionSeeFr.newInstance(incidImportancia, resolucion));
+            }
         } else {
-            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ? new IncidResolucionRegFr() : null;      // TODO: simplificar.
+            initFragmentTx(IncidResolucionRegFr.newInstance(incidImportancia));
         }
-
-        fragmentToAdd.setArguments(argsFragment);    // TODO: constructor for fr.
-        initFragmentTx(fragmentToAdd);
     }
 
     @Override

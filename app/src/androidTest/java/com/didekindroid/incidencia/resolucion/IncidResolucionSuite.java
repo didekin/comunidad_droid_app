@@ -11,11 +11,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         IncidRegResolucion_GCM_Test.class,
-        IncidResolucionEditFrTest_1.class,
-        IncidResolucionEditFrTest_2.class,
-        IncidResolucionRegFrTest.class,
-        IncidResolucionSeeFrTest_1.class,
-        IncidResolucionSeeFrTest_2.class,
+        IncidResolucionEditFrTest.class,
+        IncidResolucionRegAcTest.class,
+        IncidResolucionSeeFrTest.class,
 })
 public class IncidResolucionSuite {
 }

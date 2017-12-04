@@ -197,7 +197,6 @@ public final class IncidDataTestUtils {
         Thread.sleep(1000);
         Resolucion resolucion = doResolucion(incidencia, RESOLUCION_DEFAULT_DESC, 1122, new Timestamp(new Date().getTime()));
         assertThat(incidenciaDao.regResolucion(resolucion), is(1));
-
         return incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
     }
 }

@@ -22,7 +22,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RE
  * Date: 10/03/16
  * Time: 11:46
  */
-class ResolucionBean implements FechaPickerBean {
+public class ResolucionBean implements FechaPickerBean {
 
     private Calendar fechaPrevista;
     private String fechaPrevistaText;
