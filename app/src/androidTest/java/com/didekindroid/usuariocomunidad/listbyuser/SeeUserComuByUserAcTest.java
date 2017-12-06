@@ -9,12 +9,10 @@ import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuariocomunidad.RolUi;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,12 +68,6 @@ public class SeeUserComuByUserAcTest {
     };
     SeeUserComuByUserAc mActivity;
     SeeUserComuByUserFr mFragment;
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(3000);
-    }
 
     @Before
     public void setUp() throws Exception

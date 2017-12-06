@@ -9,7 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.Incidencia_GCM_Test;
-import com.didekindroid.incidencia.resolucion.IncidResolucionEditAc;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 

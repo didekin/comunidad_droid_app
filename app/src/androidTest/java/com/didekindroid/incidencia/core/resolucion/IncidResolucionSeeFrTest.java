@@ -1,21 +1,22 @@
-package com.didekindroid.incidencia.resolucion;
+package com.didekindroid.incidencia.core.resolucion;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.TaskStackBuilder.create;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -38,9 +40,13 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -50,7 +56,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -60,17 +65,60 @@ import static org.junit.Assert.fail;
  * User: pedro@didekin
  * Date: 14/03/16
  * Time: 17:49
+ * <p>
+ * Preconditions:
+ * 1. A user WITHOUT powers to edit a resolucion is received.
+ * 2. A resolucion in BD and intent.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionSeeFrTest {
 
     IncidImportancia incidImportancia;
     Resolucion resolucion;
-    Resolucion resolucionIntent;
+    UsuarioComunidad userJuan;
+    Activity activity;
+
+    static Resolucion doResolucionAvances(IncidImportancia incidImportancia) throws InterruptedException, UiException
+    {
+        // Registramos resolución.
+        Thread.sleep(1000);
+        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
+        // Modificamos con avances.
+        Avance avance = new Avance.AvanceBuilder().avanceDesc("avance1_desc").build();
+        List<Avance> avances = new ArrayList<>(1);
+        avances.add(avance);
+        resolucion = new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia())
+                .copyResolucion(resolucion)
+                .avances(avances)
+                .build();
+        assertThat(incidenciaDao.modifyResolucion(resolucion), is(2));
+        resolucion = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
+        return resolucion;
+    }
+
+    @Before
+    public void setUp()
+    {
+        try {
+            incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
+            assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
+        } catch (IOException | UiException e) {
+            fail();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Intent intentStack = new Intent(getTargetContext(), IncidEditAc.class);
+            intentStack.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
+            create(getTargetContext()).addNextIntentWithParentStack(intentStack).startActivities();
+        }
+    }
 
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_JUAN_AND_PEPE);
     }
 
@@ -79,11 +127,13 @@ public class IncidResolucionSeeFrTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        // Precondition: resolucion with avances.
-
-        checkScreenResolucionSeeFr(resolucionIntent);
+        // Precondition: resolucion with avances; usuario NO adm.
+        Intent intent = doPreconditionsWithAvances();
+        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+        activity = getInstrumentation().startActivitySync(intent);
+        // Check.
+        checkScreenResolucionSeeFr(resolucion);
         checkDataResolucionSeeFr(resolucion);
-
         // Avances.
         Avance avance = resolucion.getAvances().get(0);
         onData(is(avance)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
@@ -98,87 +148,77 @@ public class IncidResolucionSeeFrTest {
                         withId(R.id.incid_avance_aliasUser_view),
                         withText(USER_PEPE.getAlias()) // usuario en sesión que modifica resolución.
                 )))).check(matches(isDisplayed()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(incidEditAcLayout);
+        }
     }
 
     @Test
     public void testOnCreate_2() throws Exception
     {
-        // Precondition: Resolucion without avances.
-        getInstrumentation().startActivitySync(doPreconditions());
+        // Precondition: Resolucion without avances; usuario NO adm.
+        Intent intent = doPreconditions();
+        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+        activity = getInstrumentation().startActivitySync(intent);
         // Check.
-        checkScreenResolucionSeeFr(resolucionIntent);
+        checkScreenResolucionSeeFr(resolucion);
         checkDataResolucionSeeFr(resolucion);
         // Avances.
         onView(allOf(
                 withId(android.R.id.empty),
                 withText(R.string.incid_resolucion_no_avances_message)
         )).check(matches(isDisplayed()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(incidEditAcLayout);
+        }
     }
 
-    /**
-     * Preconditions:
-     * 1. A user WITHOUT powers to edit a resolucion is received.
-     * 2. A resolucion in BD and intent.
-     */
+    /*    ============================  Helpers  ===================================*/
 
-
-    Intent doPreconditionsWithAvances()
+    Intent doPreconditionsWithAvances() throws InterruptedException
     {
         try {
-            incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_JUAN);
-            Thread.sleep(1000);
-            // Necesitamos usuario con 'adm' para registrar resolución.
-            assertThat(userComuMockDao.regUserAndUserComu(
-                    new UsuarioComunidad.UserComuBuilder(
-                            incidImportancia.getUserComu().getComunidad(), USER_PEPE)
-                            .roles(PRESIDENTE.function)
-                            .build()).execute().body(),
-                    is(true));
-            updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
-            // Registramos resolución.
-            resolucion = insertGetResolucionNoAdvances(incidImportancia);
-            // Modificamos con avances.
-            Avance avance = new Avance.AvanceBuilder().avanceDesc("avance1_desc").build();
-            List<Avance> avances = new ArrayList<>(1);
-            avances.add(avance);
-            resolucion = new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia())
-                    .copyResolucion(resolucion)
-                    .avances(avances)
-                    .build();
-            assertThat(incidenciaDao.modifyResolucion(resolucion), is(2));
-            resolucion = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-            // Volvemos a usuario del test.
-            updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        } catch (InterruptedException | IOException | UiException e) {
+            doUser();
+            resolucion = doResolucionAvances(incidImportancia);
+
+        } catch (UiException e) {
             fail();
         }
-        return doIntent();
+        return doIntent(resolucion);
     }
 
-    Intent doPreconditions()
+    Intent doPreconditions() throws UiException, InterruptedException
+    {
+        doUser();
+        // Registramos resolución.
+        Thread.sleep(1000);
+        return doIntent(insertGetResolucionNoAdvances(incidImportancia));
+    }
+
+    private void doUser()
     {
         try {
-            // Necesitamos usuario con 'adm' para registrar resolución.
-            incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
-            Thread.sleep(1000);
-            // Registramos resolución.
-            resolucion = insertGetResolucionNoAdvances(incidImportancia);
             // Usuario del test.
-            assertThat(userComuMockDao.regUserAndUserComu(
-                    makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidImportancia.getIncidencia().getComunidadId())),
-                    is(true));
-            updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        } catch (InterruptedException | IOException | UiException e) {
+            userJuan = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidImportancia.getIncidencia().getComunidadId());
+            assertThat(userComuMockDao.regUserAndUserComu(userJuan).execute().body(), is(true));
+        } catch (IOException e) {
             fail();
         }
-        return doIntent();
     }
 
     @NonNull
-    private Intent doIntent()
+    private Intent doIntent(Resolucion resolucionIn)
     {
+        resolucion = resolucionIn;
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+        IncidImportancia noAdmIncidImport = new IncidImportancia.IncidImportanciaBuilder(incidImportancia.getIncidencia())
+                .copyIncidImportancia(incidImportancia)
+                .usuarioComunidad(userJuan)
+                .build();
+        assertThat(noAdmIncidImport.getUserComu().hasAdministradorAuthority(), is(false));
+        intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, noAdmIncidImport);
         intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         return intent;
     }

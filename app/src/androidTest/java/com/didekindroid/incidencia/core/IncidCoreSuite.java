@@ -1,7 +1,5 @@
 package com.didekindroid.incidencia.core;
 
-import com.didekindroid.incidencia.core.edit.CtrlerIncidEditAcTest;
-import com.didekindroid.incidencia.core.edit.CtrlerIncidRegEditFr_Edit_Test;
 import com.didekindroid.incidencia.core.edit.IncidCloseAc_GCM_Test;
 import com.didekindroid.incidencia.core.edit.IncidEditAcMaxTest;
 import com.didekindroid.incidencia.core.edit.IncidEditAcMinTest;
@@ -10,11 +8,14 @@ import com.didekindroid.incidencia.core.edit.ViewerIncidEditAcTest;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFrTest;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFrTest;
 import com.didekindroid.incidencia.core.edit.importancia.ViewerIncidSeeUserComuImportanciaTest;
-import com.didekindroid.incidencia.core.reg.CtrlerIncidRegEditFr_Reg_Test;
 import com.didekindroid.incidencia.core.reg.IncidRegAcTest;
 import com.didekindroid.incidencia.core.reg.IncidRegAc_GCM_Test;
 import com.didekindroid.incidencia.core.reg.ViewerIncidRegAcTest;
 import com.didekindroid.incidencia.core.reg.ViewerIncidRegFrTest;
+import com.didekindroid.incidencia.core.resolucion.IncidRegResolucion_GCM_Test;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditFrTest;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionRegAcTest;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFrTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -27,8 +28,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         // core.edit
-        CtrlerIncidEditAcTest.class,
-        CtrlerIncidRegEditFr_Edit_Test.class,
         IncidCloseAc_GCM_Test.class,
         IncidEditAc_Mn1_Test.class,
         IncidEditAcMaxTest.class,
@@ -38,13 +37,18 @@ import org.junit.runners.Suite;
         ViewerIncidEditMinFrTest.class,
         ViewerIncidSeeUserComuImportanciaTest.class,
         // core.reg
-        CtrlerIncidRegEditFr_Reg_Test.class,
         IncidRegAc_GCM_Test.class,
         IncidRegAcTest.class,
         ViewerIncidRegAcTest.class,
         ViewerIncidRegFrTest.class,
+        // core.resolucion
+        IncidRegResolucion_GCM_Test.class,
+        IncidResolucionEditFrTest.class,
+        IncidResolucionRegAcTest.class,
+        IncidResolucionSeeFrTest.class,
         // core
         CtrlerAmbitoIncidSpinnerTest.class,
+        CtrlerIncidenciaCoreTest.class,
         IncidenciaBeanTest.class,
         IncidenciaDataDbHelperTest.class,
         IncidImportanciaBeanTest.class,

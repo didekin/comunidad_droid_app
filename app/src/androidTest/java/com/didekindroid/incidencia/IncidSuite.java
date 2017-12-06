@@ -4,7 +4,6 @@ import com.didekindroid.incidencia.comment.IncidCommentSuite;
 import com.didekindroid.incidencia.core.IncidCoreSuite;
 import com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandlerTest;
 import com.didekindroid.incidencia.list.IncidListSuite;
-import com.didekindroid.incidencia.resolucion.IncidResolucionSuite;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -24,8 +23,6 @@ import org.junit.runners.Suite;
         IncidDownStreamMsgHandlerTest.class,
         // list
         IncidListSuite.class,
-        // resolucion
-        IncidResolucionSuite.class,
         // .
         IncidDaoRemoteTest_1.class,
         IncidDaoRemoteTest_2.class,

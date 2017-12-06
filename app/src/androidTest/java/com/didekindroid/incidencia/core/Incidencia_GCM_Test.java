@@ -102,22 +102,14 @@ public abstract class Incidencia_GCM_Test {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private Callable<Integer> notificationsSize()
     {
-        return new Callable<Integer>() {
-            public Integer call() throws Exception
-            {
-                notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
-                return notificationManager.getActiveNotifications().length;
-            }
+        return () -> {
+            notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
+            return notificationManager.getActiveNotifications().length;
         };
     }
 
     private Callable<String> getGcmToken()
     {
-        return new Callable<String>() {
-            public String call() throws Exception
-            {
-                return usuarioDaoRemote.getGcmToken();
-            }
-        };
+        return usuarioDaoRemote::getGcmToken;
     }
 }

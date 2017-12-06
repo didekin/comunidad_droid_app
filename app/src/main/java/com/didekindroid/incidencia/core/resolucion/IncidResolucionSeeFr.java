@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.resolucion;
+package com.didekindroid.incidencia.core.resolucion;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.resolucion;
+package com.didekindroid.incidencia.core.resolucion;
 
 import android.content.Intent;
 import android.os.Build;

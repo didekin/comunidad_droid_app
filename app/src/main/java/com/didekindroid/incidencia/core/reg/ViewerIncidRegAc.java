@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -32,7 +32,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegEditFr> implements ActivityInitiatorIf {
+public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
@@ -46,7 +46,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegE
         Timber.d("newViewerIncidRegAc()");
         ViewerIncidRegAc instance = new ViewerIncidRegAc(activity);
         instance.viewerFirebaseToken = newViewerFirebaseToken(activity);
-        instance.setController(new CtrlerIncidRegEditFr());
+        instance.setController(new CtrlerIncidenciaCore());
         // We initialize viewerIncidRegFr in its associated fragment.
         return instance;
     }

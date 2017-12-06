@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="@dimen/app_bar_bottom_margin"
-    tools:context=".incidencia.resolucion.IncidResolucionRegFr">
+    tools:context=".incidencia.core.resolucion.IncidResolucionRegFr">
 
     <include layout="@layout/incid_resolucion_fecha_coste_include"/>
 

@@ -4,20 +4,16 @@ import android.app.Activity;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +38,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
@@ -64,8 +59,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -101,21 +94,11 @@ public class UserDataAcTest {
                 fail();
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Intent intent = new Intent(getTargetContext(), UserComuDataAc.class);
-                intent.putExtra(USERCOMU_LIST_OBJECT.key,
-                        new UsuarioComunidad.UserComuBuilder(comunidad, oldUsuario).userComuRest(COMU_REAL_JUAN).build());
                 stackBuilder = create(getTargetContext());
-                // Intent con UserComuDataAc y USERCOMU_LIST_OBJECT hace falta para checkUp en opción menú INCID_SEE_OPEN_BY_COMU_AC.
-                stackBuilder.addNextIntent(intent).addParentStack(UserDataAc.class).startActivities();
+                stackBuilder.addParentStack(UserDataAc.class).startActivities();
             }
         }
     };
-
-    @BeforeClass
-    public static void calm() throws InterruptedException
-    {
-        SECONDS.sleep(3);
-    }
 
     @Before
     public void setUp() throws Exception
@@ -141,9 +124,10 @@ public class UserDataAcTest {
     public void testBackStack() throws ExecutionException, InterruptedException
     {
         List<Intent> intents = Arrays.asList(stackBuilder.getIntents());
-        assertThat(intents.size(), is(3));
+        assertThat(intents.size(), is(2));
         // El intent con posición inferior es el primero que hemos añadido.
-        assertThat(intents.get(0).getComponent().getClassName(), is("com.didekindroid.usuariocomunidad.data.UserComuDataAc"));
+        assertThat(intents.get(0).getComponent().getClassName(), is("com.didekindroid.comunidad.ComuSearchAc"));
+        assertThat(intents.get(1).getComponent().getClassName(), is("com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"));
     }
 
     @Test
@@ -231,7 +215,7 @@ public class UserDataAcTest {
     public void testPasswordChangeMn() throws InterruptedException
     {
         PASSWORD_CHANGE_AC.checkItemRegisterUser(activity);
-        SECONDS.sleep(1);
+        SECONDS.sleep(2);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
@@ -242,16 +226,6 @@ public class UserDataAcTest {
         SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Test
-    public void testIncidSeeByComuMn() throws InterruptedException
-    {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(userComuDataLayout);
         }
     }
 

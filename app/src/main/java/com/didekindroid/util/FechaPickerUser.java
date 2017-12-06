@@ -2,7 +2,7 @@ package com.didekindroid.util;
 
 import android.widget.TextView;
 
-import com.didekindroid.incidencia.resolucion.ResolucionBean;
+import com.didekindroid.incidencia.core.resolucion.ResolucionBean;
 
 /**
  * User: pedro@didekin

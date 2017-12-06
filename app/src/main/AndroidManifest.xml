@@ -151,7 +151,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
+                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>
         <activity
             android:name=".usuario.userdata.UserDataAc"
@@ -207,7 +207,7 @@
                 android:value=".incidencia.list.open.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
-            android:name=".incidencia.resolucion.IncidResolucionEditAc"
+            android:name=".incidencia.core.resolucion.IncidResolucionEditAc"
             android:label="@string/incid_resolution_ac_label"
             android:parentActivityName=".incidencia.core.edit.IncidEditAc"
             android:windowSoftInputMode="stateHidden">
@@ -215,7 +215,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.core.edit.IncidEditAc"/>
         </activity>
-        <activity android:name=".incidencia.resolucion.IncidResolucionRegAc"
+        <activity android:name=".incidencia.core.resolucion.IncidResolucionRegAc"
                   android:label="@string/incid_resolution_ac_label"
                   android:parentActivityName=".incidencia.core.edit.IncidEditAc"
                   android:windowSoftInputMode="stateHidden">
@@ -234,10 +234,10 @@
         <activity
             android:name=".incidencia.list.open.IncidSeeOpenByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
-            android:parentActivityName=".usuariocomunidad.data.UserComuDataAc">
+            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuariocomunidad.data.UserComuDataAc"/>
+                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>
         <!-- .......... GCM services ......... -->
         <service

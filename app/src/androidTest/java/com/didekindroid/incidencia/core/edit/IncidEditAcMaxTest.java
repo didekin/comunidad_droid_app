@@ -180,14 +180,12 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
     @Test
     public void testDeleteAndPressBack() throws InterruptedException
     {
-        //CASO NOT OK: intentamos borrar una incidencia ya borrada, volviendo con back.
+        //CASO OK: borramos incidencia y BACK.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
-
-        // BACK y verificamos que hemos vuelto.
+        // Check borrado.
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Como no ya no existe la incidencia, salta directamente a listado de incidencias abiertas, sin pasar por edición.
+            // BACK: como ya no existe la incidencia, salta a la lista de incidencias nuevamente.
             checkBack(onView(withId(incidSeeOpenAcLayout)), incidSeeOpenAcLayout);
         }
     }

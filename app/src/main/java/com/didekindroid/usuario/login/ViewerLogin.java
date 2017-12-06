@@ -2,6 +2,7 @@ package com.didekindroid.usuario.login;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.view.View;
@@ -86,6 +87,9 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
                 }
         );
 
+        FloatingActionButton fab = view.findViewById(R.id.login_help_fab);
+        fab.setOnClickListener(v -> showDialogAfterErrors());
+
         if (savedState != null) {
             counterWrong.set(savedState.getInt(login_counter_atomic_int.key));
         }
@@ -139,7 +143,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
     void showDialogAfterErrors()
     {
         Timber.d("showDialogAfterErrors()");
-        DialogFragment newFragment = newInstance(usuarioBean.get().getUsuario());
+        DialogFragment newFragment = newInstance(usuarioBean.get());
         newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
@@ -154,6 +158,9 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
     void doDialogPositiveClick(Usuario usuario)
     {
         Timber.d("sendNewPassword()");
+        if (usuario == null) {
+            makeToast(activity, R.string.username_wrong_in_login);
+        }
         controller.sendNewPassword(new LoginObserver() {
             @Override
             public void onSuccess(Boolean isSentPassword)
@@ -210,13 +217,15 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
 
     public static class PasswordMailDialog extends DialogFragment {
 
-        public static PasswordMailDialog newInstance(Usuario usuario)
+        public static PasswordMailDialog newInstance(UsuarioBean usuarioBean)
         {
             Timber.d("newInstance()");
             PasswordMailDialog dialog = new PasswordMailDialog();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(usuario_object.key, usuario);
-            dialog.setArguments(bundle);
+            if (usuarioBean != null && usuarioBean.getUsuario() != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(usuario_object.key, usuarioBean.getUsuario());
+                dialog.setArguments(bundle);
+            }
             return dialog;
         }
 

@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -108,7 +108,7 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testNewViewerIncidEditMaxFr() throws Exception
     {
-        assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
+        assertThat(viewer.getController(), instanceOf(CtrlerIncidenciaCore.class));
         assertThat(viewer.getParentViewer(), is(activity.getParentViewer()));
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());

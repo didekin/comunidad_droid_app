@@ -3,14 +3,17 @@
 <android.support.design.widget.CoordinatorLayout
     style="@style/baseLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <include layout="@layout/appbar_include_design"/>
 
-    <LinearLayout android:id="@+id/login_ac_layout"
-                  style="@style/baseLayout.withPadding"
-                  android:layout_marginTop="@dimen/app_bar_bottom_margin">
+    <LinearLayout
+        android:id="@+id/login_ac_layout"
+        style="@style/baseLayout.withPadding"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_bar_bottom_margin">
 
         <TextView
             android:id="@+id/reg_usuario_rotulo"
@@ -32,6 +35,13 @@
             style="@style/textBase.acButton1"
             android:layout_gravity="center_horizontal"
             android:text="@string/login_ac_button_txt"/>
-
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_help_fab"
+        style="@style/floatingButton"
+        android:layout_gravity="center_vertical|end"
+        app:fabSize="mini"
+        app:rippleColor="@color/deep_orange_200"
+        app:srcCompat="@drawable/ic_live_help_black_24dp"/>
 </android.support.design.widget.CoordinatorLayout>

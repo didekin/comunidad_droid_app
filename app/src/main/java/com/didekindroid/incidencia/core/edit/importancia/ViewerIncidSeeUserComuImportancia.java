@@ -9,7 +9,7 @@ import com.didekindroid.api.ObserverSingleList;
 import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerListIf;
-import com.didekindroid.incidencia.core.edit.CtrlerIncidEditAc;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -28,12 +28,12 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 22/03/17
  * Time: 14:40
  */
-public final class ViewerIncidSeeUserComuImportancia extends Viewer<ListView, CtrlerIncidEditAc> implements
-        ViewerListIf<ListView, CtrlerIncidEditAc, ImportanciaUser> {
+public final class ViewerIncidSeeUserComuImportancia extends Viewer<ListView, CtrlerIncidenciaCore> implements
+        ViewerListIf<ListView, CtrlerIncidenciaCore, ImportanciaUser> {
 
     private ViewerIncidSeeUserComuImportancia(View frView, ParentViewerInjectedIf parentViewer)
     {
-        super((ListView) frView.findViewById(list), parentViewer.getActivity(), parentViewer);
+        super(frView.findViewById(list), parentViewer.getActivity(), parentViewer);
     }
 
     public static ViewerIncidSeeUserComuImportancia newViewerIncidSeeUserComuImportancia(@NonNull View frView,
@@ -41,7 +41,7 @@ public final class ViewerIncidSeeUserComuImportancia extends Viewer<ListView, Ct
     {
         Timber.d("newViewerUserComuByComu()");
         ViewerIncidSeeUserComuImportancia instance = new ViewerIncidSeeUserComuImportancia(frView, parentViewer);
-        instance.setController(new CtrlerIncidEditAc());
+        instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
 

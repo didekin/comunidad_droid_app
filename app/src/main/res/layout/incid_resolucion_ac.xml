@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    tools:context=".incidencia.resolucion.IncidResolucionEditAc">
+    tools:context=".incidencia.core.resolucion.IncidResolucionEditAc">
 
     <include layout="@layout/appbar_include_design"/>
 

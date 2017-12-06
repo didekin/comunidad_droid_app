@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -77,7 +78,7 @@ public class ViewerIncidEditAcTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        AtomicReference<CtrlerIncidEditAc> atomicController = new AtomicReference<>(null);
+        AtomicReference<CtrlerIncidenciaCore> atomicController = new AtomicReference<>(null);
         atomicController.compareAndSet(null, activity.viewer.getController());
         waitAtMost(4, SECONDS).untilAtomic(atomicController, notNullValue());
         viewer = activity.viewer;
@@ -101,9 +102,9 @@ public class ViewerIncidEditAcTest {
     @Test
     public void testCheckResolucion() throws Exception
     {
-        CtrlerIncidEditAc controllerLocal = new CtrlerIncidEditAc() {
+        CtrlerIncidenciaCore controllerLocal = new CtrlerIncidenciaCore() {
             @Override
-            boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, long incidenciaId)
+            public boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, long incidenciaId)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;

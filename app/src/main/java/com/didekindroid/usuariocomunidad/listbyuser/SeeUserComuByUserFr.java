@@ -11,14 +11,18 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
+import java.io.Serializable;
 import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.RouterToAc.userComuItemSelected;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 
@@ -32,10 +36,9 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * <p/>
  * 1. An object UsuarioComunidad is passed to the listener activity.
  */
-public class SeeUserComuByUserFr extends Fragment {
+public class SeeUserComuByUserFr extends Fragment implements ActivityInitiatorIf {
 
     public SeeUserComuByUserAdapter mAdapter;
-    SeeUserComuByUserFrListener mListener;
     Activity activity;
     ListView fragmentView;
 
@@ -63,16 +66,15 @@ public class SeeUserComuByUserFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         activity = getActivity();
-        mListener = (SeeUserComuByUserFrListener) activity;
-        fragmentView.setOnItemClickListener((parent, view, position, id) -> {
-            fragmentView.setItemChecked(position, true);
-            view.setSelected(true);
-
-            if (mListener != null) {
-                UsuarioComunidad intentUserComuData = (UsuarioComunidad) fragmentView.getItemAtPosition(position);
-                mListener.onUserComuSelected(intentUserComuData, position);
-            }
-        });
+        fragmentView.setOnItemClickListener(
+                (parent, view, position, id) -> {
+                    fragmentView.setItemChecked(position, true);
+                    view.setSelected(true);
+                    Bundle bundle = new Bundle(1);
+                    bundle.putSerializable(USERCOMU_LIST_OBJECT.key, (Serializable) fragmentView.getItemAtPosition(position));
+                    initAcFromRouter(bundle, userComuItemSelected);
+                }
+        );
     }
 
 // .......... Interface to communicate with the Activity ...................
@@ -86,11 +88,6 @@ public class SeeUserComuByUserFr extends Fragment {
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
-
-    @FunctionalInterface
-    interface SeeUserComuByUserFrListener {
-        void onUserComuSelected(UsuarioComunidad userComu, int position);
-    }
 
     @SuppressWarnings("WeakerAccess")
     class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {

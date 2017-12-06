@@ -1,7 +1,6 @@
 package com.didekindroid.usuariocomunidad.listbyuser;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,15 +9,12 @@ import android.view.MenuItem;
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.security.IdentityCacher;
-import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -31,8 +27,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- an object Usuario fully initialized.
  * -- the rest of data of an object UsuarioComunidad fully initialized.
  */
-public class SeeUserComuByUserAc extends AppCompatActivity implements
-        SeeUserComuByUserFr.SeeUserComuByUserFrListener, ActivityInitiatorIf {
+public class SeeUserComuByUserAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     SeeUserComuByUserFr mFragment;
     IdentityCacher identityCacher;
@@ -89,18 +84,5 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-//    ============================================================
-//    .......... LISTENER IMPLEMENTATION AND AUXILIARY METHODS .......
-//    ============================================================
-
-    @Override
-    public void onUserComuSelected(UsuarioComunidad userComu, int position)
-    {
-        Timber.d("onUserComuSelected()");
-        Intent intent = new Intent(this, UserComuDataAc.class);
-        intent.putExtra(USERCOMU_LIST_OBJECT.key, userComu);
-        startActivity(intent);
     }
 }

@@ -6,7 +6,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -118,7 +118,7 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testNewViewerIncidEditMinFr() throws Exception
     {
-        assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
+        assertThat(viewer.getController(), instanceOf(CtrlerIncidenciaCore.class));
         assertThat(viewer.getParentViewer(), allOf(
                 is(activity.getParentViewer()),
                 notNullValue()

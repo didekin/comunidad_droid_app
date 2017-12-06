@@ -202,7 +202,7 @@
     <string name="password_wrong">The password does not match with your username.</string>
     <string name="password_new_in_login">We have send you your new password. Sign in, again, with it.</string>
     <string name="password_remote_change">Your password is already modified.</string>
-    <string name="send_password_by_mail_dialog">Do you want us to send you a new password by email?</string>
+    <string name="send_password_by_mail_dialog">Do we send to you a new password to the email address above?</string>
     <string name="send_password_by_mail_YES">Send it to me</string>
     <string name="send_password_by_mail_NO">Do not send it to me</string>
     <string name="user_email_wrong">We were unable to send the new password. Your mail address may be wrong.</string>

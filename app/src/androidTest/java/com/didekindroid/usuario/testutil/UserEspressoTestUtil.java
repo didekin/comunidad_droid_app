@@ -56,7 +56,9 @@ public final class UserEspressoTestUtil {
     public static void typeLoginData(String userName, String password)
     {
         onView(withId(reg_usuario_email_editT)).perform(replaceText(userName));
-        onView(withId(reg_usuario_password_ediT)).perform(typeText(password));
+        if (password != null){
+            onView(withId(reg_usuario_password_ediT)).perform(typeText(password));
+        }
     }
 
     public static void checkTextsInDialog(int... textsDialogs)

@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.resolucion;
+package com.didekindroid.incidencia.core.resolucion;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +13,7 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.resolucion.IncidResolucionRegFr.newInstance;
+import static com.didekindroid.incidencia.core.resolucion.IncidResolucionRegFr.newInstance;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;

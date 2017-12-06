@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
@@ -34,7 +34,7 @@ final class ViewerIncidEditMinFr extends ViewerIncidEditFr {
         ViewerIncidEditMinFr instance = new ViewerIncidEditMinFr(frView, parentViewer);
         instance.viewerImportanciaSpinner =
                 newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), instance);
-        instance.setController(new CtrlerIncidRegEditFr());
+        instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
 

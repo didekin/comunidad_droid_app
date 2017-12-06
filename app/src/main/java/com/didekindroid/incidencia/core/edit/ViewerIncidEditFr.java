@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
@@ -32,7 +32,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 15:06
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> implements
+abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> implements
         ModIncidImportanciaCallableBack, ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;

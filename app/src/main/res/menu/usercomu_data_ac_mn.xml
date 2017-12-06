@@ -4,16 +4,6 @@
       tools:context="com.didekindroid.com.didekindroid.usuario.UserComuDataAc">
 
     <item
-        android:id="@+id/see_usercomu_by_comu_ac_mn"
-        android:orderInCategory="100"
-        android:title="@string/see_usercomu_by_comu_ac_mn"
-        app:showAsAction="never|withText"/>
-    <item
-        android:id="@+id/comu_data_ac_mn"
-        android:orderInCategory="100"
-        android:title="@string/comu_data_ac_mn"
-        app:showAsAction="never|withText"/>
-    <item
         android:id="@+id/incid_see_open_by_comu_ac_mn"
         android:title="@string/incid_open_see_by_comu_ac_mn"
         android:orderInCategory="100"
@@ -22,5 +12,15 @@
         android:id="@+id/incid_reg_ac_mn"
         android:orderInCategory="100"
         android:title="@string/incid_reg_ac_mn"
+        app:showAsAction="never|withText"/>
+    <item
+        android:id="@+id/see_usercomu_by_comu_ac_mn"
+        android:orderInCategory="100"
+        android:title="@string/see_usercomu_by_comu_ac_mn"
+        app:showAsAction="never|withText"/>
+    <item
+        android:id="@+id/comu_data_ac_mn"
+        android:orderInCategory="100"
+        android:title="@string/comu_data_ac_mn"
         app:showAsAction="never|withText"/>
 </menu>

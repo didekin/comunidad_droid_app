@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 
-import com.didekindroid.incidencia.core.edit.CtrlerIncidEditAc;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -96,7 +96,7 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     @Test
     public void test_NewViewerIncidSeeUserComuImportancia() throws Exception
     {
-        assertThat(viewer.getController(), isA(CtrlerIncidEditAc.class));
+        assertThat(viewer.getController(), isA(CtrlerIncidenciaCore.class));
     }
 
     @Test

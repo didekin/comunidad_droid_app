@@ -209,7 +209,7 @@
     <string name="password_wrong">La contraseña no se corresponde con tu usuario.</string>
     <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
     <string name="password_remote_change">Ya está modificada tu contraseña.</string>
-    <string name="send_password_by_mail_dialog">¿Deseas que te enviemos una nueva contraseña por correo electrónico?</string>
+    <string name="send_password_by_mail_dialog">¿Te enviamos una nueva contraseña a la dirección de correo electrónico que has escrito?</string>
     <string name="send_password_by_mail_YES">Enviádmela</string>
     <string name="send_password_by_mail_NO">No la enviéis</string>
     <string name="user_email_wrong">No hemos podido enviar la nueva contraseña. Tu dirección de correo electrónico puede ser errónea.</string>

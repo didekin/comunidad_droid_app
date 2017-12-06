@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.didekindroid.api.ParentViewerInjected;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioAssertionMsg;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -27,7 +28,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidEditAc> implements ActivityInitiatorIf {
+class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;
 
@@ -40,7 +41,7 @@ class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidEditAc> im
     {
         Timber.d("newViewerIncidEditAc()");
         ViewerIncidEditAc instance = new ViewerIncidEditAc(activity);
-        instance.setController(new CtrlerIncidEditAc());
+        instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
 

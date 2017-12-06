@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -53,7 +53,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityIn
                 newViewerAmbitoIncidSpinner(frView.findViewById(R.id.incid_reg_ambito_spinner), instance);
         instance.viewerImportanciaSpinner =
                 newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), instance);
-        instance.setController(new CtrlerIncidRegEditFr());
+        instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
 

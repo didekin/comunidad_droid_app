@@ -17,8 +17,8 @@ import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
-import com.didekindroid.incidencia.resolucion.IncidResolucionEditAc;
-import com.didekindroid.incidencia.resolucion.IncidResolucionRegAc;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAc;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionRegAc;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
@@ -91,7 +91,7 @@ public class ActivityRouter implements ActivityRouterIf {
         menuIdMap.put(R.id.incid_reg_ac_mn, writeNewIncidencia.activityToGo);
         menuIdMap.put(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeClosedByComuAc.class);
         menuIdMap.put(R.id.incid_see_open_by_comu_ac_mn, IncidSeeOpenByComuAc.class);
-        // USUARIO REGISTRADO.
+        // USUARIO.
         menuIdMap.put(R.id.comu_data_ac_mn, ComuDataAc.class);
         menuIdMap.put(R.id.comu_search_ac_mn, ComuSearchAc.class);
         menuIdMap.put(R.id.delete_me_ac_mn, DeleteMeAc.class);
@@ -178,6 +178,8 @@ public class ActivityRouter implements ActivityRouterIf {
         comunidadFound_noRegUser(RegUserAndUserComuAc.class),
         noComunidadFound_regUser(RegComuAndUserComuAc.class),
         noComunidadFound_noRegUser(RegComuAndUserAndUserComuAc.class),
+        // UsuarioComunidad.
+        userComuItemSelected(UserComuDataAc.class),
         // Password.
         modifyPswd(SeeUserComuByUserAc.class),
         notSendNewPswd(ComuSearchAc.class),
