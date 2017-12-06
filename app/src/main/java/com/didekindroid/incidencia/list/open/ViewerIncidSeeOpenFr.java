@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseFr;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -26,7 +26,7 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * Time: 12:33
  */
 
-final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
+final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements ActivityInitiatorIf {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
@@ -58,7 +58,7 @@ final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        new ActivityInitiator(activity).initAcFromActivity(bundle);
+        initAcFromActivity(bundle);
     }
 
     /* ==================================  VIEWER  =================================*/

@@ -48,7 +48,7 @@ import static org.junit.Assert.fail;
  * Time: 18:10
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerIncidSeeOpenTest {
+public class ViewerIncidSeeOpenFrTest {
 
     Resolucion resolucion;
     IncidenciaUser incidenciaUser;

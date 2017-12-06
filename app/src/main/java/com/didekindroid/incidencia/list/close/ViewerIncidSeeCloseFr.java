@@ -15,6 +15,8 @@ import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerSelectList;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFr;
+import com.didekindroid.router.FragmentInitiatorIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -35,7 +37,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
-        implements SpinnerEventListener {
+        implements SpinnerEventListener, FragmentInitiatorIf<IncidResolucionSeeFr> {
 
     protected ViewerComuSpinner comuSpinnerViewer;
     private View emptyListView;
@@ -138,9 +140,7 @@ public class ViewerIncidSeeCloseFr extends
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-
-//        new FragmentInitiator<IncidResolucionSeeFr>(activity, R.id.incid_see_closed_by_comu_ac)
-//                .initReplaceFragmentTx(bundle, new IncidResolucionSeeFr(), IncidResolucionSeeFr.class.getName());     // TODO: descomentar.
+        initReplaceFragmentTx(bundle, IncidResolucionSeeFr.newInstance(bundle));
     }
 
     protected void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
@@ -153,6 +153,15 @@ public class ViewerIncidSeeCloseFr extends
             view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
         }
     }
+
+    // ==================================  FragmentInitiatorIf  =================================
+
+    @Override
+    public int getContainerId()
+    {
+        return R.id.incid_see_closed_by_comu_ac;
+    }
+
 
     // ==================================  SpinnerEventListener  =================================
 

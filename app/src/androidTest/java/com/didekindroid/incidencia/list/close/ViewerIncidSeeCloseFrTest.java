@@ -181,7 +181,7 @@ public class ViewerIncidSeeCloseFrTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         assertThat(fragment.viewer.getSelectedItemId(), is(incidImportancia1.getIncidencia().getIncidenciaId()));
-        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidResolucionSeeFrLayout)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
     }
 
     //    ============================ UNIT TESTS  ===================================

@@ -138,7 +138,9 @@ public class IncidResolucionEditFrTest {
                         withText(USER_JUAN.getAlias()) // usuario en sesión que modifica resolución.
                 )))).check(matches(isDisplayed()));
 
-        checkUp(incidEditAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(incidEditAcLayout);
+        }
     }
 
     @Test
@@ -155,7 +157,9 @@ public class IncidResolucionEditFrTest {
                 withText(R.string.incid_resolucion_no_avances_message)
         )).check(matches(isDisplayed()));
 
-        checkUp(incidEditAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(incidEditAcLayout);
+        }
     }
 
     @Test
@@ -168,7 +172,9 @@ public class IncidResolucionEditFrTest {
         // Verificamos pantalla de llegada.
         checKIncidAcLayout();
 
-        checkUp(incidSeeOpenAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(incidSeeOpenAcLayout);
+        }
     }
 
     @Test
@@ -180,7 +186,9 @@ public class IncidResolucionEditFrTest {
         checKIncidAcLayout();
         assertThat(incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId()), is(resolucion));
         // BACK.
-        checkBack(onView(withId(incidEditAcLayout)), incidResolucionEditFrLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkBack(onView(withId(incidEditAcLayout)), incidResolucionEditFrLayout);
+        }
     }
 
     @Test

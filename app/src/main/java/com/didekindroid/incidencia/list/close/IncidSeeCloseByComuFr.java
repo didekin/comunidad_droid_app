@@ -28,6 +28,16 @@ public class IncidSeeCloseByComuFr extends Fragment implements ActivityInitiator
     View frView;
     ViewerIncidSeeCloseFr viewer;
 
+    static IncidSeeCloseByComuFr newInstance(long comunidadId)
+    {
+        Timber.d("newInstance()");
+        IncidSeeCloseByComuFr fr = new IncidSeeCloseByComuFr();
+        Bundle args = new Bundle(1);
+        args.putLong(COMUNIDAD_ID.key, comunidadId);
+        fr.setArguments(args);
+        return fr;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState)
     {

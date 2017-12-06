@@ -8,6 +8,7 @@ import android.widget.DatePicker;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -22,6 +23,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
 
+import static android.app.TaskStackBuilder.create;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -40,6 +43,8 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.closeDatePicker;
 import static com.didekindroid.testutil.ActivityTestUtils.reSetDatePicker;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -51,6 +56,7 @@ import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -72,8 +78,15 @@ public class IncidResolucionRegAcTest {
                 // A user WITH powers 'adm'.
                 incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
             } catch (IOException | UiException e) {
-                e.printStackTrace();
+                fail();
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Intent intentStack = new Intent(getTargetContext(), IncidEditAc.class);
+                intentStack.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
+                create(getTargetContext()).addNextIntentWithParentStack(intentStack).startActivities();
+            }
+
             Intent intent = new Intent();
             intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
             return intent;
@@ -89,6 +102,9 @@ public class IncidResolucionRegAcTest {
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -97,6 +113,9 @@ public class IncidResolucionRegAcTest {
     public void testOnCreate_1() throws Exception
     {
         checkScreenResolucionRegFr();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(incidEditAcLayout);
+        }
     }
 
     @Test
@@ -169,10 +188,10 @@ public class IncidResolucionRegAcTest {
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
         setFechaEnPicker(0, 2);
+        // Run
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-
+        // Check.
         checkRegResolucionOk();
-        // TODO: checkUp.
     }
 
 //    ============================= HELPER METHODS ===========================

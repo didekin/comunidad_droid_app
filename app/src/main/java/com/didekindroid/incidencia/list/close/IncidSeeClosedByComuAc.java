@@ -12,6 +12,7 @@ import com.didekindroid.router.FragmentInitiatorIf;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.list.close.IncidSeeCloseByComuFr.newInstance;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -44,19 +45,11 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         setContentView(R.layout.incid_see_closed_by_comu_ac);
         doToolBar(this, true);
 
-        // ComunidadId in intent.
-        long comunidadId = getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
-        bundle = new Bundle();
-        bundle.putLong(COMUNIDAD_ID.key, comunidadId);
-
         if (savedInstanceState != null) {
             fragmentList = (IncidSeeCloseByComuFr) getSupportFragmentManager().findFragmentByTag(IncidSeeCloseByComuFr.class.getName());
             return;
         }
-
-        fragmentList = new IncidSeeCloseByComuFr();
-        fragmentList.setArguments(bundle);
-        initFragmentTx(fragmentList);    // TODO: constructor para fragmento.
+        initFragmentTx(newInstance(getIntent().getLongExtra(COMUNIDAD_ID.key, 0)));
     }
 
 // ======================  ActivityInitiatorIf  ===================

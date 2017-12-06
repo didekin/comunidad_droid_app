@@ -48,6 +48,14 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
         return fr;
     }
 
+    public static IncidResolucionSeeFr newInstance(Bundle bundle)
+    {
+        Timber.d("newInstance()");
+        IncidResolucionSeeFr fr = new IncidResolucionSeeFr();
+        fr.setArguments(bundle);
+        return fr;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)

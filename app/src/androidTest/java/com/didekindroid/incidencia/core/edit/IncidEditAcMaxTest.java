@@ -46,7 +46,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -150,7 +150,7 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
         // Check.
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(userComuDataLayout);
+            checkUp(seeUserComuByUserFrRsId);
         }
     }
 
@@ -173,7 +173,7 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(userComuDataLayout);
+            checkUp(seeUserComuByUserFrRsId);
         }
     }
 
