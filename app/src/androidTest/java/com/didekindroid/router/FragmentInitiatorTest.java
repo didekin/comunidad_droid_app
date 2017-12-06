@@ -62,7 +62,7 @@ public class FragmentInitiatorTest {
         // Check.
         waitAtMost(4, SECONDS).untilTrue(isRun);
         assertThat(mockFr.getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key), is(true));
-        assertThat(activity.getSupportFragmentManager().findFragmentByTag("listFrTag"), notNullValue());
+        assertThat(activity.getSupportFragmentManager().findFragmentByTag(mockFr.getClass().getName()), notNullValue());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class FragmentInitiatorTest {
         });
         // Check.
         waitAtMost(4, SECONDS).untilTrue(isRun);
-        assertThat(activity.getSupportFragmentManager().findFragmentByTag("listSimpleFrTag"), notNullValue());
+        assertThat(activity.getSupportFragmentManager().findFragmentByTag(mockFr.getClass().getName()), notNullValue());
     }
 
     @Test
