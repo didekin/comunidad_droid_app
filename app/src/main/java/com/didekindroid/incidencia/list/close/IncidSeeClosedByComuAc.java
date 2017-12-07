@@ -35,7 +35,6 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         FragmentInitiatorIf<IncidSeeCloseByComuFr> {
 
     IncidSeeCloseByComuFr fragmentList;
-    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -90,6 +89,8 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
         switch (resourceId) {
             case R.id.incid_see_open_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
+                Bundle bundle = new Bundle(1);
+                bundle.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
                 initAcFromMenu(bundle, resourceId);
                 return true;
             default:
