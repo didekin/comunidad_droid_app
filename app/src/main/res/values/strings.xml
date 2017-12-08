@@ -38,10 +38,9 @@
     <string name="proteccion_datos_txt" tools:ignore="Typos">
         Versión 30 septiembre de 2017 \n\n
 
-        La presente Política de Privacidad informa sobre el modo en que Pedro Nevado Raja,
-        autor de la aplicación Dídekin, recoge y trata la información recogida sobre usted,
-        en cuanto usuario de la aplicación. Al registrarse en Dídekin, usted acepta esta
-        política de privacidad.\n\n
+        La presente Política de Privacidad informa sobre el modo en que Dídekin recoge y
+        trata la información recogida sobre los usuarios de la aplicación.
+        Al registrarse en Dídekin, usted acepta esta política de privacidad.\n\n
 
         1. OBJETIVO DE LA APLICACIÓN\n\n
 
@@ -115,9 +114,10 @@
 
         De conformidad con lo establecido por la Ley Orgánica 15/1999, de 13 de diciembre,
         de Protección de Datos de Carácter Personal, Pedro Nevado Raja (NIF: 51640599X),
-        propietario de Dídekin, con domicilio en Ronda de la Plazuela 8 bis,
-        de Las Rozas de Madrid, le informa de la existencia de un fichero automatizado con
-        los datos personales y de comunidades, creado por él y bajo su responsabilidad." \n
+        propietario de Dídekin, con domicilio en Ronda de la Plazuela 8 bis, de Las Rozas de Madrid,
+        le informa de la existencia de un fichero automatizado con los datos personales y de comunidades,
+        creado por él y bajo su responsabilidad." \n
+
     </string>
     <string name="confidencialidad_button_rot">Continuar</string>
     <!--******************************************************************************-->
