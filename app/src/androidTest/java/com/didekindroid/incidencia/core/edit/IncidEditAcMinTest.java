@@ -150,7 +150,7 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
         // Modify.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         // Check.
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(seeUserComuByUserFrRsId);
@@ -163,7 +163,7 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
         // Modify.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         // Check.
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
