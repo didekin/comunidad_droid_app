@@ -32,6 +32,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
@@ -94,6 +95,7 @@ public class RegComuAndUserAndUserComuAcTest {
     public void testRegComuAndUserComuAndUser_NotOk() throws InterruptedException
     {
         typeComunidad();
+        focusOnView(activity, R.id.reg_usercomu_portal_ed);
         execCheckRegisterError(activity);
     }
 
@@ -166,7 +168,7 @@ public class RegComuAndUserAndUserComuAcTest {
         // Exec.
         onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
         // Check
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
                 R.string.reg_usercomu_portal_rot));
     }
 }

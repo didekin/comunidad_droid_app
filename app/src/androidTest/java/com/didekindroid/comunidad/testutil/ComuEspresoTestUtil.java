@@ -303,12 +303,12 @@ public final class ComuEspresoTestUtil {
     public static void doMunicipioSpinner(Municipio municipio)
     {
         onView(withId(R.id.municipio_spinner)).perform(click());
-        waitAtMost(3, SECONDS).until(isDataDisplayedAndClick(
+        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         isA(Municipio.class),
                         is(municipio)
                 )));
-        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.municipio_spinner)),
                         withText(is(municipio.getNombre()))
