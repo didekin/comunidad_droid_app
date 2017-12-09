@@ -214,8 +214,8 @@ public class UserDataAcTest {
     @Test
     public void testPasswordChangeMn() throws InterruptedException
     {
+        waitAtMost(6, SECONDS).untilAtomic(activity.viewer.oldUser, notNullValue());
         PASSWORD_CHANGE_AC.checkItemRegisterUser(activity);
-        SECONDS.sleep(2);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
