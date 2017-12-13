@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.open;
+package com.didekindroid.incidencia.list;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,35 +10,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.list.open.ViewerIncidSeeOpenFr.newViewerIncidSeeOpen;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewIncidencia;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewIncidencia;
 
 /**
  * Preconditions:
- * 1. An argument is passed with comunidadId.
- * 2. A list of IncidenciaUser instances is retrieved with the incidencia and the registering user data.
- * <p/>
- * Postconditions:
+ * A list of IncidenciaUser instances, whose incidencias are closed, are shown.
  */
-public class IncidSeeOpenByComuFr extends Fragment implements ActivityInitiatorIf {
+public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
 
     View frView;
-    ViewerIncidSeeOpenFr viewer;
+    ViewerIncidSeeCloseFr viewer;
 
-    static IncidSeeOpenByComuFr newInstance(long comunidadId)
+    static IncidSeeByComuFr newInstance(long comunidadId, boolean booleanExtra)
     {
         Timber.d("newInstance()");
-        IncidSeeOpenByComuFr incidSeeOpenByComuFr = new IncidSeeOpenByComuFr();
-        Bundle args = new Bundle();
-        args.putSerializable(COMUNIDAD_ID.key, comunidadId);
-        incidSeeOpenByComuFr.setArguments(args);
-        return incidSeeOpenByComuFr;
+        IncidSeeByComuFr fr = new IncidSeeByComuFr();
+        Bundle args = new Bundle(1);
+        args.putLong(COMUNIDAD_ID.key, comunidadId);
+        args.putBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key, booleanExtra);
+        fr.setArguments(args);
+        return fr;
     }
 
     @Override
@@ -57,7 +55,7 @@ public class IncidSeeOpenByComuFr extends Fragment implements ActivityInitiatorI
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedState);
-        viewer = newViewerIncidSeeOpen(frView, (AppCompatActivity) getActivity());
+        viewer = ViewerIncidSeeCloseFr.newViewerIncidSeeClose(frView, (AppCompatActivity) getActivity(), getArguments().getBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key));
         final long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
         viewer.doViewInViewer(savedState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
     }
@@ -74,7 +72,7 @@ public class IncidSeeOpenByComuFr extends Fragment implements ActivityInitiatorI
     public void onStop()
     {
         Timber.d("onStop()");
-        viewer.clearSubscriptions();
         super.onStop();
+        viewer.clearSubscriptions();
     }
 }

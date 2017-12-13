@@ -42,7 +42,7 @@ public class UiException extends Exception implements UiExceptionIf {
     {
         Timber.d("processMe(Activity activity): %s%n", errorBean.getMessage());
 
-        ActionForUiExceptionIf action = exceptionRouter.getActionForException(this);
+        IntentForUiExceptionIf action = exceptionRouter.getActionForException(this);
         if (action == null) { // NO entry in exceptions dealer's table for error bean message.
             makeToast(activity, R.string.exception_generic_message);
             Intent intent = new Intent();
@@ -60,7 +60,7 @@ public class UiException extends Exception implements UiExceptionIf {
     {
         Timber.d("processMe(Activity activity, Intent intent): %s%n", errorBean.getMessage());
 
-        ActionForUiExceptionIf actionForException = exceptionRouter.getActionForException(this);
+        IntentForUiExceptionIf actionForException = exceptionRouter.getActionForException(this);
         assertTrue(actionForException != null, actionForException_notNull);
         if (actionForException.getToastResourceId() > 0) {
             makeToast(activity, actionForException.getToastResourceId());
@@ -69,15 +69,15 @@ public class UiException extends Exception implements UiExceptionIf {
     }
 
     @Override
-    public void processMe(@NonNull Activity activity, @NonNull ActionForUiExceptionIf actionForException)
+    public void processMe(@NonNull Activity activity, @NonNull IntentForUiExceptionIf actionForException)
     {
-        Timber.d("processMe(Activity activity, ActionForUiExceptionIf actionForException): %s%n", errorBean.getMessage());
+        Timber.d("processMe(Activity activity, IntentForUiExceptionIf actionForException): %s%n", errorBean.getMessage());
 
         if (actionForException.getToastResourceId() > 0) {
             makeToast(activity, actionForException.getToastResourceId());
         }
-        if (actionForException.getActivityToGoClass() != null) {
-            Intent intent = new Intent(activity, actionForException.getActivityToGoClass());
+        if (actionForException.getIntentForException() != null) {
+            Intent intent = new Intent(activity, actionForException.getIntentForException());
             intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);
         }

@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
@@ -19,7 +19,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.RouterToAc.userComuItemSelected;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.userComuItemSelected;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;

@@ -2,6 +2,9 @@ package com.didekindroid.router;
 
 import android.app.Activity;
 
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityRouterIf;
+
 import static com.didekindroid.router.ActivityRouter.acRouter;
 
 /**

@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -21,7 +21,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewComment;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewComment;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 
 /**

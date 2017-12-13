@@ -13,7 +13,6 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -100,12 +99,6 @@ public class IncidCommentSeeAcTest_2 {
         }
     };
     private IncidCommentSeeAdapter mAdapter;
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(3000);
-    }
 
     @Before
     public void setUp() throws Exception

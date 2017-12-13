@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioAssertionMsg;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -18,8 +18,8 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.editResolucion;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.regResolucion;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.editResolucion;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.regResolucion;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.UIutils.assertTrue;
 

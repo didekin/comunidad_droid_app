@@ -331,23 +331,6 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkAppBarMenuOnView(Activity activity, int menuResourceId, int actionResourceId)
-    {
-        try {
-            onView(withText(menuResourceId)).check(matches(isDisplayed()));
-        } catch (Throwable e) {
-            openActionBarOverflowOrOptionsMenu(activity);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                fail();
-            }
-            onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
-        } finally {
-            waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
-        }
-    }
-
     public static void checkAppBarMnNotExist(Activity activity, int menuResourceId)
     {
         onView(withText(menuResourceId)).check(doesNotExist());

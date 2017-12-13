@@ -13,7 +13,8 @@ import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.incidencia.utils.IncidBundleKey;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.erasedOpenIncid;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -46,8 +48,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
      */
     AtomicBoolean hasResolucion = new AtomicBoolean(false);
 
-    @SuppressWarnings("WeakerAccess")
-    protected ViewerIncidEditFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    ViewerIncidEditFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
@@ -90,7 +91,9 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
     public void onSuccessModifyIncidImportancia(int rowInserted)
     {
         Timber.d("onSuccessModifyIncidImportancia()");
-        initAcFromActivity(new Bundle(0));
+        Bundle bundle = new Bundle(1);
+        bundle.putBoolean(IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+        initAcFromRouter(bundle, erasedOpenIncid);
     }
 
     //    ============================  LIFE CYCLE   ===================================

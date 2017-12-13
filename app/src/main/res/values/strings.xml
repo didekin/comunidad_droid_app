@@ -169,7 +169,7 @@
     <string name="incid_resolucion_coste_final_rot">Coste final EUR:</string>
     <string name="incid_resolucion_avance_rot">Nueva información</string>
     <string name="incid_resolucion_modif_button_rot">Modificar</string>
-    <string name="incid_resolucion_close_button_rot">Modificar y cerrar incidencia</string>
+    <string name="incid_resolucion_close_button_rot">Modificar y cerrar</string>
     <string name="incid_resolucion_plan_rot">Plan:</string>
     <string name="incid_resolucion_avance_hint">-- avance o cambio en el plan --</string>
     <string name="incid_resolucion_avances_rot">Historial de avances:</string>
@@ -186,7 +186,7 @@
     <string name="incid_resolucion_coste_prev_rot">Coste estimado EUR:</string>
     <string name="incid_resolucion_coste_prev_hint">-- tu estimación --</string>
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
-    <!-- ===================== IncidSeeOpenByComuAc ===================== -->
+    <!-- ===================== IncidSeeByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_apertura_rot">Apertura:</string>
     <string name="incid_cierre_rot">Cierre:</string>
@@ -197,7 +197,6 @@
     <string name="incid_ambito_rot">Ámbito:</string>
     <string name="incid_see_resolucion_label">Resolución:</string>
     <string name="incid_see_resolucion_fecha_alta_label">iniciada</string>
-    <!-- ============ IncidSeeClosedByComuAc ========== -->
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->

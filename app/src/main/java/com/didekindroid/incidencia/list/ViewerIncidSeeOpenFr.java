@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.open;
+package com.didekindroid.incidencia.list;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseFr;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
-import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.io.Serializable;
@@ -17,6 +15,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.selectedOpenIncid;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
@@ -24,9 +23,17 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * User: pedro@didekin
  * Date: 20/03/17
  * Time: 12:33
+ * <p>
+ * Preconditions:
+ * 1. The user is registered.
+ * 2. The user is registered NOW in the comunidad whose open incidencias are shown.
+ * 3. An intent may be passed with a comunidadId, when a notification is sent when the
+ * incidencia has been opened, or when the previous activity has a comuSpinner instance.
+ * Postconditions:
+ * 1. A list of IncidenciaUSer instances are shown.
+ * 2. An intent is passed with an IncidResolucionBundle instance, where the selected incidencia is embedded.
  */
-
-final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements ActivityInitiatorIf {
+public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements ActivityInitiatorIf {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
@@ -58,7 +65,7 @@ final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements Activi
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        initAcFromActivity(bundle);
+        initAcFromRouter(bundle, selectedOpenIncid);
     }
 
     /* ==================================  VIEWER  =================================*/
@@ -78,13 +85,4 @@ final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements Activi
         viewerFirebaseToken.clearSubscriptions();
         return super.clearSubscriptions();
     }
-
-    // ==================================  HELPERS  =================================
-
-    ViewerComuSpinner getComuSpinner()
-    {
-        Timber.d("getComuSpinner()");
-        return comuSpinnerViewer;
-    }
-
 }

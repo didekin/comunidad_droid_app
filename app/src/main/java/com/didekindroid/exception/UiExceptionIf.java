@@ -17,17 +17,17 @@ public interface UiExceptionIf {
 
     void processMe(Activity activity, Intent intent);
 
-    void processMe(Activity activity, ActionForUiExceptionIf actionForUiException);
+    void processMe(Activity activity, IntentForUiExceptionIf actionForUiException);
 
     ErrorBean getErrorBean();
 
     interface UiExceptionRouterIf {
-        ActionForUiExceptionIf getActionForException(UiException uiException);
+        IntentForUiExceptionIf getActionForException(UiException uiException);
     }
 
-    interface ActionForUiExceptionIf {
+    interface IntentForUiExceptionIf {
 
-        Class<? extends Activity> getActivityToGoClass();
+        Intent getIntentForException();
 
         int getToastResourceId();
     }

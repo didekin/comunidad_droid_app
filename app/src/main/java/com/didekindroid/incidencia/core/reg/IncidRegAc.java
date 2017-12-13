@@ -9,7 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.router.FragmentInitiatorIf;
+import com.didekindroid.api.router.FragmentInitiatorIf;
 
 import timber.log.Timber;
 

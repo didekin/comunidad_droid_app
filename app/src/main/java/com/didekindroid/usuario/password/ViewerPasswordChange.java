@@ -9,9 +9,9 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.ActionForUiException;
+import com.didekindroid.exception.IntentForUiException;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.userdata.UserDataAc;
@@ -24,8 +24,8 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyPswd;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.sendNewPswd;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifyPswd;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.sendNewPswd;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
@@ -158,7 +158,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
 
         if (errorMsg.equals(USER_NAME_NOT_FOUND.getHttpMessage())
                 || errorMsg.equals(PASSWORD_NOT_SENT.getHttpMessage())) {
-            uiException.processMe(activity, new ActionForUiException(UserDataAc.class, R.string.user_email_wrong));
+            uiException.processMe(activity, new IntentForUiException(UserDataAc.class, R.string.user_email_wrong));
         } else if (errorMsg.equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
         } else {

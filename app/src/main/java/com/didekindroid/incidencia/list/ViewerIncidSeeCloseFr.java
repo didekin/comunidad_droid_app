@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.close;
+package com.didekindroid.incidencia.list;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +16,7 @@ import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerSelectList;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFr;
-import com.didekindroid.router.FragmentInitiatorIf;
+import com.didekindroid.api.router.FragmentInitiatorIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -34,15 +34,30 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * User: pedro@didekin
  * Date: 18/03/17
  * Time: 11:01
+ *
+ * Preconditions:
+ * 1. The user is NOW registered in the comunidad whose incidencias are shown.
+ * 2. The incidencias shown have been registered in the last 24 months and are closed.
+ * 3. All the incidencias closed in a comunidad where the user is NOW registered are shown,
+ * even is the user was not registered in the comunidad when incidencia was open or closed.
+ * 4. All incidencias closed MUST HAVE a bundleWithResolucion.
+ * 5. An intent may be passed with a comunidadId, when a notification is sent when the
+ * incidencia has been closed or from a comuSpinner instance in a previous activity or fragment.
+ * Postconditions:
+ * 1. A list of IncidenciaUSer instances are shown.
+ * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.
+ * 3. If an incidencia is selected, the bundleWithResolucion data are shown.
+ * -- Arguments with incidImportancia, bundleWithResolucion and a toShowMenu flag are passed to the bundleWithResolucion
+ * fragment.
  */
 public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
         implements SpinnerEventListener, FragmentInitiatorIf<IncidResolucionSeeFr> {
 
-    protected ViewerComuSpinner comuSpinnerViewer;
+    ViewerComuSpinner comuSpinnerViewer;
     private View emptyListView;
 
-    protected ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
+    ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
     {
         super(frView.findViewById(android.R.id.list), activity, null);
         emptyListView = frView.findViewById(android.R.id.empty);
@@ -50,13 +65,22 @@ public class ViewerIncidSeeCloseFr extends
         view.addHeaderView(new View(activity), null, true);
     }
 
-    static ViewerIncidSeeCloseFr newViewerIncidSeeClose(View view, AppCompatActivity activity)
+    static ViewerIncidSeeCloseFr newViewerIncidSeeClose(View view, AppCompatActivity activity, boolean isListClosed)
     {
         Timber.d("newViewerIncidSeeClose()");
+        if (!isListClosed){
+            return ViewerIncidSeeOpenFr.newViewerIncidSeeOpen(view, activity);
+        }
         ViewerIncidSeeCloseFr parentInstance = new ViewerIncidSeeCloseFr(view, activity);
         parentInstance.setController(new CtrlerIncidSeeCloseByComu());
         parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), parentInstance);
         return parentInstance;
+    }
+
+    ViewerComuSpinner getComuSpinner()
+    {
+        Timber.d("getComuSpinner()");
+        return comuSpinnerViewer;
     }
 
     // ==================================  VIEWER  =================================
@@ -143,7 +167,7 @@ public class ViewerIncidSeeCloseFr extends
         initReplaceFragmentTx(bundle, IncidResolucionSeeFr.newInstance(bundle));
     }
 
-    protected void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
+    void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
     {
         Timber.d("onSuccessLoadItems_protected()");
         adapter.addAll(incidCloseList);
@@ -159,7 +183,7 @@ public class ViewerIncidSeeCloseFr extends
     @Override
     public int getContainerId()
     {
-        return R.id.incid_see_closed_by_comu_ac;
+        return R.id.incid_see_by_comu_ac;
     }
 
 

@@ -7,7 +7,8 @@ import android.util.ArrayMap;
 
 import com.didekindroid.R;
 import com.didekindroid.accesorio.ConfidencialidadAc;
-import com.didekindroid.api.RouterToAcIf;
+import com.didekindroid.api.router.ActivityRouterIf;
+import com.didekindroid.api.router.IntrospectRouterToAcIf;
 import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
@@ -15,10 +16,9 @@ import com.didekindroid.incidencia.comment.IncidCommentRegAc;
 import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
-import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAc;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionRegAc;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
@@ -42,10 +42,10 @@ import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static android.support.v4.app.NavUtils.getParentActivityIntent;
 import static android.support.v4.app.NavUtils.navigateUpTo;
 import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultNoRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewComment;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewIncidencia;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.defaultNoRegUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.defaultRegUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewComment;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewIncidencia;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 /**
@@ -57,7 +57,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 public class ActivityRouter implements ActivityRouterIf {
 
     // Singleton instance.
-    static final ActivityRouter acRouter = new ActivityRouter();
+    public static final ActivityRouter acRouter = new ActivityRouter();
 
     private static final Map<Integer, Class<? extends Activity>> menuIdMap = new ArrayMap<>();
     private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdMap = new ArrayMap<>();
@@ -69,9 +69,6 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(ComuSearchAc.class, ComuSearchResultsAc.class);
         acRouterMap.put(DeleteMeAc.class, ComuSearchAc.class);
         acRouterMap.put(IncidCommentRegAc.class, IncidCommentSeeAc.class);
-        acRouterMap.put(IncidEditAc.class, IncidSeeOpenByComuAc.class);
-        acRouterMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
-        acRouterMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
         acRouterMap.put(LoginAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegComuAndUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
@@ -89,8 +86,8 @@ public class ActivityRouter implements ActivityRouterIf {
         menuIdMap.put(R.id.incid_comment_reg_ac_mn, writeNewComment.activityToGo);
         menuIdMap.put(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class);
         menuIdMap.put(R.id.incid_reg_ac_mn, writeNewIncidencia.activityToGo);
-        menuIdMap.put(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeClosedByComuAc.class);
-        menuIdMap.put(R.id.incid_see_open_by_comu_ac_mn, IncidSeeOpenByComuAc.class);
+        menuIdMap.put(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeByComuAc.class);
+        menuIdMap.put(R.id.incid_see_open_by_comu_ac_mn, IncidSeeByComuAc.class);
         // USUARIO.
         menuIdMap.put(R.id.comu_data_ac_mn, ComuDataAc.class);
         menuIdMap.put(R.id.comu_search_ac_mn, ComuSearchAc.class);
@@ -134,10 +131,8 @@ public class ActivityRouter implements ActivityRouterIf {
         }
 
         Intent intent = getParentActivityIntent(activity);
-        // We need both flags to reuse the parent activity.
-        intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_NEW_TASK);
         activity.setIntent(intent);
-        // Using navigateUpTo() is suitable only when your app is the owner of the current task (the user began this task from your app)
         navigateUpTo(activity, intent);
     }
 
@@ -167,7 +162,7 @@ public class ActivityRouter implements ActivityRouterIf {
 
     /* =========================  HELPERS CLASSES  =========================*/
 
-    public enum RouterToAc implements RouterToAcIf {
+    public enum IntrospectRouterToAc implements IntrospectRouterToAcIf {
 
         // General defaults.
         defaultRegUser(LoginAc.class),
@@ -187,19 +182,23 @@ public class ActivityRouter implements ActivityRouterIf {
         // Incidencia
         writeNewComment(IncidCommentRegAc.class),
         writeNewIncidencia(IncidRegAc.class),
+        selectedOpenIncid(IncidEditAc.class),
+        erasedOpenIncid(IncidSeeByComuAc.class),
+        modifiedOpenIncid(IncidSeeByComuAc.class),
+        afterRegNewIncid(IncidSeeByComuAc.class),
         // Resolución.
         afterResolucionReg(IncidEditAc.class),
         regResolucion(IncidResolucionRegAc.class),
         editResolucion(IncidResolucionEditAc.class),
         regResolucionDuplicate(regResolucion.activityToGo),
         modifyResolucion(IncidEditAc.class),
-        modifyResolucionError(IncidSeeOpenByComuAc.class),
-        closeIncidencia(IncidSeeClosedByComuAc.class),
-        closeIncidenciaError(IncidSeeOpenByComuAc.class),;
+        modifyResolucionError(IncidSeeByComuAc.class),
+        closeIncidencia(IncidSeeByComuAc.class),
+        errorClosingIncid(IncidSeeByComuAc.class),;
 
         final Class<? extends Activity> activityToGo;
 
-        RouterToAc(Class<? extends Activity> activityToGo)
+        IntrospectRouterToAc(Class<? extends Activity> activityToGo)
         {
             this.activityToGo = activityToGo;
         }

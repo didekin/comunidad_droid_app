@@ -1,4 +1,4 @@
-package com.didekindroid.router;
+package com.didekindroid.api.router;
 
 import android.app.Activity;
 
@@ -8,7 +8,7 @@ import android.app.Activity;
  * Time: 14:52
  */
 
-interface ActivityRouterIf {
+public interface ActivityRouterIf {
 
     Class<? extends Activity> nextActivityFromMn(int resourceId);
 

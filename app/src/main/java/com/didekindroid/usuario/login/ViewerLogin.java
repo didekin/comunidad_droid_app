@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.RouterToAc.notSendNewPswd;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.notSendNewPswd;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.usuario.login.ViewerLogin.PasswordMailDialog.newInstance;

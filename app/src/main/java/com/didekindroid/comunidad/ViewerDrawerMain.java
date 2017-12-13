@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 

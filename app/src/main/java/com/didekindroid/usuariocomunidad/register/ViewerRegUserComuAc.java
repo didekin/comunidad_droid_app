@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;

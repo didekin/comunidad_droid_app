@@ -14,7 +14,8 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.incidencia.utils.IncidBundleKey;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.FechaPickerFr;
 import com.didekindroid.util.FechaPickerUser;
@@ -33,6 +34,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -40,10 +42,10 @@ import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidenci
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.closeIncidencia;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.closeIncidenciaError;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyResolucion;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.modifyResolucionError;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.closeIncidencia;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.errorClosingIncid;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifyResolucion;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifyResolucionError;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
@@ -231,7 +233,8 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
 
             if (uiException != null) {
                 Intent intent = new Intent(getActivity(), modifyResolucionError.getActivityToGo());
-                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
+                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId())
+                        .putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
@@ -270,8 +273,9 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent(getActivity(), closeIncidenciaError.getActivityToGo());
-                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
+                Intent intent = new Intent(getActivity(), errorClosingIncid.getActivityToGo());
+                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId())
+                        .putExtra(IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);

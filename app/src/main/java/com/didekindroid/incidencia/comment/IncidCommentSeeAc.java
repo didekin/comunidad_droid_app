@@ -2,12 +2,11 @@ package com.didekindroid.incidencia.comment;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
-import com.didekindroid.router.FragmentInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
@@ -72,42 +71,16 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
 
 // ============================================================
 //    ..... ACTION BAR ....
-/* ============================================================*/
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        Timber.d("onPrepareOptionsMenu()");
-        // Mostramos el menú si la incidencia está abierta.
-        if (incidencia.getFechaCierre() == null) {
-            menu.findItem(R.id.incid_comment_reg_ac_mn).setVisible(true);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        Timber.d("onCreateOptionsMenu()");
-        getMenuInflater().inflate(R.menu.incid_comments_see_ac_mn, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+// ============================================================
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
-
         int resourceId = item.getItemId();
-
         switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
-                return true;
-            case R.id.incid_comment_reg_ac_mn:
-                Bundle bundle = new Bundle(1);
-                bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
-                initAcFromMenu(bundle, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,10 +1,12 @@
-package com.didekindroid.incidencia.list.close;
+package com.didekindroid.incidencia.list;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
+import com.didekindroid.incidencia.list.IncidSeeByComuFr;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -60,13 +62,13 @@ import static org.junit.Assert.fail;
  * Time: 11:35
  */
 
-public class IncidSeeClosedByComuAcTest {
+public class IncidSeeByComuAcTest {
 
     IncidImportancia incidImportancia2;
     IncidImportancia incidImportancia1;
 
     @Rule
-    public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class) {
+    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
@@ -109,8 +111,8 @@ public class IncidSeeClosedByComuAcTest {
         }
     };
 
-    IncidSeeClosedByComuAc activity;
-    IncidSeeCloseByComuFr fragment;
+    IncidSeeByComuAc activity;
+    IncidSeeByComuFr fragment;
 
     @BeforeClass
     public static void relax() throws InterruptedException
@@ -122,7 +124,7 @@ public class IncidSeeClosedByComuAcTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeCloseByComuFr.class.getName());
+        fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeByComuFr.class.getName());
     }
 
     @After

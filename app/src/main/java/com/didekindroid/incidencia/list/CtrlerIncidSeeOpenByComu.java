@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.open;
+package com.didekindroid.incidencia.list;
 
 import android.os.Bundle;
 

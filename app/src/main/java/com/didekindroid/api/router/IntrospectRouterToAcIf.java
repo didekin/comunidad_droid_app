@@ -1,4 +1,4 @@
-package com.didekindroid.api;
+package com.didekindroid.api.router;
 
 import android.app.Activity;
 
@@ -10,6 +10,6 @@ import android.app.Activity;
  * Mark interface to be used by ActivityRouter.
  */
 @FunctionalInterface
-public interface RouterToAcIf {
+public interface IntrospectRouterToAcIf {
     Class<? extends Activity> getActivityToGo();
 }

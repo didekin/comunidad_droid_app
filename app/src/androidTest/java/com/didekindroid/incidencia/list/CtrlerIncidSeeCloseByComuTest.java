@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.close;
+package com.didekindroid.incidencia.list;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -30,8 +31,8 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.observers.TestObserver;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.list.close.CtrlerIncidSeeCloseByComu.bundleWithResolucion;
-import static com.didekindroid.incidencia.list.close.CtrlerIncidSeeCloseByComu.incidCloseList;
+import static com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu.bundleWithResolucion;
+import static com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu.incidCloseList;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;

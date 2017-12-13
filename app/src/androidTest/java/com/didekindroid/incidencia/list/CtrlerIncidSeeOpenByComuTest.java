@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.open;
+package com.didekindroid.incidencia.list;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.list.CtrlerIncidSeeOpenByComu;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -24,8 +25,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.observers.TestObserver;
 
-import static com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComu.incidImportancia;
-import static com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComu.incidOpenList;
+import static com.didekindroid.incidencia.list.CtrlerIncidSeeOpenByComu.incidImportancia;
+import static com.didekindroid.incidencia.list.CtrlerIncidSeeOpenByComu.incidOpenList;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;

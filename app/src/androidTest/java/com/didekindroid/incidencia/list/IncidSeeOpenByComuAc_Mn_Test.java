@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.close;
+package com.didekindroid.incidencia.list;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -24,11 +24,13 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
@@ -42,17 +44,22 @@ import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
- * Date: 02/02/16
- * Time: 18:00
+ * Date: 23/11/15
+ * Time: 18:45
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeClosedByComuAc_Mn_Test {
+public class IncidSeeOpenByComuAc_Mn_Test {
 
     Comunidad comunidadInIntent;
 
     @Rule
-    public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class, true, true) {
+    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
 
+        /**
+         * Preconditions:
+         * 1. A comunidadId is passed as an intent extra.
+         * 2. The user is registered.
+         */
         @Override
         protected Intent getActivityIntent()
         {
@@ -62,12 +69,11 @@ public class IncidSeeClosedByComuAc_Mn_Test {
                 fail();
             }
             Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id());
+            intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()).putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
             return intent;
         }
     };
-
-    private IncidSeeClosedByComuAc activity;
+    private IncidSeeByComuAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -81,32 +87,40 @@ public class IncidSeeClosedByComuAc_Mn_Test {
         cleanOptions(CLEAN_DROID);
     }
 
+    //  ============================= TESTS Empty list ==============================
+
+    @Test
+    public void testOnCreate() throws Exception
+    {
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withId(incidSeeOpenAcLayout)).check(matches(isDisplayed()));
+        onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
+        // No hay incidencias registradas.
+        SECONDS.sleep(2);
+        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
+        // Spinner
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comunidadInIntent.getNombreComunidad()));
+        // FloatingButton
+        onView(withId(R.id.incid_new_incid_fab)).perform(click());
+        onView(withId(incidRegAcLayout)).check(matches(isDisplayed()));
+        checkUp(incidSeeOpenAcLayout, incidSeeGenericFrLayout);
+    }
+
     @Test
     public void test_newIncidenciaButton() throws InterruptedException
     {
         waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
-        checkUp(incidSeeCloseAcLayout);
+        checkUp(incidSeeOpenAcLayout);
     }
 
-    // ============================================================
-    //    ..... ACTION BAR ....
-    // ============================================================
+//  ================================== MENU TESTS ====================================
 
     @Test
-    public void testOnCreateEmptyList() throws Exception
+    public void testIncidSeeClosedByComuMn() throws InterruptedException
     {
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
-        SECONDS.sleep(2);
-        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testIncidSeeOpenByComuMn() throws InterruptedException
-    {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
-        checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
+        INCID_SEE_CLOSED_BY_COMU_AC.checkMenuItem(activity);
+        checkUp(incidSeeOpenAcLayout, incidSeeGenericFrLayout);
     }
 
     @Test
@@ -114,6 +128,6 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     {
         INCID_REG_AC.checkMenuItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()));
-        checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
+        checkUp(incidSeeOpenAcLayout, incidSeeGenericFrLayout);
     }
 }

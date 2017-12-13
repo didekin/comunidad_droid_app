@@ -1,6 +1,7 @@
-package com.didekindroid.incidencia.list.open;
+package com.didekindroid.incidencia.list;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
@@ -24,7 +26,7 @@ import static org.junit.Assert.fail;
  * User: pedro@didekin
  * Date: 27/11/15
  * Time: 16:38
- *
+ * <p>
  * Test de integración GCM para la consulta de incidencias abiertas.
  */
 @RunWith(AndroidJUnit4.class)
@@ -44,10 +46,10 @@ public class IncidSeeOpenByComuAc_GCM_Test extends Incidencia_GCM_Test {
     @Override
     protected IntentsTestRule<? extends Activity> doIntentsTestRule()
     {
-        return new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
+        return new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
 
             @Override
-            protected void beforeActivityLaunched()
+            protected Intent getActivityIntent()
             {
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
@@ -56,6 +58,7 @@ public class IncidSeeOpenByComuAc_GCM_Test extends Incidencia_GCM_Test {
                 } catch (IOException | UiException e) {
                     fail();
                 }
+                return new Intent().putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
             }
         };
     }

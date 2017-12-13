@@ -6,7 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;

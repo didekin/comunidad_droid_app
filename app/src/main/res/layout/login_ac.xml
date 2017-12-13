@@ -40,7 +40,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_help_fab"
         style="@style/floatingButton"
-        android:layout_gravity="center_vertical|end"
+        android:layout_gravity="bottom|end"
         app:fabSize="mini"
         app:rippleColor="@color/deep_orange_200"
         app:srcCompat="@drawable/ic_live_help_black_24dp"/>

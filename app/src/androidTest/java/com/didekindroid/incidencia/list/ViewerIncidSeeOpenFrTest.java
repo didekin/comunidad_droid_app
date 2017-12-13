@@ -1,5 +1,6 @@
-package com.didekindroid.incidencia.list.open;
+package com.didekindroid.incidencia.list;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -20,11 +21,11 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseFrTest.checkOnSuccessLoadItems;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
@@ -55,9 +56,9 @@ public class ViewerIncidSeeOpenFrTest {
     IncidImportancia incidImportancia;
 
     @Rule
-    public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
+    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
         @Override
-        protected void beforeActivityLaunched()
+        protected Intent getActivityIntent()
         {
             try {
                 signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
@@ -70,21 +71,25 @@ public class ViewerIncidSeeOpenFrTest {
             } catch (IOException | UiException e) {
                 fail();
             }
+            return new Intent().putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
         }
     };
 
-    IncidSeeOpenByComuAc activity;
-    IncidSeeOpenByComuFr fragment;
+    IncidSeeByComuAc activity;
+    IncidSeeByComuFr fragment;
+    ViewerIncidSeeOpenFr viewer;
 
     @Before
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        fragment = (IncidSeeOpenByComuFr) activity.getSupportFragmentManager()
-                .findFragmentByTag(IncidSeeOpenByComuFr.class.getName());
+        fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager()
+                .findFragmentByTag(IncidSeeByComuFr.class.getName());
         // Wait until everything is ready.
         waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 checkIncidOpenListView(incidImportancia, activity, incidenciaUser.getFechaAltaResolucion())));
+        viewer = (ViewerIncidSeeOpenFr) fragment.viewer;
+
     }
 
     @After
@@ -100,7 +105,7 @@ public class ViewerIncidSeeOpenFrTest {
     {
         // GcmToken.
         waitAtMost(3, SECONDS).until(
-                ((CtrlerFirebaseTokenIf) fragment.viewer.viewerFirebaseToken.getController())::isGcmTokenSentServer);
+                ((CtrlerFirebaseTokenIf) viewer.viewerFirebaseToken.getController())::isGcmTokenSentServer);
     }
 
     //    ============================  TESTS  ===================================
@@ -112,13 +117,13 @@ public class ViewerIncidSeeOpenFrTest {
                 notNullValue(), instanceOf(CtrlerIncidSeeOpenByComu.class)
         ));
         assertThat(fragment.viewer.getComuSpinner(), notNullValue());
-        assertThat(fragment.viewer.viewerFirebaseToken, notNullValue());
+        assertThat(viewer.viewerFirebaseToken, notNullValue());
     }
 
     @Test
     public void testClearSubscriptions() throws Exception
     {
-        checkSubscriptionsOnStop(activity, fragment.viewer.viewerFirebaseToken.getController(),
+        checkSubscriptionsOnStop(activity, viewer.viewerFirebaseToken.getController(),
                 fragment.viewer.getController());
     }
 
@@ -135,6 +140,6 @@ public class ViewerIncidSeeOpenFrTest {
     @Test
     public void test_OnSuccessLoadItems() throws Exception
     {
-        checkOnSuccessLoadItems(incidImportancia, activity, fragment.viewer);
+        ViewerIncidSeeCloseFrTest.checkOnSuccessLoadItems(incidImportancia, activity, fragment.viewer);
     }
 }

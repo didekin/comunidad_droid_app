@@ -1,6 +1,6 @@
 package com.didekindroid.api;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -69,11 +69,11 @@ public class ViewerTest {
                 new ErrorBean(BAD_REQUEST),
                 new UiExceptionIf.UiExceptionRouterIf() {
                     @Override
-                    public UiExceptionIf.ActionForUiExceptionIf getActionForException(UiException uiException)
+                    public UiExceptionIf.IntentForUiExceptionIf getActionForException(UiException uiException)
                     {
-                        return new UiExceptionIf.ActionForUiExceptionIf() {
+                        return new UiExceptionIf.IntentForUiExceptionIf() {
                             @Override
-                            public Class<? extends Activity> getActivityToGoClass()
+                            public Intent getIntentForException()
                             {
                                 return ActivityNextMock.class;
                             }

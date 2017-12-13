@@ -9,6 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ActivityNextMock;
+import com.didekindroid.api.router.ActivityRouterIf;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.security.IdentityCacher;
 
@@ -28,8 +29,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultNoRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.defaultRegUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.defaultNoRegUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.defaultRegUser;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static org.hamcrest.CoreMatchers.is;

@@ -88,11 +88,6 @@ android {
             }
         }
     }
-
-    dexOptions {
-        maxProcessCount 2
-        javaMaxHeapSize "1g"
-    }
     lintOptions {
         checkReleaseBuilds true
         abortOnError true

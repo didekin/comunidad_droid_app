@@ -8,8 +8,8 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjected;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -19,6 +19,8 @@ import java.io.Serializable;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterRegNewIncid;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
@@ -83,7 +85,8 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenci
         Timber.d("onSuccessRegisterIncidImportancia()");
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
-        initAcFromActivity(bundle);
+        bundle.putBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+        initAcFromRouter(bundle, afterRegNewIncid);
     }
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)

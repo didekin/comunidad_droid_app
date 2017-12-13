@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.incidencia.dominio.IncidComment;

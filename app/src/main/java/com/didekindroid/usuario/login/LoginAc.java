@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.login;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +10,6 @@ import com.didekindroid.router.ActivityRouter;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.RouterToAc.writeNewIncidencia;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.util.UIutils.doToolBar;
 

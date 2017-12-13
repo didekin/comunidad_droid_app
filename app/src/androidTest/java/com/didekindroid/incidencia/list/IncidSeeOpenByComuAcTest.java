@@ -1,5 +1,6 @@
-package com.didekindroid.incidencia.list.open;
+package com.didekindroid.incidencia.list;
 
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -40,6 +41,7 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -88,9 +90,9 @@ public class IncidSeeOpenByComuAcTest {
     IncidenciaUser incidenciaUser2;
 
     @Rule
-    public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
+    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
         @Override
-        protected void beforeActivityLaunched()
+        protected Intent getActivityIntent()
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
@@ -104,18 +106,19 @@ public class IncidSeeOpenByComuAcTest {
             } catch (IOException | UiException e) {
                 fail();
             }
+            return new Intent().putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
         }
     };
 
-    IncidSeeOpenByComuAc activity;
-    IncidSeeOpenByComuFr fragment;
+    IncidSeeByComuAc activity;
+    IncidSeeByComuFr fragment;
 
     @Before
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        fragment = (IncidSeeOpenByComuFr) activity.getSupportFragmentManager()
-                .findFragmentByTag(IncidSeeOpenByComuFr.class.getName());
+        fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager()
+                .findFragmentByTag(IncidSeeByComuFr.class.getName());
         assertThat(fragment, notNullValue());
     }
 

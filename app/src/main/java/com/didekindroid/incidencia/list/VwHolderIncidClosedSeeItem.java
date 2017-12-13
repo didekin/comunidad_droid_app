@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.close;
+package com.didekindroid.incidencia.list;
 
 import android.view.View;
 import android.widget.TextView;

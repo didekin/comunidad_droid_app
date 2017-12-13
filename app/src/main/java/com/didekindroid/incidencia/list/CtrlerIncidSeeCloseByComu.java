@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.close;
+package com.didekindroid.incidencia.list;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

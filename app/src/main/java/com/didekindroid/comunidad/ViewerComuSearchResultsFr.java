@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -23,11 +23,11 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.comunidadFound_noRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.comunidadFound_regUser;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.comunidadFound_regUserComu;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.noComunidadFound_noRegUser;
-import static com.didekindroid.router.ActivityRouter.RouterToAc.noComunidadFound_regUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_noRegUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_regUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_regUserComu;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.noComunidadFound_noRegUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.noComunidadFound_regUser;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.util.UIutils.makeToast;
 

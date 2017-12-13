@@ -66,7 +66,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_closed_see_by_comu_ac_mn, R.id.incid_see_closed_by_comu_ac);
+            checkAppBarMenu(activity, R.string.incid_closed_see_by_comu_ac_mn, R.id.incid_see_by_comu_ac);
         }
     },;
 

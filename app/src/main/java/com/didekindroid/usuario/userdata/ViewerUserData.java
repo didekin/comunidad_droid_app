@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_uID_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;

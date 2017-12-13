@@ -11,7 +11,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekindroid.util.ConnectionUtils;

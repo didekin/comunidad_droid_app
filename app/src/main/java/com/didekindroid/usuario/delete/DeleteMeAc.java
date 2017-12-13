@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.router.ActivityRouter;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;

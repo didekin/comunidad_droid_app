@@ -1,4 +1,4 @@
-package com.didekindroid.router;
+package com.didekindroid.api.router;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +29,15 @@ public interface FragmentInitiatorIf<T extends Fragment> {
         if (bundle != null) {
             fragment.setArguments(bundle);
         }
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(getContainerId(), fragment, fragment.getClass().getName())
+                .addToBackStack(fragment.getClass().getName())
+                .commit();
+    }
+
+    default void initReplaceFragmentTx(@NonNull T fragment)
+    {
+        Timber.d("initReplaceFragmentTx()");
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(getContainerId(), fragment, fragment.getClass().getName())
                 .addToBackStack(fragment.getClass().getName())

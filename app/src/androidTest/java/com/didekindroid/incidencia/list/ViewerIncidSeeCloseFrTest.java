@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.close;
+package com.didekindroid.incidencia.list;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.widget.TextView;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
+import com.didekindroid.incidencia.list.IncidSeeByComuFr;
+import com.didekindroid.incidencia.list.ViewerIncidSeeCloseFr;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -74,7 +78,7 @@ public class ViewerIncidSeeCloseFrTest {
     Resolucion resolucion;
 
     @Rule
-    public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class, true) {
+    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class, true) {
 
         @Override
         protected void beforeActivityLaunched()
@@ -101,8 +105,8 @@ public class ViewerIncidSeeCloseFrTest {
         }
     };
 
-    IncidSeeCloseByComuFr fragment;
-    IncidSeeClosedByComuAc activity;
+    IncidSeeByComuFr fragment;
+    IncidSeeByComuAc activity;
 
     //    ============================  STATIC UTILITIES  ===================================
 
@@ -149,7 +153,7 @@ public class ViewerIncidSeeCloseFrTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeCloseByComuFr.class.getName());
+        fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeByComuFr.class.getName());
         // Wait until list is made.
         waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
     }

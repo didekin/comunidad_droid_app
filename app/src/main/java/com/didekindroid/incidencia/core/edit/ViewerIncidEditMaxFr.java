@@ -8,9 +8,9 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
-import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
@@ -21,7 +21,9 @@ import timber.log.Timber;
 import static android.view.View.GONE;
 import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_deleted;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.erasedOpenIncid;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -103,7 +105,9 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityIn
     {
         Timber.d("onSuccessEraseIncidencia()");
         assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
-        initAcFromActivity(new Bundle(0));
+        Bundle bundle = new Bundle(1);
+        bundle.putBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+        initAcFromRouter(bundle, erasedOpenIncid);
     }
 
     //    ============================  LIFE CYCLE   ===================================

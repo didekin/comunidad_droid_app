@@ -3,6 +3,8 @@ package com.didekindroid.router;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.didekindroid.api.router.FragmentInitiatorIf;
+
 /**
  * User: pedro@didekin
  * Date: 17/04/17
