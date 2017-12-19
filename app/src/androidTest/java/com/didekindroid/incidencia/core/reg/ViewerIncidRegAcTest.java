@@ -30,6 +30,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
@@ -131,7 +132,7 @@ public class ViewerIncidRegAcTest {
     {
         // Check change of activity.
         viewer.registerIncidencia(doIncidImportancia(), getErrorMsgBuilder(activity));
-        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
 
     }
 
@@ -150,7 +151,7 @@ public class ViewerIncidRegAcTest {
     {
         viewer.onSuccessRegisterIncidImportancia(comuPlazuela5);
         // Check change of activity.
-        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
         // Check comuSpinner initialization.
         waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuPlazuela5.getNombreComunidad()));
     }

@@ -124,7 +124,7 @@
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
-    <string name="no_incidencia_by_user">No hay incidencias que mostrar</string>
+    <string name="no_incidencia_to_show">No hay incidencias que mostrar</string>
     <string name="incidencia_not_registered">Intenta nuevamente registrar la incidencia.</string>
     <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la
         incidencia.

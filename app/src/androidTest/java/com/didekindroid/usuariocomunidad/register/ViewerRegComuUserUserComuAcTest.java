@@ -122,7 +122,7 @@ public class ViewerRegComuUserUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserUserComuBtonListener_1() throws Exception
+    public void test_RegComuUserUserComuBtonListener_1() throws Exception      // TODO: fail
     {
         // Precondition:
         assertThat(activity.viewer.getController().isRegisteredUser(), is(false));

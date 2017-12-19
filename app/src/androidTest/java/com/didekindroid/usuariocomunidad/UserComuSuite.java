@@ -32,9 +32,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // repository.
-        UserComuDaoRemoteTest.class,
-        UserComuObservableTest.class,
         // data.
         UserComuDataAcTest.class,
         ViewerUserComuDataAc_Mock_Test.class,
@@ -56,6 +53,9 @@ import org.junit.runners.Suite;
         ViewerRegUserAndUserComuAcTest.class,
         ViewerRegUserComuAcTest.class,
         ViewerRegUserComuFrTest.class,
+        // repository.
+        UserComuDaoRemoteTest.class,
+        UserComuObservableTest.class,
         /* spinner*/
         CtrlerComuSpinnerTest.class,
         ViewerComuSpinnerTest.class,

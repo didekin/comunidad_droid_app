@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad;
+package com.didekindroid.router;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -25,8 +25,9 @@ import timber.log.Timber;
 
 import static android.view.Gravity.START;
 import static android.view.View.VISIBLE;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.default_menu;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.rsIdToMenuItem;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.default_menu;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.rsIdToMenuItem;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
 import static com.didekindroid.util.UIutils.doWrongMenuItem;
 
@@ -36,7 +37,7 @@ import static com.didekindroid.util.UIutils.doWrongMenuItem;
  * Time: 18:58
  */
 
-final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
+public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
     @SuppressWarnings("WeakerAccess")
     TextView drawerHeaderRot;
@@ -49,7 +50,7 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
         drawerHeaderRot = navView.getHeaderView(0).findViewById(R.id.drawer_main_header_text);
     }
 
-    static ViewerDrawerMain newViewerDrawerMain(AppCompatActivity activity)
+    public static ViewerDrawerMain newViewerDrawerMain(AppCompatActivity activity)
     {
         Timber.d("newViewerDrawerMain()");
         ViewerDrawerMain instance = new ViewerDrawerMain(activity.findViewById(R.id.drawer_main_layout), activity);
@@ -102,7 +103,7 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
     /* ==================================== Helpers ====================================*/
 
-    void openDrawer()
+    public void openDrawer()
     {
         Timber.d("openDrawer()");
         buildMenu(navView);
@@ -123,8 +124,20 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
         user_data(R.id.user_data_ac_mn),
         user_comus(R.id.see_usercomu_by_user_ac_mn),
-        incid_open(R.id.incid_see_open_by_comu_ac_mn),
-        incid_closed(R.id.incid_see_closed_by_comu_ac_mn),
+        incid_open(R.id.incid_see_open_by_comu_ac_mn) {
+            @Override
+            void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
+            {
+                listener.initAcFromMenu(INCID_CLOSED_LIST_FLAG.getBundleForKey(false), resourceId);
+            }
+        },
+        incid_closed(R.id.incid_see_closed_by_comu_ac_mn) {
+            @Override
+            void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
+            {
+                listener.initAcFromMenu(INCID_CLOSED_LIST_FLAG.getBundleForKey(true), resourceId);
+            }
+        },
         confidencialidad(R.id.confidencialidad_ac_mn),
         default_menu(-11) {
             @Override
@@ -156,7 +169,6 @@ final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
         void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
         {
-            Timber.d("processMenu()");
             listener.initAcFromMenu(null, resourceId);
         }
     }

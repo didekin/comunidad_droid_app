@@ -19,7 +19,7 @@ import java.io.Serializable;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterRegNewIncid;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
@@ -85,7 +85,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenci
         Timber.d("onSuccessRegisterIncidImportancia()");
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
-        bundle.putBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+        bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
         initAcFromRouter(bundle, afterRegNewIncid);
     }
 

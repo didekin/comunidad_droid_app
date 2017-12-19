@@ -14,6 +14,7 @@ import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ActivityNextMock;
 import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc;
@@ -31,12 +32,14 @@ import static android.support.test.runner.lifecycle.Stage.RESUMED;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.defaultNoRegUser;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.defaultRegUser;
 import static com.didekindroid.router.ActivityRouter.acRouter;
+import static com.didekindroid.router.ActivityRouter.acRouterMap;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.getActivitesInTaskByStage;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -84,6 +87,16 @@ public class ActivityRouterTest {
     public void test_NextActivity() throws Exception
     {
         assertThat(acRouter.nextActivity(ComuDataAc.class).equals(SeeUserComuByUserAc.class), is(true));
+        // Precodition no mappping for an activity.
+        assertThat(acRouterMap.get(IncidSeeByComuAc.class), nullValue());
+        // Case: no registered user.
+        assertThat(acRouter.identityCacher.isRegisteredUser(), is(false));
+        // Check
+        assertThat(acRouter.nextActivity(IncidSeeByComuAc.class).equals(defaultNoRegUser.activityToGo), is(true));
+        // Case: registered user.
+        acRouter.identityCacher.updateIsRegistered(true);
+        // Check
+        assertThat(acRouter.nextActivity(IncidSeeByComuAc.class).equals(defaultRegUser.activityToGo), is(true));
     }
 
     @Test

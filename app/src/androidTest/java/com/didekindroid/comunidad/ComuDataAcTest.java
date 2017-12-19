@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -155,8 +154,8 @@ public class ComuDataAcTest {
         assertThat(activity.regComuFrg, notNullValue());
 
         assertThat(activity.viewer, isA(ParentViewerInjectedIf.class));
-        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
-        assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
+        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.is(activity));
+        assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.is(activity.viewer));
     }
 
     @Test

@@ -25,6 +25,7 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterModifiedUserComu;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_deleted;
 import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
@@ -138,7 +139,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
     class ModifyUserComuObserver extends UserComuDataObserver<Integer> {
 
         /**
-         * This variable is initialized with the roles in the new UsuarioComuidad instance to be used in the modification.
+         * This variable flags the adm powers of the user.
          */
         private final boolean upDateMenu;
 
@@ -157,7 +158,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
         {
             Timber.d("onSuccess()");
             showComuDataMn.set(rowsUpdated == 1 && upDateMenu);
-            initAcFromActivity(new Bundle(0));
+            initAcFromRouter(new Bundle(0), afterModifiedUserComu);
         }
     }
 
@@ -176,7 +177,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
                 activity.startActivity(intent);
                 activity.finish();
             } else {
-                initAcFromActivity(new Bundle(0));
+                initAcFromRouter(new Bundle(0), afterModifiedUserComu);
             }
         }
     }

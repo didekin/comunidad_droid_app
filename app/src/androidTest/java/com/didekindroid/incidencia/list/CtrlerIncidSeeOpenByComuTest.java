@@ -6,7 +6,6 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.CtrlerIncidSeeOpenByComu;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -21,9 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.observers.TestObserver;
 
 import static com.didekindroid.incidencia.list.CtrlerIncidSeeOpenByComu.incidImportancia;
 import static com.didekindroid.incidencia.list.CtrlerIncidSeeOpenByComu.incidOpenList;
@@ -85,15 +82,11 @@ public class CtrlerIncidSeeOpenByComuTest {
     public void testIncidOpenList() throws UiException
     {
         incidOpenList(incidencia.getComunidad().getC_Id()).test()
-                .assertOf(new Consumer<TestObserver<List<IncidenciaUser>>>() {
-                    @Override
-                    public void accept(TestObserver<List<IncidenciaUser>> testObserver) throws Exception
-                    {
-                        List<IncidenciaUser> list = testObserver.values().get(0);
-                        assertThat(list.size(), is(1));
-                        assertThat(list.get(0).getIncidencia().getDescripcion(), is(INCID_DEFAULT_DESC));
-                        assertThat(list.get(0).getIncidencia().getImportanciaAvg(), is(3f));
-                    }
+                .assertOf(testObserver -> {
+                    List<IncidenciaUser> list = testObserver.values().get(0);
+                    assertThat(list.size(), is(1));
+                    assertThat(list.get(0).getIncidencia().getDescripcion(), is(INCID_DEFAULT_DESC));
+                    assertThat(list.get(0).getIncidencia().getImportanciaAvg(), is(3f));
                 });
     }
 
@@ -101,13 +94,9 @@ public class CtrlerIncidSeeOpenByComuTest {
     public void testIncidImportancia() throws UiException
     {
         incidImportancia(incidencia).test()
-                .assertOf(new Consumer<TestObserver<Bundle>>() {
-                    @Override
-                    public void accept(TestObserver<Bundle> testObserver) throws Exception
-                    {
-                        Bundle bundle = testObserver.values().get(0);
-                        checkBundle(bundle);
-                    }
+                .assertOf(testObserver -> {
+                    Bundle bundle = testObserver.values().get(0);
+                    checkBundle(bundle);
                 });
     }
 

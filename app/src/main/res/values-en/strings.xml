@@ -114,7 +114,7 @@
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
-    <string name="no_incidencia_by_user">No incidents to show</string>
+    <string name="no_incidencia_to_show">No incidents to show</string>
     <string name="incidencia_not_registered">Try again to record the incident.</string>
     <string name="incidencia_wrong_init">We can not continue. Verify that the incident
         is still open.

@@ -47,6 +47,7 @@ import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INC
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.RESOLUCION_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.processMsgWithHandler;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -130,7 +131,7 @@ public class IncidDownStreamMsgHandlerTest {
     public void testPendingIntent_INCIDENCIA_OPEN() throws Exception
     {
         final PendingIntent pendingIntent = INCIDENCIA_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
-        checkUiPendingIntent(pendingIntent, R.id.incid_see_open_by_comu_ac, R.id.comu_search_ac_linearlayout);
+        checkUiPendingIntent(pendingIntent, incidSeeByComuAcLayout, R.id.comu_search_ac_linearlayout);
     }
 
     @Test
@@ -144,7 +145,7 @@ public class IncidDownStreamMsgHandlerTest {
     public void testPendingIntent_RESOLUCION_OPEN() throws Exception
     {
         final PendingIntent pendingIntent = RESOLUCION_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
-        checkUiPendingIntent(pendingIntent, R.id.incid_see_open_by_comu_ac, R.id.comu_search_ac_linearlayout);
+        checkUiPendingIntent(pendingIntent, incidSeeByComuAcLayout, R.id.comu_search_ac_linearlayout);
     }
 
     @Test

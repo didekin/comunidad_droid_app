@@ -31,7 +31,7 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrNotErase;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
@@ -158,7 +158,7 @@ public class ViewerIncidEditMaxFrTest {
             viewer.incidImportanciaBean.setImportancia((short) 1);
             viewer.onClickButtonModify();
         });
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
@@ -172,28 +172,28 @@ public class ViewerIncidEditMaxFrTest {
             viewer.onClickButtonErase();
             isRun.compareAndSet(false, true);
         });
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
         viewer.onSuccessModifyIncidImportancia(1);
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
     public void testOnSuccessEraseIncidencia() throws Exception
     {
         viewer.onSuccessEraseIncidencia(1);
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
     public void test_EraseIncidenciaObserver()
     {
         just(1).subscribeWith(viewer.new EraseIncidenciaObserver());
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test

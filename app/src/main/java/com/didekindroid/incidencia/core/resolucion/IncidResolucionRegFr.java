@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.core.resolucion;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.util.FechaPickerFr;
 import com.didekindroid.util.FechaPickerUser;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -26,12 +25,12 @@ import java.sql.Timestamp;
 
 import timber.log.Timber;
 
+import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_resolucionDup;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterResolucionReg;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.regResolucionDuplicate;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
@@ -172,12 +171,11 @@ public class IncidResolucionRegFr extends Fragment implements ActivityInitiatorI
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = null;
                 if (uiException.getErrorBean().getMessage().equals(RESOLUCION_DUPLICATE.getHttpMessage())) {
-                    intent = new Intent(getActivity(), regResolucionDuplicate.getActivityToGo());
-                    intent.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null));
+                    makeToast(getActivity(), show_resolucionDup.getToastResourceId());
+                } else {
+                    uiException.processMe(getActivity());
                 }
-                uiException.processMe(getActivity(), intent == null ? new Intent() : intent);
             } else {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Bundle bundle = new Bundle(1);

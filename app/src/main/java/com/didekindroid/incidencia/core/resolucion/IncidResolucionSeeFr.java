@@ -13,16 +13,15 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.util.UIutils.getStringFromInteger;
@@ -37,12 +36,12 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
     View frView;
     Resolucion resolucion;
 
-    static IncidResolucionSeeFr newInstance(IncidImportancia incidImportancia, Resolucion resolucion)
+    static IncidResolucionSeeFr newInstance(Incidencia incidencia, Resolucion resolucion)
     {
         Timber.d("newInstance()");
         IncidResolucionSeeFr fr = new IncidResolucionSeeFr();
         Bundle args = new Bundle(1);
-        args.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+        args.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
         args.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
         fr.setArguments(args);
         return fr;
@@ -74,7 +73,7 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
         resolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
         assertTrue(resolucion != null, resolucion_should_be_initialized);
         // Activamos el menú.
-        setHasOptionsMenu(getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, false));
+        setHasOptionsMenu(true);
         paintViewData();
     }
 
@@ -98,21 +97,17 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
 
         switch (resourceId) {
             case android.R.id.home:
-                if (getFragmentManager().getBackStackEntryCount() > 0) {
-                    getFragmentManager().popBackStack();
-                }
+                doUpMenu(getActivity());
                 return true;
             case R.id.incid_comments_see_ac_mn:
-                Bundle bundle = new Bundle(1);
-                bundle.putSerializable(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
-                initAcFromMenu(bundle, resourceId);
+                initAcFromMenu(INCIDENCIA_OBJECT.getBundleForKey(getArguments().getSerializable(INCIDENCIA_OBJECT.key)), resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-//  ............................. HELPER METHODS ......................................
+    //  ............................. HELPER METHODS ......................................
 
     protected void paintViewData()
     {

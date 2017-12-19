@@ -225,7 +225,7 @@
         </activity>
         <activity
             android:name=".incidencia.list.IncidSeeByComuAc"
-            android:label="@string/incid_closed_by_user_ac_label"
+            android:label="@string/incid_see_by_user_ac_label"
             android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

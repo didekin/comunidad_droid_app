@@ -15,9 +15,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
@@ -39,8 +37,6 @@ public class CtrlerIncidSeeCloseByComu extends Controller implements
                 .map(
                         resolucion -> {
                             Bundle bundle = new Bundle();
-                            bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
-                            bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
                             bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
                             return bundle;
                         }

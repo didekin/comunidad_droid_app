@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -21,14 +20,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.observers.TestObserver;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu.bundleWithResolucion;
@@ -47,7 +43,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -113,13 +108,9 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testResolucion()
     {
-        bundleWithResolucion(resolucion.getIncidencia()).test().assertOf(new Consumer<TestObserver<Bundle>>() {
-            @Override
-            public void accept(TestObserver<Bundle> bundleTestObserver) throws Exception
-            {
-                Bundle bundleIn = bundleTestObserver.values().get(0);
-                checkBundle(bundleIn);
-            }
+        bundleWithResolucion(resolucion.getIncidencia()).test().assertOf(bundleTestObserver -> {
+            Bundle bundleIn = bundleTestObserver.values().get(0);
+            checkBundle(bundleIn);
         });
     }
 
@@ -190,8 +181,6 @@ public class CtrlerIncidSeeCloseByComuTest {
 
     void checkBundle(Bundle bundleIn)
     {
-        assertThat(bundleIn.getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key), is(true));
-        assertThat(bundleIn.getSerializable(INCIDENCIA_OBJECT.key), CoreMatchers.<Serializable>is(incidencia));
-        assertThat(bundleIn.getSerializable(INCID_RESOLUCION_OBJECT.key), CoreMatchers.<Serializable>is(resolucion));
+        assertThat(bundleIn.getSerializable(INCID_RESOLUCION_OBJECT.key), CoreMatchers.is(resolucion));
     }
 }

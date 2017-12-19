@@ -9,12 +9,10 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.IntentForUiException;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
-import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
@@ -24,6 +22,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_userData_wrongMail_action;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifyPswd;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.sendNewPswd;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
@@ -42,7 +41,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * User: pedro@didekin
  * Date: 21/03/17
  * Time: 20:08
- *
+ * <p>
  * Preconditions:
  * 1. An intent is received with the userName. If not, the viewer accessed user data directly.
  */
@@ -158,7 +157,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
 
         if (errorMsg.equals(USER_NAME_NOT_FOUND.getHttpMessage())
                 || errorMsg.equals(PASSWORD_NOT_SENT.getHttpMessage())) {
-            uiException.processMe(activity, new IntentForUiException(UserDataAc.class, R.string.user_email_wrong));
+            uiException.processMe(activity, show_userData_wrongMail_action);
         } else if (errorMsg.equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
         } else {

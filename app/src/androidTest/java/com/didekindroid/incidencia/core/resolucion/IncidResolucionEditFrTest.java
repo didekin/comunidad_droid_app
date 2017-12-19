@@ -7,9 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.edit.IncidEditAc;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.Avance;
-import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -24,6 +23,7 @@ import java.util.Locale;
 
 import static android.app.TaskStackBuilder.create;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
@@ -43,11 +43,10 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionEditFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -96,17 +95,16 @@ public class IncidResolucionEditFrTest {
             fail();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Intent intentStack = new Intent(getTargetContext(), IncidEditAc.class);
-            intentStack.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-            create(getTargetContext()).addNextIntentWithParentStack(intentStack).startActivities();
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
+            create(getTargetContext()).addNextIntentWithParentStack(intent1).startActivities();
         }
     }
 
     @After
     public void tearDown() throws Exception
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
         cleanOptions(CLEAN_JUAN);
@@ -138,8 +136,8 @@ public class IncidResolucionEditFrTest {
                         withText(USER_JUAN.getAlias()) // usuario en sesión que modifica resolución.
                 )))).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(incidEditAcLayout);
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
         }
     }
 
@@ -157,8 +155,8 @@ public class IncidResolucionEditFrTest {
                 withText(R.string.incid_resolucion_no_avances_message)
         )).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(incidEditAcLayout);
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
         }
     }
 
@@ -172,8 +170,8 @@ public class IncidResolucionEditFrTest {
         // Verificamos pantalla de llegada.
         checKIncidAcLayout();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(incidSeeOpenAcLayout);
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
         }
     }
 
@@ -186,7 +184,7 @@ public class IncidResolucionEditFrTest {
         checKIncidAcLayout();
         assertThat(incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId()), is(resolucion));
         // BACK.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkBack(onView(withId(incidEditAcLayout)), incidResolucionEditFrLayout);
         }
     }
@@ -233,11 +231,11 @@ public class IncidResolucionEditFrTest {
         // OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
         // BACK
-        checkBack(onView(withId(incidSeeCloseAcLayout)), incidResolucionEditFrLayout);
+        checkBack(onView(withId(incidSeeByComuAcLayout)), incidResolucionEditFrLayout);
         // Error al intentar borrar otra vez la incidencia.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
         waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
-        onView(withId(incidSeeOpenAcLayout)).check(matches(isDisplayed()));
+        onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
     }
 
 /*    ============================= HELPER METHODS ===========================*/

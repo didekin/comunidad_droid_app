@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.reg;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -8,7 +9,9 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
-import com.didekinlib.model.comunidad.Comunidad;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +23,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.app.TaskStackBuilder.create;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -30,9 +36,14 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -44,6 +55,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -61,30 +74,35 @@ import static org.junit.Assert.fail;
 public class IncidRegAcTest {
 
     final static AtomicReference<String> flagMethodExec_1 = new AtomicReference<>(BEFORE_METHOD_EXEC);
-    List<Comunidad> comunidades;
+    List<UsuarioComunidad> usuarioComunidades;
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
-
         @Override
         protected Intent getActivityIntent()
         {
-            Intent intent = null;
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-                comunidades = userComuDaoRemote.getComusByUser();
-                intent = new Intent();
-                assertThat(comunidades.get(0).getC_Id() > 0, is(true));
-                intent.putExtra(COMUNIDAD_ID.key, comunidades.get(0).getC_Id());
+                usuarioComunidades = userComuDaoRemote.seeUserComusByUser();
             } catch (IOException | UiException e) {
                 fail();
             }
-            return intent;
+
+            if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+                Intent intent0 = new Intent(getTargetContext(), UserComuDataAc.class)
+                        .putExtra(USERCOMU_LIST_OBJECT.key,
+                                new UsuarioComunidad.UserComuBuilder(
+                                        usuarioComunidades.get(0).getComunidad(),
+                                        usuarioComunidades.get(0).getUsuario()
+                                ).userComuRest(usuarioComunidades.get(0)).build()
+                        );
+                Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
+                create(getTargetContext()).addNextIntent(intent0).addNextIntentWithParentStack(intent1).startActivities();
+            }
+            return new Intent().putExtra(COMUNIDAD_ID.key, usuarioComunidades.get(0).getComunidad().getC_Id());
         }
     };
 
-    int activityLayoutId = R.id.incid_reg_ac_layout;
-    int fragmentLayoutId = R.id.incid_reg_frg;
     AmbitoIncidValueObj ambitoObj = new AmbitoIncidValueObj((short) 10, "Calefacción comunitaria");
     IncidRegAc activity;
 
@@ -97,6 +115,9 @@ public class IncidRegAcTest {
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -112,31 +133,32 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
+        checkUp(incidSeeByComuAcLayout);
     }
 
     @Test
     public void testRegisterIncidencia_2() throws UiException, InterruptedException
     {
-        // Caso OK: incidencia con datos de importancia.
+        // Caso OK: incidencia CON datos de importancia.
         doImportanciaSpinner(activity, 4);
         SECONDS.sleep(1);
         doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
-        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
-        checkUp(activityLayoutId, fragmentLayoutId);
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
+        checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test
     public void testRegisterIncidencia_3() throws UiException, InterruptedException
     {
-        // Caso OK: no cubro importancia.
+        // Caso OK: incidencia SIN datos de importancia.
         doAmbitoAndDescripcion(ambitoObj, "descripcion is valid");
         SECONDS.sleep(1);
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
-        checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)), activityLayoutId, fragmentLayoutId);
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
+        checkBack(onView(withId(incidSeeByComuAcLayout)), incidRegAcLayout, incidRegFrLayout);
     }
 
     @Test
@@ -151,8 +173,8 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "Incidencia La Fuente");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
-        checkUp(activityLayoutId, fragmentLayoutId);
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
+        checkUp(seeUserComuByUserFrRsId);
     }
 
     //    =======================   UNIT TESTS ========================
@@ -161,9 +183,11 @@ public class IncidRegAcTest {
     public void testOnCreate()
     {
         assertThat(activity.getParentViewer(), notNullValue());
-        assertThat(activity.incidRegFr.getArguments().getLong(COMUNIDAD_ID.key), is(comunidades.get(0).getC_Id()));
+        assertThat(activity.incidRegFr.getArguments().getLong(COMUNIDAD_ID.key), is(usuarioComunidades.get(0).getComunidad().getC_Id()));
         assertThat(activity.incidRegFr.viewerInjector, instanceOf(IncidRegAc.class));
         assertThat(activity.incidRegFr.viewer.getParentViewer(), is(activity.viewer));
+
+        checkUp(incidSeeByComuAcLayout);
     }
 
     @Test

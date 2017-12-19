@@ -45,7 +45,7 @@ import static org.junit.Assert.assertThat;
  * 2. We check that after a task which produces a notification, a notification is received in the phone.
  */
 @RunWith(AndroidJUnit4.class)
-public abstract class Incidencia_GCM_Test {
+public abstract class Incidencia_GCM_abs_Test {
 
     @Rule
     public IntentsTestRule<? extends Activity> intentRule = doIntentsTestRule();

@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad;
+package com.didekindroid.router;
 
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.Gravity;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 
 import org.junit.Before;
@@ -20,7 +21,7 @@ import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
@@ -35,7 +36,7 @@ import static org.junit.Assert.assertThat;
  * Time: 13:21
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMainTest {
+public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMain_abs_Test {
 
     @Rule
     public ActivityTestRule<ComuSearchAc> activityRule = new ActivityTestRule<>(ComuSearchAc.class, true, true);
@@ -43,7 +44,7 @@ public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMainTest {
     @Before
     public void setUp()
     {
-        viewerDrawer = activityRule.getActivity().viewerDrawer;
+        viewerDrawer = activityRule.getActivity().getViewerDrawer();
         assertThat(viewerDrawer.getController().isRegisteredUser(), is(false));
     }
 

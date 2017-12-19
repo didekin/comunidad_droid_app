@@ -9,6 +9,11 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentsSeeFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionRegFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkAppBarMenu;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -25,7 +30,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_comment_reg_ac_mn, R.id.incid_comment_reg_ac_layout);
+            checkAppBarMenu(activity, R.string.incid_comment_reg_ac_mn, incidCommentRegAcLayout);
         }
     },
 
@@ -33,7 +38,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_fr_layout);
+            checkAppBarMenu(activity, R.string.incid_comments_see_ac_mn, incidCommentsSeeFrLayout);
         }
     },
 
@@ -41,7 +46,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_reg_ac_mn, R.id.incid_reg_ac_layout);
+            checkAppBarMenu(activity, R.string.incid_reg_ac_mn, incidRegAcLayout);
         }
     },
 
@@ -50,7 +55,7 @@ public enum IncidenciaMenuTestUtils {
         public void checkMenuItem(Activity activity)
         {
             onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
-            waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_fragment_container_ac));
+            waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidResolucionRegFrLayout));
         }
     },
 
@@ -58,7 +63,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_open_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
+            checkAppBarMenu(activity, R.string.incid_open_see_by_comu_ac_mn, incidSeeByComuAcLayout);
         }
     },
 
@@ -66,7 +71,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_closed_see_by_comu_ac_mn, R.id.incid_see_by_comu_ac);
+            checkAppBarMenu(activity, R.string.incid_closed_see_by_comu_ac_mn, incidSeeByComuAcLayout);
         }
     },;
 

@@ -61,7 +61,7 @@ public class ActivityRouter implements ActivityRouterIf {
 
     private static final Map<Integer, Class<? extends Activity>> menuIdMap = new ArrayMap<>();
     private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdMap = new ArrayMap<>();
-    private static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
+    static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
 
     // Activity --> activity mapping (usually the default or the only option).
     static {
@@ -74,7 +74,6 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegUserComuAc.class, SeeUserComuByUserAc.class);
-        acRouterMap.put(UserComuDataAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
     }
 
@@ -105,7 +104,7 @@ public class ActivityRouter implements ActivityRouterIf {
 
     // =====================  Instance fields and methods ======================
 
-    private final IdentityCacher identityCacher;
+    final IdentityCacher identityCacher;
 
     public ActivityRouter()
     {
@@ -132,8 +131,16 @@ public class ActivityRouter implements ActivityRouterIf {
 
         Intent intent = getParentActivityIntent(activity);
         intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_NEW_TASK);
-        activity.setIntent(intent);
         navigateUpTo(activity, intent);
+    }
+
+    @SuppressWarnings("unused")
+    public static void doUpInFragment(Activity activity)
+    {
+        Timber.d("doUpInFragment()");
+        if (activity.getFragmentManager().getBackStackEntryCount() > 0) {
+            activity.getFragmentManager().popBackStack();
+        }
     }
 
     @Override
@@ -157,7 +164,11 @@ public class ActivityRouter implements ActivityRouterIf {
     public Class<? extends Activity> nextActivity(Class<? extends Activity> previousActivity)
     {
         Timber.d("nextActivity()");
-        return acRouterMap.get(previousActivity);
+        Class<? extends Activity> acClass = acRouterMap.get(previousActivity);
+        if (acClass != null){
+            return acClass;
+        }
+        return identityCacher.isRegisteredUser() ? defaultRegUser.activityToGo : defaultNoRegUser.activityToGo;
     }
 
     /* =========================  HELPERS CLASSES  =========================*/
@@ -175,6 +186,7 @@ public class ActivityRouter implements ActivityRouterIf {
         noComunidadFound_noRegUser(RegComuAndUserAndUserComuAc.class),
         // UsuarioComunidad.
         userComuItemSelected(UserComuDataAc.class),
+        afterModifiedUserComu(SeeUserComuByUserAc.class),
         // Password.
         modifyPswd(SeeUserComuByUserAc.class),
         notSendNewPswd(ComuSearchAc.class),
@@ -183,6 +195,7 @@ public class ActivityRouter implements ActivityRouterIf {
         writeNewComment(IncidCommentRegAc.class),
         writeNewIncidencia(IncidRegAc.class),
         selectedOpenIncid(IncidEditAc.class),
+        selectedClosedIncid(IncidResolucionEditAc.class),
         erasedOpenIncid(IncidSeeByComuAc.class),
         modifiedOpenIncid(IncidSeeByComuAc.class),
         afterRegNewIncid(IncidSeeByComuAc.class),
@@ -190,7 +203,6 @@ public class ActivityRouter implements ActivityRouterIf {
         afterResolucionReg(IncidEditAc.class),
         regResolucion(IncidResolucionRegAc.class),
         editResolucion(IncidResolucionEditAc.class),
-        regResolucionDuplicate(regResolucion.activityToGo),
         modifyResolucion(IncidEditAc.class),
         modifyResolucionError(IncidSeeByComuAc.class),
         closeIncidencia(IncidSeeByComuAc.class),

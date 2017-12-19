@@ -23,6 +23,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -161,7 +162,7 @@ public class UiExceptionTest {
         activity.runOnUiThread(() -> ue.processMe(activity));
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
-        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
 
         cleanOptions(CLEAN_JUAN);
     }

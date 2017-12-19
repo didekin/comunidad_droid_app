@@ -25,12 +25,15 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
@@ -181,9 +184,18 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testIncidSeeByComuMn() throws InterruptedException
+    public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
+        onView(withText(R.string.incid_see_by_user_ac_label)).check(matches(isDisplayed()));
+        checkUp(userComuDataLayout);
+    }
+
+    @Test
+    public void testIncidSeeCloseByComuMn() throws InterruptedException
+    {
+        INCID_SEE_CLOSED_BY_COMU_AC.checkMenuItem(activity);
+        onView(withText(R.string.incid_closed_by_user_ac_label)).check(matches(isDisplayed()));
         checkUp(userComuDataLayout);
     }
 

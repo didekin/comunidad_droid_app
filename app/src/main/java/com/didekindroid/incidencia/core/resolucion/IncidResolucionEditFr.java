@@ -34,7 +34,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -234,7 +234,7 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
             if (uiException != null) {
                 Intent intent = new Intent(getActivity(), modifyResolucionError.getActivityToGo());
                 intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId())
-                        .putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+                        .putExtra(INCID_CLOSED_LIST_FLAG.key, false);
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
@@ -275,11 +275,11 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
             if (uiException != null) {
                 Intent intent = new Intent(getActivity(), errorClosingIncid.getActivityToGo());
                 intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId())
-                        .putExtra(IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+                        .putExtra(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, false);
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
-                initAcFromRouter(null, closeIncidencia);
+                initAcFromRouter(INCID_CLOSED_LIST_FLAG.getBundleForKey(true), closeIncidencia);
             }
         }
     }

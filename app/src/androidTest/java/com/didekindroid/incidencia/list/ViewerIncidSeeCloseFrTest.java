@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.list;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -10,10 +11,7 @@ import android.widget.TextView;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu;
-import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.incidencia.list.IncidSeeByComuFr;
-import com.didekindroid.incidencia.list.ViewerIncidSeeCloseFr;
+import com.didekindroid.incidencia.utils.IncidBundleKey;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -44,7 +42,6 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isCom
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -55,7 +52,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -81,7 +77,7 @@ public class ViewerIncidSeeCloseFrTest {
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class, true) {
 
         @Override
-        protected void beforeActivityLaunched()
+        protected Intent getActivityIntent()
         {
             try {
                 signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
@@ -102,6 +98,7 @@ public class ViewerIncidSeeCloseFrTest {
             } catch (UiException | IOException e) {
                 fail();
             }
+            return new Intent().putExtra(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, true);
         }
     };
 
@@ -223,9 +220,7 @@ public class ViewerIncidSeeCloseFrTest {
     public void test_OnSuccessLoadSelectedItem() throws Exception
     {
         // Preconditions.
-        Bundle bundle = new Bundle(3);
-        bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
-        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolucion.getIncidencia());
+        Bundle bundle = new Bundle(1);
         bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
         // Exec.
         fragment.viewer.onSuccessLoadSelectedItem(bundle);

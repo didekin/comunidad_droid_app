@@ -49,7 +49,7 @@ import static org.junit.Assert.assertThat;
  * Time: 20:11
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerRegComuUserComuAcTest {
+public class ViewerRegComuUserComuAcTest {   // TODO: test de un alta de comunidad ya existente.
 
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> acActivityTestRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, true);

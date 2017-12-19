@@ -13,8 +13,10 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.list.IncidSeeByComuFr.newInstance;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_listFlag_should_be_initialized;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 public class IncidSeeByComuAc extends AppCompatActivity implements ActivityInitiatorIf,
@@ -31,12 +33,21 @@ public class IncidSeeByComuAc extends AppCompatActivity implements ActivityIniti
         setContentView(R.layout.incid_see_by_comu_ac);
         doToolBar(this, true);
 
+        assertTrue(getIntent().hasExtra(INCID_CLOSED_LIST_FLAG.key), incid_listFlag_should_be_initialized);
+        boolean isClosedList = getIntent().getBooleanExtra(INCID_CLOSED_LIST_FLAG.key, false);
+
+        if (isClosedList){
+            setTitle(R.string.incid_closed_by_user_ac_label);
+        } else {
+            setTitle(R.string.incid_see_by_user_ac_label);
+        }
+
         comunidadId = getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
         if (savedInstanceState != null) {
             fragment = (IncidSeeByComuFr) getSupportFragmentManager().findFragmentByTag(IncidSeeByComuFr.class.getName());
             return;
         }
-        initFragmentTx(newInstance(comunidadId, getIntent().getBooleanExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false)));
+        initFragmentTx(newInstance(comunidadId, isClosedList));
     }
 
 // ======================  ActivityInitiatorIf  ===================
@@ -71,9 +82,9 @@ public class IncidSeeByComuAc extends AppCompatActivity implements ActivityIniti
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        boolean isClosedIncidList = getIntent().getBooleanExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
-        menu.findItem(R.id.incid_see_open_by_comu_ac_mn).setEnabled(!isClosedIncidList).setVisible(!isClosedIncidList);
-        menu.findItem(R.id.incid_see_closed_by_comu_ac_mn).setEnabled(isClosedIncidList).setVisible(isClosedIncidList);
+        boolean isClosedIncidList = getIntent().getBooleanExtra(INCID_CLOSED_LIST_FLAG.key, false);
+        menu.findItem(R.id.incid_see_open_by_comu_ac_mn).setEnabled(isClosedIncidList).setVisible(isClosedIncidList);
+        menu.findItem(R.id.incid_see_closed_by_comu_ac_mn).setEnabled(!isClosedIncidList).setVisible(!isClosedIncidList);
         return true;
     }
 
@@ -90,16 +101,16 @@ public class IncidSeeByComuAc extends AppCompatActivity implements ActivityIniti
                 return true;
             case R.id.incid_see_open_by_comu_ac_mn:
                 initReplaceFragmentTx(newInstance(comunidadId, false));
-                getIntent().putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false); // TODO: test. Testar que cambia el menú cuando cambiamos el fragmento.
+                setTitle(R.string.incid_see_by_user_ac_label);
+                getIntent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
                 initReplaceFragmentTx(newInstance(comunidadId, true));
-                getIntent().putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, true);
+                setTitle(R.string.incid_closed_by_user_ac_label);
+                getIntent().putExtra(INCID_CLOSED_LIST_FLAG.key, true);
                 return true;
             case R.id.incid_reg_ac_mn:
-                Bundle bundle = new Bundle(1);
-                bundle.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
-                initAcFromMenu(bundle, resourceId);
+                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0)), resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

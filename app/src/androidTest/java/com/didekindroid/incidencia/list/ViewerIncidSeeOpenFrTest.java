@@ -20,16 +20,21 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.list.ViewerIncidSeeCloseFrTest.checkOnSuccessLoadItems;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
+import static com.didekindroid.testutil.ActivityTestUtils.isStatementTrue;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -71,7 +76,7 @@ public class ViewerIncidSeeOpenFrTest {
             } catch (IOException | UiException e) {
                 fail();
             }
-            return new Intent().putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+            return new Intent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);
         }
     };
 
@@ -86,8 +91,7 @@ public class ViewerIncidSeeOpenFrTest {
         fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager()
                 .findFragmentByTag(IncidSeeByComuFr.class.getName());
         // Wait until everything is ready.
-        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
-                checkIncidOpenListView(incidImportancia, activity, incidenciaUser.getFechaAltaResolucion())));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidOpenListView(incidImportancia, activity, incidenciaUser.getFechaAltaResolucion())));
         viewer = (ViewerIncidSeeOpenFr) fragment.viewer;
 
     }
@@ -134,12 +138,14 @@ public class ViewerIncidSeeOpenFrTest {
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null));
         // Exec and check.
-        checkViewerReplaceComponent(fragment.viewer, incidEditAcLayout, bundle);
+        waitAtMost(4, SECONDS).until(isStatementTrue(fragment.viewer != null));
+        fragment.viewer.onSuccessLoadSelectedItem(bundle);
+        onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void test_OnSuccessLoadItems() throws Exception
     {
-        ViewerIncidSeeCloseFrTest.checkOnSuccessLoadItems(incidImportancia, activity, fragment.viewer);
+        checkOnSuccessLoadItems(incidImportancia, activity, fragment.viewer);
     }
 }

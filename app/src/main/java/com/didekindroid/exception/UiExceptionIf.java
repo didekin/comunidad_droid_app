@@ -3,6 +3,7 @@ package com.didekindroid.exception;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.didekindroid.api.router.ActionForUiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 
 /**
@@ -17,18 +18,8 @@ public interface UiExceptionIf {
 
     void processMe(Activity activity, Intent intent);
 
-    void processMe(Activity activity, IntentForUiExceptionIf actionForUiException);
+    void processMe(Activity activity, ActionForUiExceptionIf actionForUiException);
 
     ErrorBean getErrorBean();
 
-    interface UiExceptionRouterIf {
-        IntentForUiExceptionIf getActionForException(UiException uiException);
-    }
-
-    interface IntentForUiExceptionIf {
-
-        Intent getIntentForException();
-
-        int getToastResourceId();
-    }
 }

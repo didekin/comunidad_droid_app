@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -149,14 +149,14 @@ public class ViewerIncidEditMinFrTest {
             viewer.incidImportanciaBean.setImportancia((short) 1);
             viewer.onClickButtonModify();
         });
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
         viewer.onSuccessModifyIncidImportancia(1);
-        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeOpenAcLayout)));
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
     }
 
     @Test

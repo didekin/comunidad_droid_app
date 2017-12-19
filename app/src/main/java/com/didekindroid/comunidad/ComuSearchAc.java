@@ -14,10 +14,12 @@ import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerManagerIf;
 import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.router.ViewerDrawerMain;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
+import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -70,6 +72,11 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         savedStateViewers(outState);
     }
 
+    public ViewerDrawerMain getViewerDrawer()
+    {
+        return viewerDrawer;
+    }
+
     // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
@@ -102,7 +109,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         Timber.d("initViewers()");
         viewerAc = newViewerComuSearch(this);
         viewerAc.doViewInViewer(savedInstanceState, null);
-        viewerDrawer = ViewerDrawerMain.newViewerDrawerMain(this);
+        viewerDrawer = newViewerDrawerMain(this);
         viewerDrawer.doViewInViewer(savedInstanceState, null);
     }
 

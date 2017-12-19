@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -52,7 +51,7 @@ public class FragmentInitiatorTest {
     {
         // Preconditions.
         Bundle bundle = new Bundle(3);
-        bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
+        bundle.putBoolean("testKey", true);
         Fragment mockFr = new ListMockFr();
         // Exec.
         activity.runOnUiThread(() -> {
@@ -61,7 +60,7 @@ public class FragmentInitiatorTest {
         });
         // Check.
         waitAtMost(4, SECONDS).untilTrue(isRun);
-        assertThat(mockFr.getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key), is(true));
+        assertThat(mockFr.getArguments().getBoolean("testKey"), is(true));
         assertThat(activity.getSupportFragmentManager().findFragmentByTag(mockFr.getClass().getName()), notNullValue());
     }
 

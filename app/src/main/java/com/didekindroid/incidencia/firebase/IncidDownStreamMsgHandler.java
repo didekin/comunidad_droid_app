@@ -30,7 +30,7 @@ import static android.media.RingtoneManager.getDefaultUri;
 import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.firebase.NotificationChannelId.INCID_NOTIFICATION_CHANNEL;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
@@ -58,7 +58,7 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
             Intent comuSearch = new Intent(new Intent(context, ComuSearchAc.class));
             Intent incidSeeComu = new Intent(context, IncidSeeByComuAc.class);
             incidSeeComu.putExtra(COMUNIDAD_ID.key, parseLong(data.get(comunidadId_key)))
-                    .putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false); // Open incidencias list.
+                    .putExtra(INCID_CLOSED_LIST_FLAG.key, false); // Open incidencias list.
             return doCommonStackBuilder(context, incidSeeComu, comuSearch);
         }
 

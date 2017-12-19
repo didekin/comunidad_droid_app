@@ -1,10 +1,11 @@
-package com.didekindroid.comunidad;
+package com.didekindroid.router;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.exception.UiException;
 
 import org.junit.After;
@@ -17,15 +18,14 @@ import java.io.IOException;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.incid_closed;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.incid_open;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.user_comus;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.user_data;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.incid_closed;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.incid_open;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.user_comus;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.user_data;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
@@ -48,7 +48,7 @@ import static org.junit.Assert.fail;
  * Time: 13:21
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMainTest {
+public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMain_abs_Test {
 
     @Rule
     public IntentsTestRule<ComuSearchAc> intentRule = new IntentsTestRule<ComuSearchAc>(ComuSearchAc.class) {
@@ -68,7 +68,7 @@ public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMainTest {
     @Before
     public void setUp()
     {
-        viewerDrawer = intentRule.getActivity().viewerDrawer;
+        viewerDrawer = intentRule.getActivity().getViewerDrawer();
         assertThat(viewerDrawer.getController().isRegisteredUser(), is(true));
     }
 
@@ -138,7 +138,7 @@ public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMainTest {
         checkMainDrawerMenu(confidencialidad.resourceId, confidencialidadLayout, comuSearchAcLayout);
         checkMainDrawerMenu(user_comus.resourceId, seeUserComuByUserFrRsId, comuSearchAcLayout);
         checkMainDrawerMenu(user_data.resourceId, userDataAcRsId, comuSearchAcLayout);
-        checkMainDrawerMenu(incid_open.resourceId, incidSeeOpenAcLayout, comuSearchAcLayout);
-        checkMainDrawerMenu(incid_closed.resourceId, incidSeeCloseAcLayout, comuSearchAcLayout);
+        checkMainDrawerMenu(incid_open.resourceId, incidSeeByComuAcLayout, comuSearchAcLayout);
+        checkMainDrawerMenu(incid_closed.resourceId, incidSeeByComuAcLayout, comuSearchAcLayout);
     }
 }

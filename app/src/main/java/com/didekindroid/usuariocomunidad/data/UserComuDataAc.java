@@ -19,6 +19,7 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc.newViewerUserComuDataAc;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
@@ -133,15 +134,24 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
+        Bundle bundle;
+
         switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
             case R.id.comu_data_ac_mn:
-            case R.id.incid_see_open_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                Bundle bundle = new Bundle(1);
+                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(oldUserComu.getComunidad().getC_Id()), resourceId);
+                return true;
+            case R.id.incid_see_open_by_comu_ac_mn:
+                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(false);
+                bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
+                initAcFromMenu(bundle, resourceId);
+                return true;
+            case R.id.incid_see_closed_by_comu_ac_mn:
+                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(true);
                 bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
                 initAcFromMenu(bundle, resourceId);
                 return true;

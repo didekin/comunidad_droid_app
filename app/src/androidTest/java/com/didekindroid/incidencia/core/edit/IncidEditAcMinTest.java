@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
-import com.didekindroid.usuario.userdata.UserDataAc;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -26,15 +26,19 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.app.TaskStackBuilder.create;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.core.edit.IncidEditAcMaxTest.checkOnStop;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
@@ -67,17 +71,15 @@ import static org.junit.Assert.fail;
  * Usuario inicial en sesión SIN permisos para modificar o borrar una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidEditAcMinTest extends IncidEditAcTest {
+public class IncidEditAcMinTest {
 
-    IncidImportancia incidImportanciaIntent;
     IncidImportancia incidImportancia_0;
-
+    IncidAndResolBundle resolBundle;
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            IncidAndResolBundle resolBundle = null;
             try {
                 incidImportancia_0 = insertGetIncidImportancia(COMU_REAL_PEPE);
                 // Registro userComu en misma comunidad.
@@ -85,29 +87,26 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
                 userComuMockDao.regUserAndUserComu(userComuJuan).execute();
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                incidImportanciaIntent = incidenciaDao.seeIncidImportancia(incidImportancia_0.getIncidencia().getIncidenciaId()).getIncidImportancia();
-                resolBundle = new IncidAndResolBundle(incidImportanciaIntent, false);
+                resolBundle = incidenciaDao.seeIncidImportancia(incidImportancia_0.getIncidencia().getIncidenciaId());
             } catch (IOException | UiException e) {
                 fail();
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Intent intentStack = new Intent(getTargetContext(), UserComuDataAc.class);
-                intentStack.putExtra(USERCOMU_LIST_OBJECT.key,
-                        new UsuarioComunidad.UserComuBuilder(
-                                incidImportanciaIntent.getUserComu().getComunidad(),
-                                incidImportanciaIntent.getUserComu().getUsuario()
-                        ).userComuRest(COMU_REAL_JUAN)
-                                .build());
-                create(getTargetContext()).addNextIntent(intentStack).addParentStack(UserDataAc.class).startActivities();
+            if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+                Intent intent0 = new Intent(getTargetContext(), UserComuDataAc.class)
+                        .putExtra(USERCOMU_LIST_OBJECT.key,
+                                new UsuarioComunidad.UserComuBuilder(
+                                        resolBundle.getIncidImportancia().getUserComu().getComunidad(),
+                                        resolBundle.getIncidImportancia().getUserComu().getUsuario()
+                                ).userComuRest(COMU_REAL_JUAN).build()
+                        );
+                Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
+                create(getTargetContext()).addNextIntent(intent0).addNextIntentWithParentStack(intent1).startActivities();
             }
-
-            Intent intent = new Intent();
-            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
-            return intent;
+            return new Intent().putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         }
     };
-
+    IncidEditAc activity;
     IncidenciaDataDbHelper dbHelper;
 
     @Before
@@ -115,8 +114,9 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
     {
         activity = activityRule.getActivity();
         dbHelper = new IncidenciaDataDbHelper(activity);
-        // Usuario sin registro previo de resolBundle.
-        assertThat(incidImportanciaIntent.getImportancia(), is((short) 0));
+        // Preconditions.
+        assertThat(resolBundle.getIncidImportancia().getImportancia(), is((short) 0));
+        assertThat(resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(false));
     }
 
     @After
@@ -124,7 +124,7 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
     {
         dbHelper.close();
         cleanOptions(CLEAN_JUAN_AND_PEPE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
     }
@@ -134,11 +134,13 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent);
+        checkDataEditMinFr(dbHelper, activity, resolBundle.getIncidImportancia());
         AtomicBoolean isChecked = new AtomicBoolean(false);
         isChecked.compareAndSet(false,
                 checkImportanciaUser(new ImportanciaUser(USER_PEPE.getAlias(), incidImportancia_0.getImportancia()), activity));
         waitAtMost(4, SECONDS).untilTrue(isChecked);
+
+        checkUp(incidSeeByComuAcLayout);
     }
 
     @Test
@@ -150,9 +152,9 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
         // Modify.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         // Check.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(seeUserComuByUserFrRsId);
         }
     }
@@ -163,14 +165,11 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
         // Modify.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         // Check.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
-            AtomicBoolean isChecked = new AtomicBoolean(false);
-            isChecked.compareAndSet(false, checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent));
-            waitAtMost(4, SECONDS).untilTrue(isChecked);
-            checkImportanciaUser(new ImportanciaUser(USER_PEPE.getAlias(), incidImportancia_0.getImportancia()), activity);
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkBack(onView(withId(incidSeeByComuAcLayout)));
+            checkDataEditMinFr(dbHelper, activity, resolBundle.getIncidImportancia());
         }
     }
 
@@ -182,5 +181,11 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
         IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMinFr.class.getName());
         assertThat(fragment.viewerInjector, instanceOf(IncidEditAc.class));
         assertThat(fragment.viewer.getParentViewer(), CoreMatchers.is(activity.viewer));
+    }
+
+    @Test
+    public void testOnStop()
+    {
+        checkOnStop(activity);
     }
 }

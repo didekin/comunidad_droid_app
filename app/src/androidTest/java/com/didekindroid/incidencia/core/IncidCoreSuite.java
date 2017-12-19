@@ -13,6 +13,7 @@ import com.didekindroid.incidencia.core.reg.IncidRegAc_GCM_Test;
 import com.didekindroid.incidencia.core.reg.ViewerIncidRegAcTest;
 import com.didekindroid.incidencia.core.reg.ViewerIncidRegFrTest;
 import com.didekindroid.incidencia.core.resolucion.IncidRegResolucion_GCM_Test;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAcTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditFrTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionRegAcTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFrTest;
@@ -35,6 +36,7 @@ import org.junit.runners.Suite;
         ViewerIncidEditAcTest.class,
         ViewerIncidEditMaxFrTest.class,
         ViewerIncidEditMinFrTest.class,
+        // core.edit.importancia
         ViewerIncidSeeUserComuImportanciaTest.class,
         // core.reg
         IncidRegAc_GCM_Test.class,
@@ -43,6 +45,7 @@ import org.junit.runners.Suite;
         ViewerIncidRegFrTest.class,
         // core.resolucion
         IncidRegResolucion_GCM_Test.class,
+        IncidResolucionEditAcTest.class,
         IncidResolucionEditFrTest.class,
         IncidResolucionRegAcTest.class,
         IncidResolucionSeeFrTest.class,

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -198,6 +199,7 @@ public final class IncidEspressoTestUtils {
     @SuppressWarnings("unchecked")
     public static Matcher<View> checkIncidClosedListView(IncidImportancia incidImportancia, Activity activity)
     {
+        ViewMatchers.assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
         return allOf(
                 withId(R.id.incid_see_cierre_block),
                 hasDescendant(allOf(
@@ -214,6 +216,7 @@ public final class IncidEspressoTestUtils {
 
     public static Matcher<View> checkIncidOpenListView(IncidImportancia incidImportancia, Activity activity, Timestamp fechaAltaResolucion)
     {
+        ViewMatchers.assertThat(activity.getTitle(), is(activity.getText(R.string.incid_see_by_user_ac_label)));
         return allOf(
                 withId(R.id.incid_see_resolucion_block),
                 hasDescendant(allOf(

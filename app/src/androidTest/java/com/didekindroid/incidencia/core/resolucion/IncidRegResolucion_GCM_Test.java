@@ -8,7 +8,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.Incidencia_GCM_Test;
+import com.didekindroid.incidencia.core.Incidencia_GCM_abs_Test;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -38,7 +38,7 @@ import static org.junit.Assert.assertThat;
  * Test GCM para el registro de la resolución de una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_Test {
+public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_abs_Test {
 
     IncidImportancia incidImportancia;
 

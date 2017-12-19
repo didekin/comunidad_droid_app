@@ -1,16 +1,14 @@
 package com.didekindroid.api;
 
-import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.exception.ActionForUiException;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,25 +65,7 @@ public class ViewerTest {
     {
         UiException uiException = new UiException(
                 new ErrorBean(BAD_REQUEST),
-                new UiExceptionIf.UiExceptionRouterIf() {
-                    @Override
-                    public UiExceptionIf.IntentForUiExceptionIf getActionForException(UiException uiException)
-                    {
-                        return new UiExceptionIf.IntentForUiExceptionIf() {
-                            @Override
-                            public Intent getIntentForException()
-                            {
-                                return ActivityNextMock.class;
-                            }
-
-                            @Override // NOT USED in test.
-                            public int getToastResourceId()
-                            {
-                                return 0;
-                            }
-                        };
-                    }
-                }
+                uiException1 -> new ActionForUiException(0, ActivityNextMock.class)
         );
 
         viewer.onErrorInObserver(uiException);
@@ -126,6 +106,6 @@ public class ViewerTest {
     @Test
     public void test_GetParentViewer() throws Exception
     {
-       assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(parentViewer));
+        assertThat(viewer.getParentViewer(), is(parentViewer));
     }
 }

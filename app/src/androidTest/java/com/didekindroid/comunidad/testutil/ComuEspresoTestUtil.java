@@ -22,6 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -308,7 +309,7 @@ public final class ComuEspresoTestUtil {
                         isA(Municipio.class),
                         is(municipio)
                 )));
-        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
                 allOf(withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.municipio_spinner)),
                         withText(is(municipio.getNombre()))

@@ -6,7 +6,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.Incidencia_GCM_Test;
+import com.didekindroid.incidencia.core.Incidencia_GCM_abs_Test;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
@@ -30,7 +30,7 @@ import static org.junit.Assert.fail;
  * Test de integración GCM para la consulta de incidencias abiertas.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeOpenByComuAc_GCM_Test extends Incidencia_GCM_Test {
+public class IncidSeeByComuAc_Open_GCM_Test extends Incidencia_GCM_abs_Test {
 
     Usuario pepe;
 
@@ -58,7 +58,7 @@ public class IncidSeeOpenByComuAc_GCM_Test extends Incidencia_GCM_Test {
                 } catch (IOException | UiException e) {
                     fail();
                 }
-                return new Intent().putExtra(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+                return new Intent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);
             }
         };
     }

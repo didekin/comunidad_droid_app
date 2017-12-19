@@ -116,9 +116,7 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
                 doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
-                Bundle bundle = new Bundle(1);
-                bundle.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
-                initAcFromMenu(bundle, resourceId);
+                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0L)), resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -37,8 +37,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -164,13 +164,19 @@ public class ViewerUserComuDataAcTest {
     @Test
     public void test_ModifyComuObserver_1()
     {
-        execCheckUpdateMenu(true);
+        // Exec and check.
+        just(1).subscribeWith(viewer.new ModifyUserComuObserver(true));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        assertThat(viewer.showComuDataMn.get(), is(true));
     }
 
     @Test
     public void test_ModifyComuObserver_2()
     {
-        execCheckUpdateMenu(false);
+        // Exec and check.
+        just(1).subscribeWith(viewer.new ModifyUserComuObserver(false));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        assertThat(viewer.showComuDataMn.get(), is(false));
     }
 
     @Test
@@ -211,15 +217,5 @@ public class ViewerUserComuDataAcTest {
         AtomicReference<Menu> atomicItem = new AtomicReference<>(null);
         atomicItem.compareAndSet(null, activity.viewer.acMenu);
         waitAtMost(4, SECONDS).untilAtomic(atomicItem, notNullValue());
-    }
-
-    void execCheckUpdateMenu(boolean upDateMenu)
-    {
-        // Preconditions.
-        viewer.showComuDataMn.set(!upDateMenu);
-        // Exec and check.
-        just(1).subscribeWith(viewer.new ModifyUserComuObserver(upDateMenu));
-        waitAtMost(8, SECONDS).untilAtomic(viewer.showComuDataMn, is(upDateMenu));
-        checkViewerReplaceComponent(viewer, seeUserComuByUserFrRsId, null);
     }
 }

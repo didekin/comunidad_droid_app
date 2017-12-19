@@ -1,24 +1,24 @@
 package com.didekindroid.incidencia.list;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.incidencia.list.IncidSeeByComuFr;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static android.app.TaskStackBuilder.create;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -34,11 +34,13 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doCom
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
@@ -48,11 +50,11 @@ import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.use
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -62,7 +64,7 @@ import static org.junit.Assert.fail;
  * Time: 11:35
  */
 
-public class IncidSeeByComuAcTest {
+public class IncidSeeByComuAc_Close_Test {
 
     IncidImportancia incidImportancia2;
     IncidImportancia incidImportancia1;
@@ -105,20 +107,17 @@ public class IncidSeeByComuAcTest {
             } catch (UiException | IOException e) {
                 fail();
             }
-            Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_ID.key, incidImportancia1.getIncidencia().getComunidadId());
-            return intent;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();
+            }
+
+            return new Intent().putExtra(COMUNIDAD_ID.key, incidImportancia1.getIncidencia().getComunidadId()).putExtra(INCID_CLOSED_LIST_FLAG.key, true);
         }
     };
 
     IncidSeeByComuAc activity;
     IncidSeeByComuFr fragment;
-
-    @BeforeClass
-    public static void relax() throws InterruptedException
-    {
-        SECONDS.sleep(2);
-    }
 
     @Before
     public void setUp() throws Exception
@@ -130,6 +129,9 @@ public class IncidSeeByComuAcTest {
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activityRule.getActivity());
+        }
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -137,16 +139,24 @@ public class IncidSeeByComuAcTest {
     //  ==================================== INTEGRATION TESTS  ====================================
 
     @Test
-    public void testOnCreate() throws Exception
+    public void testOnCreate_1() throws Exception
+    {
+        assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(seeUserComuByUserFrRsId);
+        }
+    }
+
+    @Test
+    public void testOnCreate_2() throws Exception
     {
         /* CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).*/
-        assertThat(activity, notNullValue());
-        assertThat(fragment, notNullValue());
-        // Inicializa correctamente fragment.
         assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(incidImportancia1.getIncidencia().getComunidadId()));
+        assertThat(fragment.getArguments().getBoolean(INCID_CLOSED_LIST_FLAG.key), is(true));
 
+        assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(incidSeeCloseAcLayout)).check(matches(isDisplayed()));
+        onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
         onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
 
@@ -165,7 +175,7 @@ public class IncidSeeByComuAcTest {
         waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
         waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
-        checkUp(incidSeeCloseAcLayout);
+        checkUp(incidSeeByComuAcLayout);
     }
 
     @Test

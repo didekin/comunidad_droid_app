@@ -10,21 +10,25 @@ import com.didekindroid.R;
 import com.didekindroid.api.router.FragmentInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_initialized;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
  * <p>
  * Preconditions:
- * 1. An intent key is received with an IncidImportancia belonging.
+ * 1. An intent may received with an IncidImportancia instance.
+ * 2. An intent may received with an incidencia.
  * 2. An intent key with a Resolucion instance may be received.
  * Postconditions:
  * 1. If NOT Resolucion intent is received and the user has authority 'adm':
@@ -42,18 +46,14 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
 
     IncidImportancia incidImportancia;
     Resolucion resolucion;
+    Incidencia incidencia;
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)   // TODO: completar documento navegación.
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
-        // Preconditions.
-        incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        resolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
-        boolean hasAdmRole = incidImportancia.getUserComu().hasAdministradorAuthority();
-
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
@@ -62,35 +62,23 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
             return;
         }
 
+        // Preconditions.
+        assertTrue(getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key) || getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key), incidencia_should_be_initialized);
+        incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
+        resolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
+        boolean hasAdmRole = getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key) && incidImportancia.getUserComu().hasAdministradorAuthority();
+        incidencia = getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key) ? ((Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key)).getIncidencia()
+                : incidImportancia.getIncidencia();
+
         if (resolucion != null) {
-            if (hasAdmRole) {
+            if (hasAdmRole && incidencia.getFechaCierre() == null) {
                 initFragmentTx(IncidResolucionEditFr.newInstance(incidImportancia, resolucion));
             } else {
-                initFragmentTx(IncidResolucionSeeFr.newInstance(incidImportancia, resolucion));
+                initFragmentTx(IncidResolucionSeeFr.newInstance(incidencia, resolucion));
             }
         } else {
             initFragmentTx(IncidResolucionRegFr.newInstance(incidImportancia));
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        Timber.d("onSaveInstanceState()");
-        if (resolucion != null) {
-            outState.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
-        }
-        outState.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onRestoreInstanceState()");
-        resolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION_OBJECT.key);
-        incidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA_OBJECT.key);
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

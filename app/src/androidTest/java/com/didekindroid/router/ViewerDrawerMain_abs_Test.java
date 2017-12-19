@@ -1,22 +1,20 @@
-package com.didekindroid.comunidad;
+package com.didekindroid.router;
 
-import android.support.design.widget.NavigationView;
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem;
+import com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.view.Gravity.LEFT;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.default_menu;
-import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.menuItemsToDraw;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.default_menu;
+import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.menuItemsToDraw;
 import static com.didekindroid.testutil.ActivityTestUtils.checkDrawerMenu;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,7 +26,7 @@ import static org.junit.Assert.assertThat;
  * Time: 16:35
  */
 @SuppressWarnings("AbstractClassWithoutAbstractMethods")
-abstract class ViewerDrawerMainTest {
+abstract class ViewerDrawerMain_abs_Test {
 
     final int drawer_main_layout = R.id.drawer_main_layout;
     final int drawer_nav_view = R.id.drawer_main_nav_view;
@@ -45,7 +43,7 @@ abstract class ViewerDrawerMainTest {
         }
         item = drawerMn.findItem(confidencialidad.resourceId);
         assertThat(item.isEnabled() && item.isVisible(), is(true));
-        onView(withId(default_menu.resourceId)).check(ViewAssertions.doesNotExist());
+        onView(withId(default_menu.resourceId)).check(doesNotExist());
     }
 
     void checkMainDrawerMenu(int menuItemId, int nexAcLayoutId, int upLayout)

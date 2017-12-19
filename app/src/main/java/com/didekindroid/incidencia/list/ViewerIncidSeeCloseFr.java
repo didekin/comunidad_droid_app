@@ -15,8 +15,7 @@ import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerSelectList;
-import com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFr;
-import com.didekindroid.api.router.FragmentInitiatorIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -26,6 +25,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.selectedClosedIncid;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 import static com.didekindroid.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -34,7 +34,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * User: pedro@didekin
  * Date: 18/03/17
  * Time: 11:01
- *
+ * <p>
  * Preconditions:
  * 1. The user is NOW registered in the comunidad whose incidencias are shown.
  * 2. The incidencias shown have been registered in the last 24 months and are closed.
@@ -52,10 +52,10 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
-        implements SpinnerEventListener, FragmentInitiatorIf<IncidResolucionSeeFr> {
+        implements SpinnerEventListener, ActivityInitiatorIf {
 
     ViewerComuSpinner comuSpinnerViewer;
-    private View emptyListView;
+    View emptyListView;
 
     ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
     {
@@ -68,7 +68,7 @@ public class ViewerIncidSeeCloseFr extends
     static ViewerIncidSeeCloseFr newViewerIncidSeeClose(View view, AppCompatActivity activity, boolean isListClosed)
     {
         Timber.d("newViewerIncidSeeClose()");
-        if (!isListClosed){
+        if (!isListClosed) {
             return ViewerIncidSeeOpenFr.newViewerIncidSeeOpen(view, activity);
         }
         ViewerIncidSeeCloseFr parentInstance = new ViewerIncidSeeCloseFr(view, activity);
@@ -164,7 +164,7 @@ public class ViewerIncidSeeCloseFr extends
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        initReplaceFragmentTx(bundle, IncidResolucionSeeFr.newInstance(bundle));
+        initAcFromRouter(bundle, selectedClosedIncid);
     }
 
     void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
@@ -177,15 +177,6 @@ public class ViewerIncidSeeCloseFr extends
             view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
         }
     }
-
-    // ==================================  FragmentInitiatorIf  =================================
-
-    @Override
-    public int getContainerId()
-    {
-        return R.id.incid_see_by_comu_ac;
-    }
-
 
     // ==================================  SpinnerEventListener  =================================
 

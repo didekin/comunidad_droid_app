@@ -30,6 +30,9 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrNotErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMinFr;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionRegFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
@@ -119,7 +122,7 @@ public class IncidEditAc_Mn1_Test {
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem(activity);
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_edit_fr_layout));
 
-        checkBack(onView(withId(R.id.incid_resolucion_edit_fr_layout)));
+        checkBack(onView(withId(incidResolucionEditFrLayout)));
         checkScreenEditMaxPowerFrNotErase(activity.resolBundle);
     }
 
@@ -138,7 +141,7 @@ public class IncidEditAc_Mn1_Test {
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem(activity);
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_reg_frg_layout));
 
-        checkBack(onView(withId(R.id.incid_resolucion_reg_frg_layout)));
+        checkBack(onView(withId(incidResolucionRegFrLayout)));
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
     }
 
@@ -185,9 +188,9 @@ public class IncidEditAc_Mn1_Test {
         // Run
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem(activity);
         // Check
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_see_fr_layout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidResolucionSeeFrLayout));
 
-        checkBack(onView(withId(R.id.incid_resolucion_see_fr_layout)));
+        checkBack(onView(withId(incidResolucionSeeFrLayout)));
         checkScreenEditMinFr();
 
         cleanOptions(CLEAN_JUAN);

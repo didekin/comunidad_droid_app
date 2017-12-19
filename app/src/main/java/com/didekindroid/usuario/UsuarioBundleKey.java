@@ -1,5 +1,7 @@
 package com.didekindroid.usuario;
 
+import android.os.Bundle;
+
 import com.didekindroid.util.BundleKey;
 
 /**
@@ -11,10 +13,17 @@ import com.didekindroid.util.BundleKey;
 public enum UsuarioBundleKey implements BundleKey {
 
     login_counter_atomic_int,
-    user_name,
+    user_name {
+        @Override
+        public Bundle getBundleForKey(Object extraValue)
+        {
+            Bundle bundle = new Bundle(1);
+            bundle.putString(key, String.class.cast(extraValue));
+            return bundle;
+        }
+    },
     user_alias,
-    usuario_object,
-    ;
+    usuario_object,;
 
     public final String key;
 

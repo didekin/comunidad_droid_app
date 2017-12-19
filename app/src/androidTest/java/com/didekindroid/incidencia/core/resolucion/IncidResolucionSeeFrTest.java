@@ -8,9 +8,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.edit.IncidEditAc;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.Avance;
-import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import static android.app.TaskStackBuilder.create;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
@@ -40,9 +40,9 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -106,17 +106,16 @@ public class IncidResolucionSeeFrTest {
             fail();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Intent intentStack = new Intent(getTargetContext(), IncidEditAc.class);
-            intentStack.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-            create(getTargetContext()).addNextIntentWithParentStack(intentStack).startActivities();
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
+            create(getTargetContext()).addNextIntentWithParentStack(intent1).startActivities();
         }
     }
 
     @After
     public void tearDown() throws Exception
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
         cleanOptions(CLEAN_JUAN_AND_PEPE);
@@ -149,8 +148,8 @@ public class IncidResolucionSeeFrTest {
                         withText(USER_PEPE.getAlias()) // usuario en sesión que modifica resolución.
                 )))).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(incidEditAcLayout);
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
         }
     }
 
@@ -170,8 +169,8 @@ public class IncidResolucionSeeFrTest {
                 withText(R.string.incid_resolucion_no_avances_message)
         )).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(incidEditAcLayout);
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
         }
     }
 

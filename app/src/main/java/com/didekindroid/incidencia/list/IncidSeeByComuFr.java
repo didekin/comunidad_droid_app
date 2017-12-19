@@ -16,7 +16,7 @@ import com.didekinlib.model.comunidad.Comunidad;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewIncidencia;
 
 /**
@@ -34,7 +34,7 @@ public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
         IncidSeeByComuFr fr = new IncidSeeByComuFr();
         Bundle args = new Bundle(1);
         args.putLong(COMUNIDAD_ID.key, comunidadId);
-        args.putBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key, booleanExtra);
+        args.putBoolean(INCID_CLOSED_LIST_FLAG.key, booleanExtra);
         fr.setArguments(args);
         return fr;
     }
@@ -55,7 +55,7 @@ public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedState);
-        viewer = ViewerIncidSeeCloseFr.newViewerIncidSeeClose(frView, (AppCompatActivity) getActivity(), getArguments().getBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key));
+        viewer = ViewerIncidSeeCloseFr.newViewerIncidSeeClose(frView, (AppCompatActivity) getActivity(), getArguments().getBoolean(INCID_CLOSED_LIST_FLAG.key));
         final long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
         viewer.doViewInViewer(savedState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
     }

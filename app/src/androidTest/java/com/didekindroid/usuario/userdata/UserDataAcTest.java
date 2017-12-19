@@ -40,7 +40,7 @@ import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_A
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceCmp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -192,7 +192,7 @@ public class UserDataAcTest {
     @Test
     public void testReplaceRootView()
     {
-        checkViewerReplaceComponent(activity.viewer, seeUserComuByUserFrRsId, null);
+        checkViewerReplaceCmp(activity.viewer, seeUserComuByUserFrRsId, null);
     }
 
     //    =================================  MENU TESTS ==================================

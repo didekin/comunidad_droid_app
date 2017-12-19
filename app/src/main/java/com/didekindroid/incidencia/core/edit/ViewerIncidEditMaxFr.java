@@ -21,7 +21,7 @@ import timber.log.Timber;
 import static android.view.View.GONE;
 import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_deleted;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.erasedOpenIncid;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
@@ -106,7 +106,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityIn
         Timber.d("onSuccessEraseIncidencia()");
         assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
         Bundle bundle = new Bundle(1);
-        bundle.putBoolean(INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+        bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
         initAcFromRouter(bundle, erasedOpenIncid);
     }
 

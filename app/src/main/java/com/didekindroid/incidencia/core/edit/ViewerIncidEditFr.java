@@ -92,7 +92,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
     {
         Timber.d("onSuccessModifyIncidImportancia()");
         Bundle bundle = new Bundle(1);
-        bundle.putBoolean(IncidBundleKey.INCIDENCIAS_CLOSED_LIST_FLAG.key, false);
+        bundle.putBoolean(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, false);
         initAcFromRouter(bundle, erasedOpenIncid);
     }
 

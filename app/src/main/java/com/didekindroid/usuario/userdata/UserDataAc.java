@@ -81,9 +81,7 @@ public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf
                 doUpMenu(this);
                 return true;
             case R.id.password_change_ac_mn:
-                Bundle bundle = new Bundle(1);
-                bundle.putString(user_name.key, viewer.oldUser.get().getUserName());
-                initAcFromMenu(bundle,resourceId);
+                initAcFromMenu(user_name.getBundleForKey(viewer.oldUser.get().getUserName()),resourceId);
             case R.id.delete_me_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:

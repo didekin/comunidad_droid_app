@@ -17,7 +17,6 @@ import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.runner.lifecycle.Stage;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.DatePicker;
@@ -75,6 +74,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance;
+import static android.view.Gravity.LEFT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
@@ -109,6 +109,11 @@ public final class ActivityTestUtils {
     public static Callable<Boolean> isActivityDying(final Activity activity)
     {
         return () -> activity.isFinishing() || activity.isDestroyed();
+    }
+
+    public static Callable<Boolean> isStatementTrue(Boolean objetToTest)
+    {
+        return () -> objetToTest;
     }
 
     public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceIds)
@@ -343,7 +348,7 @@ public final class ActivityTestUtils {
 
     public static void checkDrawerMenu(int drawerLayoutId, int navigationViewId, int menuResourceId, int actionResourceId)
     {
-        onView(withId(drawerLayoutId)).check(matches(isClosed(Gravity.LEFT))).perform(open());
+        onView(withId(drawerLayoutId)).check(matches(isClosed(LEFT))).perform(open());
         onView(withId(navigationViewId)).perform(navigateTo(menuResourceId));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
     }
@@ -411,7 +416,7 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkViewerReplaceComponent(final ViewerIf<? extends View, ? extends ControllerIf> viewer, int resorceIdNextView, Bundle bundle)
+    public static void checkViewerReplaceCmp(final ViewerIf<? extends View, ? extends ControllerIf> viewer, int resorceIdNextView, Bundle bundle)
     {
         if (bundle == null) {
             bundle = new Bundle(0);

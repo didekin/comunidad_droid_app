@@ -167,9 +167,7 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
                 return true;
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
-                Bundle bundle = new Bundle(1);
-                bundle.putSerializable(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
-                initAcFromMenu(bundle, resourceId);
+                initAcFromMenu(INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()), resourceId);
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 viewer.checkResolucion();

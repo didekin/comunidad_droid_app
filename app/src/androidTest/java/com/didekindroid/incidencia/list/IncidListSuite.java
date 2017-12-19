@@ -10,17 +10,15 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // list.close
         CtrlerIncidSeeCloseByComuTest.class,
-        ViewerIncidSeeCloseFrTest.class,
-        IncidSeeByComuAc_Mn_Test.class,
-        IncidSeeByComuAcTest.class,
-        // list.open
         CtrlerIncidSeeOpenByComuTest.class,
+        IncidSeeByComuAc_Close_Mn_Test.class,
+        IncidSeeByComuAc_Close_Test.class,
+        IncidSeeByComuAc_Open_GCM_Test.class,
+        IncidSeeByComuAc_Open_Mn_Test.class,
+        IncidSeeByComuAc_Open_Test.class,
+        ViewerIncidSeeCloseFrTest.class,
         ViewerIncidSeeOpenFrTest.class,
-        IncidSeeOpenByComuAc_GCM_Test.class,
-        IncidSeeOpenByComuAc_Mn_Test.class,
-        IncidSeeOpenByComuAcTest.class,
 })
 public class IncidListSuite {
 }

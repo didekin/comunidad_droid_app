@@ -32,7 +32,7 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunic
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceCmp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -118,7 +118,7 @@ public class ViewerComuDataAcTest {
     @Test
     public void test_ReplaceComponent() throws Exception
     {
-        checkViewerReplaceComponent(viewer, seeUserComuByUserFrRsId, null);
+        checkViewerReplaceCmp(viewer, seeUserComuByUserFrRsId, null);
     }
 
     @Test
