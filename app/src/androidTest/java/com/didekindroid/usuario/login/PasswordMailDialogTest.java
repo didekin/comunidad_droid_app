@@ -26,12 +26,6 @@ public class PasswordMailDialogTest {
     @Test
     public void test_NewInstance() throws Exception
     {
-        try {
-            newInstance(null);
-        } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(bean_fromView_should_be_initialized));
-        }
-
         UsuarioBean usuarioBean = new UsuarioBean("email@mail.es", "alias", "password", "password");
         usuarioBean.validateLoginData(getTargetContext().getResources(), new StringBuilder(0));
         PasswordMailDialog dialog = newInstance(usuarioBean);
