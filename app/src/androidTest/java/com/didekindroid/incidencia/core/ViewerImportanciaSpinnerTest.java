@@ -79,7 +79,7 @@ public class ViewerImportanciaSpinnerTest {
     public void testOnSuccessLoadItems()
     {
         final List<String> importancias = Arrays.asList("baja", "alta", "muy alta", "urgente");
-        viewer.setItemSelectedId(2);
+        viewer.setSelectedItemId(2);
 
         final AtomicBoolean isExec = new AtomicBoolean(false);
         activity.runOnUiThread(() -> {

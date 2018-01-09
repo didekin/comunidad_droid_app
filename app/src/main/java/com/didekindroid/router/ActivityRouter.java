@@ -58,10 +58,9 @@ public class ActivityRouter implements ActivityRouterIf {
 
     // Singleton instance.
     public static final ActivityRouter acRouter = new ActivityRouter();
-
+    static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
     private static final Map<Integer, Class<? extends Activity>> menuIdMap = new ArrayMap<>();
     private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdMap = new ArrayMap<>();
-    static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
 
     // Activity --> activity mapping (usually the default or the only option).
     static {
@@ -70,11 +69,8 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(DeleteMeAc.class, ComuSearchAc.class);
         acRouterMap.put(IncidCommentRegAc.class, IncidCommentSeeAc.class);
         acRouterMap.put(LoginAc.class, SeeUserComuByUserAc.class);
-        acRouterMap.put(RegComuAndUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
-        acRouterMap.put(RegUserAndUserComuAc.class, LoginAc.class);
         acRouterMap.put(RegUserComuAc.class, SeeUserComuByUserAc.class);
-        acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
     }
 
     // Menu options --> activity mapping
@@ -165,7 +161,7 @@ public class ActivityRouter implements ActivityRouterIf {
     {
         Timber.d("nextActivity()");
         Class<? extends Activity> acClass = acRouterMap.get(previousActivity);
-        if (acClass != null){
+        if (acClass != null) {
             return acClass;
         }
         return identityCacher.isRegisteredUser() ? defaultRegUser.activityToGo : defaultNoRegUser.activityToGo;
@@ -184,13 +180,15 @@ public class ActivityRouter implements ActivityRouterIf {
         comunidadFound_noRegUser(RegUserAndUserComuAc.class),
         noComunidadFound_regUser(RegComuAndUserComuAc.class),
         noComunidadFound_noRegUser(RegComuAndUserAndUserComuAc.class),
+        // Usuario
+        afterModifiedUserAlias(SeeUserComuByUserAc.class),
         // UsuarioComunidad.
         userComuItemSelected(UserComuDataAc.class),
         afterModifiedUserComu(SeeUserComuByUserAc.class),
         // Password.
         modifyPswd(SeeUserComuByUserAc.class),
-        notSendNewPswd(ComuSearchAc.class),
         sendNewPswd(LoginAc.class),
+        afterClickPswdSentDialog(LoginAc.class),
         // Incidencia
         writeNewComment(IncidCommentRegAc.class),
         writeNewIncidencia(IncidRegAc.class),

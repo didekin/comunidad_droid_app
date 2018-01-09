@@ -11,6 +11,7 @@ import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterClickPswdSentDialog;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
@@ -51,7 +52,7 @@ public class PasswordSentDialog extends DialogFragment implements ActivityInitia
                             dialog.dismiss();
                             Bundle bundle = new Bundle(1);
                             bundle.putString(user_name.key, usuarioArg.getUserName());
-                            initAcFromActivity(bundle);
+                            initAcFromRouter(bundle, afterClickPswdSentDialog);
                         }
                 );
         return builder.create();

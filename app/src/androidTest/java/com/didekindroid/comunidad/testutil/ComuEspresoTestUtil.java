@@ -69,6 +69,19 @@ public final class ComuEspresoTestUtil {
         }
     }
 
+    public static void typeComunidadDefault(ComunidadAutonoma comunidadAutonoma)
+    {
+        final TipoViaValueObj tipoVia = new TipoViaValueObj(52, "Calle");
+        try {
+            doTipoViaSpinner(tipoVia);
+            SECONDS.sleep(1);
+            typeComuCalleNumero("Real", "5", "Bis");
+            doComunAutonomaSpinner(comunidadAutonoma);
+        } catch (InterruptedException e) {
+            fail("InterruptedException");
+        }
+    }
+
     public static void typeComunidadData(Municipio municipio, TipoViaValueObj tipoVia, String nombreVia,
                                          String numeroEnVia, String sufijoNumero) throws InterruptedException
     {
@@ -310,11 +323,11 @@ public final class ComuEspresoTestUtil {
                         is(municipio)
                 )));
         waitAtMost(4, SECONDS).until(isViewDisplayed(
-                allOf(withId(R.id.app_spinner_1_dropdown_item),
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.municipio_spinner)),
                         withText(is(municipio.getNombre()))
-                )
-        ));
+                )));
     }
 
     public static void checkMunicipioSpinner(Comunidad comunidad)

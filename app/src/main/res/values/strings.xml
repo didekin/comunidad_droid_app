@@ -126,8 +126,7 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_to_show">No hay incidencias que mostrar</string>
     <string name="incidencia_not_registered">Intenta nuevamente registrar la incidencia.</string>
-    <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la
-        incidencia.
+    <string name="incidencia_wrong_init">Verifica que sigue abierta la incidencia.
     </string>
     <string name="resolucion_duplicada">Ya existe resolución para esta incidencia</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
@@ -204,6 +203,7 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
+    <string name="comunidad_duplicate">Esta comunidad ya había sido registrada</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí.</string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string>
@@ -212,9 +212,9 @@
     <string name="password_remote_change">Ya está modificada tu contraseña.</string>
     <string name="send_password_by_mail_dialog">¿Te enviamos una nueva contraseña a la dirección de correo electrónico que has escrito?</string>
     <string name="send_password_by_mail_YES">Enviádmela</string>
-    <string name="send_password_by_mail_NO">No la enviéis</string>
     <string name="user_email_wrong">No hemos podido enviar la nueva contraseña. Tu dirección de correo electrónico puede ser errónea.</string>
     <string name="user_without_signedUp">"Haz login. O busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
+    <string name="user_with_token_null">"Haz login para continuar."</string>
     <string name="user_data_not_modified_msg">No hemos podido modificar tus datos.</string>
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Datos comunidad</string>
@@ -256,7 +256,7 @@
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <string name="receive_password_by_mail_dialog">
-        Hemos enviado tu contraseña a tu dirección de correo electrónico.\nHaz login a continuación.
+        Hemos enviado tu nueva contraseña a tu dirección de correo electrónico.\nHaz login a continuación.
     </string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>

@@ -152,7 +152,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
             ComunidadAutonoma comunidadAutonomaOld = provinciaSpinner.getProvinciaEventSelect().getProvincia().getComunidadAutonoma();
             // If comunidadAutonoma has changed, provincia is initialized to 0.
             if (!comunidadAutonomaOld.equals(comunidadInEvent.getComunidadAutonoma())) {
-                provinciaSpinner.setItemSelectedId(0L);
+                provinciaSpinner.setSelectedItemId(0L);
             }
             provinciaSpinner.getController()
                     .loadItemsByEntitiyId(new ObserverSingleSelectList<>(provinciaSpinner), comunidadInEvent.getSpinnerItemIdSelect());
@@ -163,7 +163,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
             Municipio municipioOld = municipioSpinner.getSpinnerEvent().getMunicipio();
             // If provincia has changed, municipio is initialized to 0.
             if (!municipioOld.getProvincia().equals(provinciaInEvent.getProvincia())) {
-                municipioSpinner.setItemSelectedId(0L);
+                municipioSpinner.setSelectedItemId(0L);
             }
             municipioSpinner.getController()
                     .loadItemsByEntitiyId(new ObserverSingleSelectList<>(municipioSpinner), spinnerEventItemSelect.getSpinnerItemIdSelect());

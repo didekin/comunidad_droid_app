@@ -15,13 +15,14 @@ import com.didekindroid.usuario.userdata.UserDataAc;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_comunidad_duplicate_action;
 import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_comunidad_search_action;
 import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_incidReg_action;
 import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_incid_list_action;
 import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_login_noPowers_action;
 import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_login_noUser_action;
+import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_login_tokenNull_action;
 import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_resolucionDup;
-import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_userData_noModified_action;
 import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_userData_wrongMail_action;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
@@ -72,7 +73,7 @@ public final class UiExceptionRouter implements UiExceptionRouterIf {
         router.put(AVANCE_WRONG_INIT.getHttpMessage(), show_incid_list_action);
         router.put(BAD_REQUEST.getHttpMessage(), show_login_noUser_action);
         router.put(COMUNIDAD_NOT_COMPARABLE.getHttpMessage(), ActionsForRouter.generic_action);
-        router.put(COMUNIDAD_DUPLICATE.getHttpMessage(), show_comunidad_search_action);
+        router.put(COMUNIDAD_DUPLICATE.getHttpMessage(), show_comunidad_duplicate_action);
         router.put(COMUNIDAD_NOT_FOUND.getHttpMessage(), show_comunidad_search_action);
         router.put(COMUNIDAD_NOT_HASHABLE.getHttpMessage(), show_comunidad_search_action);
         router.put(COMUNIDAD_WRONG_INIT.getHttpMessage(), show_comunidad_search_action);
@@ -90,12 +91,12 @@ public final class UiExceptionRouter implements UiExceptionRouterIf {
         router.put(RESOLUCION_WRONG_INIT.getHttpMessage(), show_incid_list_action);
         router.put(SUFIJO_NUM_IN_COMUNIDAD_NULL.getHttpMessage(), ActionsForRouter.generic_action);
 //        router.put(TOKEN_NOT_DELETED.getHttpMessage(), TOKEN_TO_ERASE);  // TODO: qué hago con el borrado en servidor de token inservibles.
-        router.put(TOKEN_NULL.getHttpMessage(), show_login_noUser_action);
-        router.put(UNAUTHORIZED.getHttpMessage(), show_login_noUser_action);
-        router.put(UNAUTHORIZED_TX_TO_USER.getHttpMessage(), show_login_noUser_action);
+        router.put(TOKEN_NULL.getHttpMessage(), show_login_tokenNull_action);
+        router.put(UNAUTHORIZED.getHttpMessage(), show_login_tokenNull_action);
+        router.put(UNAUTHORIZED_TX_TO_USER.getHttpMessage(), show_login_tokenNull_action);
         router.put(USERCOMU_WRONG_INIT.getHttpMessage(), show_login_noUser_action);
         router.put(USER_COMU_NOT_FOUND.getHttpMessage(), show_login_noUser_action);
-        router.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), show_userData_noModified_action);
+        router.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), show_login_tokenNull_action);
         router.put(USER_DATA_NOT_INSERTED.getHttpMessage(), show_login_noUser_action);
         router.put(USER_NAME_DUPLICATE.getHttpMessage(), show_login_noUser_action);
         router.put(USER_NAME_NOT_FOUND.getHttpMessage(), show_login_noUser_action);
@@ -127,13 +128,15 @@ public final class UiExceptionRouter implements UiExceptionRouterIf {
                 return bundle;
             }
         },
-        show_login_noUser_action(R.string.user_without_signedUp, LoginAc.class),
-        show_login_noPowers_action(R.string.user_without_powers, LoginAc.class),
+        show_comunidad_duplicate_action(R.string.comunidad_duplicate, ComuSearchAc.class),
         show_comunidad_search_action(R.string.comunidad_not_found_message, ComuSearchAc.class),
         show_incidReg_action(R.string.incidencia_not_registered, IncidRegAc.class),
+        show_login_tokenNull_action(R.string.user_with_token_null, LoginAc.class),
+        show_login_noUser_action(R.string.user_without_signedUp, LoginAc.class),
+        show_login_noPowers_action(R.string.user_without_powers, LoginAc.class),
+        show_resolucionDup(R.string.resolucion_duplicada, null),
         show_userData_wrongMail_action(R.string.user_email_wrong, UserDataAc.class),
-        show_userData_noModified_action(R.string.user_data_not_modified_msg, UserDataAc.class),
-        show_resolucionDup(R.string.resolucion_duplicada, null),;
+        show_userData_noModified_action(R.string.user_data_not_modified_msg, UserDataAc.class),;
 
         private final int resourceIdForMsg;
         private final Class<? extends Activity> activityToGo;

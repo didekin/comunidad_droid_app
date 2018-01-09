@@ -60,14 +60,14 @@ public class ViewerSelectListTest {
     @Test
     public void testGetSelectedItemId() throws Exception
     {
-        viewer.setItemSelectedId(111L);
+        viewer.setSelectedItemId(111L);
         assertThat(viewer.getSelectedItemId(), is(111L));
     }
 
     @Test
     public void testGetSelectedViewFromItemId() throws Exception
     {
-        viewer.setItemSelectedId(111L);
+        viewer.setSelectedItemId(111L);
         assertThat(viewer.getSelectedPositionFromItemId(111L), is(111));
     }
 
@@ -76,7 +76,7 @@ public class ViewerSelectListTest {
     {
         final List<String> stringList = Arrays.asList("string22", "string11", "string44", "string33");
         long itemSelected = 1;
-        viewer.setItemSelectedId(itemSelected);
+        viewer.setSelectedItemId(itemSelected);
 
         final AtomicBoolean isExec = new AtomicBoolean(false);
         activity.runOnUiThread(() -> {

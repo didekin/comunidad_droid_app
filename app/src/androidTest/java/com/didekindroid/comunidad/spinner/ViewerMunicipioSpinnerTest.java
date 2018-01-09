@@ -167,7 +167,7 @@ public class ViewerMunicipioSpinnerTest {
         assertThat(viewer.getSelectedItemId(), is(11L));
         // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() ... {--> MunicipioSelectedListener.onItemSelected() }
         // We initialize to 0 the itemSelectedId to checkMenu the call to MunicipioSelectedListener.onItemSelected().
-        viewer.setItemSelectedId(2L);
+        viewer.setSelectedItemId(2L);
         viewer.getController().loadItemsByEntitiyId(new ObserverSingleSelectList<>(viewer), 35L);
         waitAtMost(3, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(34));

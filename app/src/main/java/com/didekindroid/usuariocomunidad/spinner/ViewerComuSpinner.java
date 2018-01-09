@@ -52,7 +52,7 @@ public class ViewerComuSpinner extends
     {
         Timber.d("initSelectedItemId()");
 
-        if (savedState != null && savedState.containsKey(COMUNIDAD_ID.key)) {
+        if (savedState != null && savedState.containsKey(COMUNIDAD_ID.key) && savedState.getLong(COMUNIDAD_ID.key) > 0) {
             itemSelectedId = savedState.getLong(COMUNIDAD_ID.key, 0);
         } else if (spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() > 0) {
             itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();

@@ -116,8 +116,7 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_to_show">No incidents to show</string>
     <string name="incidencia_not_registered">Try again to record the incident.</string>
-    <string name="incidencia_wrong_init">We can not continue. Verify that the incident
-        is still open.
+    <string name="incidencia_wrong_init">Verify that the incident is still open.
     </string>
     <string name="resolucion_duplicada">Resolution for this incident already exists.</string>
     <string name="user_without_powers">Sign in and access again to the incident.</string>
@@ -195,6 +194,7 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="exception_generic_app_message">We can not continue. Search your community or sign in.</string>
     <string name="comunidad_not_found_message">We can not show you this community. Search it again.</string>
+    <string name="comunidad_duplicate">This community had already been registered</string>
     <string name="no_result_search_comunidad">We have not found your community.\nYou can register it here.</string>
     <string name="login_wrong_no_mail">"Search your community and sign up.\nIf it does not exist, register it in 'New community'."</string>
     <string name="username_wrong_in_login">Email address is not recorded.</string>
@@ -203,9 +203,9 @@
     <string name="password_remote_change">Your password is already modified.</string>
     <string name="send_password_by_mail_dialog">Do we send to you a new password to the email address above?</string>
     <string name="send_password_by_mail_YES">Send it to me</string>
-    <string name="send_password_by_mail_NO">Do not send it to me</string>
     <string name="user_email_wrong">We were unable to send the new password. Your mail address may be wrong.</string>
     <string name="user_without_signedUp">"Sign in. Or search your community and sign up.\nIf it does not exist, register it in 'New community'."</string>
+    <string name="user_with_token_null">"Sign in to continue."</string>
     <string name="user_data_not_modified_msg">We were unable to modify your data.</string>
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Community data</string>
@@ -247,7 +247,7 @@
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
     <string name="reg_comunidad_ac_label">New community</string>
     <string name="receive_password_by_mail_dialog">
-        We have sent your password to your email address.\nLog on in the next screen.
+        We have sent your new password to your email address.\nLog on in the next screen.
     </string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Your home</string>

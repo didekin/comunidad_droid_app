@@ -144,10 +144,10 @@ public class ViewerRegComuFrTest {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
 
         Bundle bundle = new Bundle(4);
-        fragment.viewer.comuAutonomaSpinner.setItemSelectedId(2L);
-        fragment.viewer.provinciaSpinner.setItemSelectedId(11L);
+        fragment.viewer.comuAutonomaSpinner.setSelectedItemId(2L);
+        fragment.viewer.provinciaSpinner.setSelectedItemId(11L);
         fragment.viewer.municipioSpinner.setSpinnerEvent(new Municipio((short) 23, new Provincia((short) 34)));
-        fragment.viewer.tipoViaSpinner.setItemSelectedId(12L);
+        fragment.viewer.tipoViaSpinner.setSelectedItemId(12L);
 
         fragment.viewer.saveState(bundle);
         assertThat(bundle.getLong(COMUNIDAD_AUTONOMA_ID.key), is(2L));

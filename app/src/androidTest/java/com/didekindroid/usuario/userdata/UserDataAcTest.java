@@ -31,6 +31,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -40,7 +41,6 @@ import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_A
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceCmp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -48,6 +48,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
@@ -161,14 +162,10 @@ public class UserDataAcTest {
     }
 
     @Test  // Modify user OK.
-    public void testModifyUserData_Up() throws UiException, InterruptedException
+    public void testModifyUserData() throws UiException, InterruptedException
     {
         SECONDS.sleep(2);
         typeClickWait();
-        // Verificamos navegación.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(comuSearchAcLayout);
-        }
     }
 
     @Test  // Modify user OK.
@@ -176,7 +173,7 @@ public class UserDataAcTest {
     {
         SECONDS.sleep(2);
         typeClickWait();
-        checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), userDataAcRsId);
+        checkBack(onView(withText(R.string.receive_password_by_mail_dialog)).inRoot(isDialog()).check(matches(isDisplayed())), userDataAcRsId);
     }
 
     @Test
@@ -187,12 +184,6 @@ public class UserDataAcTest {
             // Check.
             assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
         });
-    }
-
-    @Test
-    public void testReplaceRootView()
-    {
-        checkViewerReplaceCmp(activity.viewer, seeUserComuByUserFrRsId, null);
     }
 
     //    =================================  MENU TESTS ==================================
@@ -237,6 +228,6 @@ public class UserDataAcTest {
         focusOnView(activity, user_data_modif_button);
         onView(withId(user_data_modif_button)).perform(scrollTo(), click());
 
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        checkTextsInDialog(R.string.receive_password_by_mail_dialog, R.string.continuar_button_rot);
     }
 }

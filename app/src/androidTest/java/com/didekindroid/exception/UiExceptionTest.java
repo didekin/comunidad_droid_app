@@ -22,6 +22,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_login_tokenNull_action;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
@@ -98,7 +99,7 @@ public class UiExceptionTest {
 
         activity.runOnUiThread(() -> ue.processMe(activity));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed((R.id.login_ac_layout)));
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
+        waitAtMost(4, SECONDS).until(isToastInView(show_login_tokenNull_action.getToastResourceId(), activity));
     }
 
     @Test
@@ -205,8 +206,8 @@ public class UiExceptionTest {
         final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
         activity.runOnUiThread(() -> ue.processMe(activity));
 
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_data_not_modified_msg, activity));
-        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+        waitAtMost(5, SECONDS).until(isToastInView(show_login_tokenNull_action.getToastResourceId(), activity));
+        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
 
         cleanOptions(CLEAN_JUAN);
     }

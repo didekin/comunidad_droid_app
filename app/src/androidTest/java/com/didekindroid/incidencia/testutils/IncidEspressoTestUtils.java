@@ -401,7 +401,7 @@ public final class IncidEspressoTestUtils {
 
     public static void doComunidadSpinner(Comunidad comunidad)
     {
-        doComunidadSpinner(comunidad, R.id.incid_reg_comunidad_spinner);
+        doComunidadSpinner(comunidad, R.id.incid_comunidad_spinner);
     }
 
     public static void doComunidadSpinner(Comunidad comunidad, int resourceId)
@@ -424,7 +424,7 @@ public final class IncidEspressoTestUtils {
                 onView(
                         allOf(
                                 withId(R.id.app_spinner_1_dropdown_item),
-                                withParent(withId(R.id.incid_reg_comunidad_spinner))
+                                withParent(withId(R.id.incid_comunidad_spinner))
                         )
                 ).check(matches(withText(is(textToCheck)))).check(matches(isDisplayed()));
                 return true;

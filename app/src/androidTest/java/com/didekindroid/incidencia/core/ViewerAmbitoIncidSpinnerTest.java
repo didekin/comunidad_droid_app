@@ -85,7 +85,7 @@ public class ViewerAmbitoIncidSpinnerTest {
         ambitos.add(new AmbitoIncidValueObj((short) 0, "ambito0"));
         ambitos.add(new AmbitoIncidValueObj((short) 1, "ambito1"));
         ambitos.add(new AmbitoIncidValueObj((short) 2, "ambito2"));
-        viewer.setItemSelectedId(1);
+        viewer.setSelectedItemId(1);
 
         final AtomicBoolean isExec = new AtomicBoolean(false);
         activity.runOnUiThread(() -> {

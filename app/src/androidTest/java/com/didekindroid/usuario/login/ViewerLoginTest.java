@@ -26,10 +26,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.R.string.send_password_by_mail_NO;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
@@ -139,7 +137,7 @@ public class ViewerLoginTest {
         // Exec.
         activity.viewerLogin.showDialogAfterErrors();
         // Check.
-        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES, send_password_by_mail_NO);
+        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES);
     }
 
     @Test   // Login NO ok, counterWrong > 3.
@@ -152,7 +150,7 @@ public class ViewerLoginTest {
         activity.runOnUiThread(() -> activity.viewerLogin.processLoginBackInView(false));
         // Check.
         waitAtMost(3, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(4));
-        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES, send_password_by_mail_NO);
+        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES);
     }
 
     @Test   // Login NO ok, counterWrong <= 3.
@@ -165,15 +163,6 @@ public class ViewerLoginTest {
         waitAtMost(5, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(3));
         waitAtMost(5, SECONDS).until(isToastInView(R.string.password_wrong, activity));
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testDoDialogNegativeClick() throws Exception
-    {
-        // Exec.
-        activity.runOnUiThread(() -> activity.viewerLogin.doDialogNegativeClick());
-        // Check.
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
     }
 
     @Test
@@ -245,7 +234,7 @@ public class ViewerLoginTest {
                 new UsuarioBean("didekindroid@didekin.es", null, null, null));
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.login_help_fab), click()));
         // Check.
-        checkTextsInDialog(R.string.send_password_by_mail_dialog, R.string.send_password_by_mail_YES, R.string.send_password_by_mail_NO);
+        checkTextsInDialog(R.string.send_password_by_mail_dialog, R.string.send_password_by_mail_YES);
     }
 
     @Test
@@ -255,7 +244,7 @@ public class ViewerLoginTest {
         activity.viewerLogin.usuarioBean.set(null);
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.login_help_fab), click()));
         // Check.
-        checkTextsInDialog(R.string.send_password_by_mail_dialog, R.string.send_password_by_mail_YES, R.string.send_password_by_mail_NO);
+        checkTextsInDialog(R.string.send_password_by_mail_dialog, R.string.send_password_by_mail_YES);
     }
 
     // ============================================================

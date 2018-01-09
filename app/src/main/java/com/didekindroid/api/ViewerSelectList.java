@@ -56,9 +56,9 @@ public abstract class ViewerSelectList<T extends AdapterView<? super ArrayAdapte
 
     /* Mainly for tests */
     @Override
-    public void setItemSelectedId(long itemSelectedId)
+    public void setSelectedItemId(long itemSelectedId)
     {
-        Timber.d("setItemSelectedId()");
+        Timber.d("setSelectedItemId()");
         this.itemSelectedId = itemSelectedId;
     }
 

@@ -163,7 +163,7 @@ public class ViewerIncidEditMinFrTest {
     public void test_saveState() throws Exception
     {
         Bundle bundleTest = new Bundle();
-        viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
+        viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
 
         viewer.saveState(bundleTest);
         assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));

@@ -73,7 +73,7 @@ public class ViewerIncidSeeCloseFr extends
         }
         ViewerIncidSeeCloseFr parentInstance = new ViewerIncidSeeCloseFr(view, activity);
         parentInstance.setController(new CtrlerIncidSeeCloseByComu());
-        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), parentInstance);
+        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_comunidad_spinner), parentInstance);
         return parentInstance;
     }
 
@@ -190,7 +190,9 @@ public class ViewerIncidSeeCloseFr extends
     public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
-        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this), spinnerEventItemSelect.getSpinnerItemIdSelect());
+        long comunidadIdInSpinner = spinnerEventItemSelect.getSpinnerItemIdSelect();
+
+        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this), comunidadIdInSpinner);
     }
 
     // ==================================  HELPERS  =================================

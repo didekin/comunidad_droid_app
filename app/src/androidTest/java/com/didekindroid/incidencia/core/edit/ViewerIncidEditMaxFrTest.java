@@ -215,8 +215,8 @@ public class ViewerIncidEditMaxFrTest {
     public void testSaveState() throws Exception
     {
         Bundle bundleTest = new Bundle();
-        viewer.viewerAmbitoIncidSpinner.setItemSelectedId(11);
-        viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
+        viewer.viewerAmbitoIncidSpinner.setSelectedItemId(11);
+        viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
         viewer.saveState(bundleTest);
 
         assertThat(bundleTest.getLong(AMBITO_INCIDENCIA_POSITION.key), is(11L));

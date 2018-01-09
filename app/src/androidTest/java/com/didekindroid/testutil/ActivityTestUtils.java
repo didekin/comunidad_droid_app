@@ -487,7 +487,7 @@ public final class ActivityTestUtils {
 
     public static void checkSavedStateWithItemSelected(ViewerSelectListIf viewer, BundleKey bundleKey)
     {
-        viewer.setItemSelectedId(18L);
+        viewer.setSelectedItemId(18L);
         Bundle bundle = new Bundle(1);
         viewer.saveState(bundle);
         assertThat(bundle.getLong(bundleKey.getKey()), is(18L));

@@ -12,11 +12,11 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -31,7 +31,6 @@ import static android.support.v4.app.TaskStackBuilder.create;
 import static com.didekindroid.R.id.login_ac_button;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
-import static com.didekindroid.R.string.send_password_by_mail_NO;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
@@ -50,7 +49,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -81,7 +79,7 @@ public class LoginAcTest {
             } catch (Exception e) {
                 fail();
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 create(getTargetContext())
                         .addParentStack(LoginAc.class)
                         .startActivities();
@@ -97,12 +95,6 @@ public class LoginAcTest {
         }
     };
 
-    @BeforeClass
-    public static void relax() throws InterruptedException
-    {
-        MILLISECONDS.sleep(2000);
-    }
-
     @Before
     public void setUp() throws Exception
     {
@@ -113,7 +105,7 @@ public class LoginAcTest {
     @After
     public void cleanUp() throws UiException
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
         cleanOptions(CLEAN_DROID);
@@ -134,7 +126,7 @@ public class LoginAcTest {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withContentDescription(R.string.navigate_up_txt)).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
     }
@@ -166,7 +158,7 @@ public class LoginAcTest {
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         waitAtMost(2, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(4));
-        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES, send_password_by_mail_NO);
+        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES);
     }
 
     @Test   // Login NOT OK, counterWrong <= 3.

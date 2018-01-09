@@ -48,7 +48,7 @@ public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements
         ViewerIncidSeeOpenFr parentInstance = new ViewerIncidSeeOpenFr(view, activity);
         parentInstance.setController(new CtrlerIncidSeeOpenByComu());
         parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
-        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_reg_comunidad_spinner), parentInstance);
+        parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_comunidad_spinner), parentInstance);
         return parentInstance;
     }
 

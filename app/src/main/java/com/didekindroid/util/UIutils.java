@@ -34,6 +34,7 @@ import static android.widget.Toast.makeText;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_be_zero;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_not_be_null;
 import static com.didekindroid.util.CommonAssertionMsg.wrong_option_menu;
+import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.text.DateFormat.MEDIUM;
@@ -62,11 +63,11 @@ public final class UIutils {
 
     public static boolean checkInternet(Activity activity)
     {
-        if (!ConnectionUtils.isInternetConnected(activity)) {
+        if (!isInternetConnected(activity)) {
             makeToast(activity, R.string.no_internet_conn_toast);
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static boolean checkPostExecute(Activity activity)

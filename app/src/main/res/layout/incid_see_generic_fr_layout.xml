@@ -18,7 +18,7 @@
         android:text="@string/incid_comunidad_rot"/>
 
     <Spinner
-        android:id="@+id/incid_reg_comunidad_spinner"
+        android:id="@+id/incid_comunidad_spinner"
         style="@style/spinnerBase"/>
 
     <TextView

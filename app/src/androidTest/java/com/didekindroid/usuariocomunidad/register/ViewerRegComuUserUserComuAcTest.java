@@ -10,6 +10,7 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.usuario.login.LoginAc;
+import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,8 +34,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadDefault;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -80,6 +81,25 @@ public class ViewerRegComuUserUserComuAcTest {
 
     RegComuAndUserAndUserComuAc activity;
 
+    static void execCheckCleanDialog(ViewerIf viewer) throws IOException
+    {
+        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias());
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        // Exec.
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
+        // Check.
+        waitAtMost(8, SECONDS)
+                .until(isViewDisplayed(onView(withText(R.string.receive_password_by_mail_dialog)).inRoot(isDialog())));
+        assertThat(viewer.getController().isRegisteredUser(), is(true));
+        // Exec.
+        onView(withText(R.string.continuar_button_rot)).inRoot(isDialog()).perform(click());
+        // Check.
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
+        intended(hasExtra(user_name.key, USER_PEPE.getUserName()));
+        // Clean.
+        assertThat(userComuMockDao.deleteUser(USER_PEPE.getUserName()).execute().body(), is(true));
+    }
+
     @Before
     public void setUp()
     {
@@ -97,6 +117,8 @@ public class ViewerRegComuUserUserComuAcTest {
             cleanTasks(activity);
         }
     }
+
+    //  =========================  TESTS  ===========================
 
     @Test
     public void test_NewViewerRegComuUserUserComuAc() throws Exception
@@ -122,12 +144,12 @@ public class ViewerRegComuUserUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserUserComuBtonListener_1() throws Exception      // TODO: fail
+    public void test_RegComuUserUserComuBtonListener_1() throws Exception
     {
         // Precondition:
         assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
         // Data.
-        typeComunidadData();
+        typeComunidadDefault(new ComunidadAutonoma((short) 10, "Valencia"));
         // Data, exec and check.
         execCheckCleanDialog(activity.viewer);
     }
@@ -160,7 +182,7 @@ public class ViewerRegComuUserUserComuAcTest {
                 R.string.municipio));
     }
 
-    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
+    /*  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================*/
 
     @Test
     public void test_OnCreate()
@@ -172,36 +194,11 @@ public class ViewerRegComuUserUserComuAcTest {
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
     }
 
+    //  =========================  Helpers  ===========================
+
     @Test
     public void test_OnStop()
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
-    }
-
-    //  =========================  Helpers  ===========================
-
-    static void execCheckCleanDialog(ViewerIf viewer) throws IOException
-    {
-        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias());
-        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        // Exec.
-        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
-        // Check.
-        waitAtMost(8, SECONDS)
-                .until(isViewDisplayed(onView(withText(R.string.receive_password_by_mail_dialog)).inRoot(isDialog())));
-        assertThat(viewer.getController().isRegisteredUser(), is(true));
-        // Exec.
-        onView(withText(R.string.continuar_button_rot)).inRoot(isDialog()).perform(click());
-        // Check.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
-        intended(hasExtra(user_name.key, USER_PEPE.getUserName()));
-        // CheckUp.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Since the user is 'registered' ComuSearchAc try to access its data, but with the tokenCache not initialized,
-            // it comes back to login.
-            checkUp(loginAcResourceId);
-        }
-        // Clean.
-        assertThat(userComuMockDao.deleteUser(USER_PEPE.getUserName()).execute().body(), is(true));
     }
 }

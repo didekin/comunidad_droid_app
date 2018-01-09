@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.userdata;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,7 @@ import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
-import com.didekindroid.util.UIutils;
+import com.didekindroid.usuariocomunidad.register.PasswordSentDialog;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
@@ -22,11 +23,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterModifiedUserAlias;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
 import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkInternet;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -123,7 +126,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
             makeToast(activity, errorBuilder.toString());
             return false;
         }
-        return !UIutils.checkInternet(activity);
+        return checkInternet(activity);
     }
 
     /**
@@ -173,6 +176,18 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
                 makeToast(activity, R.string.no_user_data_to_be_modified);
                 return false;
             case userName:
+                return controller.modifyUser(
+                        new AbstractSingleObserver<Boolean>(this) {
+                            @Override
+                            public void onSuccess(Boolean isCompleted)
+                            {
+                                Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
+                                DialogFragment newFragment = PasswordSentDialog.newInstance(newUser.get());
+                                newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
+                            }
+                        },
+                        oldUser.get(),
+                        newUser.get());
             case alias_only:
                 return controller.modifyUser(
                         new AbstractSingleObserver<Boolean>(this) {
@@ -181,7 +196,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
                             {
                                 Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
                                 assertTrue(isCompleted, "AbstractSingleObserver.onSuccess() should be TRUE");
-                                initAcFromActivity(null);
+                                initAcFromRouter(null, afterModifiedUserAlias);
                             }
                         },
                         oldUser.get(),
@@ -190,6 +205,8 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
                 return false;
         }
     }
+
+    // ================================= Viewer callbacks ==================================
 
     @SuppressWarnings("ThrowableNotThrown")
     @Override

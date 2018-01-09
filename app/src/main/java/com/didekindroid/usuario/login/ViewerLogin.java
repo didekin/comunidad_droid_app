@@ -3,8 +3,6 @@ package com.didekindroid.usuario.login;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,10 +21,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.notSendNewPswd;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
-import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
-import static com.didekindroid.usuario.login.ViewerLogin.PasswordMailDialog.newInstance;
+import static com.didekindroid.usuario.login.PasswordMailDialog.newInstance;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
@@ -147,14 +143,6 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
         newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
-    void doDialogNegativeClick()
-    {
-        Timber.d("doDialogNegativeClick()");
-        makeToast(getActivity(), R.string.login_wrong_no_mail);
-        initAcFromRouter(null, notSendNewPswd);
-        activity.finish();
-    }
-
     void doDialogPositiveClick(Usuario usuario)
     {
         Timber.d("sendNewPassword()");
@@ -209,50 +197,6 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
     {
         Timber.d("getCounterWrong()");
         return counterWrong;
-    }
-
-    // ============================================================
-    //    ................ ERROR DIALOG .................
-    // ============================================================
-
-    public static class PasswordMailDialog extends DialogFragment {
-
-        public static PasswordMailDialog newInstance(UsuarioBean usuarioBean)
-        {
-            Timber.d("newInstance()");
-            PasswordMailDialog dialog = new PasswordMailDialog();
-            if (usuarioBean != null && usuarioBean.getUsuario() != null) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(usuario_object.key, usuarioBean.getUsuario());
-                dialog.setArguments(bundle);
-            }
-            return dialog;
-        }
-
-        @Override
-        public AppCompatDialog onCreateDialog(Bundle savedInstanceState)
-        {
-            Timber.d("onCreateDialog()");
-            final ViewerLogin viewerLogin = ((LoginAc) getActivity()).viewerLogin;
-            AlertDialog.Builder builder = new AlertDialog.Builder(viewerLogin.getActivity(), R.style.alertDialogTheme);
-
-            builder.setMessage(R.string.send_password_by_mail_dialog)
-                    .setPositiveButton(
-                            R.string.send_password_by_mail_YES,
-                            (dialog, id) -> {
-                                dialog.dismiss();
-                                viewerLogin.doDialogPositiveClick((Usuario) getArguments().getSerializable(usuario_object.key));
-                            }
-                    )
-                    .setNegativeButton(
-                            R.string.send_password_by_mail_NO,
-                            (dialog, id) -> {
-                                dialog.dismiss();
-                                viewerLogin.doDialogNegativeClick();
-                            }
-                    );
-            return builder.create();
-        }
     }
 
     // ============================================================

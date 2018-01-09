@@ -118,7 +118,7 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testOnSuccessLoadItems()
     {
-        viewer.setItemSelectedId(33L);
+        viewer.setSelectedItemId(33L);
         execLoadItems();
 
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(3));
@@ -133,27 +133,23 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testInitSelectedItemId() throws Exception
     {
-        viewer.spinnerEvent = new ComuSpinnerEventItemSelect();
+        // Preconditions: savedState != null  && COMUNIDAD_ID.key == 0 && spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() == 0.
         Bundle savedState = new Bundle();
-
+        savedState.putLong(COMUNIDAD_ID.key, 0L);
+        viewer.spinnerEvent = new ComuSpinnerEventItemSelect();
+        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect() == 0L, is(true));
         viewer.initSelectedItemId(savedState);
         assertThat(viewer.getSelectedItemId(), is(0L)); // Default initialization.
-
-        savedState = null;
-        viewer.spinnerEvent = new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(13L).build());
+        // Preconditions: savedState != null  && COMUNIDAD_ID.key == 0 && spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() > 0.
+        viewer.spinnerEvent = new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(11L).build());
+        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect() > 0L, is(true));
         viewer.initSelectedItemId(savedState);
-        assertThat(viewer.getSelectedItemId(), is(13L));
-
-        savedState = new Bundle();
-        savedState.putLong(COMUNIDAD_ID.key, 8L);
-        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(13L));
+        assertThat(viewer.getSelectedItemId(), is(11L)); // spinnerEvent initialization.
+        // Preconditions: savedState != null  && COMUNIDAD_ID.key > 0 && spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() > 0.
+        savedState.putLong(COMUNIDAD_ID.key, 22L);
+        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect() > 0L, is(true));
         viewer.initSelectedItemId(savedState);
-        assertThat(viewer.getSelectedItemId(), is(8L));
-
-        viewer.spinnerEvent = null;
-        savedState = null;
-        viewer.initSelectedItemId(savedState);
-        assertThat(viewer.getSelectedItemId(), is(0L)); // Default initialization.
+        assertThat(viewer.getSelectedItemId(), is(22L)); // savedState initialization.
     }
 
     @Test

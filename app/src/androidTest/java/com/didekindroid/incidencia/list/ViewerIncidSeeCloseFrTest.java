@@ -113,7 +113,7 @@ public class ViewerIncidSeeCloseFrTest {
         final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia);
 
         activity.runOnUiThread(() -> {
-            viewer.setItemSelectedId(22L);
+            viewer.setSelectedItemId(22L);
             viewer.onSuccessLoadItemList(list);
             assertThat(viewer.getViewInViewer().getHeaderViewsCount(), is(1));
             // ListView.getCount() and Adapter.getCount() take into account header views.
@@ -126,7 +126,7 @@ public class ViewerIncidSeeCloseFrTest {
         });
 
         activity.runOnUiThread(() -> {
-            viewer.setItemSelectedId(0L);
+            viewer.setSelectedItemId(0L);
             viewer.onSuccessLoadItemList(list);
             // When itemSelectedId == 0, no checkedItem.
             assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
@@ -135,7 +135,7 @@ public class ViewerIncidSeeCloseFrTest {
 
         final List<IncidenciaUser> listEmpty = new ArrayList<>(0);
         activity.runOnUiThread(() -> {
-            viewer.setItemSelectedId(22L);
+            viewer.setSelectedItemId(22L);
             viewer.onSuccessLoadItemList(listEmpty);
             // No se cumple la condición view.getCount() > view.getHeaderViewsCount(): no se llama  view.setItemChecked().
             assertThat(viewer.getViewInViewer().getCount() <= viewer.getViewInViewer().getHeaderViewsCount(), is(true));
@@ -257,8 +257,8 @@ public class ViewerIncidSeeCloseFrTest {
     public void testSaveState() throws Exception
     {
         Bundle bundle = new Bundle(2);
-        fragment.viewer.comuSpinnerViewer.setItemSelectedId(7L);
-        fragment.viewer.setItemSelectedId(5L);
+        fragment.viewer.comuSpinnerViewer.setSelectedItemId(7L);
+        fragment.viewer.setSelectedItemId(5L);
 
         fragment.viewer.saveState(bundle);
         assertThat(bundle.getLong(INCIDENCIA_ID_LIST_SELECTED.key), is(5L));

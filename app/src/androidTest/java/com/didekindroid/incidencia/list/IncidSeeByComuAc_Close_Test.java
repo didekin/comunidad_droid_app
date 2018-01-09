@@ -75,7 +75,7 @@ public class IncidSeeByComuAc_Close_Test {
         protected Intent getActivityIntent()
         {
             try {
-                regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+                regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE); // Orden en lista: lafuente(0), plazuelas(1).
                 incidImportancia1 = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0), (short) 1);
                 incidImportancia2 = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(1), (short) 4);
 
@@ -158,7 +158,7 @@ public class IncidSeeByComuAc_Close_Test {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
         onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_comunidad_spinner)).check(matches(isDisplayed()));
 
         // Data
         waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
@@ -170,11 +170,23 @@ public class IncidSeeByComuAc_Close_Test {
     }
 
     @Test
-    public void test_newIncidenciaButton() throws InterruptedException
+    public void test_newIncidenciaButton_1() throws Exception
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
-        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
+        waitAtMost(6, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
+        checkUp(incidSeeByComuAcLayout);
+    }
+
+    @Test
+    public void test_newIncidenciaButton_2() throws InterruptedException
+    {
+        waitAtMost(6, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
+        doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidImportancia2.getIncidencia().getComunidad().getNombreComunidad()));
         checkUp(incidSeeByComuAcLayout);
     }
 

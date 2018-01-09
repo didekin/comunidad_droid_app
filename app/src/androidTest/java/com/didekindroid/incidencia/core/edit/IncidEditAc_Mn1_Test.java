@@ -22,7 +22,11 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
@@ -119,8 +123,8 @@ public class IncidEditAc_Mn1_Test {
         assertThat(activity.resolBundle.hasResolucion(), is(true));
         assertThat(activity.resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(true));
 
-        INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem(activity);
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_edit_fr_layout));
+        onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidResolucionEditFrLayout));
 
         checkBack(onView(withId(incidResolucionEditFrLayout)));
         checkScreenEditMaxPowerFrNotErase(activity.resolBundle);
@@ -139,7 +143,7 @@ public class IncidEditAc_Mn1_Test {
         assertThat(activity.resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(true));
 
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem(activity);
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_reg_frg_layout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidResolucionRegFrLayout));
 
         checkBack(onView(withId(incidResolucionRegFrLayout)));
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
@@ -186,7 +190,7 @@ public class IncidEditAc_Mn1_Test {
         assertThat(activity.resolBundle.hasResolucion(), is(true));
         assertThat(activity.resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(false));
         // Run
-        INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem(activity);
+        onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
         // Check
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidResolucionSeeFrLayout));
 

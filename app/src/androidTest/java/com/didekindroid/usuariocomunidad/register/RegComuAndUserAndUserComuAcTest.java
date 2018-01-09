@@ -6,11 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
-import com.didekinlib.model.comunidad.Municipio;
-import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +23,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadDefault;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -72,6 +69,25 @@ public class RegComuAndUserAndUserComuAcTest {
 
     RegComuAndUserAndUserComuAc activity;
 
+    private static void typeComunidad()
+    {
+        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
+        typeComunidadDefault(comunidadAutonoma);
+    }
+
+    static void execCheckRegisterError(Activity activity)
+    {
+        typeUserComuData("WRONG**", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        typeUserDataFull(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
+        // Exec.
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
+        // Check
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.reg_usercomu_portal_rot));
+    }
+
+    //    ================================================================================
+
     @Before
     public void setUp() throws Exception
     {
@@ -89,7 +105,7 @@ public class RegComuAndUserAndUserComuAcTest {
         }
     }
 
-    //    ================================================================================
+    /*    =================================== Life cycle ===================================*/
 
     @Test
     public void testRegComuAndUserComuAndUser_NotOk() throws InterruptedException
@@ -98,8 +114,6 @@ public class RegComuAndUserAndUserComuAcTest {
         focusOnView(activity, R.id.reg_usercomu_portal_ed);
         execCheckRegisterError(activity);
     }
-
-    //    =================================== Life cycle ===================================
 
     @Test
     public void test_OnCreate() throws Exception
@@ -148,27 +162,5 @@ public class RegComuAndUserAndUserComuAcTest {
             // Exec and check navigate-up.
             checkUp(comuSearchAcLayout);
         }
-    }
-
-    /*    =================================== HELPERS ===================================*/
-
-    private static void typeComunidad() throws InterruptedException
-    {
-        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
-        final Provincia provincia = new Provincia(comunidadAutonoma, (short) 12, "Castellón/Castelló");
-        final Municipio municipio = new Municipio((short) 53, "Chilches/Xilxes", provincia);
-        final TipoViaValueObj tipoVia = new TipoViaValueObj(54, "Callejon");
-        typeComunidadData(municipio, tipoVia, "nombre via One", "123", "Tris");
-    }
-
-    static void execCheckRegisterError(Activity activity)
-    {
-        typeUserComuData("WRONG**", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        typeUserDataFull(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
-        // Exec.
-        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
-        // Check
-        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
-                R.string.reg_usercomu_portal_rot));
     }
 }

@@ -56,8 +56,8 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
         TaskStackBuilder doStackBuilder(Context context, Map<String, String> data)
         {
             Intent comuSearch = new Intent(new Intent(context, ComuSearchAc.class));
-            Intent incidSeeComu = new Intent(context, IncidSeeByComuAc.class);
-            incidSeeComu.putExtra(COMUNIDAD_ID.key, parseLong(data.get(comunidadId_key)))
+            Intent incidSeeComu = new Intent(context, IncidSeeByComuAc.class)
+                    .putExtra(COMUNIDAD_ID.key, parseLong(data.get(comunidadId_key)))
                     .putExtra(INCID_CLOSED_LIST_FLAG.key, false); // Open incidencias list.
             return doCommonStackBuilder(context, incidSeeComu, comuSearch);
         }
@@ -80,8 +80,9 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
         TaskStackBuilder doStackBuilder(Context context, Map<String, String> data)
         {
             Intent comuSearch = new Intent(context, ComuSearchAc.class);
-            Intent incidSeeClosedComu = new Intent(context, IncidSeeByComuAc.class);
-            incidSeeClosedComu.putExtra(COMUNIDAD_ID.key, parseLong(data.get(comunidadId_key)));
+            Intent incidSeeClosedComu = new Intent(context, IncidSeeByComuAc.class)
+                    .putExtra(COMUNIDAD_ID.key, parseLong(data.get(comunidadId_key)))
+                    .putExtra(INCID_CLOSED_LIST_FLAG.key, true);  // Closed incidencias list.
             return doCommonStackBuilder(context, incidSeeClosedComu, comuSearch);
         }
 

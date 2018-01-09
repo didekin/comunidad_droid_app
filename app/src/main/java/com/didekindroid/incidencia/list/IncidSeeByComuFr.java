@@ -45,7 +45,7 @@ public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         FloatingActionButton fab = frView.findViewById(R.id.incid_new_incid_fab);
-        fab.setOnClickListener(v -> initAcFromRouter(getArguments(), writeNewIncidencia));
+        fab.setOnClickListener(v -> initAcFromRouter(COMUNIDAD_ID.getBundleForKey(viewer.getComuSpinner().getSelectedItemId()), writeNewIncidencia));
         return frView;
     }
 

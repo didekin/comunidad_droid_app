@@ -179,7 +179,7 @@ public class ViewerProvinciaSpinnerTest {
 
         // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() ... {--> ProvinciaSelectedListener.onItemSelected() }
         // We initialize to 0 the itemSelectedId to chedk the call to ProvinciaSelectedListener.onItemSelected().
-        viewer.setItemSelectedId(38L); // Santa Cruz de Tenerife
+        viewer.setSelectedItemId(38L); // Santa Cruz de Tenerife
         viewer.getController().loadItemsByEntitiyId(new ObserverSingleSelectList<>(viewer), 5L);
         waitAtMost(3, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(2));

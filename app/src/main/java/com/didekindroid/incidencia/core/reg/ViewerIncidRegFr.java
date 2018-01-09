@@ -62,7 +62,7 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
         instance.viewerImportanciaSpinner =
                 newViewerImportanciaSpinner(instance.getViewInViewer().findViewById(R.id.incid_reg_importancia_spinner), instance);
         instance.viewerComuSpinner =
-                newViewerComuSpinner(instance.getViewInViewer().findViewById(R.id.incid_reg_comunidad_spinner), instance);
+                newViewerComuSpinner(instance.getViewInViewer().findViewById(R.id.incid_comunidad_spinner), instance);
         return instance;
     }
 
