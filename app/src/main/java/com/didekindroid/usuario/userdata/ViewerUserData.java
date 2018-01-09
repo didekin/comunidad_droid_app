@@ -121,7 +121,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         Timber.d("alias: %s", usuarioBean.get().getAlias());
 
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
-        if (!usuarioBean.get().validateWithOnePassword(activity.getResources(), errorBuilder)) {
+        if (!usuarioBean.get().validateUserNameAliasPswd(activity.getResources(), errorBuilder)) {
             Timber.d("checkUserData(): %s", errorBuilder.toString());
             makeToast(activity, errorBuilder.toString());
             return false;

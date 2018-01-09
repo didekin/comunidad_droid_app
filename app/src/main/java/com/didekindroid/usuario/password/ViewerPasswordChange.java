@@ -122,7 +122,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
         oldUserPswd.set(new Usuario.UsuarioBuilder().userName(userName.get()).password(getPswdDataFromView()[2]).build());
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
 
-        if (!usuarioBean.get().validateWithoutAlias(activity.getResources(), errorBuilder)) {
+        if (!usuarioBean.get().validateUserNamePswd(activity.getResources(), errorBuilder)) {
             makeToast(activity, errorBuilder.toString());
             return false;
         }

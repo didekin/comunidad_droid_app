@@ -63,8 +63,8 @@ android {
         local {
             applicationIdSuffix ""
             debuggable true
-//            shrinkResources true
-//            minifyEnabled true
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'

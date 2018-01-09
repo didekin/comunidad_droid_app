@@ -40,7 +40,7 @@ public class ViewerRegUserFr extends Viewer<View, Controller> {
                         .toString(),
                 null, null
         );
-        if (usuarioBean.validateRegUser(activity.getResources(), errorBuilder)) {
+        if (usuarioBean.validateUserNameAlias(activity.getResources(), errorBuilder)) {
             return usuarioBean.getUsuario();
         } else {
             return null;

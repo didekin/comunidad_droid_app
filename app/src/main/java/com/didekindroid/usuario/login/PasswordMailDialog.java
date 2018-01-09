@@ -2,6 +2,7 @@ package com.didekindroid.usuario.login;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 
@@ -20,14 +21,12 @@ import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
  */
 public class PasswordMailDialog extends DialogFragment {
 
-    public static PasswordMailDialog newInstance(UsuarioBean usuarioBean)
+    public static PasswordMailDialog newInstance(@NonNull UsuarioBean usuarioBean)
     {
         Timber.d("newInstance()");
         PasswordMailDialog dialog = new PasswordMailDialog();
         Bundle bundle = new Bundle();
-        if (usuarioBean != null && usuarioBean.getUsuario() != null) {
-            bundle.putSerializable(usuario_object.key, usuarioBean.getUsuario());
-        }
+        bundle.putSerializable(usuario_object.key, usuarioBean.getUsuario());
         dialog.setArguments(bundle);
         return dialog;
     }

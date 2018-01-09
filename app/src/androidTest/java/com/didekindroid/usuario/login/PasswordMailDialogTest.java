@@ -9,9 +9,11 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.usuario.login.PasswordMailDialog.newInstance;
+import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -24,13 +26,15 @@ public class PasswordMailDialogTest {
     @Test
     public void test_NewInstance() throws Exception
     {
-        PasswordMailDialog dialog = PasswordMailDialog.newInstance(null);
-        assertThat(dialog.getArguments(), notNullValue());
-        assertThat(dialog.getArguments().getSerializable(usuario_object.key), nullValue());
+        try {
+            newInstance(null);
+        } catch (AssertionError e) {
+            assertThat(e.getMessage(), is(bean_fromView_should_be_initialized));
+        }
 
-        UsuarioBean usuarioBean = new UsuarioBean("email@mail.es","alias", "password", "password");
+        UsuarioBean usuarioBean = new UsuarioBean("email@mail.es", "alias", "password", "password");
         usuarioBean.validateLoginData(getTargetContext().getResources(), new StringBuilder(0));
-        dialog = PasswordMailDialog.newInstance(usuarioBean);
+        PasswordMailDialog dialog = newInstance(usuarioBean);
         assertThat(dialog.getArguments().getSerializable(usuario_object.key), notNullValue());
     }
 }

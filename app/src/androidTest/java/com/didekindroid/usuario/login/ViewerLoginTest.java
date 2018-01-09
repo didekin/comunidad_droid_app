@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -107,6 +108,13 @@ public class ViewerLoginTest {
         });
     }
 
+    @Test
+    public void test_CheckEmailData() throws Exception
+    {
+        typeLoginData(USER_DROID.getUserName(), null);
+        assertThat(activity.viewerLogin.checkEmailData(), is(true));
+    }
+
     @Test  // Validation: error message.
     public void testCheckLoginData_1() throws Exception
     {
@@ -134,8 +142,7 @@ public class ViewerLoginTest {
     @Test
     public void test_ShowDialogAfterErrors() throws Exception
     {
-        // Precondition.
-        activity.viewerLogin.usuarioBean.compareAndSet(null, new UsuarioBean("userName", null, "password_ok", null));
+        userBeanPreconditions();
         // Exec.
         activity.viewerLogin.showDialogAfterErrors();
         // Check.
@@ -147,7 +154,7 @@ public class ViewerLoginTest {
     {
         // Precondition.
         activity.viewerLogin.getCounterWrong().set(3);
-        activity.viewerLogin.usuarioBean.compareAndSet(null, new UsuarioBean("mail_wrong", null, "password_wrong", null));
+        userBeanPreconditions();
         // Exec.
         activity.runOnUiThread(() -> activity.viewerLogin.processLoginBackInView(false));
         // Check.
@@ -158,10 +165,11 @@ public class ViewerLoginTest {
     @Test   // Login NO ok, counterWrong <= 3.
     public void testProcessLoginBackInView_2() throws InterruptedException
     {
+        // Precondition.
         activity.viewerLogin.getCounterWrong().set(2);
-
+        // Exec.
         activity.runOnUiThread(() -> activity.viewerLogin.processLoginBackInView(false));
-
+        // Check.
         waitAtMost(5, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(3));
         waitAtMost(5, SECONDS).until(isToastInView(R.string.password_wrong, activity));
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
@@ -231,9 +239,7 @@ public class ViewerLoginTest {
     public void test_HelpButton_1() throws Exception
     {
         // Precondition.
-        activity.viewerLogin.usuarioBean.compareAndSet(
-                null,
-                new UsuarioBean("didekindroid@didekin.es", null, null, null));
+        typeLoginData(USER_DROID.getUserName(), null);
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.login_help_fab), click()));
         // Check.
         checkTextsInDialog(R.string.send_password_by_mail_dialog, R.string.send_password_by_mail_YES);
@@ -243,7 +249,7 @@ public class ViewerLoginTest {
     public void test_HelpButton_2() throws Exception
     {
         // Precondition.
-        activity.viewerLogin.usuarioBean.set(null);
+        typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.login_help_fab), click()));
         // Check.
         checkTextsInDialog(R.string.send_password_by_mail_dialog, R.string.send_password_by_mail_YES);
@@ -259,5 +265,13 @@ public class ViewerLoginTest {
         activity.runOnUiThread(() -> activity.viewerLogin.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND))));
         waitAtMost(3, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activity));
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
+    }
+
+    // =========================  HELPERS  =========================
+
+    private void userBeanPreconditions()
+    {
+        activity.viewerLogin.usuarioBean.compareAndSet(null, new UsuarioBean(USER_DROID.getUserName(), null, USER_DROID.getPassword(), null));
+        activity.viewerLogin.usuarioBean.get().validateLoginData(getTargetContext().getResources(), new StringBuilder(0));
     }
 }

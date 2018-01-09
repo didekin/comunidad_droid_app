@@ -23,7 +23,9 @@ import timber.log.Timber;
 
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.login.PasswordMailDialog.newInstance;
-import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
+import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkInternet;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -64,8 +66,8 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
             ((EditText) view.findViewById(R.id.reg_usuario_email_editT)).setText(String.class.cast(viewBean));
         }
 
-        Button mLoginButton = view.findViewById(R.id.login_ac_button);
-        mLoginButton.setOnClickListener(
+        Button validateLoginButton = view.findViewById(R.id.login_ac_button);
+        validateLoginButton.setOnClickListener(
                 v -> {
                     Timber.d("onClick()");
                     if (checkLoginData()) {
@@ -84,11 +86,28 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
         );
 
         FloatingActionButton fab = view.findViewById(R.id.login_help_fab);
-        fab.setOnClickListener(v -> showDialogAfterErrors());
+        fab.setOnClickListener(v -> {
+            if (checkEmailData()) {
+                showDialogAfterErrors();
+            }
+        });
 
         if (savedState != null) {
             counterWrong.set(savedState.getInt(login_counter_atomic_int.key));
         }
+    }
+
+    boolean checkEmailData()
+    {
+        Timber.d("checkEmailData()");
+        usuarioBean.set(new UsuarioBean(getLoginDataFromView()[0], null, null, null));
+
+        StringBuilder errorBuilder = getErrorMsgBuilder(activity);
+        if (!usuarioBean.get().validateUserName(activity.getResources(), errorBuilder)) {
+            makeToast(activity, errorBuilder.toString());
+            return false;
+        }
+        return checkInternet(activity);
     }
 
     boolean checkLoginData()
@@ -101,11 +120,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
             makeToast(activity, errorBuilder.toString());
             return false;
         }
-        if (!isInternetConnected(activity)) {
-            makeToast(activity, R.string.no_internet_conn_toast);
-            return false;
-        }
-        return true;
+        return checkInternet(activity);
     }
 
     String[] getLoginDataFromView()
@@ -139,6 +154,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
     void showDialogAfterErrors()
     {
         Timber.d("showDialogAfterErrors()");
+        assertTrue(usuarioBean != null && usuarioBean.get().getUsuario() != null, bean_fromView_should_be_initialized);
         DialogFragment newFragment = newInstance(usuarioBean.get());
         newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
