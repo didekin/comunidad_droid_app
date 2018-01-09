@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.widget.EditText;
 
 import com.didekindroid.R;
@@ -16,6 +17,7 @@ import com.didekinlib.model.usuario.Usuario;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -57,7 +59,7 @@ import static org.junit.Assert.assertThat;
  * Date: 24/03/17
  * Time: 19:15
  */
-
+@RunWith(AndroidJUnit4.class)
 public class ViewerLoginTest {
 
     static final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);

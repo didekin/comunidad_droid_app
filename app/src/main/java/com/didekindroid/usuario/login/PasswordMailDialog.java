@@ -24,11 +24,11 @@ public class PasswordMailDialog extends DialogFragment {
     {
         Timber.d("newInstance()");
         PasswordMailDialog dialog = new PasswordMailDialog();
+        Bundle bundle = new Bundle();
         if (usuarioBean != null && usuarioBean.getUsuario() != null) {
-            Bundle bundle = new Bundle();
             bundle.putSerializable(usuario_object.key, usuarioBean.getUsuario());
-            dialog.setArguments(bundle);
         }
+        dialog.setArguments(bundle);
         return dialog;
     }
 

@@ -7,6 +7,7 @@ import com.didekindroid.usuario.delete.DeleteMeAcTest;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenTest;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenTest;
 import com.didekindroid.usuario.login.LoginAcTest;
+import com.didekindroid.usuario.login.PasswordMailDialogTest;
 import com.didekindroid.usuario.login.ViewerLoginTest;
 import com.didekindroid.usuario.password.PasswordChangeAcTest;
 import com.didekindroid.usuario.password.ViewerPasswordChangeTest;
@@ -34,6 +35,7 @@ import org.junit.runners.Suite;
         ViewerFirebaseTokenTest.class,
         // login
         LoginAcTest.class,
+        PasswordMailDialogTest.class,
         ViewerLoginTest.class,
         // password
         PasswordChangeAcTest.class,

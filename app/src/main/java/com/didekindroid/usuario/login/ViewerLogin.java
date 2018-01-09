@@ -148,6 +148,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
         Timber.d("sendNewPassword()");
         if (usuario == null) {
             makeToast(activity, R.string.username_wrong_in_login);
+            return;
         }
         controller.sendNewPassword(new LoginObserver() {
             @Override
