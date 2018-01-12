@@ -28,26 +28,32 @@ public final class UserEspressoTestUtil {
     {
     }
 
-    public static void typeUserDataFull(String email, String alias/*, String password, String passwordConfirm*/)
+    public static void typeUserNameAlias(String email, String alias)
     {
         onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), replaceText(email));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), replaceText(alias), closeSoftKeyboard());
     }
 
-    public static void typeUserData(String userName, String alias, String password)
+    public static void typeUserNamePswd(String userName, String password)
+    {
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
+        onView(withId(R.id.password_validation_ediT)).perform(replaceText(password), closeSoftKeyboard());
+    }
+
+    public static void typeUserNameAliasPswd(String userName, String alias, String password)
     {
         onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText(alias));
         onView(withId(R.id.password_validation_ediT)).perform(replaceText(password), closeSoftKeyboard());
     }
 
-    public static void typePswdData(String password, String confirmation)
+    public static void typePswdConfirmPswd(String password, String confirmation)
     {
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation), closeSoftKeyboard());
     }
 
-    public static void typePswdDataWithPswdValidation(String password, String confirmation, String currentPassword)
+    public static void typePswdWithPswdValidation(String password, String confirmation, String currentPassword)
     {
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation));

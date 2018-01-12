@@ -43,7 +43,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
@@ -83,7 +83,7 @@ public class ViewerRegComuUserUserComuAcTest {
 
     static void execCheckCleanDialog(ViewerIf viewer) throws IOException
     {
-        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias());
+        typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         // Exec.
         onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
@@ -171,7 +171,7 @@ public class ViewerRegComuUserUserComuAcTest {
     @Test
     public void test_RegComuUserUserComuBtonListener_3() throws Exception
     {
-        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias());
+        typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         int buttonId = R.id.reg_user_plus_button;
         focusOnView(activity, buttonId);

@@ -18,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -48,17 +49,20 @@ import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAliasPswd;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNamePswd;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -81,7 +85,6 @@ public class UserDataAcTest {
     Usuario oldUsuario;
     Comunidad comunidad;
     TaskStackBuilder stackBuilder;
-
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
         @Override
@@ -100,6 +103,7 @@ public class UserDataAcTest {
             }
         }
     };
+    private boolean isClean;
 
     @Before
     public void setUp() throws Exception
@@ -110,7 +114,9 @@ public class UserDataAcTest {
     @After
     public void tearDown() throws Exception
     {
-        usuarioDaoRemote.deleteUser();
+        if (!isClean) {
+            usuarioDaoRemote.deleteUser();
+        }
         cleanWithTkhandler();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
@@ -156,24 +162,31 @@ public class UserDataAcTest {
     public void testModifyUserDataWrongPswd() throws InterruptedException
     {
         SECONDS.sleep(2);
-        typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
+        typeUserNameAliasPswd("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
         onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
         waitAtMost(6, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 
-    @Test  // Modify user OK.
-    public void testModifyUserData() throws UiException, InterruptedException
+    @Test  // Modify userName and alias OK.
+    public void testModifyUserData() throws UiException, InterruptedException, IOException
     {
         SECONDS.sleep(2);
         typeClickWait();
+        isClean = userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body();
+        assertThat(isClean, is(true));
     }
 
-    @Test  // Modify user OK.
-    public void testModifyUserData_Back() throws UiException, InterruptedException
+    @Test  // Modify userName OK.
+    public void testModifyUserData_Back() throws UiException, InterruptedException, IOException
     {
         SECONDS.sleep(2);
-        typeClickWait();
+        typeUserNamePswd(USER_DROID.getUserName(), USER_JUAN.getPassword());
+        focusOnView(activity, user_data_modif_button);
+        onView(withId(user_data_modif_button)).perform(scrollTo(), click());
+        // Check passwordSent dialog and back.
         checkBack(onView(withText(R.string.receive_password_by_mail_dialog)).inRoot(isDialog()).check(matches(isDisplayed())), userDataAcRsId);
+        isClean = userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body();
+        assertThat(isClean, is(true));
     }
 
     @Test
@@ -224,10 +237,13 @@ public class UserDataAcTest {
 
     public void typeClickWait()
     {
-        typeUserData("new@username.com", "new_alias", USER_JUAN.getPassword());
+        typeUserNameAliasPswd(USER_DROID.getUserName(), "new_alias", USER_JUAN.getPassword());
         focusOnView(activity, user_data_modif_button);
         onView(withId(user_data_modif_button)).perform(scrollTo(), click());
-
-        checkTextsInDialog(R.string.receive_password_by_mail_dialog, R.string.continuar_button_rot);
+        // Exec.
+        onView(withText(R.string.continuar_button_rot)).inRoot(isDialog()).perform(click());
+        // Check.
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
+        intended(hasExtra(user_name.key, USER_DROID.getUserName()));
     }
 }

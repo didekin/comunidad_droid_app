@@ -35,7 +35,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnSt
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -148,7 +148,7 @@ public class ViewerRegUserAndUserComuAcTest {
     @Test
     public void test_RegUserAndUserComuButtonListener_2() throws Exception
     {
-        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias());
+        typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5");
         onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
 

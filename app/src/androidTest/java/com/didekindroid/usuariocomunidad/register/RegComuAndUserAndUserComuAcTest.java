@@ -31,7 +31,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
@@ -78,7 +78,7 @@ public class RegComuAndUserAndUserComuAcTest {
     static void execCheckRegisterError(Activity activity)
     {
         typeUserComuData("WRONG**", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        typeUserDataFull(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
+        typeUserNameAlias(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
         // Exec.
         onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
         // Check

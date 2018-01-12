@@ -27,8 +27,8 @@ import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.password.ViewerPasswordChange.newViewerPswdChange;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdData;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdDataWithPswdValidation;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdConfirmPswd;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdWithPswdValidation;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
@@ -128,7 +128,7 @@ public class ViewerPasswordChangeTest {
     public void testCheckLoginData_1() throws Exception
     {
         // Caso WRONG: We test the change to false.
-        typePswdData("password1", "password2");
+        typePswdConfirmPswd("password1", "password2");
         // Run.
         activity.runOnUiThread(() -> activity.viewer.checkLoginData());
         // Check.
@@ -139,7 +139,7 @@ public class ViewerPasswordChangeTest {
     public void testCheckLoginData_2() throws Exception
     {
         // Caso WRONG: wrong format for current password.
-        typePswdDataWithPswdValidation("password1", "password1", "wrong+password");
+        typePswdWithPswdValidation("password1", "password1", "wrong+password");
 
         activity.runOnUiThread(() -> activity.viewer.checkLoginData());
         waitAtMost(4L, SECONDS).until(isToastInView(R.string.password_wrong, activity));
@@ -150,7 +150,7 @@ public class ViewerPasswordChangeTest {
     {
         // Caso OK: We test the change to true.
         final AtomicBoolean isPswdDataOk = new AtomicBoolean(false);
-        typePswdDataWithPswdValidation("password1", "password1", USER_PEPE.getPassword());
+        typePswdWithPswdValidation("password1", "password1", USER_PEPE.getPassword());
 
         activity.runOnUiThread(() -> assertThat(isPswdDataOk.getAndSet(activity.viewer.checkLoginData()), is(false)));
         waitAtMost(2, SECONDS).untilTrue(isPswdDataOk);
@@ -159,7 +159,7 @@ public class ViewerPasswordChangeTest {
     @Test
     public void testGetPswdDataFromView() throws Exception
     {
-        typePswdDataWithPswdValidation("new_password", "confirmation", "currentPassword");
+        typePswdWithPswdValidation("new_password", "confirmation", "currentPassword");
         assertThat(activity.viewer.getPswdDataFromView()[0], is("new_password"));
         assertThat(activity.viewer.getPswdDataFromView()[1], is("confirmation"));
         assertThat(activity.viewer.getPswdDataFromView()[2], is("currentPassword"));

@@ -28,7 +28,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAliasPswd;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -132,7 +132,7 @@ public class ViewerUserDataTest {
     {
         SECONDS.sleep(2);
 
-        typeUserData("newuser@user.com", USER_PEPE.getAlias(), USER_PEPE.getPassword());
+        typeUserNameAliasPswd("newuser@user.com", USER_PEPE.getAlias(), USER_PEPE.getPassword());
         runCheckUserData(true);
         Usuario usuario = activity.viewer.usuarioBean.get().getUsuario();
 
@@ -146,7 +146,7 @@ public class ViewerUserDataTest {
     {
         SECONDS.sleep(2);
 
-        typeUserData("wrong_newuser.com", USER_PEPE.getAlias(), USER_PEPE.getPassword());
+        typeUserNameAliasPswd("wrong_newuser.com", USER_PEPE.getAlias(), USER_PEPE.getPassword());
         runCheckUserData(false);
         waitAtMost(6, SECONDS).until(isToastInView(R.string.email_hint, activity));
     }
@@ -156,19 +156,19 @@ public class ViewerUserDataTest {
     {
         // Caso 1: datos de entrada (usuarioBean) == oldUser.
         activity.viewer.oldUser.set(new Usuario.UsuarioBuilder().alias(USER_PEPE.getAlias()).userName(USER_PEPE.getUserName()).build());
-        typeUserData(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword());
+        typeUserNameAliasPswd(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword());
         runWhatDataChange(nothing);
 
         // Caso 2: datos de entrada userName == oldUser.userName.
-        typeUserData(USER_PEPE.getUserName(), "new_alias", USER_PEPE.getPassword());
+        typeUserNameAliasPswd(USER_PEPE.getUserName(), "new_alias", USER_PEPE.getPassword());
         runWhatDataChange(alias_only);
 
         // Caso 3: datos de entrada userName != oldUser.userName.
-        typeUserData("new@userName.com", USER_PEPE.getAlias(), USER_PEPE.getPassword());
+        typeUserNameAliasPswd("new@userName.com", USER_PEPE.getAlias(), USER_PEPE.getPassword());
         runWhatDataChange(userName);
 
         // Caso 4: datos de entrada userName != oldUser.
-        typeUserData("new@userName.com", "new_alias", USER_PEPE.getPassword());
+        typeUserNameAliasPswd("new@userName.com", "new_alias", USER_PEPE.getPassword());
         runWhatDataChange(userName);
     }
 

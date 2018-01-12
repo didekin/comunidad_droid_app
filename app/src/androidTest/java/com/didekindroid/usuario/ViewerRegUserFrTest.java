@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -64,7 +64,7 @@ public class ViewerRegUserFrTest {
     @Test
     public void test_GetUserFromViewerOk() throws Exception
     {
-        typeUserDataFull("yo@email.com", "alias1");
+        typeUserNameAlias("yo@email.com", "alias1");
         assertThat(fragment.viewer.getUserFromViewer(new StringBuilder()), allOf(
                 notNullValue(),
                 is(new Usuario.UsuarioBuilder().userName("yo@email.com").alias("alias1").password("password1").build())
@@ -74,7 +74,7 @@ public class ViewerRegUserFrTest {
     @Test
     public void test_GetUserFromViewerWrong() throws Exception
     {
-        typeUserDataFull("yo_email.com", "alias1");
+        typeUserNameAlias("yo_email.com", "alias1");
         assertThat(fragment.viewer.getUserFromViewer(new StringBuilder()), nullValue());
     }
 }
