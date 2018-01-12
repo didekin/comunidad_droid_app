@@ -31,7 +31,7 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
 
     public static final UsuarioDaoIf usuarioDaoRemote = new UsuarioDaoRemote(creator.get().getRetrofitHandler().getService(UsuarioEndPoints.class));
     private final UsuarioEndPoints endPoint;
-    private final IdentityCacher identityCacher;
+    final IdentityCacher identityCacher;
 
     private UsuarioDaoRemote(UsuarioEndPoints endPoints)
     {
@@ -83,9 +83,9 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
     }
 
     @Override
-    public Call<Integer> modifyUser(String accessToken, Usuario usuario)
+    public Call<Integer> modifyUser(String deviceLanguage, String accessToken, Usuario usuario)
     {
-        return endPoint.modifyUser(accessToken, usuario);
+        return endPoint.modifyUser(deviceLanguage, accessToken, usuario);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
     {
         Timber.d("modifyUserWithToken(), Thread: %s", Thread.currentThread().getName());
         try {
-            return getResponseBody(modifyUser(identityCacher.checkBearerToken(oauthToken), usuario).execute());
+            return getResponseBody(modifyUser(getDeviceLanguage(), identityCacher.checkBearerToken(oauthToken), usuario).execute());
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }

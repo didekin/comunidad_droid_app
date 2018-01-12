@@ -135,15 +135,18 @@ public class UsuarioDaoRemoteTest {
     {
         whatClean = CLEAN_JUAN;
 
-        // Changed alias; not user.
+        // Changed alias; not userName.
         Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         Usuario usuarioIn = new Usuario.UsuarioBuilder()
+                .copyUsuario(usuario_1)
+                .password(USER_JUAN.getPassword())
                 .alias("new_alias_juan")
-                .uId(usuario_1.getuId())
                 .build();
 
         int rowUpdated = usuarioDaoRemote.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
         assertThat(rowUpdated, is(1));
+        // Login data has not changed.
+        assertThat(usuarioDaoRemote.loginInternal(usuarioIn.getUserName(), usuarioIn.getPassword()), is(true));
     }
 
     @Test
@@ -151,22 +154,22 @@ public class UsuarioDaoRemoteTest {
     {
         whatClean = CLEAN_NOTHING;
 
-        // Changed user.
+        // Preconditions.
         Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_PEPE);
+        assertThat(usuarioDaoRemote.loginInternal(USER_PEPE.getUserName(), USER_PEPE.getPassword()), is(true));
+
         Usuario usuarioIn = new Usuario.UsuarioBuilder()
-                .userName("new_pepe@pepe.com")
+                .userName(USER_DROID.getUserName())
                 .alias("new_alias_pepe")
                 .uId(usuario_1.getuId())
                 .build();
 
         int rowUpdated = usuarioDaoRemote.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
         assertThat(rowUpdated, is(1));
-
-        cleanOneUser(new Usuario.UsuarioBuilder()
-                .copyUsuario(usuarioIn)
-                .password(USER_PEPE.getPassword())
-                .build()
-        );
+        // Login data has changed: not only userName, but password.
+        assertThat(usuarioDaoRemote.loginInternal(USER_DROID.getUserName(), USER_PEPE.getPassword()), is(false));
+        // Clean.
+        assertThat(userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body(), is(true));
     }
 
     @Test

@@ -30,6 +30,7 @@ import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
@@ -88,7 +89,7 @@ public class ViewerUserDataTest {
     @After
     public void cleanUp() throws UiException
     {
-        if (isClean){
+        if (isClean) {
             return;
         }
         cleanOneUser(USER_PEPE);
@@ -197,11 +198,11 @@ public class ViewerUserDataTest {
         // Datos de entrada userName != oldUser.userName.
         waitAtMost(6, SECONDS).untilAtomic(activity.viewer.oldUser, is(usuario));
         activity.viewer.oldUser.set(new Usuario.UsuarioBuilder().copyUsuario(usuario).password(USER_PEPE.getPassword()).build());
-        activity.viewer.newUser.set(new Usuario.UsuarioBuilder().copyUsuario(activity.viewer.oldUser.get()).userName("new_userName").build());
+        activity.viewer.newUser.set(new Usuario.UsuarioBuilder().copyUsuario(activity.viewer.oldUser.get()).userName(USER_DROID.getUserName()).build());
         activity.runOnUiThread(() -> activity.viewer.modifyUserData(userName));
         checkTextsInDialog(R.string.receive_password_by_mail_dialog, R.string.continuar_button_rot);
 
-        assertThat(userComuMockDao.deleteUser("new_userName").execute().body(), is(true));
+        assertThat(userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body(), is(true));
         isClean = true;
     }
 

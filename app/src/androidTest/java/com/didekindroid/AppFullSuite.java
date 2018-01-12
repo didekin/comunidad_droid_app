@@ -22,7 +22,7 @@ import org.junit.runners.Suite;
         IncidSuite.class,
         // security
         SecuritySuite.class,
-        /* usuario*/
+        // usuario
         UsuarioSuite.class,
         // usuariocomunidad
         UserComuSuite.class,

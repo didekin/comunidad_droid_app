@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.dao;
 
-import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
@@ -13,7 +12,9 @@ import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCa
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromUserPswd;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheConsumer;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_should_be_initialized;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.Single.just;
 import static java.lang.Boolean.TRUE;
@@ -24,7 +25,7 @@ import static java.lang.Boolean.TRUE;
  * Time: 11:19
  */
 
-class UsuarioDaoObservable {
+class UsuarioObservable {
 
     @SuppressWarnings("WeakerAccess")
     static final UsuarioDaoIf usuarioDao = usuarioDaoRemote;
@@ -81,18 +82,22 @@ class UsuarioDaoObservable {
         return fromCallable(usuarioDao::getUserData);
     }
 
-    static Completable userModifiedTkUpdated(final SpringOauthToken oldUserToken, final Usuario newUser)
+    static Single<Boolean> userAliasModified(Usuario oldUser, final Usuario newUser)
     {
-        Timber.d("userModifiedTkUpdated()");
-        return Completable
-                .fromCallable(() -> usuarioDao.modifyUserWithToken(oldUserToken, newUser))
-                .andThen(oauthTokenAndInitCache(newUser));
+        Timber.d("userAliasModified()");
+        assertTrue(newUser.getUserName() != null, user_name_should_be_initialized);
+        return oauthTokenFromUserPswd(oldUser)
+                .flatMap(oldUserToken -> Completable.fromCallable(() -> usuarioDao.modifyUserWithToken(oldUserToken, newUser))
+                        .toSingleDefault(TRUE));
     }
 
-    static Single<Boolean> userModifiedWithPswdValidation(Usuario oldUser, final Usuario newUser)
+    static Single<Boolean> userNameModified(Usuario oldUser, final Usuario newUser)
     {
-        Timber.d("userModifiedWithPswdValidation()");
+        Timber.d("userNameModified()");
+        assertTrue(newUser.getUserName() != null, user_name_should_be_initialized);
         return oauthTokenFromUserPswd(oldUser)
-                .flatMap(oldUserToken -> userModifiedTkUpdated(oldUserToken, newUser).toSingleDefault(TRUE));
+                .flatMap(oldUserToken -> Completable.fromCallable(() -> usuarioDao.modifyUserWithToken(oldUserToken, newUser))
+                        .doOnComplete(((UsuarioDaoRemote) usuarioDao).identityCacher::cleanIdentityCache)
+                        .toSingleDefault(TRUE));
     }
 }

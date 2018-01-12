@@ -15,15 +15,15 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUpdatedCacheAfterPswd;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.deleteMeSingle;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginPswdSendSingle;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginSingle;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginUpdateTkCache;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.passwordChangeWithPswdValidation;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userData;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedTkUpdated;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedWithPswdValidation;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioObservable.deleteMeSingle;
+import static com.didekindroid.usuario.dao.UsuarioObservable.loginPswdSendSingle;
+import static com.didekindroid.usuario.dao.UsuarioObservable.loginSingle;
+import static com.didekindroid.usuario.dao.UsuarioObservable.loginUpdateTkCache;
+import static com.didekindroid.usuario.dao.UsuarioObservable.passwordChangeWithPswdValidation;
+import static com.didekindroid.usuario.dao.UsuarioObservable.userAliasModified;
+import static com.didekindroid.usuario.dao.UsuarioObservable.userData;
+import static com.didekindroid.usuario.dao.UsuarioObservable.userNameModified;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -36,8 +36,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertThat;
  * Date: 31/10/2017
  * Time: 12:20
  */
-public class UsuarioDaoObservableTest {
+public class UsuarioObservableTest {
 
     // ................................. DELETE USER ...............................
 
@@ -175,24 +175,42 @@ public class UsuarioDaoObservableTest {
     }
 
     @Test
-    public void test_UserModifiedTokenUpdated() throws Exception
+    public void test_UserAliasModified() throws Exception
     {
-        Usuario oldUsuario = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        userModifiedTkUpdated(TKhandler.getTokenCache().get(), doNewUser(oldUsuario)).test().awaitDone(4, SECONDS).assertComplete();
-
-        // El hecho de poder borrar implica que la cache se ha actualizado correctamente.
-        usuarioDaoRemote.deleteUser();
-        cleanWithTkhandler();
+        // Preconditions.
+        Usuario oldUsuario = new Usuario.UsuarioBuilder().copyUsuario(signUpAndUpdateTk(COMU_ESCORIAL_PEPE))
+                .password(USER_PEPE.getPassword()).build();
+        // Exec: we change alias.
+        userAliasModified(oldUsuario,
+                new Usuario.UsuarioBuilder()
+                        .copyUsuario(oldUsuario)
+                        .alias("new_pepe_alias")
+                        .build())
+                .test().assertResult(true);
+        // Check side effects.
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
+        // Delete.
+        cleanOneUser(oldUsuario);
     }
 
     @Test
-    public void test_UserModifiedWithPswdValidation() throws Exception
+    public void test_UserNameModified() throws Exception
     {
-        Usuario oldUsuario = new Usuario.UsuarioBuilder().copyUsuario(signUpAndUpdateTk(COMU_ESCORIAL_PEPE)).password(USER_PEPE.getPassword()).build();
-        userModifiedWithPswdValidation(oldUsuario, doNewUser(oldUsuario)).test().assertResult(true);
-
-        usuarioDaoRemote.deleteUser();
-        cleanWithTkhandler();
+        // Preconditions.
+        Usuario oldUsuario = new Usuario.UsuarioBuilder().copyUsuario(signUpAndUpdateTk(COMU_ESCORIAL_PEPE))
+                .password(USER_PEPE.getPassword()).build();
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
+        // Exec: we change userName.
+        userNameModified(oldUsuario,
+                new Usuario.UsuarioBuilder()
+                        .copyUsuario(oldUsuario)
+                        .userName(USER_DROID.getUserName())
+                        .build())
+                .test().assertResult(true);
+        // Check side effects.
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
+        // Delete.
+        assertThat(userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body(), is(true));
     }
 
     //  ============================================================================================
@@ -207,12 +225,4 @@ public class UsuarioDaoObservableTest {
         cleanWithTkhandler();
     }
 
-    public Usuario doNewUser(Usuario oldUsuario)
-    {
-        return new Usuario.UsuarioBuilder()
-                .userName("new_pepe_name")
-                .uId(oldUsuario.getuId())
-                .password(USER_PEPE.getPassword())
-                .build();
-    }
 }

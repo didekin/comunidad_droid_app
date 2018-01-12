@@ -11,12 +11,13 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.deleteMeSingle;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginPswdSendSingle;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginUpdateTkCache;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.passwordChangeWithPswdValidation;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userData;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedWithPswdValidation;
+import static com.didekindroid.usuario.dao.UsuarioObservable.deleteMeSingle;
+import static com.didekindroid.usuario.dao.UsuarioObservable.loginPswdSendSingle;
+import static com.didekindroid.usuario.dao.UsuarioObservable.loginUpdateTkCache;
+import static com.didekindroid.usuario.dao.UsuarioObservable.passwordChangeWithPswdValidation;
+import static com.didekindroid.usuario.dao.UsuarioObservable.userAliasModified;
+import static com.didekindroid.usuario.dao.UsuarioObservable.userData;
+import static com.didekindroid.usuario.dao.UsuarioObservable.userNameModified;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
@@ -63,11 +64,22 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
     }
 
     @Override
-    public boolean modifyUser(DisposableSingleObserver<Boolean> observer, Usuario oldUser, Usuario newUser)
+    public boolean modifyUserName(DisposableSingleObserver<Boolean> observer, Usuario oldUser, Usuario newUser)
     {
-        Timber.d("modifyUser()");
+        Timber.d("modifyUserName()");
         return subscriptions.add(
-                userModifiedWithPswdValidation(oldUser, newUser)
+                userNameModified(oldUser, newUser)
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribeWith(observer));
+    }
+
+    @Override
+    public boolean modifyUserAlias(DisposableSingleObserver<Boolean> observer, Usuario oldUser, Usuario newUser)
+    {
+        Timber.d("modifyUserName()");
+        return subscriptions.add(
+                userAliasModified(oldUser, newUser)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer));

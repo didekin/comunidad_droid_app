@@ -1,7 +1,7 @@
 package com.didekindroid.usuario;
 
 import com.didekindroid.usuario.dao.CtrlerUsuario_Test;
-import com.didekindroid.usuario.dao.UsuarioDaoObservableTest;
+import com.didekindroid.usuario.dao.UsuarioObservableTest;
 import com.didekindroid.usuario.dao.UsuarioDaoRemoteTest;
 import com.didekindroid.usuario.delete.DeleteMeAcTest;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenTest;
@@ -26,7 +26,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         // dao
         CtrlerUsuario_Test.class,
-        UsuarioDaoObservableTest.class,
+        UsuarioObservableTest.class,
         UsuarioDaoRemoteTest.class,
         // delete
         DeleteMeAcTest.class,

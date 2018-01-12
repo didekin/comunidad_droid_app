@@ -176,7 +176,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
                 makeToast(activity, R.string.no_user_data_to_be_modified);
                 return false;
             case userName:
-                return controller.modifyUser(
+                return controller.modifyUserName(
                         new AbstractSingleObserver<Boolean>(this) {
                             @Override
                             public void onSuccess(Boolean isCompleted)
@@ -189,7 +189,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
                         oldUser.get(),
                         newUser.get());
             case alias_only:
-                return controller.modifyUser(
+                return controller.modifyUserAlias(
                         new AbstractSingleObserver<Boolean>(this) {
                             @Override
                             public void onSuccess(Boolean isCompleted)

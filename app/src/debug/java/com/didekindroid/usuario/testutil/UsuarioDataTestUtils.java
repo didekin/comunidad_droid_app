@@ -33,7 +33,7 @@ public final class UsuarioDataTestUtils {
             .password("pswd01")
             .build();
     public static final Usuario USER_PEPE = new Usuario.UsuarioBuilder()
-            .userName("pepe@didekin.es")
+            .userName("pedro@didekin.es")
             .alias("alias_pepe")
             .password("psw_pepe")
             .build();

@@ -36,6 +36,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -157,21 +158,25 @@ public class CtrlerUsuario_Test {
     }
 
     @Test
-    public void testModifyUser() throws Exception
+    public void testModifyUserName() throws Exception
     {
         Usuario oldUser = new Usuario.UsuarioBuilder().copyUsuario(signUpAndUpdateTk(COMU_ESCORIAL_PEPE)).password(USER_PEPE.getPassword()).build();
 
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.modifyUser(
+            assertThat(controller.modifyUserName(
                     new TestSingleObserver<Boolean>() {
                         @Override
                         public void onSuccess(Boolean item)
                         {
                             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
                         }
-                    }, oldUser, doNewUser(oldUser)),
+                    }, oldUser, new Usuario.UsuarioBuilder()
+                            .copyUsuario(oldUser)
+                            .userName(USER_DROID.getUserName())
+                            .password(USER_PEPE.getPassword())
+                            .build()),
                     is(true));
         } finally {
             resetAllSchedulers();
@@ -179,8 +184,34 @@ public class CtrlerUsuario_Test {
         assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
 
-        usuarioDaoRemote.deleteUser();
+        assertThat(userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body(), is(true));
         cleanWithTkhandler();
+    }
+
+    @Test
+    public void testModifyUserAlias() throws Exception
+    {
+        Usuario oldUser = new Usuario.UsuarioBuilder().copyUsuario(signUpAndUpdateTk(COMU_ESCORIAL_PEPE)).password(USER_PEPE.getPassword()).build();
+
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            assertThat(controller.modifyUserAlias(
+                    new TestSingleObserver<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean item)
+                        {
+                            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+                        }
+                    }, oldUser, new Usuario.UsuarioBuilder().copyUsuario(oldUser).alias("new_pepe_alias").build()),
+                    is(true));
+        } finally {
+            resetAllSchedulers();
+        }
+        assertThat(controller.getSubscriptions().size(), is(1));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
+
+        cleanOneUser(USER_PEPE);
     }
 
     @Test   // With mock callable to avoid change identity data in cache.
@@ -191,7 +222,7 @@ public class CtrlerUsuario_Test {
             trampolineReplaceAndroidMain();
             assertThat(controller.sendNewPassword(
                     new UsuarioDaoTestUtil.SendPswdCallable(),
-                    new TestSingleObserver<Boolean>()),
+                    new TestSingleObserver<>()),
                     is(true));
         } finally {
             resetAllSchedulers();
@@ -207,7 +238,7 @@ public class CtrlerUsuario_Test {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.validateLogin(new TestSingleObserver<Boolean>(), USER_DROID), is(true));
+            assertThat(controller.validateLogin(new TestSingleObserver<>(), USER_DROID), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -218,15 +249,6 @@ public class CtrlerUsuario_Test {
     //  ============================================================================================
     //    .................................... HELPERS .................................
     //  ============================================================================================
-
-    public Usuario doNewUser(Usuario oldUsuario)
-    {
-        return new Usuario.UsuarioBuilder()
-                .userName("new_pepe_name")
-                .uId(oldUsuario.getuId())
-                .password(USER_PEPE.getPassword())
-                .build();
-    }
 
     static class TestSingleObserver<T> extends DisposableSingleObserver<T> {
 

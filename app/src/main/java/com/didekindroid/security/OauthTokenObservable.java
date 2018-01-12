@@ -72,7 +72,7 @@ public class OauthTokenObservable {
      *
      * @return a Completable which calls oauthTokenFromUserPswd, initializes the token cache and update register status to true.
      */
-    public static Completable oauthTokenInitCacheUpdateRegister(final Usuario usuario)
+    static Completable oauthTokenInitCacheUpdateRegister(final Usuario usuario)
     {
         Timber.d("oauthTokenAndInitCache()");
         return oauthTokenFromUserPswd(usuario)
