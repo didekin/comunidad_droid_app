@@ -2,6 +2,7 @@ package com.didekindroid.usuariocomunidad.listbyuser;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import com.didekindroid.security.IdentityCacher;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.newComunidadUserComu;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
@@ -44,6 +46,8 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements ActivityIn
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
+        FloatingActionButton fab = findViewById(R.id.new_comunidad_fab);
+        fab.setOnClickListener(v -> initAcFromRouter(null, newComunidadUserComu));
         mFragment = (SeeUserComuByUserFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
     }
 

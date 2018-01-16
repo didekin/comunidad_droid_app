@@ -167,7 +167,7 @@ public class ViewerUserComuDataAcTest {
         // Exec and check.
         just(1).subscribeWith(viewer.new ModifyUserComuObserver(true));
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
-        assertThat(viewer.showComuDataMn.get(), is(true));
+        waitAtMost(4, SECONDS).untilTrue(viewer.showComuDataMn);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class ViewerUserComuDataAcTest {
         // Exec and check.
         just(1).subscribeWith(viewer.new ModifyUserComuObserver(false));
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
-        assertThat(viewer.showComuDataMn.get(), is(false));
+        waitAtMost(4, SECONDS).untilFalse(viewer.showComuDataMn);
     }
 
     @Test

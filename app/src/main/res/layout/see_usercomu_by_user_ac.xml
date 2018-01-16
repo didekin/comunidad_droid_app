@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/see_usercomu_by_user_ac"
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include layout="@layout/appbar_include_design" />
 
@@ -10,4 +15,11 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/app_bar_bottom_margin" />
 
-</merge>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_comunidad_fab"
+        style="@style/floatingButton"
+        app:fabSize="mini"
+        app:rippleColor="@color/deep_orange_200"
+        app:srcCompat="@drawable/ic_create_black_24dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

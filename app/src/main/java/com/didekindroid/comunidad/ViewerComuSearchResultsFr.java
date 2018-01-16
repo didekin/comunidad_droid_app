@@ -24,10 +24,10 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_noRegUser;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_regUser;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_regUserComu;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_editUserComu;
 import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.noComunidadFound_noRegUser;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.noComunidadFound_regUser;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.noComunidadFound_regComuUserComu;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.util.UIutils.makeToast;
 
@@ -80,7 +80,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidad);
         if (controller.isRegisteredUser()) {
-            initAcFromRouter(bundle, noComunidadFound_regUser);
+            initAcFromRouter(bundle, noComunidadFound_regComuUserComu);
         } else {
             initAcFromRouter(bundle, noComunidadFound_noRegUser);
         }
@@ -124,7 +124,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onSuccess()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
-            initAcFromRouter(bundle, comunidadFound_regUserComu);
+            initAcFromRouter(bundle, comunidadFound_editUserComu);
         }
 
         @Override
@@ -140,7 +140,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onComplete()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            initAcFromRouter(bundle, comunidadFound_regUser);
+            initAcFromRouter(bundle, comunidadFound_regUserComu);
         }
     }
 

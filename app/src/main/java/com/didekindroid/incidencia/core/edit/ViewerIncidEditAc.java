@@ -28,11 +28,11 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
+final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;
 
-    ViewerIncidEditAc(IncidEditAc activity)
+    private ViewerIncidEditAc(IncidEditAc activity)
     {
         super(activity.acView, activity);
     }

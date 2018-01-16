@@ -145,6 +145,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityIn
         {
             Timber.d("onSuccess()");
             onSuccessEraseIncidencia(rowDeleted);
+            getActivity().finish();
         }
 
         @Override

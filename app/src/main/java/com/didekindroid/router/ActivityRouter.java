@@ -175,16 +175,17 @@ public class ActivityRouter implements ActivityRouterIf {
         defaultRegUser(LoginAc.class),
         defaultNoRegUser(ComuSearchAc.class),
         // Search comunidad.
-        comunidadFound_regUserComu(UserComuDataAc.class),
-        comunidadFound_regUser(RegUserComuAc.class),
+        comunidadFound_editUserComu(UserComuDataAc.class),
+        comunidadFound_regUserComu(RegUserComuAc.class),
         comunidadFound_noRegUser(RegUserAndUserComuAc.class),
-        noComunidadFound_regUser(RegComuAndUserComuAc.class),
+        noComunidadFound_regComuUserComu(RegComuAndUserComuAc.class),
         noComunidadFound_noRegUser(RegComuAndUserAndUserComuAc.class),
         // Usuario
         afterModifiedUserAlias(SeeUserComuByUserAc.class),
         // UsuarioComunidad.
         userComuItemSelected(UserComuDataAc.class),
         afterModifiedUserComu(SeeUserComuByUserAc.class),
+        newComunidadUserComu(noComunidadFound_regComuUserComu.activityToGo),
         // Password.
         modifyPswd(SeeUserComuByUserAc.class),
         sendNewPswd(LoginAc.class),
