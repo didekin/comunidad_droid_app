@@ -158,6 +158,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
         {
             Timber.d("onSuccess()");
             showComuDataMn.set(rowsUpdated == 1 && upDateMenu);
+            Timber.d("Update menu = %b", showComuDataMn.get());
             initAcFromRouter(new Bundle(0), afterModifiedUserComu);
         }
     }

@@ -80,7 +80,6 @@ public class ViewerRegUserComuAcTest {
     };
 
     RegUserComuAc activity;
-    private boolean cleanBoth;
 
     @Before
     public void setUp() throws Exception
