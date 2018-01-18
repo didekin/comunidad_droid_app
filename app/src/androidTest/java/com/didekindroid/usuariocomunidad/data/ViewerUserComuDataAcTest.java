@@ -175,8 +175,8 @@ public class ViewerUserComuDataAcTest {
     {
         // Exec and check.
         just(1).subscribeWith(viewer.new ModifyUserComuObserver(false));
-        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
-        waitAtMost(4, SECONDS).untilFalse(viewer.showComuDataMn);
+        waitAtMost(8, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(6, SECONDS).untilFalse(viewer.showComuDataMn);
     }
 
     @Test

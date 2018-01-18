@@ -70,6 +70,7 @@ public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMain_abs_Test {
     {
         viewerDrawer = intentRule.getActivity().getViewerDrawer();
         assertThat(viewerDrawer.getController().isRegisteredUser(), is(true));
+        waitAtMost(4, SECONDS).until(() -> viewerDrawer.drawerHeaderRot != null);
     }
 
     @After
