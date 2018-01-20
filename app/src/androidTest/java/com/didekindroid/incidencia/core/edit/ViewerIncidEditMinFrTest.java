@@ -8,6 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
@@ -155,8 +157,11 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
-        viewer.onSuccessModifyIncidImportancia(1);
+        Comunidad incidComu = resolBundle.getIncidImportancia().getIncidencia().getComunidad();
+        viewer.onSuccessModifyIncidImportancia(incidComu);
         waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
+        // Check comuSpinner initialization.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidComu.getNombreComunidad()));
     }
 
     @Test

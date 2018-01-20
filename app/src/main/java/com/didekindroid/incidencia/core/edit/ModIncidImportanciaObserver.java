@@ -1,6 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
-import com.didekindroid.api.ViewerIf;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
@@ -11,20 +11,22 @@ import timber.log.Timber;
  * Time: 17:22
  */
 
-class ModIncidImportanciaObserver<T extends ViewerIf & ModIncidImportanciaCallableBack> extends DisposableSingleObserver<Integer> {
+class ModIncidImportanciaObserver<T extends ViewerIncidEditFr> extends DisposableSingleObserver<Integer> {
 
     private final T viewerCallBack;
+    private final Comunidad comunidad;
 
-    ModIncidImportanciaObserver(T viewerCallBack)
+    ModIncidImportanciaObserver(T viewerCallBack, Comunidad comunidad)
     {
         this.viewerCallBack = viewerCallBack;
+        this.comunidad = comunidad;
     }
 
     @Override
     public void onSuccess(Integer rowModified)
     {
         Timber.d("onSuccess()");
-        viewerCallBack.onSuccessModifyIncidImportancia(rowModified);
+        viewerCallBack.onSuccessModifyIncidImportancia(comunidad);
     }
 
     @Override
