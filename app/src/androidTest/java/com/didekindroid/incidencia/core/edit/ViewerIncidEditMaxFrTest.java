@@ -24,13 +24,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrNotErase;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
@@ -40,7 +42,9 @@ import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
@@ -64,6 +68,9 @@ public class ViewerIncidEditMaxFrTest {
     ViewerIncidEditMaxFr viewer;
     IncidenciaDataDbHelper dbHelper;
     IncidAndResolBundle resolBundle;
+    UsuarioComunidad comuRealJuan;
+    UsuarioComunidad comuPlazuelaJuan;
+
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
@@ -71,8 +78,12 @@ public class ViewerIncidEditMaxFrTest {
         protected Intent getActivityIntent()
         {
             try {
+                regTwoUserComuSameUser(makeListTwoUserComu());
+                List<UsuarioComunidad> userComus = userComuDaoRemote.seeUserComusByUser();
+                comuRealJuan = userComus.get(0);
+                comuPlazuelaJuan = userComus.get(1);
                 // Perfil pro, iniciador de la incidencia. Incidencia sin resolución abierta.
-                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_REAL_JUAN), false);
+                resolBundle = new IncidAndResolBundle(makeRegGetIncidImportancia(comuRealJuan, (short) 3), false);
             } catch (IOException | UiException e) {
                 fail();
             }
@@ -178,8 +189,13 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
-        viewer.onSuccessModifyIncidImportancia(1);
+        // Precondition: comuRealJuan in spinner.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuRealJuan.getComunidad().getNombreComunidad()));
+        // Exec with the other comunidad as parameter.
+        viewer.onSuccessModifyIncidImportancia(comuPlazuelaJuan.getComunidad());
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        // Check comuSpinner initialization with the comunidad in the method parameter.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuPlazuelaJuan.getComunidad().getNombreComunidad()));
     }
 
     @Test

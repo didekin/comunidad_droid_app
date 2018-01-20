@@ -21,7 +21,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
 /**
  * Preconditions:
  * 1. The user is registered.
- * 2. An intent may be received with the comunidadId where the incidencia will be open.
+ * 2. An intent is received with the comunidadId where the incidencia will be open.
  * Postconditions:
  * 1. No intent passed.
  * <p>

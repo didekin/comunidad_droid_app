@@ -9,12 +9,13 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.incidencia.utils.IncidBundleKey;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -23,7 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.erasedOpenIncid;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifiedOpenIncid;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -34,8 +36,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 15:06
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> implements
-        ModIncidImportanciaCallableBack, ActivityInitiatorIf {
+abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;
     IncidenciaBean incidenciaBean;
@@ -79,7 +80,9 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
             // Check first for a valid IncidImportancia instance; then check the internet connection.
             IncidImportancia newIncidImportancia = doNewIncidImportancia(errorMsg);
             if (checkInternetConnected(getActivity())) {
-                controller.modifyIncidImportancia(new ModIncidImportanciaObserver<>(this), newIncidImportancia);
+                controller.modifyIncidImportancia(
+                        new ModIncidImportanciaObserver<>(this, newIncidImportancia.getIncidencia().getComunidad()),
+                        newIncidImportancia);
             }
         } catch (IllegalStateException e) {
             Timber.e(e.getMessage());
@@ -87,13 +90,13 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
         }
     }
 
-    @Override
-    public void onSuccessModifyIncidImportancia(int rowInserted)
+    void onSuccessModifyIncidImportancia(Comunidad comunidad)
     {
         Timber.d("onSuccessModifyIncidImportancia()");
         Bundle bundle = new Bundle(1);
+        bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id()); // TODO: test.
         bundle.putBoolean(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, false);
-        initAcFromRouter(bundle, erasedOpenIncid);
+        initAcFromRouter(bundle, modifiedOpenIncid);
     }
 
     //    ============================  LIFE CYCLE   ===================================
