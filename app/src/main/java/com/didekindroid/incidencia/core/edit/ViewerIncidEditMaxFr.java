@@ -106,6 +106,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityIn
         Timber.d("onSuccessEraseIncidencia()");
         assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
         Bundle bundle = new Bundle(1);
+        // TODO: hay que pasar la comunidad para la lista de incidencias que se muestra a continuación.
         bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
         initAcFromRouter(bundle, erasedOpenIncid);
     }
