@@ -76,11 +76,11 @@ android {
             // Variables for android_studio default run-debug configuration.
             if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
             // LOCAL url's
-//                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
-//                resValue "string", "didekin_web_port", '""'
+                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+                resValue "string", "didekin_web_port", '""'
             // AWSPRE url's
-                resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
-                resValue "string", "didekin_web_port", '":443"'
+//                resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+//                resValue "string", "didekin_web_port", '":443"'
             } else {
                 // Variables defined in buildtest.sh for local and awspre environments.
                 resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
