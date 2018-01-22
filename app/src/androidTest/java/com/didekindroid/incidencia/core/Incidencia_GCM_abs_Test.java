@@ -63,6 +63,8 @@ public abstract class Incidencia_GCM_abs_Test {
     {
         mActivity = intentRule.getActivity();
         notificationManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+        // Double check.
+        notificationManager.cancelAll();
     }
 
     @After

@@ -77,7 +77,7 @@ public class ViewerRegComuUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserComuButtonListener_1() throws Exception    // TODO: se para aquí.
+    public void test_RegComuUserComuButtonListener_1() throws Exception
     {
         // Precondition: user is registered.
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);

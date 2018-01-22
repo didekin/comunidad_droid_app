@@ -28,6 +28,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
@@ -50,6 +55,7 @@ import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -189,8 +195,7 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
-        // Precondition: comuRealJuan in spinner.
-        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuRealJuan.getComunidad().getNombreComunidad()));
+        checkComuInSpinner();
         // Exec with the other comunidad as parameter.
         viewer.onSuccessModifyIncidImportancia(comuPlazuelaJuan.getComunidad());
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
@@ -201,14 +206,18 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testOnSuccessEraseIncidencia() throws Exception
     {
-        viewer.onSuccessEraseIncidencia(1);
+        checkComuInSpinner();
+        // Exec with the other comunidad as parameter.
+        viewer.onSuccessEraseIncidencia(comuPlazuelaJuan.getComunidad());
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        // Check comuSpinner initialization with the comunidad in the method parameter.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuPlazuelaJuan.getComunidad().getNombreComunidad()));
     }
 
     @Test
     public void test_EraseIncidenciaObserver()
     {
-        just(1).subscribeWith(viewer.new EraseIncidenciaObserver());
+        just(1).subscribeWith(viewer.new EraseIncidenciaObserver(comuRealJuan.getComunidad()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
@@ -268,5 +277,17 @@ public class ViewerIncidEditMaxFrTest {
                                 .roles(rol)
                                 .build())
                 .build();
+    }
+
+    private void checkComuInSpinner()
+    {
+        // Precondition: comuRealJuan is shown in screen.
+        waitAtMost(4, SECONDS).until(() -> {
+            onView(allOf(
+                    withId(R.id.incid_comunidad_txt),
+                    withText(comuRealJuan.getComunidad().getNombreComunidad())
+            )).check(matches(isDisplayed()));
+            return true;
+        });
     }
 }

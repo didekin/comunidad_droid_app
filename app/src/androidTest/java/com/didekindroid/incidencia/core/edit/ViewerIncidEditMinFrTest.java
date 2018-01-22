@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
@@ -22,7 +23,11 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
@@ -158,9 +163,17 @@ public class ViewerIncidEditMinFrTest {
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
         Comunidad incidComu = resolBundle.getIncidImportancia().getIncidencia().getComunidad();
+        // Precondition: incidComu name is shown in screen.
+        waitAtMost(4, SECONDS).until(() -> {
+            onView(allOf(
+                    withId(R.id.incid_comunidad_txt),
+                    withText(incidComu.getNombreComunidad())
+            )).check(matches(isDisplayed()));
+            return true;
+        });
         viewer.onSuccessModifyIncidImportancia(incidComu);
         waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
-        // Check comuSpinner initialization.
+        // Check comuSpinner initialization: the same initial comunidad is shown.
         waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidComu.getNombreComunidad()));
     }
 
