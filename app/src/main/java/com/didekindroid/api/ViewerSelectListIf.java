@@ -24,7 +24,7 @@ public interface ViewerSelectListIf<T extends AdapterView, C extends CtrlerSelec
 
     int getSelectedPositionFromItemId(long itemId);
 
-    void setItemSelectedId(long itemSelectedId);
+    void setSelectedItemId(long itemSelectedId);
 
     void onSuccessLoadSelectedItem(@NonNull Bundle bundle);
 }

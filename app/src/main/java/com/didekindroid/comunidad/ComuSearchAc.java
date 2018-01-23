@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -12,11 +13,13 @@ import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerManagerIf;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.router.ViewerDrawerMain;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
+import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -31,7 +34,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  */
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjectorIf,
-        ViewerManagerIf {
+        ViewerManagerIf, ActivityInitiatorIf {
 
     View acView;
     RegComuFr regComuFrg;
@@ -69,6 +72,11 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         savedStateViewers(outState);
     }
 
+    public ViewerDrawerMain getViewerDrawer()
+    {
+        return viewerDrawer;
+    }
+
     // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
@@ -85,6 +93,14 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         viewerAc.setChildViewer(viewerChild);
     }
 
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
     /* ==================================== ViewerManagerIf ====================================*/
 
     @Override
@@ -93,7 +109,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         Timber.d("initViewers()");
         viewerAc = newViewerComuSearch(this);
         viewerAc.doViewInViewer(savedInstanceState, null);
-        viewerDrawer = ViewerDrawerMain.newViewerDrawerMain(this);
+        viewerDrawer = newViewerDrawerMain(this);
         viewerDrawer.doViewInViewer(savedInstanceState, null);
     }
 
@@ -147,7 +163,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
                 return true;
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                new ActivityInitiator(this).initAcFromMnNewIntent(resourceId);
+                initAcFromMenu(null, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

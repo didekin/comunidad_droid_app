@@ -5,6 +5,8 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
@@ -57,14 +59,14 @@ public class DeleteMeAcTest {
             }
         }
     };
-    CtrlerDeleteMeIf controller;
+    CtrlerUsuarioIf controller;
 
     @Before
     public void setUp() throws Exception
     {
         activity = (DeleteMeAc) mActivityRule.getActivity();
         // Default initialization.
-        controller = new CtrlerDeleteMe();
+        controller = new CtrlerUsuario();
     }
 
     //    =====================================  TESTS  ==========================================

@@ -66,13 +66,9 @@ public class ObserverCacheCleanerTest {
         assertThat(viewer.getController().getIdentityCacher().getTokenCache().get(), nullValue());
         assertThat(viewer.getController().getIdentityCacher().getRefreshTokenFile().exists(), is(false));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(error(new UiException(new ErrorBean(BAD_REQUEST))).subscribeWith(new ObserverCacheCleaner(viewer)).isDisposed(), is(true));
-                assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
-            }
+        activity.runOnUiThread(() -> {
+            assertThat(error(new UiException(new ErrorBean(BAD_REQUEST))).subscribeWith(new ObserverCacheCleaner(viewer)).isDisposed(), is(true));
+            assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
         });
     }
 }

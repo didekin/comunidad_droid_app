@@ -6,6 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
@@ -25,6 +27,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -35,7 +38,6 @@ import static com.didekindroid.comunidad.spinner.ViewerProvinciaSpinner.newViewe
 import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.PROVINCIA_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -177,9 +179,9 @@ public class ViewerProvinciaSpinnerTest {
 
         // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() ... {--> ProvinciaSelectedListener.onItemSelected() }
         // We initialize to 0 the itemSelectedId to chedk the call to ProvinciaSelectedListener.onItemSelected().
-        viewer.setItemSelectedId(38L); // Santa Cruz de Tenerife
+        viewer.setSelectedItemId(38L); // Santa Cruz de Tenerife
         viewer.getController().loadItemsByEntitiyId(new ObserverSingleSelectList<>(viewer), 5L);
-        waitAtMost(3, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(3, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(2));
         // ProvinciaSelectedListener.onItemSelected() modify spinnerEvent.
         assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(38L));

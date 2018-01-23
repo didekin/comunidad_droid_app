@@ -50,12 +50,10 @@ public class ObserverSingleSelectListTest {
     {
         final AppCompatActivity activity = activityRule.getActivity();
         final AtomicReference<ObserverSingleSelectList<ViewerSelectList<Spinner, CtrlerSelectList<String>, String>, String>> atomicObserver = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                atomicObserver.compareAndSet(null,
-                        new ObserverSingleSelectList<ViewerSelectList<Spinner, CtrlerSelectList<String>, String>, String>(
+        activity.runOnUiThread(
+                () -> atomicObserver.compareAndSet(
+                        null,
+                        new ObserverSingleSelectList<>(
                                 new ViewerSelectList<Spinner, CtrlerSelectList<String>, String>(new Spinner(activity), activity, null) {
                                     @Override
                                     public void initSelectedItemId(Bundle savedState)
@@ -74,9 +72,9 @@ public class ObserverSingleSelectListTest {
                                         assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
                                     }
                                 }
-                        ));
-            }
-        });
+                        )
+                )
+        );
         waitAtMost(2, SECONDS).untilAtomic(atomicObserver, notNullValue());
         observerSingleSelectList = atomicObserver.get();
     }

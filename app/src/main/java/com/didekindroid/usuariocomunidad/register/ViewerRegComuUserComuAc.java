@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParent;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -29,7 +29,8 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:31
  */
 
-final class ViewerRegComuUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
+final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> implements
+        ActivityInitiatorIf {
 
     private ViewerRegComuUserComuAc(View view, AppCompatActivity activity)
     {
@@ -88,7 +89,7 @@ final class ViewerRegComuUserComuAc extends ViewerParent<View, CtrlerUsuarioComu
         {
             Timber.d("onSuccess()");
             assertTrue(rowInserted, user_and_comunidad_should_be_registered);
-            new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+            initAcFromActivity(new Bundle(0));
             dispose();
         }
 

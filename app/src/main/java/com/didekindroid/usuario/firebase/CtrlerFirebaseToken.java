@@ -14,7 +14,7 @@ import timber.log.Timber;
 import static android.content.Context.MODE_PRIVATE;
 import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
@@ -41,7 +41,7 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
                                        public Integer call() throws Exception
                                        {
                                            String token = FirebaseInstanceId.getInstance().getToken();
-                                           return usuarioDao.modifyUserGcmToken(token);
+                                           return usuarioDaoRemote.modifyUserGcmToken(token);
                                        }
                                    }
         );

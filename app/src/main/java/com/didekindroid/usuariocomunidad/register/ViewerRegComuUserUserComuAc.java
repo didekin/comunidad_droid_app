@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.register;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -7,9 +8,8 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ObserverCacheCleaner;
-import com.didekindroid.api.ViewerParent;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -29,7 +29,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 
-public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
+public final class ViewerRegComuUserUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
     private ViewerRegComuUserUserComuAc(View view, AppCompatActivity activity)
     {
@@ -51,21 +51,21 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        Button mRegistroButton = view.findViewById(R.id.reg_com_usuario_usuariocomu_button);
-        mRegistroButton.setOnClickListener(new RegComuUserButtonListener());
+        Button mRegistroButton = view.findViewById(R.id.reg_user_plus_button);
+        mRegistroButton.setOnClickListener(new RegComuUserUserComuBtonListener());
     }
 
     // ==================================  HELPERS =================================
 
-    @SuppressWarnings("WeakerAccess")
-    void onRegisterSuccess()
+    void onRegisterSuccess(UsuarioComunidad userComu)
     {
         Timber.d("onRegisterSuccess()");
-        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+        DialogFragment newFragment = PasswordSentDialog.newInstance(userComu.getUsuario());
+        newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
     @SuppressWarnings("WeakerAccess")
-    class RegComuUserButtonListener implements View.OnClickListener {
+    class RegComuUserUserComuBtonListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v)
@@ -74,7 +74,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
             StringBuilder errorBuilder = getErrorMsgBuilder(activity);
             Comunidad comunidadFromViewer = getChildViewer(ViewerRegComuFr.class).getComunidadFromViewer(errorBuilder);
             Usuario usuarioFromViewer = getChildViewer(ViewerRegUserFr.class).getUserFromViewer(errorBuilder);
-            UsuarioComunidad usuarioComunidad = comunidadFromViewer != null && usuarioFromViewer != null ?
+            final UsuarioComunidad usuarioComunidad = comunidadFromViewer != null && usuarioFromViewer != null ?
                     getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadFromViewer, usuarioFromViewer) :
                     null;
 
@@ -89,7 +89,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
                             public void onComplete()
                             {
                                 super.onComplete();
-                                onRegisterSuccess();
+                                onRegisterSuccess(usuarioComunidad);
                             }
                         },
                         usuarioComunidad);

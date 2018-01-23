@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
-import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -36,7 +35,6 @@ public class CtrlerComuSpinnerTest {
     @Before
     public void setUp() throws IOException, UiException
     {
-        final Activity activity = activityRule.getActivity();
         controller = new CtrlerComuSpinner();
     }
 

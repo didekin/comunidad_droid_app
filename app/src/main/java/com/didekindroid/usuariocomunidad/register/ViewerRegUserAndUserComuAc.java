@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.register;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,8 +9,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ObserverCacheCleaner;
-import com.didekindroid.api.ViewerParent;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -20,7 +20,6 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
 
@@ -30,7 +29,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 10:37
  */
 
-final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
+final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
     private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
     {
@@ -52,20 +51,18 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
     {
         Timber.d("doViewInViewer()");
         Comunidad comunidad = Comunidad.class.cast(viewBean);
-        TextView nombreComunidad = view.findViewById(R.id.descripcion_comunidad_text);
-        nombreComunidad.setText(comunidad.getNombreComunidad());
-        Button registroButton = view.findViewById(R.id.reg_user_usercomu_button);
+        view.<TextView>findViewById(R.id.descripcion_comunidad_text).setText(comunidad.getNombreComunidad());
+        Button registroButton = view.findViewById(R.id.reg_user_plus_button);
         registroButton.setOnClickListener(new RegUserAndUserComuButtonListener(comunidad));
     }
 
     // ==================================  HELPERS =================================
 
-    void onRegisterSuccess(long c_id)
+    void onRegisterSuccess(UsuarioComunidad userComu)
     {
         Timber.d("onRegisterSuccess()");
-        Bundle bundle = new Bundle(1);
-        bundle.putLong(COMUNIDAD_ID.key, c_id);
-        new ActivityInitiator(activity).initAcWithBundle(bundle);
+        DialogFragment newFragment = PasswordSentDialog.newInstance(userComu.getUsuario());
+        newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -83,8 +80,8 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
         {
             Timber.d("onClick()");
             StringBuilder errorBuilder = getErrorMsgBuilder(activity);
-            Usuario usuarioFromViewer = getChildViewer(ViewerRegUserFr.class).getUserFromViewer(errorBuilder);
-            UsuarioComunidad usuarioComunidad = usuarioFromViewer != null ?
+            final Usuario usuarioFromViewer = getChildViewer(ViewerRegUserFr.class).getUserFromViewer(errorBuilder);
+            final UsuarioComunidad usuarioComunidad = usuarioFromViewer != null ?
                     getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadIntent, usuarioFromViewer) :
                     null;
 
@@ -99,7 +96,7 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
                             public void onComplete()
                             {
                                 super.onComplete();
-                                onRegisterSuccess(comunidadIntent.getC_Id());
+                                onRegisterSuccess(usuarioComunidad);
                             }
                         },
                         usuarioComunidad);

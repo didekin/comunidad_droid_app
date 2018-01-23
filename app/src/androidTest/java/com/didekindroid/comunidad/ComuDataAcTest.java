@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -74,7 +74,7 @@ public class ComuDataAcTest {
         protected void beforeActivityLaunched()
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                TaskStackBuilder.create(getTargetContext()).addParentStack(SeeUserComuByComuAc.class).startActivities();
+                create(getTargetContext()).addParentStack(SeeUserComuByComuAc.class).startActivities();
             }
         }
 
@@ -154,8 +154,8 @@ public class ComuDataAcTest {
         assertThat(activity.regComuFrg, notNullValue());
 
         assertThat(activity.viewer, isA(ParentViewerInjectedIf.class));
-        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
-        assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
+        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.is(activity));
+        assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.is(activity.viewer));
     }
 
     @Test

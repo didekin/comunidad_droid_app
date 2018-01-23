@@ -1,6 +1,8 @@
 package com.didekindroid.usuario.login;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -10,12 +12,13 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -23,14 +26,21 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.v4.app.TaskStackBuilder.create;
 import static com.didekindroid.R.id.login_ac_button;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
+import static com.didekindroid.R.string.send_password_by_mail_YES;
+import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkPswdSendByMailDialog;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
@@ -38,12 +48,14 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -65,26 +77,37 @@ public class LoginAcTest {
             try {
                 registeredUser = signUpAndUpdateTk(COMU_REAL_DROID);
             } catch (Exception e) {
-                e.printStackTrace();
+                fail();
+            }
+            if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+                create(getTargetContext())
+                        .addParentStack(LoginAc.class)
+                        .startActivities();
             }
         }
-    };
 
-    @BeforeClass
-    public static void relax() throws InterruptedException
-    {
-        MILLISECONDS.sleep(2000);
-    }
+        @Override
+        protected Intent getActivityIntent()
+        {
+            Intent intent = new Intent();
+            intent.putExtra(user_name.key, USER_DROID.getUserName());
+            return intent;
+        }
+    };
 
     @Before
     public void setUp() throws Exception
     {
         activity = (LoginAc) mActivityRule.getActivity();
+        assertThat(activity.getIntent().hasExtra(user_name.key), is(true));
     }
 
     @After
     public void cleanUp() throws UiException
     {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_DROID);
     }
 
@@ -93,24 +116,25 @@ public class LoginAcTest {
     @Test
     public final void testOnCreate() throws Exception
     {
-        onView(withId(reg_usuario_email_editT)).check(matches(isDisplayed()));
+        onView(allOf(
+                withId(reg_usuario_email_editT),
+                withText(USER_DROID.getUserName())
+        )).check(matches(isDisplayed()));
         onView(withId(reg_usuario_password_ediT)).check(matches(isDisplayed()));
         onView(withId(login_ac_button)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withContentDescription(R.string.navigate_up_txt)).check(matches(isDisplayed()));
+
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test
     public final void testOnStop() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnStop(activity);
-            }
-        });
+        activity.runOnUiThread(() -> getInstrumentation().callActivityOnStop(activity));
         // Check.
         assertThat(activity.viewerLogin.getController().getSubscriptions().size(), is(0));
     }
@@ -119,9 +143,10 @@ public class LoginAcTest {
     public void testValidateLoginRemote_1()
     {
         typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
+        // Exec.
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
-
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
+        // Check.
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         waitAtMost(2, SECONDS).until(isActivityDying(activity), is(true));
     }
 
@@ -133,7 +158,7 @@ public class LoginAcTest {
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         waitAtMost(2, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(4));
-        checkPswdSendByMailDialog();
+        checkTextsInDialog(send_password_by_mail_dialog, send_password_by_mail_YES);
     }
 
     @Test   // Login NOT OK, counterWrong <= 3.

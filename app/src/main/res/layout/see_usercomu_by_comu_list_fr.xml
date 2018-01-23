@@ -12,7 +12,8 @@
         android:padding="@dimen/list_padding"/>
     <ListView
         android:id="@id/android:list"
-        style="@style/basicList">
+        style="@style/basicList"
+        android:listSelector="@android:color/transparent">
     </ListView>
 
 </LinearLayout>

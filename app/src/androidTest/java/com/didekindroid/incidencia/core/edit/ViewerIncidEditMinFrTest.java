@@ -5,15 +5,15 @@ import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ViewerIf;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,21 +25,18 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeUserComuImportanciaAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -60,7 +57,7 @@ import static org.junit.Assert.fail;
  * User: pedro@didekin
  * Date: 09/04/17
  * Time: 14:42
- *
+ * <p>
  * This test used a only one user in DB: pepe.
  * User Juan is used only to launch the behavior imposed by the internal structure of the IncidenciaResolBundle
  * received in the activity.
@@ -108,7 +105,7 @@ public class ViewerIncidEditMinFrTest {
     {
         activity = activityRule.getActivity();
         dbHelper = new IncidenciaDataDbHelper(activity);
-        IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMinFr.class.getName());
 
         AtomicReference<ViewerIncidEditMinFr> viewerAtomic = new AtomicReference<>(null);
         viewerAtomic.compareAndSet(null, fragment.viewer);
@@ -128,9 +125,9 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testNewViewerIncidEditMinFr() throws Exception
     {
-        assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
+        assertThat(viewer.getController(), instanceOf(CtrlerIncidenciaCore.class));
         assertThat(viewer.getParentViewer(), allOf(
-                CoreMatchers.<ViewerIf>is(activity.getParentViewer()),
+                is(activity.getParentViewer()),
                 notNullValue()
         ));
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
@@ -149,43 +146,42 @@ public class ViewerIncidEditMinFrTest {
         checkDataEditMinFr(dbHelper, activity, incidImportancia);
     }
 
-    @Test
-    public void testOnClickLinkImportanciaUsers() throws Exception
-    {
-        viewer.onClickLinkToImportanciaUsers(new LinkToImportanciaUsersListener(viewer));
-        onView(withId(incidSeeUserComuImportanciaAcLayout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCIDENCIA_OBJECT.key, activity.resolBundle.getIncidImportancia().getIncidencia()));
-    }
-
     /*
     *  Case: importancia == 0. Importancia is modified to 1.
     */
     @Test
     public void testOnClickButtonModify_1() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.incidImportanciaBean.setImportancia((short) 1);
-                viewer.onClickButtonModify();
-            }
+        activity.runOnUiThread(() -> {
+            viewer.incidImportanciaBean.setImportancia((short) 1);
+            viewer.onClickButtonModify();
         });
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
-        viewer.onSuccessModifyIncidImportancia(1);
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidSeeOpenAcLayout)));
+        Comunidad incidComu = resolBundle.getIncidImportancia().getIncidencia().getComunidad();
+        // Precondition: incidComu name is shown in screen.
+        waitAtMost(4, SECONDS).until(() -> {
+            onView(allOf(
+                    withId(R.id.incid_comunidad_txt),
+                    withText(incidComu.getNombreComunidad())
+            )).check(matches(isDisplayed()));
+            return true;
+        });
+        viewer.onSuccessModifyIncidImportancia(incidComu);
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
+        // Check comuSpinner initialization: the same initial comunidad is shown.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidComu.getNombreComunidad()));
     }
 
     @Test
     public void test_saveState() throws Exception
     {
         Bundle bundleTest = new Bundle();
-        viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
+        viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
 
         viewer.saveState(bundleTest);
         assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));

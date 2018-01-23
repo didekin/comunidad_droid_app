@@ -17,12 +17,8 @@ import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.runner.lifecycle.Stage;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
@@ -33,11 +29,9 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 
 import java.io.Serializable;
@@ -67,7 +61,6 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressBack;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
@@ -81,6 +74,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance;
+import static android.view.Gravity.LEFT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
@@ -90,11 +84,11 @@ import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -114,111 +108,100 @@ public final class ActivityTestUtils {
 
     public static Callable<Boolean> isActivityDying(final Activity activity)
     {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                return activity.isFinishing() || activity.isDestroyed();
-            }
-        };
+        return () -> activity.isFinishing() || activity.isDestroyed();
+    }
+
+    public static Callable<Boolean> isStatementTrue(Boolean objetToTest)
+    {
+        return () -> objetToTest;
     }
 
     public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceIds)
     {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    for (int resourceId : resourceIds) {
-                        onView(withId(resourceId)).check(matches(isDisplayed()));
-                    }
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
+        return () -> {
+            try {
+                for (int resourceId : resourceIds) {
+                    onView(withId(resourceId)).check(matches(isDisplayed()));
                 }
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
             }
         };
     }
 
     public static Callable<Boolean> isTextIdNonExist(final Integer... stringId)
     {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    for (int resourceId : stringId) {
-                        onView(withText(resourceId)).check(doesNotExist());
-                    }
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
+        return () -> {
+            try {
+                for (int resourceId : stringId) {
+                    onView(withText(resourceId)).check(doesNotExist());
                 }
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
             }
         };
     }
 
-    public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher, final ViewAction... viewActions)
+    public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher)
     {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    onView(viewMatcher).check(matches(isDisplayed())).perform(viewActions);
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
-                }
+        return () -> {
+            try {
+                onView(viewMatcher).check(matches(isDisplayed()));
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
+            }
+        };
+    }
+
+    public static Callable<Boolean> isViewDisplayed(final ViewInteraction viewInteraction)
+    {
+        return () -> {
+            try {
+                viewInteraction.check(matches(isDisplayed()));
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
+            }
+        };
+    }
+
+    public static Callable<Boolean> isViewDisplayedAndPerform(final Matcher<View> viewMatcher, final ViewAction... viewActions)
+    {
+        return () -> {
+            try {
+                onView(viewMatcher).check(matches(isDisplayed())).perform(viewActions);
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
             }
         };
     }
 
     public static Callable<Boolean> isDataDisplayedAndClick(final Matcher<?> objectMatcher)
     {
-        return new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                try {
-                    onData(objectMatcher)
-                            .check(matches(isDisplayed()))
-                            .perform(click());
-                    return true;
-                } catch (NoMatchingViewException | PerformException e) {
-                    return false;
-                }
+        return () -> {
+            try {
+                onData(objectMatcher)
+                        .check(matches(isDisplayed()))
+                        .perform(click());
+                return true;
+            } catch (NoMatchingViewException | PerformException e) {
+                return false;
             }
         };
-    }
-
-    //    ============================== BUTTONS ============================
-
-    public static int focusOnButton(Activity activity, int buttonRsId)
-    {
-        final Button button = activity.findViewById(buttonRsId);
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                button.setFocusable(true);
-                button.setFocusableInTouchMode(true);
-                button.requestFocus();
-            }
-        });
-        return buttonRsId;
     }
 
     public static int focusOnView(Activity activity, int viewRsId)
     {
         final View view = activity.findViewById(viewRsId);
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                view.setFocusable(true);
-                view.setFocusableInTouchMode(true);
-                view.requestFocus();
-            }
+        activity.runOnUiThread(() -> {
+            view.setFocusable(true);
+            view.setFocusableInTouchMode(true);
+            view.requestFocus();
         });
         return viewRsId;
     }
@@ -253,39 +236,15 @@ public final class ActivityTestUtils {
         }
         assertThat(atomicInteger.get() >= controllers.length, is(true));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnStop(activity);
-                atomicInteger.set(0);
-                for (ControllerIf controller : controllers) {
-                    atomicInteger.addAndGet(controller.getSubscriptions().size());
-                }
+        activity.runOnUiThread(() -> {
+            getInstrumentation().callActivityOnStop(activity);
+            atomicInteger.set(0);
+            for (ControllerIf controller : controllers) {
+                atomicInteger.addAndGet(controller.getSubscriptions().size());
             }
         });
 
         waitAtMost(6, SECONDS).untilAtomic(atomicInteger, is(0));
-    }
-
-    public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
-    {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                return controller.isGcmTokenSentServer();
-            }
-        };
-    }
-
-    public static Callable<Adapter> getAdapter(final AdapterView<? extends Adapter> adapterView)
-    {
-        return new Callable<Adapter>() {
-            public Adapter call() throws Exception
-            {
-                return adapterView.getAdapter();
-            }
-        };
     }
 
     //    ============================= DATE PICKERS ===================================
@@ -354,6 +313,7 @@ public final class ActivityTestUtils {
 
     //    ============================= MENU ===================================
 
+    @SuppressWarnings("unused")
     @NonNull
     public static Menu doMockMenu(Activity activity, int menuMockRsId)
     {
@@ -376,9 +336,19 @@ public final class ActivityTestUtils {
         }
     }
 
+    public static void checkAppBarMnNotExist(Activity activity, int menuResourceId)
+    {
+        onView(withText(menuResourceId)).check(doesNotExist());
+        try {
+            openActionBarOverflowOrOptionsMenu(activity);
+        } catch (NoMatchingViewException e) {
+        }
+        waitAtMost(4, SECONDS).until(isTextIdNonExist(menuResourceId));
+    }
+
     public static void checkDrawerMenu(int drawerLayoutId, int navigationViewId, int menuResourceId, int actionResourceId)
     {
-        onView(withId(drawerLayoutId)).check(matches(isClosed(Gravity.LEFT))).perform(open());
+        onView(withId(drawerLayoutId)).check(matches(isClosed(LEFT))).perform(open());
         onView(withId(navigationViewId)).perform(navigateTo(menuResourceId));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
     }
@@ -393,20 +363,12 @@ public final class ActivityTestUtils {
         ).check(matches(isDisplayed())).perform(click());
     }
 
-    public static void scrollClickNavigateUp()
-    {
-        onView(withContentDescription(R.string.navigate_up_txt))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-                .perform(click());
-    }
-
     public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
     {
         viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
         for (Integer layout : activityLayoutIds) {
             try {
-                waitAtMost(4, SECONDS).until(isResourceIdDisplayed(layout));
+                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
             } catch (Exception e) {
                 fail();
             }
@@ -416,13 +378,13 @@ public final class ActivityTestUtils {
     public static void checkUp(Integer... activityLayoutIds)
     {
         clickNavigateUp();
-        iterateLayouts(activityLayoutIds);
-    }
-
-    public static void checkScrollUp(Integer... activityLayoutIds)
-    {
-        scrollClickNavigateUp();
-        iterateLayouts(activityLayoutIds);
+        for (Integer layout : activityLayoutIds) {
+            try {
+                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
+            } catch (Exception e) {
+                fail();
+            }
+        }
     }
 
     @SuppressWarnings("unused")
@@ -430,13 +392,7 @@ public final class ActivityTestUtils {
     {
         Timber.d("============= getStageByActivity() =================");
 
-        final FutureTask<Stage> taskGetActivities = new FutureTask<>(new Callable<Stage>() {
-            @Override
-            public Stage call() throws Exception
-            {
-                return getInstance().getLifecycleStageOf(activity);
-            }
-        });
+        final FutureTask<Stage> taskGetActivities = new FutureTask<>(() -> getInstance().getLifecycleStageOf(activity));
         getInstrumentation().runOnMainSync(taskGetActivities);
         return taskGetActivities.get();
     }
@@ -445,13 +401,7 @@ public final class ActivityTestUtils {
     {
         Timber.d("============= getActivitesInTaskByStage() =================");
 
-        final FutureTask<Collection<Activity>> taskGetActivities = new FutureTask<>(new Callable<Collection<Activity>>() {
-            @Override
-            public Collection<Activity> call() throws Exception
-            {
-                return getInstance().getActivitiesInStage(stage);
-            }
-        });
+        final FutureTask<Collection<Activity>> taskGetActivities = new FutureTask<>(() -> getInstance().getActivitiesInStage(stage));
         getInstrumentation().runOnMainSync(taskGetActivities);
         return taskGetActivities.get();
     }
@@ -466,20 +416,14 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkViewerReplaceComponent(final ViewerIf<? extends View, ? extends ControllerIf> viewer, int resorceIdNextView, Bundle bundle)
+    public static void checkViewerReplaceCmp(final ViewerIf<? extends View, ? extends ControllerIf> viewer, int resorceIdNextView, Bundle bundle)
     {
         if (bundle == null) {
             bundle = new Bundle(0);
         }
         final Bundle finalBundle = bundle;
 
-        viewer.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                new ActivityInitiator(viewer.getActivity()).initAcWithBundle(finalBundle);
-            }
-        });
+        viewer.getActivity().runOnUiThread(() -> new ActivityInitiator(viewer.getActivity()).initAcFromActivity(finalBundle));
         waitAtMost(4, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));
     }
 
@@ -529,15 +473,12 @@ public final class ActivityTestUtils {
 
     public static Callable<Boolean> isToastInView(final int resourceStringId, final Activity activity, final int... resorceErrorId)
     {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    checkToastInTest(resourceStringId, activity, resorceErrorId);
-                    return true;
-                } catch (NoMatchingViewException | NoMatchingRootException ne) {
-                    return false;
-                }
+        return () -> {
+            try {
+                checkToastInTest(resourceStringId, activity, resorceErrorId);
+                return true;
+            } catch (NoMatchingViewException | NoMatchingRootException ne) {
+                return false;
             }
         };
     }
@@ -546,7 +487,7 @@ public final class ActivityTestUtils {
 
     public static void checkSavedStateWithItemSelected(ViewerSelectListIf viewer, BundleKey bundleKey)
     {
-        viewer.setItemSelectedId(18L);
+        viewer.setSelectedItemId(18L);
         Bundle bundle = new Bundle(1);
         viewer.saveState(bundle);
         assertThat(bundle.getLong(bundleKey.getKey()), is(18L));
@@ -556,20 +497,7 @@ public final class ActivityTestUtils {
     {
         final ViewerMock viewerChild = new ViewerMock(activity);
         activity.setChildInParentViewer(viewerChild);
-        assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), CoreMatchers.<ViewerIf>is(viewerChild));
-    }
-
-    //    ============================ HELPERS ============================
-
-    private static void iterateLayouts(Integer[] activityLayoutIds)
-    {
-        for (Integer layout : activityLayoutIds) {
-            try {
-                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
-            } catch (Exception e) {
-                fail();
-            }
-        }
+        assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), is(viewerChild));
     }
 }
 

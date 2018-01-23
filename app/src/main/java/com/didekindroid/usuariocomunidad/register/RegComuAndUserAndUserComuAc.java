@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.register;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,7 +12,7 @@ import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.RegUserFr;
 
 import timber.log.Timber;
@@ -26,9 +27,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The comunidad has not been registered either, by other users.
  * 3. There is not extras in the activity intent.
  */
-// TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
 public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
-        ChildViewersInjectorIf {
+        ChildViewersInjectorIf, ActivityInitiatorIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -78,6 +78,14 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         viewer.setChildViewer(viewerChild);
     }
 
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
 //    ============================================================
 //    ..... ACTION BAR ....
 //    ============================================================
@@ -102,7 +110,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
                 doUpMenu(this);
                 return true;
             case R.id.login_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(null, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

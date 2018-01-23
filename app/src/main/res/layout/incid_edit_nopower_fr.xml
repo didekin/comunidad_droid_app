@@ -11,6 +11,7 @@
     <TextView
         android:id="@+id/incid_reg_desc_txt"
         style="@style/textBase.editField.description"
+        android:layout_marginBottom="@dimen/vertical_margin"
         tools:ignore="LabelFor"/>
 
     <LinearLayout
@@ -18,10 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/incid_ambito_rot"
             style="@style/textBase.textFieldLabel1"
             android:text="@string/incid_ambito_rot"/>
+
         <TextView
             android:id="@+id/incid_ambito_view"
             style="@style/textBase.textFieldLabel2"/>
@@ -33,6 +36,10 @@
         android:id="@+id/incid_edit_fr_modif_button"
         style="@style/textBase.acButton1"
         android:layout_gravity="center_horizontal"
-        android:text="@string/incid_importancia_reg_edit_button_rot"/>
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:text="@string/modif_button_rot"/>
+
+    <include
+        layout="@layout/incid_see_usercomu_importancia_merge"/>
 
 </LinearLayout>

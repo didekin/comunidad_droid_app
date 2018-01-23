@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -15,7 +16,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.List;
 
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.TestObserver;
+
+import static com.didekindroid.incidencia.IncidObservable.incidImportanciaByUsers;
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaModified;
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaRegistered;
 import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
@@ -23,11 +29,14 @@ import static com.didekindroid.incidencia.IncidObservable.resolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /**
@@ -80,6 +89,21 @@ public class IncidObservableTest {
     public void testIncidImportanciaDeleted() throws Exception
     {
         incidenciaDeleted(insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia()).test().assertResult(1);
+    }
+
+    @Test
+    public void test_IncidImportanciaByUsers() throws Exception
+    {
+        final IncidImportancia incidImportancia = makeRegGetIncidImportancia(pepeUserComu, (short) 1);
+        incidImportanciaByUsers(incidImportancia.getIncidencia().getIncidenciaId()).test().assertOf(new Consumer<TestObserver<List<ImportanciaUser>>>() {
+            @Override
+            public void accept(TestObserver<List<ImportanciaUser>> listTestObserver) throws Exception
+            {
+                List<ImportanciaUser> list = listTestObserver.values().get(0);
+                assertThat(list.size(), is(1));
+                assertThat(list.get(0).getImportancia(), is(incidImportancia.getImportancia()));
+            }
+        });
     }
 
     @Test

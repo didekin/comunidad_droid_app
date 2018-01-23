@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.didekindroid.R;
+import com.didekindroid.api.router.ActionForUiExceptionIf;
+import com.didekindroid.api.router.UiExceptionRouterIf;
 import com.didekinlib.http.ErrorBean;
 
 import timber.log.Timber;
@@ -42,7 +44,7 @@ public class UiException extends Exception implements UiExceptionIf {
     {
         Timber.d("processMe(Activity activity): %s%n", errorBean.getMessage());
 
-        ActionForUiExceptionIf action = exceptionRouter.getActionForException(this);
+        ActionForUiExceptionIf action = exceptionRouter.getAction(this);
         if (action == null) { // NO entry in exceptions dealer's table for error bean message.
             makeToast(activity, R.string.exception_generic_message);
             Intent intent = new Intent();
@@ -60,24 +62,26 @@ public class UiException extends Exception implements UiExceptionIf {
     {
         Timber.d("processMe(Activity activity, Intent intent): %s%n", errorBean.getMessage());
 
-        ActionForUiExceptionIf actionForException = exceptionRouter.getActionForException(this);
+        ActionForUiExceptionIf actionForException = exceptionRouter.getAction(this);
         assertTrue(actionForException != null, actionForException_notNull);
         if (actionForException.getToastResourceId() > 0) {
             makeToast(activity, actionForException.getToastResourceId());
         }
-        activity.startActivity(intent);
+        // Double check.
+        activity.startActivity(intent != null ? intent : new Intent());
     }
 
     @Override
-    public void processMe(@NonNull Activity activity, @NonNull ActionForUiExceptionIf actionForException)
+    public void processMe(@NonNull Activity activity, @NonNull ActionForUiExceptionIf action)
     {
-        Timber.d("processMe(Activity activity, ActionForUiExceptionIf actionForException): %s%n", errorBean.getMessage());
+        Timber.d("processMe(Activity activity, ActionForUiException actionForException): %s%n", errorBean.getMessage());
 
-        if (actionForException.getToastResourceId() > 0) {
-            makeToast(activity, actionForException.getToastResourceId());
+        if (action.getToastResourceId() > 0) {
+            makeToast(activity, action.getToastResourceId());
         }
-        if (actionForException.getActivityToGoClass() != null) {
-            Intent intent = new Intent(activity, actionForException.getActivityToGoClass());
+
+        if (action.getActivityToGo() != null) {
+            Intent intent = new Intent(activity, action.getActivityToGo()).putExtras(action.getExtrasForActivity());
             intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);
         }

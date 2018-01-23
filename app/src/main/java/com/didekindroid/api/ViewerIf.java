@@ -30,6 +30,9 @@ public interface ViewerIf<T extends View, C extends ControllerIf> {
 
     void setController(@NonNull C controller);
 
+    /**
+     *  The data saved by this method is used in doViewInViewer().
+     */
     void saveState(Bundle savedState);
 
     @Nullable

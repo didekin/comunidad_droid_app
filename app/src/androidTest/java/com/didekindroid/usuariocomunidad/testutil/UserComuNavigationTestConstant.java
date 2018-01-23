@@ -10,7 +10,7 @@ import com.didekindroid.R;
 
 public final class UserComuNavigationTestConstant {
 
-    public static final int regComu_User_UserComuAcLayout = R.id.reg_comu_usuario_usuariocomu_layout;
+    public static final int regComu_User_UserComuAcLayout = R.id.reg_comu_and_user_and_usercomu_ac_layout;
     public static final int regComu_UserComuAcLayout = R.id.reg_comu_and_usercomu_layout;
     public static final int regUser_UserComuAcLayout = R.id.reg_user_and_usercomu_ac_layout;
     public static final int regUserComuAcLayout = R.id.reg_usercomu_ac_layout;

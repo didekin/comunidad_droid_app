@@ -5,29 +5,29 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParent;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterModifiedUserComu;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_deleted;
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_modified;
 import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -40,13 +40,15 @@ import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
  * Time: 09:27
  */
 
-final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
+final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> implements
+        ActivityInitiatorIf {
 
     @SuppressWarnings("WeakerAccess")
     UsuarioComunidad userComuIntent;
     Menu acMenu;
+    AtomicBoolean showComuDataMn = new AtomicBoolean(false);
 
-    private ViewerUserComuDataAc(View view, AppCompatActivity activity)
+    ViewerUserComuDataAc(View view, AppCompatActivity activity)
     {
         super(view, activity);
     }
@@ -76,21 +78,6 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
     // .............................. HELPERS ..................................
 
     /**
-     * Option 'comu_data_ac_mn' is only visible if the user is the oldest (oldest fecha_alta) UsuarioComunidad in
-     * this comunidad, or has the roles adm or pre.
-     * <p/>
-     */
-    @SuppressWarnings("WeakerAccess")
-    void updateActivityMenu()
-    {
-        Timber.d("updateActivityMenu()");
-        MenuItem comuDataItem = acMenu.findItem(R.id.comu_data_ac_mn);
-        comuDataItem.setVisible(true);
-        comuDataItem.setEnabled(true);
-        activity.onPrepareOptionsMenu(acMenu);
-    }
-
-    /**
      * This method is called from the activity.
      */
     void setAcMenu(Menu menu)
@@ -117,7 +104,7 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
-                controller.modifyUserComu(new ModifyUserComuObserver(), usuarioComunidad);
+                controller.modifyUserComu(new ModifyUserComuObserver(usuarioComunidad.hasAdministradorAuthority()), usuarioComunidad);
             }
         }
     }
@@ -136,24 +123,43 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
 
     @SuppressWarnings("WeakerAccess")
     class AcMenuObserver extends UserComuDataObserver<Boolean> {
+
+        /**
+         * Postcondition: flag for showing the ComunidadDataAc menu option is initialized.
+         */
         @Override
-        public void onSuccess(Boolean isOldestUser)
+        public void onSuccess(Boolean hasComuDataModPower)
         {
             Timber.d("onSuccess()");
-            if (isOldestUser) {
-                updateActivityMenu();
-            }
+            showComuDataMn.set(hasComuDataModPower);
         }
     }
 
     @SuppressWarnings("WeakerAccess")
     class ModifyUserComuObserver extends UserComuDataObserver<Integer> {
+
+        /**
+         * This variable flags the adm powers of the user.
+         */
+        private final boolean upDateMenu;
+
+        ModifyUserComuObserver(boolean upDateMenu)
+        {
+            this.upDateMenu = upDateMenu;
+        }
+
+        /**
+         * Postcondition: flag for showing the ComunidadDataAc menu option is updated.
+         * It may happen that if a user change her roles to NO ADM roles, although she continues to be the oldest user,
+         * the flag would signal NOT to show the ComunidadDataAc menu option.
+         */
         @Override
         public void onSuccess(Integer rowsUpdated)
         {
             Timber.d("onSuccess()");
-            assertTrue(rowsUpdated == 1, userComu_should_be_modified);
-            new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+            showComuDataMn.set(rowsUpdated == 1 && upDateMenu);
+            Timber.d("Update menu = %b", showComuDataMn.get());
+            initAcFromRouter(new Bundle(0), afterModifiedUserComu);
         }
     }
 
@@ -163,8 +169,8 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
         public void onSuccess(Integer rowsUpdated)
         {
             Timber.d("onSuccess()");
-            boolean isUserDeleted = rowsUpdated == IS_USER_DELETED;
-            boolean isUserComuDeleted = rowsUpdated == 1;
+            boolean isUserDeleted = (rowsUpdated == IS_USER_DELETED);
+            boolean isUserComuDeleted = (rowsUpdated == 1);
             assertTrue(isUserDeleted || isUserComuDeleted, userComu_should_be_deleted);
             if (isUserDeleted) {
                 Intent intent = new Intent(activity, ComuSearchAc.class);
@@ -172,7 +178,7 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
                 activity.startActivity(intent);
                 activity.finish();
             } else {
-                new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+                initAcFromRouter(new Bundle(0), afterModifiedUserComu);
             }
         }
     }

@@ -1,14 +1,13 @@
 package com.didekindroid.comunidad;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParent;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjected;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.security.CtrlerAuthToken;
 import com.didekindroid.security.CtrlerAuthTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -28,7 +27,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:21
  */
 
-class ViewerComuSearchAc extends ViewerParent<View, CtrlerAuthTokenIf> {
+class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> implements ActivityInitiatorIf {
 
     ViewerComuSearchAc(View view, AppCompatActivity activity)
     {
@@ -59,12 +58,6 @@ class ViewerComuSearchAc extends ViewerParent<View, CtrlerAuthTokenIf> {
 
     // ==================================  HELPERS =================================
 
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initAcWithBundle(bundle);
-    }
-
     @SuppressWarnings("WeakerAccess")
     class ComuSearchButtonListener implements View.OnClickListener {
         @Override
@@ -81,7 +74,7 @@ class ViewerComuSearchAc extends ViewerParent<View, CtrlerAuthTokenIf> {
             } else {
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidadFromViewer);
-                replaceComponent(bundle);
+                initAcFromActivity(bundle);
             }
         }
     }

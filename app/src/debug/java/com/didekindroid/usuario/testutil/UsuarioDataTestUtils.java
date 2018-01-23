@@ -5,7 +5,7 @@ import com.didekinlib.model.usuario.Usuario;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 
 /**
  * User: pedro
@@ -23,17 +23,17 @@ public final class UsuarioDataTestUtils {
 
     //  ======================================= CREATING METHODS  ==========================================
     public static final Usuario USER_JUAN = new Usuario.UsuarioBuilder()
-            .userName("juan@juan.us")
+            .userName("juan@didekin.es")
             .alias("alias_juan")
             .password("psw_juan")
             .build();
     public static final Usuario USER_JUAN2 = new Usuario.UsuarioBuilder()
-            .userName("juan@juan.com")
-            .alias("alias_juan")
+            .userName("juan2@didekin.es")
+            .alias("alias_juan2")
             .password("pswd01")
             .build();
     public static final Usuario USER_PEPE = new Usuario.UsuarioBuilder()
-            .userName("pepe@pepe.org")
+            .userName("pedro@didekin.es")
             .alias("alias_pepe")
             .password("psw_pepe")
             .build();
@@ -47,7 +47,7 @@ public final class UsuarioDataTestUtils {
     public static void cleanOneUser(Usuario usuario) throws UiException
     {
         updateSecurityData(usuario.getUserName(), usuario.getPassword());
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
     }
 

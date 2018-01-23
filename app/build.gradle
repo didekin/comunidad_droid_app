@@ -1,22 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.didekindroid"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "a-0.5.2"
+        versionCode 6
+        versionName "a-0.6"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
-        resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
+        resConfigs "es" /* , "en"  Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     testOptions {
@@ -52,7 +52,6 @@ android {
             resValue "string", "didekin_web_port", '":443"'
         }
         pre {
-//            initWith release
             applicationIdSuffix ""
             shrinkResources true
             minifyEnabled true
@@ -75,7 +74,6 @@ android {
             debuggable true
             versionNameSuffix ''
             // Variables for android_studio default run-debug configuration.
-            //noinspection GrEqualsBetweenInconvertibleTypes
             if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
             // LOCAL url's
                 resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
@@ -89,11 +87,6 @@ android {
                 resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
             }
         }
-    }
-
-    dexOptions {
-        maxProcessCount 2
-        javaMaxHeapSize "1g"
     }
     lintOptions {
         checkReleaseBuilds true
@@ -112,7 +105,7 @@ android {
 }
 
 dependencies {
-    implementation rootProject.ext.firebase_message
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
     implementation rootProject.ext.didekinlib_model
     implementation rootProject.ext.didekinlib_http
     implementation rootProject.ext.timber

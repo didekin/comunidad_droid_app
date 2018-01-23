@@ -24,10 +24,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
+import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -84,7 +84,7 @@ public class ViewerRegComuUserComuAcTest {
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         int buttonId = R.id.reg_comu_usuariocomunidad_button;
-        focusOnButton(activity, buttonId);
+        focusOnView(activity, buttonId);
         typeComunidadData();
         onView(withId(buttonId)).perform(scrollTo(), click());
 
@@ -100,7 +100,7 @@ public class ViewerRegComuUserComuAcTest {
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         int buttonId = R.id.reg_comu_usuariocomunidad_button;
-        focusOnButton(activity, buttonId);
+        focusOnView(activity, buttonId);
         onView(withId(buttonId)).perform(scrollTo(), click());
 
         // Error: no ha seleccionado municipio, ni tipo de vía, ni nombre de vía.
@@ -119,7 +119,7 @@ public class ViewerRegComuUserComuAcTest {
 
         ViewerRegComuUserComuAc.RegComuAndUserComuObserver observer = activity.viewer.new RegComuAndUserComuObserver();
         just(true).subscribeWith(observer);
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
         cleanOptions(CLEAN_PEPE);
     }
 

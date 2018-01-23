@@ -1,11 +1,12 @@
 package com.didekindroid.incidencia.core.edit;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.didekindroid.api.ViewerParent;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjected;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.usuario.UsuarioAssertionMsg;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -17,6 +18,8 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.editResolucion;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.regResolucion;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.UIutils.assertTrue;
 
@@ -25,11 +28,11 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
+final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;
 
-    ViewerIncidEditAc(IncidEditAc activity)
+    private ViewerIncidEditAc(IncidEditAc activity)
     {
         super(activity.acView, activity);
     }
@@ -38,7 +41,7 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
     {
         Timber.d("newViewerIncidEditAc()");
         ViewerIncidEditAc instance = new ViewerIncidEditAc(activity);
-        instance.setController(new CtrlerIncidEditAc());
+        instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
 
@@ -51,59 +54,31 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         resolBundle = IncidAndResolBundle.class.cast(viewBean);
     }
 
-    void checkResolucion(int resourceIdItemMn)
+    void checkResolucion()
     {
         Timber.d("checkResolucion()");
+        assertTrue(controller.isRegisteredUser(), UsuarioAssertionMsg.user_should_be_registered);
         controller.seeResolucion(
-                new ResolucionObserver(resourceIdItemMn),
+                new ResolucionObserver(),
                 resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId());
-    }
-
-    void onSuccessCheckResolucion(Resolucion resolucion, int resourceIdItemMn)
-    {
-        Timber.d("onSuccessCheckResolucion()");
-        onAfterSeeResolucion(resolucion, resourceIdItemMn);
-    }
-
-    void onCompleteCheckResolucion(int resourceIdItemMn)
-    {
-        Timber.d("onCompleteCheckResolucion()");
-        onAfterSeeResolucion(null, resourceIdItemMn);
     }
 
     // .................................... HELPERS .................................
 
-    private void onAfterSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
-    {
-        Timber.d("onAfterSeeResolucion()");
-
-        Intent intent = new Intent();
-        intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
-        if (resolucion != null) {
-            intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-            for (ViewerIncidEditFr child : getChildViewersFromSuperClass(ViewerIncidEditFr.class)) {
-                child.setHasResolucion();
-            }
-        }
-        activity.setIntent(intent);
-        new ActivityInitiator(activity).initAcFromMnKeepIntent(resourceIdItemMn);
-    }
-
     @SuppressWarnings("WeakerAccess")
     class ResolucionObserver extends DisposableMaybeObserver<Resolucion> {
-
-        private final int idItemMenu;
-
-        ResolucionObserver(int idItemMenu)
-        {
-            this.idItemMenu = idItemMenu;
-        }
 
         @Override
         public void onSuccess(@NonNull Resolucion resolucion)
         {
             Timber.d("onSuccess()");
-            onSuccessCheckResolucion(resolucion, idItemMenu);
+            Bundle bundle = new Bundle(1);
+            bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
+            bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+            for (ViewerIncidEditFr child : getChildViewersFromSuperClass(ViewerIncidEditFr.class)) {
+                child.setHasResolucion();
+            }
+            initAcFromRouter(bundle, editResolucion);
         }
 
         @Override
@@ -117,7 +92,9 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         public void onComplete()
         {
             Timber.d("onComplete()");
-            onCompleteCheckResolucion(idItemMenu);
+            Bundle bundle = new Bundle(1);
+            bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
+            initAcFromRouter(bundle, regResolucion);
         }
     }
 }

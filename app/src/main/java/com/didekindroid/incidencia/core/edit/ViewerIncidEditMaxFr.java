@@ -2,17 +2,16 @@ package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
@@ -21,9 +20,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_deleted;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.erasedOpenIncid;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -37,26 +38,25 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * 1. An incidencia with resolucion is not allowed to be erased.
  * 2. An incidencia can be erased by a user with adm function.
  */
-final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
+final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityInitiatorIf {
 
     ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
 
-    private ViewerIncidEditMaxFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    private ViewerIncidEditMaxFr(View view, ParentViewerInjectedIf parentViewer)
     {
-        super(view, activity, parentViewer);
+        super(view, parentViewer.getActivity(), parentViewer);
     }
 
-    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ViewerIf parentViewer)
+    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
 
-        AppCompatActivity activity = parentViewer.getActivity();
-        ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, activity, parentViewer);
+        ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, parentViewer);
         instance.viewerAmbitoIncidSpinner =
-                newViewerAmbitoIncidSpinner((Spinner) frView.findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
+                newViewerAmbitoIncidSpinner(frView.findViewById(R.id.incid_reg_ambito_spinner), instance);
         instance.viewerImportanciaSpinner =
-                newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
-        instance.setController(new CtrlerIncidRegEditFr());
+                newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), instance);
+        instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
 
@@ -72,16 +72,8 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
         Button buttonErase = view.findViewById(R.id.incid_edit_fr_borrar_button);
         if (!canUserEraseIncidencia(resolBundle.getIncidImportancia())) {
             buttonErase.setVisibility(GONE);
-            view.findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);
         } else {
-            buttonErase.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
-                    Timber.d("mButtonErase.onClickLinkToImportanciaUsers()");
-                    onClickButtonErase();
-                }
-            });
+            buttonErase.setOnClickListener(v -> onClickButtonErase());
         }
     }
 
@@ -106,15 +98,17 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
         assertTrue(incidImportancia.getUserComu().hasAdministradorAuthority() || incidImportancia.isIniciadorIncidencia(), usercomu_should_have_admAuthority);
 
         if (checkInternetConnected(getActivity())) {
-            controller.eraseIncidencia(new EraseIncidenciaObserver(), incidImportancia.getIncidencia());
+            controller.eraseIncidencia(new EraseIncidenciaObserver(incidImportancia.getIncidencia().getComunidad()), incidImportancia.getIncidencia());
         }
     }
 
-    void onSuccessEraseIncidencia(int rowsDeleted)
+    void onSuccessEraseIncidencia(Comunidad comunidad)
     {
         Timber.d("onSuccessEraseIncidencia()");
-        assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
-        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+        Bundle bundle = new Bundle(1);
+        bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
+        bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
+        initAcFromRouter(bundle, erasedOpenIncid);
     }
 
     //    ============================  LIFE CYCLE   ===================================
@@ -147,11 +141,19 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
     @SuppressWarnings("WeakerAccess")
     class EraseIncidenciaObserver extends DisposableSingleObserver<Integer> {
 
+        private final Comunidad comunidad;
+
+        public EraseIncidenciaObserver(Comunidad comunidad)
+        {
+            this.comunidad = comunidad;
+        }
+
         @Override
         public void onSuccess(Integer rowDeleted)
         {
             Timber.d("onSuccess()");
-            onSuccessEraseIncidencia(rowDeleted);
+            onSuccessEraseIncidencia(comunidad);
+            getActivity().finish();
         }
 
         @Override

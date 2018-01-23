@@ -8,6 +8,7 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.SpinnerTextMockFr;
+import com.didekindroid.api.ViewerMock;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -30,6 +31,7 @@ import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -57,16 +59,12 @@ public class ViewerAmbitoIncidSpinnerTest {
         activity = activityRule.getActivity();
 
         final AtomicReference<ViewerAmbitoIncidSpinner> atomicViewer = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
-                        .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.ambito_spinner);
-                atomicViewer.compareAndSet(null, newViewerAmbitoIncidSpinner(spinner, activity, null));
-            }
+        activity.runOnUiThread(() -> {
+            activity.getSupportFragmentManager().beginTransaction()
+                    .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
+                    .commitNow();
+            spinner = activity.findViewById(R.id.ambito_spinner);
+            atomicViewer.compareAndSet(null, newViewerAmbitoIncidSpinner(spinner, new ViewerMock(activity)));
         });
         waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
         viewer = atomicViewer.get();
@@ -77,7 +75,7 @@ public class ViewerAmbitoIncidSpinnerTest {
     @Test
     public void testNewViewerAmbitoIncidSpinner() throws Exception
     {
-        assertThat(newViewerAmbitoIncidSpinner(spinner, activity, null).getController(), notNullValue());
+        assertThat(newViewerAmbitoIncidSpinner(spinner, new ViewerMock(activity)).getController(), notNullValue());
     }
 
     @Test
@@ -87,16 +85,12 @@ public class ViewerAmbitoIncidSpinnerTest {
         ambitos.add(new AmbitoIncidValueObj((short) 0, "ambito0"));
         ambitos.add(new AmbitoIncidValueObj((short) 1, "ambito1"));
         ambitos.add(new AmbitoIncidValueObj((short) 2, "ambito2"));
-        viewer.setItemSelectedId(1);
+        viewer.setSelectedItemId(1);
 
         final AtomicBoolean isExec = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadItemList(ambitos);
-                isExec.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadItemList(ambitos);
+            isExec.compareAndSet(false, true);
         });
         waitAtMost(2, SECONDS).untilTrue(isExec);
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(ambitos.size()));
@@ -159,8 +153,7 @@ public class ViewerAmbitoIncidSpinnerTest {
         // Check call to controller.loadDataInSpinner();
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
         // Check call to view.setOnItemSelectedListener().
-        ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener listener =
-                (ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();
+        assertThat(viewer.getViewInViewer().getOnItemSelectedListener(), instanceOf(ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener.class));
     }
 
     @Test

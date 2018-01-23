@@ -18,24 +18,12 @@ public class RxSchedulersUtils {
 
     public static void trampolineReplaceIoScheduler()
     {
-        RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception
-            {
-                return trampoline();
-            }
-        });
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> trampoline());
     }
 
     public static void trampolineReplaceAndroidMain()
     {
-        RxAndroidPlugins.setMainThreadSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception
-            {
-                return trampoline();
-            }
-        });
+        RxAndroidPlugins.setMainThreadSchedulerHandler(scheduler -> trampoline());
     }
 
     public static void trampolineReplaceIoMain()
@@ -44,26 +32,16 @@ public class RxSchedulersUtils {
         trampolineReplaceIoScheduler();
     }
 
+    @SuppressWarnings("unused")
     public static void singleReplaceAndroidMain()
     {
-        RxAndroidPlugins.setMainThreadSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception
-            {
-                return single();
-            }
-        });
+        RxAndroidPlugins.setMainThreadSchedulerHandler(scheduler -> single());
     }
 
+    @SuppressWarnings("unused")
     public static void singleReplaceIoScheduler()
     {
-        RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception
-            {
-                return single();
-            }
-        });
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> single());
     }
 
     public static void resetAllSchedulers()

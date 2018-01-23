@@ -36,13 +36,7 @@ public class ViewerTestWrapper {
 
     public void checkOnSaveInstanceState(final Viewer viewer)
     {
-        viewer.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(viewer.getActivity(), new Bundle(0));
-            }
-        });
+        viewer.getActivity().runOnUiThread(() -> getInstrumentation().callActivityOnSaveInstanceState(viewer.getActivity(), new Bundle(0)));
         waitAtMost(6, SECONDS).untilAtomic(flagMethod, is(AFTER_SaveState));
     }
 }

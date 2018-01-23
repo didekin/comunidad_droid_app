@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.userdata;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -7,11 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -22,7 +24,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity {
+public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     ViewerUserData viewer;
     View acView;
@@ -48,10 +50,12 @@ public class UserDataAc extends AppCompatActivity {
         viewer.clearSubscriptions();
     }
 
-    public void replaceComponent(Bundle bundle)
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
     {
-        Timber.d("initAcWithBundle()");
-        new ActivityInitiator(this).initAcWithBundle(bundle);
+        return this;
     }
 
 //    ============================================================
@@ -67,13 +71,6 @@ public class UserDataAc extends AppCompatActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        Timber.d("onPrepareOptionsMenu()");
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
@@ -84,11 +81,11 @@ public class UserDataAc extends AppCompatActivity {
                 doUpMenu(this);
                 return true;
             case R.id.password_change_ac_mn:
+                initAcFromMenu(user_name.getBundleForKey(viewer.oldUser.get().getUserName()),resourceId);
             case R.id.delete_me_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:
-            case R.id.incid_see_open_by_comu_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(null, resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

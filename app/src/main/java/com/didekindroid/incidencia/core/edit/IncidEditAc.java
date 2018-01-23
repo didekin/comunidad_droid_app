@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.core.edit;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,9 +8,10 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.api.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -20,26 +20,24 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditAc.newViewerIncidEditAc;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.CommonAssertionMsg.fragment_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
- * 1. An intent key is received with the IncidImportancia instance to be edited.
+ * 1. An intent key is received with a IncidAndResolBundle instance.
  * -- Users with maximum powers can modify description and ambito of the incidencia; they can also
  * erase an incidencia if there is not resolucion open. Users with max powers
  * are those with adm function or users who register the incidencia in the first time.
  * -- Users with minimum powers can only modify the importance assigned by them.
- * 2. An intent key is received with a flag signalling if the incidencia has an open resolucion.
  * Postconditions:
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf,
+        FragmentInitiatorIf<IncidEditFr> {
 
     View acView;
     ViewerIncidEditAc viewer;
@@ -61,31 +59,16 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         setContentView(acView);
         doToolBar(this, true);
 
-        IncidEditFr fragmentToAdd;
-
-        if (savedInstanceState != null) {
-            fragmentToAdd = (IncidEditFr) getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
-            assertTrue(fragmentToAdd != null, fragment_should_be_initialized);
-            if (viewer == null) {
-                initViewer();
-            }
+        if (savedInstanceState != null && viewer == null) {
+            initViewer();
             return;
         }
 
-        Bundle argsFragment = new Bundle();
-
         if (incidImportancia.isIniciadorIncidencia() || incidImportancia.getUserComu().hasAdministradorAuthority()) {
-            fragmentToAdd = new IncidEditMaxFr();
+            initFragmentTx(IncidEditMaxFr.newInstance(resolBundle));
         } else {
-            fragmentToAdd = new IncidEditMinFr();
+            initFragmentTx(IncidEditMinFr.newInstance(resolBundle));
         }
-
-        argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle);
-        fragmentToAdd.setArguments(argsFragment);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag)
-                .commit();
-
         initViewer();
     }
 
@@ -121,6 +104,22 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         viewer.setChildViewer(childViewer);
     }
 
+// ================  ActivityInitiatorIf  ====================
+
+    @Override
+    public AppCompatActivity getActivity()
+    {
+        return this;
+    }
+
+// ================  FragmentInitiatorIf  ====================
+
+    @Override
+    public int getContainerId()
+    {
+        return R.id.incid_edit_fragment_container_ac;
+    }
+
 //    ......................... HELPERS ..........................
 
     private void initViewer()
@@ -143,6 +142,19 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Timber.d("onPrepareOptionsMenu()");
+        // Visible for ADM users always and for the rest only when there is resolucion.
+        boolean hasToBeShown = resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority()
+                || resolBundle.hasResolucion();
+        menu.findItem(R.id.incid_resolucion_reg_ac_mn)
+                .setVisible(hasToBeShown)
+                .setEnabled(hasToBeShown);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
@@ -155,14 +167,10 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
                 return true;
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
-                Intent intent = new Intent();
-                intent.putExtra(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
-                setIntent(intent);
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()), resourceId);
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
-                // We don't reuse flag for resolucion: the state might have changed. We checked DB.
-                viewer.checkResolucion(resourceId);
+                viewer.checkResolucion();
                 return false;
             default:
                 return super.onOptionsItemSelected(item);

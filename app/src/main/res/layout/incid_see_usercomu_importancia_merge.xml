@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/incid_importancia_in_comunidad_rot"
+        style="@style/textBase.textPageLabel2"
+        android:text="@string/incid_importancia_comunidad_rot"
+        android:layout_marginTop="@dimen/vertical_margin"/>
+    <ListView
+        android:id="@id/android:list"
+        style="@style/basicList"
+        android:choiceMode="none"
+        android:listSelector="@color/transparent"
+        android:divider="@color/purple_900"
+        android:dividerHeight="1dp">
+    </ListView>
+    <TextView
+        android:id="@id/android:empty"
+        style="@style/textBase.no_item_list_message"
+        android:text="@string/no_importancia_by_user"
+        android:visibility="gone">
+    </TextView>
+</merge>

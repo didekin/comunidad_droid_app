@@ -3,6 +3,8 @@ package com.didekindroid.comunidad.spinner;
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
@@ -19,6 +21,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -26,7 +29,6 @@ import io.reactivex.observers.DisposableSingleObserver;
 import static com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner.newViewerMunicipioSpinner;
 import static com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner.spinnerEvent_default;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.MUNICIPIO_SPINNER_EVENT;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -165,9 +167,9 @@ public class ViewerMunicipioSpinnerTest {
         assertThat(viewer.getSelectedItemId(), is(11L));
         // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() ... {--> MunicipioSelectedListener.onItemSelected() }
         // We initialize to 0 the itemSelectedId to checkMenu the call to MunicipioSelectedListener.onItemSelected().
-        viewer.setItemSelectedId(2L);
+        viewer.setSelectedItemId(2L);
         viewer.getController().loadItemsByEntitiyId(new ObserverSingleSelectList<>(viewer), 35L);
-        waitAtMost(3, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(3, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(34));
         // MunicipioSelectedListener.onItemSelected() modify municipioIn.
         assertThat(viewer.spinnerEvent.getMunicipio().getProvincia().getProvinciaId(), is((short) 35));

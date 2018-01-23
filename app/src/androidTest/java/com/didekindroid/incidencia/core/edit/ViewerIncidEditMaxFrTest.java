@@ -7,9 +7,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -18,7 +17,6 @@ import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,37 +24,38 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrNotErase;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeUserComuImportanciaAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -75,6 +74,9 @@ public class ViewerIncidEditMaxFrTest {
     ViewerIncidEditMaxFr viewer;
     IncidenciaDataDbHelper dbHelper;
     IncidAndResolBundle resolBundle;
+    UsuarioComunidad comuRealJuan;
+    UsuarioComunidad comuPlazuelaJuan;
+
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
@@ -82,8 +84,12 @@ public class ViewerIncidEditMaxFrTest {
         protected Intent getActivityIntent()
         {
             try {
+                regTwoUserComuSameUser(makeListTwoUserComu());
+                List<UsuarioComunidad> userComus = userComuDaoRemote.seeUserComusByUser();
+                comuRealJuan = userComus.get(0);
+                comuPlazuelaJuan = userComus.get(1);
                 // Perfil pro, iniciador de la incidencia. Incidencia sin resolución abierta.
-                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_REAL_JUAN), false);
+                resolBundle = new IncidAndResolBundle(makeRegGetIncidImportancia(comuRealJuan, (short) 3), false);
             } catch (IOException | UiException e) {
                 fail();
             }
@@ -98,7 +104,7 @@ public class ViewerIncidEditMaxFrTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        IncidEditMaxFr fragment = (IncidEditMaxFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        IncidEditMaxFr fragment = (IncidEditMaxFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMaxFr.class.getName());
         dbHelper = new IncidenciaDataDbHelper(activity);
 
         AtomicReference<ViewerIncidEditMaxFr> viewerAtomic = new AtomicReference<>(null);
@@ -119,8 +125,8 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testNewViewerIncidEditMaxFr() throws Exception
     {
-        assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
-        assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.getParentViewer()));
+        assertThat(viewer.getController(), instanceOf(CtrlerIncidenciaCore.class));
+        assertThat(viewer.getParentViewer(), is(activity.getParentViewer()));
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
     }
@@ -146,52 +152,30 @@ public class ViewerIncidEditMaxFrTest {
         // Preconditions.
         final IncidAndResolBundle newResolBundle = new IncidAndResolBundle(resolBundle.getIncidImportancia(), true);
         // Exec.
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(new Bundle(0), newResolBundle);
-            }
-        });
+        activity.runOnUiThread(() -> viewer.doViewInViewer(new Bundle(0), newResolBundle));
         // Checks: NOT erase button.
         waitAtMost(4, SECONDS).untilTrue(viewer.hasResolucion);
         checkScreenEditMaxPowerFrNotErase(newResolBundle);
     }
 
     @Test
-    public void testOnClickLinkImportanciaUsers() throws Exception
-    {
-        viewer.onClickLinkToImportanciaUsers(new LinkToImportanciaUsersListener(viewer));
-        onView(withId(incidSeeUserComuImportanciaAcLayout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCIDENCIA_OBJECT.key, activity.resolBundle.getIncidImportancia().getIncidencia()));
-    }
-
-    @Test
     public void testOnClickButtonModify_1() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.incidImportanciaBean.setImportancia((short) 11);
-                viewer.onClickButtonModify();
-            }
+        activity.runOnUiThread(() -> {
+            viewer.incidImportanciaBean.setImportancia((short) 11);
+            viewer.onClickButtonModify();
         });
-        waitAtMost(2, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_importancia));
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_importancia));
     }
 
     @Test
     public void testOnClickButtonModify_2() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.incidImportanciaBean.setImportancia((short) 1);
-                viewer.onClickButtonModify();
-            }
+        activity.runOnUiThread(() -> {
+            viewer.incidImportanciaBean.setImportancia((short) 1);
+            viewer.onClickButtonModify();
         });
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
@@ -201,36 +185,40 @@ public class ViewerIncidEditMaxFrTest {
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
         final AtomicBoolean isRun = new AtomicBoolean(false);
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onClickButtonErase();
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onClickButtonErase();
+            isRun.compareAndSet(false, true);
         });
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
-        viewer.onSuccessModifyIncidImportancia(1);
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        checkComuInSpinner();
+        // Exec with the other comunidad as parameter.
+        viewer.onSuccessModifyIncidImportancia(comuPlazuelaJuan.getComunidad());
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        // Check comuSpinner initialization with the comunidad in the method parameter.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuPlazuelaJuan.getComunidad().getNombreComunidad()));
     }
 
     @Test
     public void testOnSuccessEraseIncidencia() throws Exception
     {
-        viewer.onSuccessEraseIncidencia(1);
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        checkComuInSpinner();
+        // Exec with the other comunidad as parameter.
+        viewer.onSuccessEraseIncidencia(comuPlazuelaJuan.getComunidad());
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        // Check comuSpinner initialization with the comunidad in the method parameter.
+        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(comuPlazuelaJuan.getComunidad().getNombreComunidad()));
     }
 
     @Test
     public void test_EraseIncidenciaObserver()
     {
-        just(1).subscribeWith(viewer.new EraseIncidenciaObserver());
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        just(1).subscribeWith(viewer.new EraseIncidenciaObserver(comuRealJuan.getComunidad()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
@@ -252,8 +240,8 @@ public class ViewerIncidEditMaxFrTest {
     public void testSaveState() throws Exception
     {
         Bundle bundleTest = new Bundle();
-        viewer.viewerAmbitoIncidSpinner.setItemSelectedId(11);
-        viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
+        viewer.viewerAmbitoIncidSpinner.setSelectedItemId(11);
+        viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
         viewer.saveState(bundleTest);
 
         assertThat(bundleTest.getLong(AMBITO_INCIDENCIA_POSITION.key), is(11L));
@@ -289,5 +277,17 @@ public class ViewerIncidEditMaxFrTest {
                                 .roles(rol)
                                 .build())
                 .build();
+    }
+
+    private void checkComuInSpinner()
+    {
+        // Precondition: comuRealJuan is shown in screen.
+        waitAtMost(4, SECONDS).until(() -> {
+            onView(allOf(
+                    withId(R.id.incid_comunidad_txt),
+                    withText(comuRealJuan.getComunidad().getNombreComunidad())
+            )).check(matches(isDisplayed()));
+            return true;
+        });
     }
 }

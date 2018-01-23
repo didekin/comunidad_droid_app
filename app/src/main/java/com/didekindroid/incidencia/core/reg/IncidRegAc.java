@@ -6,12 +6,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.router.FragmentInitiatorIf;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegAc.newViewerIncidRegAc;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
@@ -19,14 +21,13 @@ import static com.didekindroid.util.UIutils.doToolBar;
 /**
  * Preconditions:
  * 1. The user is registered.
- * 2. An intent may be received with the comunidadId where the incidencia will be open.
+ * 2. An intent is received with the comunidadId where the incidencia will be open.
  * Postconditions:
  * 1. No intent passed.
  * <p>
  * This activity is a point of registration for receiving notifications of new incidencias.
- * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
-public class IncidRegAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class IncidRegAc extends AppCompatActivity implements ChildViewersInjectorIf, FragmentInitiatorIf<IncidRegFr> {
 
     IncidRegFr incidRegFr;
     ViewerIncidRegAc viewer;
@@ -44,7 +45,9 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
 
         viewer = newViewerIncidRegAc(this);
         viewer.doViewInViewer(savedInstanceState, null);
-        incidRegFr = (IncidRegFr) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
+        Bundle bundle = new Bundle(1);
+        bundle.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
+        incidRegFr = initFragmentById(bundle, R.id.incid_reg_frg);
     }
 
     @Override
@@ -63,7 +66,7 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
         viewer.saveState(outState);
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+// ===================  ChildViewersInjectorIf  ===================
 
     @Override
     public ParentViewerInjectedIf getParentViewer()
@@ -77,6 +80,16 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
     {
         Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(childViewer);
+    }
+
+//    ============================================================
+//    ................... FragmentInitiatorIf ....................
+//    ============================================================
+
+    @Override
+    public AppCompatActivity getActivity()
+    {
+        return this;
     }
 
     // ============================================================

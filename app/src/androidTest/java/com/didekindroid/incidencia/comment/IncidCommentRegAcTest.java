@@ -1,24 +1,28 @@
 package com.didekindroid.incidencia.comment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.app.TaskStackBuilder.create;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -33,11 +37,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -60,12 +67,6 @@ public class IncidCommentRegAcTest {
     public IntentsTestRule<IncidCommentRegAc> intentsRule = new IntentsTestRule<IncidCommentRegAc>(IncidCommentRegAc.class) {
 
         @Override
-        protected void beforeActivityLaunched()
-        {
-            super.beforeActivityLaunched();
-        }
-
-        @Override
         protected Intent getActivityIntent()
         {
             try {
@@ -81,29 +82,28 @@ public class IncidCommentRegAcTest {
             } catch (UiException | IOException e) {
                 fail();
             }
-            Intent intent = new Intent();
-            intent.putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
-            return intent;
+
+            if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+                Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
+                create(getTargetContext()).addNextIntent(intent1).startActivities();
+            }
+            return new Intent().putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
         }
     };
-    int activityLayoutId = R.id.incid_comment_reg_ac_layout;
-    private IncidCommentRegAc mActivity;
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(3000);
-    }
+    private IncidCommentRegAc activity;
 
     @Before
     public void setUp() throws Exception
     {
-        mActivity = intentsRule.getActivity();
+        activity = intentsRule.getActivity();
     }
 
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -112,9 +112,9 @@ public class IncidCommentRegAcTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(mActivity, notNullValue());
+        assertThat(activity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        assertThat(mActivity.findViewById(activityLayoutId), notNullValue());
+        assertThat(activity.findViewById(incidCommentRegAcLayout), notNullValue());
 
         onView(withId(R.id.incid_comment_incidencias_rot)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comment_reg_button)).check(matches(isDisplayed()));
@@ -127,8 +127,6 @@ public class IncidCommentRegAcTest {
                 withId(R.id.incid_reg_desc_txt),
                 withText(incidJuanReal1.getIncidencia().getDescripcion())
         )).check(matches(isDisplayed()));
-
-        clickNavigateUp();
     }
 
     @Test
@@ -138,7 +136,7 @@ public class IncidCommentRegAcTest {
         onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment = not valid")).perform(closeSoftKeyboard());
         Thread.sleep(1000);
         onView(withId(R.id.incid_comment_reg_button)).perform(click());
-        checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_comment_label);
+        checkToastInTest(R.string.error_validation_msg, activity, R.string.incid_comment_label);
     }
 
     @Test
@@ -151,6 +149,9 @@ public class IncidCommentRegAcTest {
         // Verificación.
         onView(withId(R.id.incid_comments_see_ac)).check(matches(isDisplayed()));
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
-        checkUp(activityLayoutId);
+        // CheckUp.
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
+        }
     }
 }

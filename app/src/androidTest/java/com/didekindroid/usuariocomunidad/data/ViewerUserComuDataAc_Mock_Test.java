@@ -1,17 +1,17 @@
 package com.didekindroid.usuariocomunidad.data;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ActivityMock;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,12 +30,10 @@ import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc.newViewerUserComuDataAc;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -60,84 +58,60 @@ public class ViewerUserComuDataAc_Mock_Test {
     @Before
     public void setUp() throws Exception
     {
-        Intent intent = new Intent(getTargetContext(), UserComuDataAc.class);
+        Intent intent = new Intent(getTargetContext(), ActivityMock.class);
         intent.putExtra(USERCOMU_LIST_OBJECT.key, userComuIntent);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         TKhandler.updateIsRegistered(true);
         activity = (AppCompatActivity) getInstrumentation().startActivitySync(intent);
 
-        cleanWithTkhandler();
-        viewer = newViewerUserComuDataAc((UserComuDataAc) activity);
+        viewer = new ViewerUserComuDataAc(null, activity);
         viewer.userComuIntent = userComuIntent;
     }
 
-    @Test
-    public void test_NewViewerUserComuDataAc() throws Exception
+    @After
+    public void cleanUp()
     {
-        assertThat(viewer.getController(), isA(CtrlerUsuarioComunidad.class));
+        cleanWithTkhandler();
+    }
+
+    // .............................. VIEWER ..................................
+
+    @Test
+    public void test_SetAcMenu() throws Exception
+    {
+        // Preconditions.
+        Menu mockMenu = doMockMenu(activity, R.menu.menu_mock_one);
+        viewer.setController(new CtrlerUsuarioComunidadTest());
+        // Exec.
+        viewer.setAcMenu(mockMenu);
+        // Check.
+        assertThat(flagLocalExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        assertThat(viewer.acMenu, is(mockMenu));
     }
 
     // .............................. SUBSCRIBERS ..................................
 
     @Test
-    public void test_UpdateActivityMenu() throws Exception
-    {
-        // Preconditions.
-        Menu myMenu = checkMockMenu(activity, R.menu.menu_mock_one);
-        // Mock controller.
-        viewer.setController(new CtrlerUsuarioComunidadTest());
-        // Mock menu in viewer.
-        viewer.setAcMenu(myMenu);
-        // Exec.
-        viewer.updateActivityMenu();
-        // Check.
-        MenuItem comuDataItem = myMenu.findItem(R.id.comu_data_ac_mn);
-        assertThat(comuDataItem.isEnabled(), is(true));
-        assertThat(comuDataItem.isVisible(), is(true));
-    }
-
-    @Test
     public void test_AcMenuObserver_1()
     {
-        // Preconditions.
-        boolean isOldest = false;
-        Menu myMenu = checkMockMenu(activity, R.menu.menu_mock_one);
-        // Exec and check.
-        execCheck(myMenu, isOldest);
+        execCheckPower(false);
     }
 
     @Test
     public void test_AcMenuObserver_2()
     {
-        // Preconditions.
-        boolean isOldest = true;
-        Menu myMenu = checkMockMenu(activity, R.menu.menu_mock_one);
-        // Mock menu in viewer.
-        viewer.setAcMenu(myMenu);
-        // Exec and check.
-        execCheck(myMenu, isOldest);
+        execCheckPower(true);
     }
 
     //  =========================  HELPERS  ===========================
 
-    Menu checkMockMenu(Activity activity, int menuMockRsId)
-    {
-        Menu menu = doMockMenu(activity, menuMockRsId);
-        MenuItem menuItem = menu.findItem(R.id.comu_data_ac_mn);
-        assertThat(menuItem.isEnabled(), is(false));
-        assertThat(menuItem.isVisible(), is(false));
-        return menu;
-    }
-
-    void execCheck(Menu myMenu, boolean isOldest)
+    void execCheckPower(boolean hasComunidadPower)
     {
         // Exec.
         ViewerUserComuDataAc.AcMenuObserver observer = viewer.new AcMenuObserver();
-        just(isOldest).subscribeWith(observer);
-        // Check: no change in menu
-        MenuItem comuDataItem = myMenu.findItem(R.id.comu_data_ac_mn);
-        assertThat(comuDataItem.isEnabled(), is(isOldest));
-        assertThat(comuDataItem.isVisible(), is(isOldest));
+        just(hasComunidadPower).subscribeWith(observer);
+        // Check
+        assertThat(viewer.showComuDataMn.get(), is(hasComunidadPower));
     }
 
     class CtrlerUsuarioComunidadTest extends CtrlerUsuarioComunidad {

@@ -8,8 +8,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.Incidencia_GCM_Test;
-import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
+import com.didekindroid.incidencia.core.Incidencia_GCM_abs_Test;
+import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -24,7 +24,7 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -38,7 +38,7 @@ import static org.junit.Assert.assertThat;
  * Test de integración GCM para cierre de una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
+public class IncidCloseAc_GCM_Test extends Incidencia_GCM_abs_Test {
 
     Resolucion resolucion;
 
@@ -61,7 +61,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
     @Override
     protected IntentsTestRule<? extends Activity> doIntentsTestRule()
     {
-        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+        return new IntentsTestRule<IncidResolucionEditAc>(IncidResolucionEditAc.class) {
 
             /**
              * Preconditions:
@@ -77,7 +77,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     // We'll test that the gcmToken has not been updated in server.
-                    assertThat(usuarioDao.getGcmToken(), nullValue());
+                    assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
                 } catch ( IOException | UiException e) {
                     e.printStackTrace();
                 }

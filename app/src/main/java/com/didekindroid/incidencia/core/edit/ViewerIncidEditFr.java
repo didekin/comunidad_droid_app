@@ -9,11 +9,13 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.incidencia.utils.IncidBundleKey;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -22,10 +24,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_modified;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifiedOpenIncid;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
 
@@ -35,8 +36,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 15:06
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> implements
-        LinkToImportanciaUsersClickable, ModIncidImportanciaCallableBack {
+abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
 
     IncidAndResolBundle resolBundle;
     IncidenciaBean incidenciaBean;
@@ -49,8 +49,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
      */
     AtomicBoolean hasResolucion = new AtomicBoolean(false);
 
-    @SuppressWarnings("WeakerAccess")
-    protected ViewerIncidEditFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    ViewerIncidEditFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
@@ -68,27 +67,8 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
         viewerImportanciaSpinner.doViewInViewer(savedState, incidImportanciaBean);
         ((TextView) view.findViewById(R.id.incid_comunidad_txt)).setText(resolBundle.getIncidImportancia().getIncidencia().getComunidad().getNombreComunidad());
 
-
-        TextView linkToImportanciaUsersView = view.findViewById(R.id.incid_importancia_otros_view);
-        linkToImportanciaUsersView.setOnClickListener(new LinkToImportanciaUsersListener(this));
-
         Button buttonModify = view.findViewById(R.id.incid_edit_fr_modif_button);
-        buttonModify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("onClickLinkToImportanciaUsers()");
-                onClickButtonModify();
-            }
-        });
-    }
-
-    public void onClickLinkToImportanciaUsers(LinkToImportanciaUsersListener listener)
-    {
-        Timber.d("LinkToImportanciaUsersListener.onClickLinkToImportanciaUsers()");
-        Bundle bundle = new Bundle(1);
-        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
-        new ActivityInitiator(activity).initAcFromListener(bundle, listener.getClass());
+        buttonModify.setOnClickListener(v -> onClickButtonModify());
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -100,7 +80,9 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
             // Check first for a valid IncidImportancia instance; then check the internet connection.
             IncidImportancia newIncidImportancia = doNewIncidImportancia(errorMsg);
             if (checkInternetConnected(getActivity())) {
-                controller.modifyIncidImportancia(new ModIncidImportanciaObserver<>(this), newIncidImportancia);
+                controller.modifyIncidImportancia(
+                        new ModIncidImportanciaObserver<>(this, newIncidImportancia.getIncidencia().getComunidad()),
+                        newIncidImportancia);
             }
         } catch (IllegalStateException e) {
             Timber.e(e.getMessage());
@@ -108,12 +90,13 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
         }
     }
 
-    @Override
-    public void onSuccessModifyIncidImportancia(int rowInserted)
+    void onSuccessModifyIncidImportancia(Comunidad comunidad)
     {
         Timber.d("onSuccessModifyIncidImportancia()");
-        assertTrue(rowInserted >= 1, incid_importancia_should_be_modified);
-        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
+        Bundle bundle = new Bundle(1);
+        bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
+        bundle.putBoolean(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, false);
+        initAcFromRouter(bundle, modifiedOpenIncid);
     }
 
     //    ============================  LIFE CYCLE   ===================================

@@ -32,9 +32,9 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunic
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceCmp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -118,7 +118,7 @@ public class ViewerComuDataAcTest {
     @Test
     public void test_ReplaceComponent() throws Exception
     {
-        checkViewerReplaceComponent(viewer, seeUserComuByUserFrRsId, null);
+        checkViewerReplaceCmp(viewer, seeUserComuByUserFrRsId, null);
     }
 
     @Test
@@ -129,14 +129,6 @@ public class ViewerComuDataAcTest {
         // After.
         viewer.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), viewer));
         assertThat(viewer.getChildViewer(ViewerRegComuFr.class), notNullValue());
-    }
-
-    @Test
-    public void test_OnSuccessModifyComunidad() throws Exception
-    {
-        checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
-        viewer.onSuccessModifyComunidad();
-        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -167,6 +159,6 @@ public class ViewerComuDataAcTest {
     {
         ViewerComuDataAc.ComuDataAcObserver observer = viewer.new ComuDataAcObserver();
         just(1).subscribeWith(observer);
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
     }
 }

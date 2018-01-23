@@ -23,6 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
@@ -68,6 +69,19 @@ public final class ComuEspresoTestUtil {
         }
     }
 
+    public static void typeComunidadDefault(ComunidadAutonoma comunidadAutonoma)
+    {
+        final TipoViaValueObj tipoVia = new TipoViaValueObj(52, "Calle");
+        try {
+            doTipoViaSpinner(tipoVia);
+            SECONDS.sleep(1);
+            typeComuCalleNumero("Real", "5", "Bis");
+            doComunAutonomaSpinner(comunidadAutonoma);
+        } catch (InterruptedException e) {
+            fail("InterruptedException");
+        }
+    }
+
     public static void typeComunidadData(Municipio municipio, TipoViaValueObj tipoVia, String nombreVia,
                                          String numeroEnVia, String sufijoNumero) throws InterruptedException
     {
@@ -85,7 +99,7 @@ public final class ComuEspresoTestUtil {
 
     public static void checkRegComuFrViewEmpty()
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.tipo_via_spinner)),
@@ -93,7 +107,7 @@ public final class ComuEspresoTestUtil {
                 )
         ));
 
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.autonoma_comunidad_spinner)),
@@ -101,7 +115,7 @@ public final class ComuEspresoTestUtil {
                 )
         ));
 
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.provincia_spinner)),
@@ -109,7 +123,7 @@ public final class ComuEspresoTestUtil {
                 )
         ));
 
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.municipio_spinner)),
@@ -130,7 +144,7 @@ public final class ComuEspresoTestUtil {
 
     public static void checkNumeroEnVia(Comunidad comunidad)
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.comunidad_numero_editT),
                         withText(containsString(String.valueOf(comunidad.getNumero())))
@@ -140,7 +154,7 @@ public final class ComuEspresoTestUtil {
 
     public static void checkNumeroSufijo(Comunidad comunidad)
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.comunidad_sufijo_numero_editT),
                         withText(containsString(String.valueOf(comunidad.getSufijoNumero())))
@@ -226,7 +240,7 @@ public final class ComuEspresoTestUtil {
                         is(tipoVia)
                 )));
 
-        waitAtMost(2, SECONDS).until(isViewDisplayed(
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.tipo_via_spinner)),
@@ -236,7 +250,7 @@ public final class ComuEspresoTestUtil {
 
     public static void checkTipoViaSpinner(Comunidad comunidad)
     {
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.tipo_via_spinner)),
@@ -252,7 +266,7 @@ public final class ComuEspresoTestUtil {
                         isA(ComunidadAutonoma.class),
                         is(comunidadAutonoma)
                 )));
-        waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.autonoma_comunidad_spinner)),
                 withText(is(comunidadAutonoma.getNombre()))
@@ -261,7 +275,7 @@ public final class ComuEspresoTestUtil {
 
     public static void checkComuAutonomaSpinner(String nombreComAutonoma)
     {
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.autonoma_comunidad_spinner)),
@@ -277,7 +291,7 @@ public final class ComuEspresoTestUtil {
                         isA(Provincia.class),
                         is(provincia)
                 )));
-        waitAtMost(2, SECONDS).until(isViewDisplayed(
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.provincia_spinner)),
                         withText(is(provincia.getNombre()))
@@ -292,7 +306,7 @@ public final class ComuEspresoTestUtil {
 
     public static void checkProvinciaSpinner(String provinciaNombre)
     {
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.provincia_spinner)),
@@ -303,17 +317,17 @@ public final class ComuEspresoTestUtil {
     public static void doMunicipioSpinner(Municipio municipio)
     {
         onView(withId(R.id.municipio_spinner)).perform(click());
-        waitAtMost(3, SECONDS).until(isDataDisplayedAndClick(
+        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         isA(Municipio.class),
                         is(municipio)
                 )));
-        waitAtMost(2, SECONDS).until(isViewDisplayed(
-                allOf(withId(R.id.app_spinner_1_dropdown_item),
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.municipio_spinner)),
                         withText(is(municipio.getNombre()))
-                )
-        ));
+                )));
     }
 
     public static void checkMunicipioSpinner(Comunidad comunidad)
@@ -323,7 +337,7 @@ public final class ComuEspresoTestUtil {
 
     public static void checkMunicipioSpinner(String municipioNombre)
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.municipio_spinner)),

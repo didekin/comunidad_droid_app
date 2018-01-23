@@ -7,7 +7,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.Incidencia_GCM_Test;
+import com.didekindroid.incidencia.core.Incidencia_GCM_abs_Test;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
  * Test de integración GCM para el registro de una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
+public class IncidRegAc_GCM_Test extends Incidencia_GCM_abs_Test {
 
     Usuario pepe;
     UsuarioComunidad pepeUserComu;
@@ -75,7 +75,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
                     // We'll test that the gcmToken is not updated in server.
-                    assertThat(usuarioDao.getGcmToken(), nullValue());
+                    assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {
                     e.printStackTrace();
                 }

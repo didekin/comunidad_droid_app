@@ -22,7 +22,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_login_tokenNull_action;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -84,13 +86,7 @@ public class UiExceptionTest {
     {
         final UiException ue = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.exception_generic_app_message, activity));
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
@@ -101,15 +97,9 @@ public class UiExceptionTest {
     {
         final UiException ue = new UiException(new ErrorBean(TOKEN_NULL));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed((R.id.login_ac_layout)));
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
+        waitAtMost(4, SECONDS).until(isToastInView(show_login_tokenNull_action.getToastResourceId(), activity));
     }
 
     @Test
@@ -117,13 +107,7 @@ public class UiExceptionTest {
     {
         final UiException ue = new UiException(new ErrorBean(COMUNIDAD_NOT_FOUND));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
         waitAtMost(5, SECONDS).until(isToastInView(R.string.comunidad_not_found_message, activity));
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
@@ -135,13 +119,7 @@ public class UiExceptionTest {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
         onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed())); // Lista de incidencias abiertas.
@@ -156,13 +134,7 @@ public class UiExceptionTest {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_not_registered, activity));
         onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
@@ -175,13 +147,7 @@ public class UiExceptionTest {
     {
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_USER_WRONG_INIT));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_powers, activity));
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
@@ -194,16 +160,10 @@ public class UiExceptionTest {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_COMMENT_WRONG_INIT));
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
-        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
 
         cleanOptions(CLEAN_JUAN);
     }
@@ -219,13 +179,7 @@ public class UiExceptionTest {
 
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity, intentIn);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity, intentIn));
         waitAtMost(5, SECONDS).until(isToastInView(R.string.resolucion_duplicada, activity));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
 
@@ -237,13 +191,7 @@ public class UiExceptionTest {
     {
         final UiException ue = new UiException(new ErrorBean(USERCOMU_WRONG_INIT));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
@@ -256,16 +204,10 @@ public class UiExceptionTest {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
         final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
+        activity.runOnUiThread(() -> ue.processMe(activity));
 
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_data_not_modified_msg, activity));
-        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+        waitAtMost(5, SECONDS).until(isToastInView(show_login_tokenNull_action.getToastResourceId(), activity));
+        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
 
         cleanOptions(CLEAN_JUAN);
     }

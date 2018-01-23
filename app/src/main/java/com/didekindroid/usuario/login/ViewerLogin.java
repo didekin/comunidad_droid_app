@@ -1,19 +1,17 @@
 package com.didekindroid.usuario.login;
 
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
@@ -23,11 +21,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
-import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
-import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
-import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
+import static com.didekindroid.usuario.login.PasswordMailDialog.newInstance;
+import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkInternet;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -39,9 +37,8 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLoginIf {
+public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ActivityInitiatorIf {
 
-    @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
     private AtomicInteger counterWrong;
 
@@ -52,10 +49,10 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         usuarioBean = new AtomicReference<>(null);
     }
 
-    static ViewerLoginIf newViewerLogin(LoginAc activity)
+    static ViewerLogin newViewerLogin(LoginAc activity)
     {
         Timber.d("newViewerLogin()");
-        ViewerLoginIf instance = new ViewerLogin(activity);
+        ViewerLogin instance = new ViewerLogin(activity);
         instance.setController(new CtrlerUsuario());
         return instance;
     }
@@ -65,15 +62,55 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
     {
         Timber.d("doViewInViewer()");
 
-        Button mLoginButton = view.findViewById(R.id.login_ac_button);
-        mLoginButton.setOnClickListener(new LoginButtonListener());
+        if (viewBean != null) {
+            ((EditText) view.findViewById(R.id.reg_usuario_email_editT)).setText(String.class.cast(viewBean));
+        }
+
+        Button validateLoginButton = view.findViewById(R.id.login_ac_button);
+        validateLoginButton.setOnClickListener(
+                v -> {
+                    Timber.d("onClick()");
+                    if (checkLoginData()) {
+                        controller.validateLogin(
+                                new LoginObserver() {
+                                    @Override
+                                    public void onSuccess(Boolean isLoginOk)
+                                    {
+                                        processLoginBackInView(isLoginOk);
+                                    }
+                                },
+                                usuarioBean.get().getUsuario()
+                        );
+                    }
+                }
+        );
+
+        FloatingActionButton fab = view.findViewById(R.id.login_help_fab);
+        fab.setOnClickListener(v -> {
+            if (checkEmailData()) {
+                showDialogAfterErrors();
+            }
+        });
+
         if (savedState != null) {
             counterWrong.set(savedState.getInt(login_counter_atomic_int.key));
         }
     }
 
-    @Override
-    public boolean checkLoginData()
+    boolean checkEmailData()
+    {
+        Timber.d("checkEmailData()");
+        usuarioBean.set(new UsuarioBean(getLoginDataFromView()[0], null, null, null));
+
+        StringBuilder errorBuilder = getErrorMsgBuilder(activity);
+        if (!usuarioBean.get().validateUserName(activity.getResources(), errorBuilder)) {
+            makeToast(activity, errorBuilder.toString());
+            return false;
+        }
+        return checkInternet(activity);
+    }
+
+    boolean checkLoginData()
     {
         Timber.i("checkLoginData()");
         usuarioBean.set(new UsuarioBean(getLoginDataFromView()[0], null, getLoginDataFromView()[1], null));
@@ -83,11 +120,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
             makeToast(activity, errorBuilder.toString());
             return false;
         }
-        if (!isInternetConnected(activity)) {
-            makeToast(activity, R.string.no_internet_conn_toast);
-            return false;
-        }
-        return true;
+        return checkInternet(activity);
     }
 
     String[] getLoginDataFromView()
@@ -99,14 +132,14 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         };
     }
 
-    @Override
-    public void processLoginBackInView(boolean isLoginOk)
+    void processLoginBackInView(boolean isLoginOk)
     {
         Timber.d("processLoginBackInView()");
 
         if (isLoginOk) {
             Timber.d("login OK");
-            replaceComponent(new Bundle());
+            initAcFromActivity(null);
+            activity.finish();
         } else {
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
@@ -118,67 +151,31 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         }
     }
 
-    private void showDialogAfterErrors()
+    void showDialogAfterErrors()
     {
         Timber.d("showDialogAfterErrors()");
-        DialogFragment newFragment = newInstance(usuarioBean.get().getUsuario());
+        assertTrue(usuarioBean != null && usuarioBean.get().getUsuario() != null, bean_fromView_should_be_initialized);
+        DialogFragment newFragment = newInstance(usuarioBean.get());
         newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
-    @Override
-    public AppCompatDialog doDialogInViewer(final LoginAc.PasswordMailDialog dialogFragment)
-    {
-        Timber.d("doDialogInViewer()");
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.alertDialogTheme);
-
-        builder.setMessage(R.string.send_password_by_mail_dialog)
-                .setPositiveButton(
-                        R.string.send_password_by_mail_YES,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.dismiss();
-                                doDialogPositiveClick((Usuario) dialogFragment.getArguments().getSerializable(usuario_object.key));
-                            }
-                        }
-                )
-                .setNegativeButton(
-                        R.string.send_password_by_mail_NO,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.dismiss();
-                                makeToast(getActivity(), R.string.login_wrong_no_mail);
-                                doDialogNegativeClick();
-                            }
-                        }
-                );
-        return builder.create();
-    }
-
-    @Override
-    public void doDialogNegativeClick()
-    {
-        Timber.d("doDialogNegativeClick()");
-        replaceComponent(new Bundle());
-    }
-
-    @Override
-    public void doDialogPositiveClick(Usuario usuario)
+    void doDialogPositiveClick(Usuario usuario)
     {
         Timber.d("sendNewPassword()");
+        if (usuario == null) {
+            makeToast(activity, R.string.username_wrong_in_login);
+            return;
+        }
         controller.sendNewPassword(new LoginObserver() {
             @Override
             public void onSuccess(Boolean isSentPassword)
             {
-                Timber.d("onSuccess()");
                 processBackSendPswdInView(isSentPassword);
             }
         }, usuario);
     }
 
-    @Override
-    public void processBackSendPswdInView(boolean isSendPassword)
+    void processBackSendPswdInView(boolean isSendPassword)
     {
         Timber.d("processBackSendPswdInView()");
         if (isSendPassword) {
@@ -187,6 +184,7 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         }
     }
 
+    @SuppressWarnings("ThrowableNotThrown")
     @Override
     public void onErrorInObserver(Throwable error)
     {
@@ -198,6 +196,8 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         }
     }
 
+    // =========================  LyfeCicle  =========================
+
     @Override
     public void saveState(Bundle savedState)
     {
@@ -208,43 +208,17 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
         savedState.putInt(login_counter_atomic_int.key, counterWrong.get());
     }
 
-    @Override
-    public AtomicInteger getCounterWrong()
+    // =========================  HELPERS  =========================
+
+    AtomicInteger getCounterWrong()
     {
         Timber.d("getCounterWrong()");
         return counterWrong;
     }
 
-    // ==================================  HELPERS  =================================
-
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK);
-        activity.finish();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    class LoginButtonListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v)
-        {
-            Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-            if (checkLoginData()) {
-                controller.validateLogin(new LoginObserver() {
-                    @Override
-                    public void onSuccess(Boolean isLoginOk)
-                    {
-                        Timber.d("onSuccess()");
-                        processLoginBackInView(isLoginOk);
-                    }
-                }, usuarioBean.get().getUsuario());
-            }
-        }
-    }
-
-    // ............................ SUBSCRIBERS ..................................
+    // ============================================================
+    // ....................... SUBSCRIBERS ...................
+    // ============================================================
 
     abstract class LoginObserver extends DisposableSingleObserver<Boolean> {
 

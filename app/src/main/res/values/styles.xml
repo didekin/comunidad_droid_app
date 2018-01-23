@@ -47,12 +47,34 @@
         <item name="android:textColorPrimary">@color/purple_900</item>
     </style>
 
+    <!-- ............... Drawers ................-->
+    <style name="drawerMainHeaderLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">69dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">?attr/colorPrimaryDark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingEnd">@dimen/drawer_padding</item>
+        <item name="android:paddingStart">@dimen/drawer_padding</item>
+    </style>
+
+    <!-- ............... FloatingActionButton ................-->
+    <style name="floatingButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:tint">@color/white</item>
+    </style>
+
     <!-- .............. EditTextFields ......... -->
     <style name="textBase.editField">
         <item name="android:textSize">@dimen/text_hint_size</item>
         <item name="android:textStyle">normal</item>
         <item name="android:imeOptions">actionNext</item>
-        <!--?attr/android:textColorPrimary-->
         <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
 
@@ -166,6 +188,4 @@
         <item name="android:textColor">?attr/colorAccent</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="themeOne.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="themeOne.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

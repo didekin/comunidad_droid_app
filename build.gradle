@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-rc1'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.google.gms:google-services:3.1.0'
     }
 }
@@ -36,19 +36,17 @@ subprojects {
 
 ext {
     minSdkVersion = 19
-    targetSdkVersion = 26
-    compileSdkVersion = 26
-    buildToolsVersion = '26.0.2'
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.3'
 
-    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
-    targetCompatibilityVersion = JavaVersion.VERSION_1_7
+    sourceCompatibilityVersion = JavaVersion.VERSION_1_8
+    targetCompatibilityVersion = JavaVersion.VERSION_1_8
 
-    didekinlibsVersion = 'a-0.1.35'
-    didekinlib_model = ":didekinlib_model-$rootProject.ext.didekinlibsVersion:@jar"
-    didekinlib_http = ":didekinlib_http-$rootProject.ext.didekinlibsVersion:@jar"
-    didekinlib_gcm = ":didekinlib_gcm-$rootProject.ext.didekinlibsVersion:@jar"
+    didekinlib_model = ':didekinlib_model-a-0.2.3:@jar'
+    didekinlib_http = ':didekinlib_http-a-0.2.3:@jar'
+    didekinlib_gcm = ':didekinlib_gcm-a-0.2.3:@jar'
 
-    firebase_message = ['com.google.firebase:firebase-messaging:11.0.4']
 
     retrofit2 = ['com.squareup.retrofit2:retrofit:2.3.0',
                  'com.squareup.retrofit2:converter-gson:2.3.0',
@@ -60,35 +58,27 @@ ext {
               'io.reactivex.rxjava2:rxandroid:2.0.1',
               'com.squareup.retrofit2:adapter-rxjava2:2.3.0']
 
-    android_support = ["com.android.support:support-annotations:26.1.0",
-                       "com.android.support:design:26.1.0",
-                       "com.android.support:appcompat-v7:26.1.0",
-                       "com.android.support:support-v4:26.1.0",
-                       "com.android.support:recyclerview-v7:26.1.0",
-                       "com.android.support:gridlayout-v7:26.1.0"]
+    android_support = ["com.android.support:support-annotations:27.0.2",
+                       "com.android.support:design:27.0.2",
+                       "com.android.support:appcompat-v7:27.0.2",
+                       "com.android.support:support-v4:27.0.2",
+                       "com.android.support:recyclerview-v7:27.0.2",
+                       "com.android.support:gridlayout-v7:27.0.2"]
 
     junit = ["junit:junit:4.12"]
     testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    testOrchestrator = ["com.android.support.test:orchestrator:1.0.2-alpha1"]
 
-    testOrchestrator =["com.android.support.test:orchestrator:1.0.1"]
-
-    testRunner = ["com.android.support.test:runner:1.0.1"]
-    testRuler = ["com.android.support.test:rules:1.0.1"]
-    espresso = ["com.android.support.test.espresso:espresso-core:3.0.1",
-                "com.android.support.test.espresso:espresso-intents:3.0.1",
-                "com.android.support.test.espresso:espresso-contrib:3.0.1",
-                "com.android.support.test.espresso:espresso-idling-resource:3.0.1"]
-
-
-    /*test_depend_resolution = ["com.android.support:support-annotations:26.0.2",
-                              "com.android.support:support-v4:26.0.2",
-                              "com.android.support:appcompat-v7:26.0.2",
-                              "com.android.support:recyclerview-v7:26.0.2",
-                              "com.android.support:design:26.0.2"]*/
+    testRunner = ["com.android.support.test:runner:1.0.2-alpha1"]
+    testRuler = ["com.android.support.test:rules:1.0.2-alpha1"]
+    espresso = ["com.android.support.test.espresso:espresso-core:3.0.2-alpha1",
+                "com.android.support.test.espresso:espresso-intents:3.0.2-alpha1",
+                "com.android.support.test.espresso:espresso-contrib:3.0.2-alpha1",
+                "com.android.support.test.espresso:espresso-idling-resource:3.0.2-alpha1"]
 
     awaitility = 'org.awaitility:awaitility:3.0.0'
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = '4.4'
 }

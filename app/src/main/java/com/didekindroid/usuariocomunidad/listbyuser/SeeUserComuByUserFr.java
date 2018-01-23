@@ -3,23 +3,28 @@ package com.didekindroid.usuariocomunidad.listbyuser;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.didekindroid.R;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
+import java.io.Serializable;
 import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.newComunidadUserComu;
+import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.userComuItemSelected;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 
@@ -33,12 +38,11 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * <p/>
  * 1. An object UsuarioComunidad is passed to the listener activity.
  */
-public class SeeUserComuByUserFr extends Fragment {
+public class SeeUserComuByUserFr extends Fragment implements ActivityInitiatorIf {
 
     public SeeUserComuByUserAdapter mAdapter;
-    SeeUserComuByUserFrListener mListener;
     Activity activity;
-    ListView fragmentView;
+    ListView frView;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -53,11 +57,9 @@ public class SeeUserComuByUserFr extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        fragmentView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
-        // To get visible a divider on top of the list.
-//        fragmentView.addHeaderView(new View(getActivity()), null, true);
-        fragmentView.setItemsCanFocus(true);
-        return fragmentView;
+        frView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
+        frView.setItemsCanFocus(true);
+        return frView;
     }
 
     @Override
@@ -66,38 +68,28 @@ public class SeeUserComuByUserFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         activity = getActivity();
-        mListener = (SeeUserComuByUserFrListener) activity;
-        fragmentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                Timber.d("onItemClick()");
-                fragmentView.setItemChecked(position, true);
-                view.setSelected(true);
-
-                if (mListener != null) {
-                    UsuarioComunidad intentUserComuData = (UsuarioComunidad) fragmentView.getItemAtPosition(position);
-                    mListener.onUserComuSelected(intentUserComuData, position);
+        frView.setOnItemClickListener(
+                (parent, view, position, id) -> {
+                    frView.setItemChecked(position, true);
+                    view.setSelected(true);
+                    Bundle bundle = new Bundle(1);
+                    bundle.putSerializable(USERCOMU_LIST_OBJECT.key, (Serializable) frView.getItemAtPosition(position));
+                    initAcFromRouter(bundle, userComuItemSelected);
                 }
-            }
-        });
+        );
     }
 
 // .......... Interface to communicate with the Activity ...................
 
-    public View getFragmentView()
+    public View getFrView()
     {
-        Timber.d("getFragmentView()");
-        return fragmentView;
+        Timber.d("getFrView()");
+        return frView;
     }
 
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
-
-    interface SeeUserComuByUserFrListener {
-        void onUserComuSelected(UsuarioComunidad userComu, int position);
-    }
 
     @SuppressWarnings("WeakerAccess")
     class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
@@ -118,6 +110,7 @@ public class SeeUserComuByUserFr extends Fragment {
             return usuarioComunidades;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {
@@ -133,7 +126,7 @@ public class SeeUserComuByUserFr extends Fragment {
                 Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
                 mAdapter = new SeeUserComuByUserAdapter(getActivity());
                 mAdapter.addAll(usuarioComunidades);
-                fragmentView.setAdapter(mAdapter);
+                frView.setAdapter(mAdapter);
             }
         }
     }

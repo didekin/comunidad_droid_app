@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="IncidResolucionFaseArray" >
-        <item>en estudio</item>
-        <item>planificada</item>
-        <item>en ejecución</item>
-        <item>resuelta</item>
-        <item>cerrada</item>
-    </string-array>
     <string-array name="IncidImportanciaArray">
         <!--0-->
         <item>importancia</item>

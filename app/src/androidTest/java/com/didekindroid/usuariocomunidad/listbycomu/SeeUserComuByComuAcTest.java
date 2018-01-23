@@ -1,10 +1,14 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.testutil.ComunidadNavConstant;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -16,18 +20,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
+import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -40,6 +47,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.runFinalCheckUserComuByComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByComuFrRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.containsString;
@@ -64,6 +72,15 @@ public class SeeUserComuByComuAcTest {
 
     @Rule
     public IntentsTestRule<SeeUserComuByComuAc> mActivityRule = new IntentsTestRule<SeeUserComuByComuAc>(SeeUserComuByComuAc.class) {
+
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addParentStack(SeeUserComuByComuAc.class).startActivities();
+            }
+        }
+
         @Override
         protected Intent getActivityIntent()
         {
@@ -86,14 +103,17 @@ public class SeeUserComuByComuAcTest {
         activity = mActivityRule.getActivity();
         fragment = (SeeUserComuByComuFr) activity.getSupportFragmentManager().findFragmentById(seeUserComuByComuFrRsId);
         // Wait until the screen data are there.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.see_usercomu_by_comu_list_header),
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(allOf(withId(R.id.see_usercomu_by_comu_list_header),
                 withText(containsString(usuarioComunidad.getComunidad().getNombreComunidad())))));
-        waitAtMost(4, SECONDS).until(getAdapter(fragment.viewer.getViewInViewer()), notNullValue());
+        waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) fragment.viewer.getViewInViewer())::getAdapter, notNullValue());
     }
 
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -114,20 +134,17 @@ public class SeeUserComuByComuAcTest {
                         )
                 )
         );
-
-        clickNavigateUp();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(seeUserComuByUserFrRsId);
+        }
     }
 
     @Test
     public void testOnStop() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnStop(activity);
-                assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
-            }
+        activity.runOnUiThread(() -> {
+            getInstrumentation().callActivityOnStop(activity);
+            assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
         });
     }
 
@@ -137,14 +154,14 @@ public class SeeUserComuByComuAcTest {
     public void testUserComuByUserMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
-        checkUp(seeUserComuByComuFrRsId);
+        checkUp(comuSearchAcLayout);
     }
 
     @Test
     public void testUserDataMn() throws InterruptedException
     {
         USER_DATA_AC.checkItemRegisterUser(activity);
-        checkUp(seeUserComuByComuFrRsId);
+        checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test

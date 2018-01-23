@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="69dp"
-              android:gravity="center_vertical"
-              android:background="?attr/colorPrimaryDark"
-              android:orientation="vertical"
-              android:paddingEnd="@dimen/drawer_padding"
-              android:paddingStart="@dimen/drawer_padding">
-    <TextView style="@style/appBarTitle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:gravity="center_vertical"
-              android:text="@string/app_name"
-              android:textColor="@color/white"
-    />
+<LinearLayout style="@style/drawerMainHeaderLayout"
+              xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/drawer_main_header_text"
+        style="@style/appBarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:visibility="invisible"
+        android:textColor="@color/white"/>
 </LinearLayout>

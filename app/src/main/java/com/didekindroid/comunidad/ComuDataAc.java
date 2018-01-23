@@ -1,6 +1,6 @@
 package com.didekindroid.comunidad;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,10 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -27,9 +27,10 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. Oldest user in the comunidad (to be changed in the future).
  * 3. An intent with a comunidad id key.
  * Postconditions:
- * 1.
+ * 1. If the user has comunidad modification power, the comunidad data may have changed in DB.
+ * 2. If user hasn't power, the data are merely shown.
  */
-public class ComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class ComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
 
     View acView;
     RegComuFr regComuFrg;
@@ -86,6 +87,14 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
         viewer.setChildViewer(viewerChild);
     }
 
+    // ==================================  ActivityInitiatorIf  =================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
 //    =========================================  MENU  =============================================
 
     @Override
@@ -107,10 +116,7 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
                 doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
-                Intent intent = new Intent();
-                intent.putExtra(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
-                setIntent(intent);
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0L)), resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

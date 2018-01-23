@@ -30,14 +30,13 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 22/03/17
  * Time: 14:40
  */
-@SuppressWarnings("ClassWithOnlyPrivateConstructors")
-class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList> {
+public final class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList> {
 
     final TextView nombreComuView;
 
     private ViewerSeeUserComuByComu(View frView, AppCompatActivity activity)
     {
-        super((ListView) frView.findViewById(list), activity, null);
+        super(frView.findViewById(list), activity, null);
         nombreComuView = frView.findViewById(R.id.see_usercomu_by_comu_list_header);
         // To get visible a divider on top of the list.
         view.addHeaderView(new View(activity), null, true);

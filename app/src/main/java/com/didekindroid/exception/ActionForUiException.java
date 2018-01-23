@@ -1,8 +1,9 @@
 package com.didekindroid.exception;
 
 import android.app.Activity;
+import android.os.Bundle;
 
-import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
+import com.didekindroid.api.router.ActionForUiExceptionIf;
 
 /**
  * User: pedro@didekin
@@ -11,24 +12,37 @@ import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
  */
 public class ActionForUiException implements ActionForUiExceptionIf {
 
-    private final Class<? extends Activity> activityToGoClass;
+    private final Class<? extends Activity> activityToGo;
     private final int toastResourceId;
+    private final Bundle bundle;
 
     ActionForUiException(int toastResourceId)
     {
-        this(null, toastResourceId);
+        this(toastResourceId, null, null);
     }
 
-    public ActionForUiException(Class<? extends Activity> activityToGoClass, int toastResourceId)
+    public ActionForUiException(int toastResourceId, Class<? extends Activity> activityToGo)
     {
-        this.activityToGoClass = activityToGoClass;
+        this(toastResourceId, activityToGo, null);
+    }
+
+    public ActionForUiException(int toastResourceId, Class<? extends Activity> activityToGo, Bundle bundle)
+    {
+        this.activityToGo = activityToGo;
         this.toastResourceId = toastResourceId;
+        this.bundle = bundle;
     }
 
     @Override
-    public Class<? extends Activity> getActivityToGoClass()
+    public Class<? extends Activity> getActivityToGo()
     {
-        return activityToGoClass;
+        return activityToGo;
+    }
+
+    @Override
+    public Bundle getExtrasForActivity()
+    {
+        return bundle != null ? bundle : new Bundle(0);
     }
 
     @Override

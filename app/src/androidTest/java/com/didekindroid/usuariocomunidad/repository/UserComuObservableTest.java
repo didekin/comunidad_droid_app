@@ -15,9 +15,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import io.reactivex.functions.Consumer;
-import io.reactivex.observers.TestObserver;
-
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
@@ -55,14 +52,10 @@ public class UserComuObservableTest {
     @Test
     public void testComunidadesByUser() throws Exception
     {
-        comunidadesByUser().test().assertOf(new Consumer<TestObserver<List<Comunidad>>>() {
-            @Override
-            public void accept(TestObserver<List<Comunidad>> listTestObserver) throws Exception
-            {
-                List<Comunidad> list = listTestObserver.values().get(0);
-                assertThat(list.size(), is(1));
-                assertThat(list.get(0), is(COMU_EL_ESCORIAL));
-            }
+        comunidadesByUser().test().assertOf(listTestObserver -> {
+            List<Comunidad> list = listTestObserver.values().get(0);
+            assertThat(list.size(), is(1));
+            assertThat(list.get(0), is(COMU_EL_ESCORIAL));
         });
     }
 

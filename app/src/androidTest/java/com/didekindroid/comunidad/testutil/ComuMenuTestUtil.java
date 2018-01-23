@@ -1,7 +1,6 @@
 package com.didekindroid.comunidad.testutil;
 
 import android.app.Activity;
-import android.support.test.espresso.matcher.ViewMatchers;
 
 import com.didekindroid.R;
 import com.didekindroid.testutil.MenuTestUtilIf;
@@ -23,10 +22,9 @@ import static java.lang.Thread.sleep;
  * Time: 12:30
  */
 
-public enum  ComuMenuTestUtil implements MenuTestUtilIf {
+public enum ComuMenuTestUtil implements MenuTestUtilIf {
 
     COMU_DATA_AC {
-
         @Override
         public void checkItemNoRegisterUser(Activity activity)
         {
@@ -60,6 +58,5 @@ public enum  ComuMenuTestUtil implements MenuTestUtilIf {
             onView(withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         }
-    },
-    ;
+    },;
 }

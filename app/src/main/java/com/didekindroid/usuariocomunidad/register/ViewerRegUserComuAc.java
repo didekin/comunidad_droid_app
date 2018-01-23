@@ -7,8 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParent;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.ParentViewerInjected;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -31,7 +31,8 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 13:39
  */
 
-final class ViewerRegUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
+final class ViewerRegUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> implements
+        ActivityInitiatorIf {
 
     private ViewerRegUserComuAc(View view, AppCompatActivity activity)
     {
@@ -54,9 +55,9 @@ final class ViewerRegUserComuAc extends ViewerParent<View, CtrlerUsuarioComunida
         Timber.d("doViewInViewer()");
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
         Comunidad comunidad = Comunidad.class.cast(viewBean);
-        TextView nombreComunidad = (TextView) view.findViewById(R.id.descripcion_comunidad_text);
+        TextView nombreComunidad = view.findViewById(R.id.descripcion_comunidad_text);
         nombreComunidad.setText(comunidad.getNombreComunidad());
-        Button registroButton = (Button) view.findViewById(R.id.reg_usercomu_button);
+        Button registroButton = view.findViewById(R.id.reg_usercomu_button);
         registroButton.setOnClickListener(new RegUserComuButtonListener(comunidad));
     }
 
@@ -106,7 +107,7 @@ final class ViewerRegUserComuAc extends ViewerParent<View, CtrlerUsuarioComunida
             assertTrue(rowInserted == 1, user_and_comunidad_should_be_registered);
             Bundle bundle = new Bundle(1);
             bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
-            new ActivityInitiator(activity).initAcWithBundle(bundle);
+            initAcFromActivity(bundle);
             dispose();
         }
 

@@ -7,16 +7,14 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
-import static com.didekindroid.R.string.send_password_by_mail_NO;
-import static com.didekindroid.R.string.send_password_by_mail_YES;
-import static com.didekindroid.R.string.send_password_by_mail_dialog;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 
 /**
  * User: pedro@didekin
@@ -30,28 +28,32 @@ public final class UserEspressoTestUtil {
     {
     }
 
-    public static void typeUserDataFull(String email, String alias, String password, String passwordConfirm)
+    public static void typeUserNameAlias(String email, String alias)
     {
-        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), replaceText(password));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(), replaceText(passwordConfirm));
         onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), replaceText(email));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), replaceText(alias), closeSoftKeyboard());
     }
 
-    public static void typeUserData(String userName, String alias, String password)
+    public static void typeUserNamePswd(String userName, String password)
+    {
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
+        onView(withId(R.id.password_validation_ediT)).perform(replaceText(password), closeSoftKeyboard());
+    }
+
+    public static void typeUserNameAliasPswd(String userName, String alias, String password)
     {
         onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText(alias));
         onView(withId(R.id.password_validation_ediT)).perform(replaceText(password), closeSoftKeyboard());
     }
 
-    public static void typePswdData(String password, String confirmation)
+    public static void typePswdConfirmPswd(String password, String confirmation)
     {
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation), closeSoftKeyboard());
     }
 
-    public static void typePswdDataWithPswdValidation(String password, String confirmation, String currentPassword)
+    public static void typePswdWithPswdValidation(String password, String confirmation, String currentPassword)
     {
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation));
@@ -60,17 +62,16 @@ public final class UserEspressoTestUtil {
 
     public static void typeLoginData(String userName, String password)
     {
-        onView(withId(reg_usuario_email_editT)).perform(typeText(userName));
-        onView(withId(reg_usuario_password_ediT)).perform(typeText(password));
+        onView(withId(reg_usuario_email_editT)).perform(replaceText(userName));
+        if (password != null) {
+            onView(withId(reg_usuario_password_ediT)).perform(typeText(password));
+        }
     }
 
-    public static void checkPswdSendByMailDialog()
+    public static void checkTextsInDialog(int... textsDialogs)
     {
-        onView(withText(send_password_by_mail_dialog)).inRoot(isDialog())
-                .check(matches(isDisplayed()));
-        onView(withText(send_password_by_mail_YES)).inRoot(isDialog())
-                .check(matches(isDisplayed()));
-        onView(withText(send_password_by_mail_NO)).inRoot(isDialog())
-                .check(matches(isDisplayed()));
+        for (int textsDialog : textsDialogs) {
+            waitAtMost(6, SECONDS).until(isViewDisplayed(onView(withText(textsDialog)).inRoot(isDialog())));
+        }
     }
 }

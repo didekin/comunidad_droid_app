@@ -37,18 +37,14 @@ public class ViewerSelectListTest {
     {
         activity = activityRule.getActivity();
         final AtomicBoolean execFlag = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer = new ViewerSelectList<Spinner, CtrlerSelectList<String>, String>(new Spinner(activity), activity, null) {
-                    @Override
-                    public void initSelectedItemId(Bundle savedState)
-                    {
-                    }
-                };
-                execFlag.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer = new ViewerSelectList<Spinner, CtrlerSelectList<String>, String>(new Spinner(activity), activity, null) {
+                @Override
+                public void initSelectedItemId(Bundle savedState)
+                {
+                }
+            };
+            execFlag.compareAndSet(false, true);
         });
         waitAtMost(2, SECONDS).untilTrue(execFlag);
     }
@@ -64,14 +60,14 @@ public class ViewerSelectListTest {
     @Test
     public void testGetSelectedItemId() throws Exception
     {
-        viewer.setItemSelectedId(111L);
+        viewer.setSelectedItemId(111L);
         assertThat(viewer.getSelectedItemId(), is(111L));
     }
 
     @Test
     public void testGetSelectedViewFromItemId() throws Exception
     {
-        viewer.setItemSelectedId(111L);
+        viewer.setSelectedItemId(111L);
         assertThat(viewer.getSelectedPositionFromItemId(111L), is(111));
     }
 
@@ -80,16 +76,12 @@ public class ViewerSelectListTest {
     {
         final List<String> stringList = Arrays.asList("string22", "string11", "string44", "string33");
         long itemSelected = 1;
-        viewer.setItemSelectedId(itemSelected);
+        viewer.setSelectedItemId(itemSelected);
 
         final AtomicBoolean isExec = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadItemList(stringList);
-                isExec.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadItemList(stringList);
+            isExec.compareAndSet(false, true);
         });
         waitAtMost(4, SECONDS).untilTrue(isExec);
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(stringList.size()));

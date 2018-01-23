@@ -18,6 +18,7 @@ import timber.log.Timber;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
+import static com.didekindroid.util.Device.getDeviceLanguage;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -26,11 +27,11 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * Time: 15:06
  */
 @SuppressWarnings("WeakerAccess")
-public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
+public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
 
-    public static final UsuarioDao usuarioDao = new UsuarioDaoRemote(creator.get().getRetrofitHandler().getService(UsuarioEndPoints.class));
+    public static final UsuarioDaoIf usuarioDaoRemote = new UsuarioDaoRemote(creator.get().getRetrofitHandler().getService(UsuarioEndPoints.class));
     private final UsuarioEndPoints endPoint;
-    private final IdentityCacher identityCacher;
+    final IdentityCacher identityCacher;
 
     private UsuarioDaoRemote(UsuarioEndPoints endPoints)
     {
@@ -41,12 +42,6 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     {
         this.endPoint = endPoint;
         this.identityCacher = identityCacher;
-    }
-
-    @Override
-    public UsuarioEndPoints getEndPoint()
-    {
-        return endPoint;
     }
 
     //  ================================== UsuarioEndPoints implementation ============================
@@ -88,9 +83,9 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     }
 
     @Override
-    public Call<Integer> modifyUser(String accessToken, Usuario usuario)
+    public Call<Integer> modifyUser(String deviceLanguage, String accessToken, Usuario usuario)
     {
-        return endPoint.modifyUser(accessToken, usuario);
+        return endPoint.modifyUser(deviceLanguage, accessToken, usuario);
     }
 
     @Override
@@ -100,10 +95,10 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     }
 
     @Override
-    public Call<Boolean> passwordSend(String userName)
+    public Call<Boolean> passwordSend(String deviceLanguage, String userName)
     {
         Timber.d("passwordSend()");
-        return endPoint.passwordSend(userName);
+        return endPoint.passwordSend(deviceLanguage, userName);
     }
 
 //  =============================================================================
@@ -194,7 +189,7 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     {
         Timber.d("modifyUserWithToken(), Thread: %s", Thread.currentThread().getName());
         try {
-            return getResponseBody(modifyUser(identityCacher.checkBearerToken(oauthToken), usuario).execute());
+            return getResponseBody(modifyUser(getDeviceLanguage(), identityCacher.checkBearerToken(oauthToken), usuario).execute());
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
@@ -217,7 +212,7 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     {
         Timber.d("sendPassword(), Thread: %s", Thread.currentThread().getName());
         try {
-            return getResponseBody(passwordSend(email).execute());
+            return getResponseBody(passwordSend(getDeviceLanguage(), email).execute());
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }

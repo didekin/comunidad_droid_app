@@ -47,6 +47,7 @@ import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INC
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.RESOLUCION_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.processMsgWithHandler;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -122,7 +123,7 @@ public class IncidDownStreamMsgHandlerTest {
         assertThat(stackBuilder.getIntentCount(), is(2));
         Intent[] intents = stackBuilder.getIntents();
         assertThat(intents[0].getComponent().getShortClassName(), is(".comunidad.ComuSearchAc"));
-        assertThat(intents[1].getComponent().getShortClassName(), is(".incidencia.list.open.IncidSeeOpenByComuAc"));
+        assertThat(intents[1].getComponent().getShortClassName(), is(".incidencia.list.IncidSeeByComuAc"));
         assertThat(intents[1].getLongExtra(COMUNIDAD_ID.key, 0L), is(comunidadId));
     }
 
@@ -130,21 +131,21 @@ public class IncidDownStreamMsgHandlerTest {
     public void testPendingIntent_INCIDENCIA_OPEN() throws Exception
     {
         final PendingIntent pendingIntent = INCIDENCIA_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
-        checkUiPendingIntent(pendingIntent, R.id.incid_see_open_by_comu_ac, R.id.comu_search_ac_linearlayout);
+        checkUiPendingIntent(pendingIntent, incidSeeByComuAcLayout, R.id.comu_search_ac_linearlayout);
     }
 
     @Test
     public void testPendingIntent_INCIDENCIA_CLOSE() throws Exception
     {
         final PendingIntent pendingIntent = INCIDENCIA_CLOSE.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
-        checkUiPendingIntent(pendingIntent, R.id.incid_see_closed_by_comu_ac, R.id.comu_search_ac_linearlayout);
+        checkUiPendingIntent(pendingIntent, R.id.incid_see_by_comu_ac, R.id.comu_search_ac_linearlayout);
     }
 
     @Test
     public void testPendingIntent_RESOLUCION_OPEN() throws Exception
     {
         final PendingIntent pendingIntent = RESOLUCION_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
-        checkUiPendingIntent(pendingIntent, R.id.incid_see_open_by_comu_ac, R.id.comu_search_ac_linearlayout);
+        checkUiPendingIntent(pendingIntent, incidSeeByComuAcLayout, R.id.comu_search_ac_linearlayout);
     }
 
     @Test
@@ -238,15 +239,11 @@ public class IncidDownStreamMsgHandlerTest {
 
     private void checkUiPendingIntent(final PendingIntent pendingIntent, int... layouts)
     {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                try {
-                    pendingIntent.send();
-                } catch (PendingIntent.CanceledException e) {
-                    e.printStackTrace();
-                }
+        mActivity.runOnUiThread(() -> {
+            try {
+                pendingIntent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
             }
         });
 
@@ -288,12 +285,9 @@ public class IncidDownStreamMsgHandlerTest {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private Callable<Integer> notificationsSize()
     {
-        return new Callable<Integer>() {
-            public Integer call() throws Exception
-            {
-                notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
-                return notificationManager.getActiveNotifications().length;
-            }
+        return () -> {
+            notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
+            return notificationManager.getActiveNotifications().length;
         };
     }
 }

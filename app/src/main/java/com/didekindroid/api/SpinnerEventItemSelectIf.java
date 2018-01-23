@@ -10,6 +10,7 @@ import java.io.Serializable;
  * This class encapsulates spinner selection.
  */
 
-public interface SpinnerEventItemSelectIf<E> extends Serializable {
+@SuppressWarnings("InterfaceMayBeAnnotatedFunctional")
+public interface SpinnerEventItemSelectIf extends Serializable {
     long getSpinnerItemIdSelect();
 }

@@ -1,16 +1,5 @@
 package com.didekindroid.incidencia.list;
 
-import com.didekindroid.incidencia.list.close.CtrlerIncidSeeCloseByComuTest;
-import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAcTest;
-import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc_Mn_Test;
-import com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseTest;
-import com.didekindroid.incidencia.list.importancia.IncidSeeUserComuImportanciaAcTest;
-import com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComuTest;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAcTest;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc_GCM_Test;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc_Mn_Test;
-import com.didekindroid.incidencia.list.open.ViewerIncidSeeOpenTest;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -21,19 +10,15 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // list.close
         CtrlerIncidSeeCloseByComuTest.class,
-        IncidSeeClosedByComuAc_Mn_Test.class,
-        IncidSeeClosedByComuAcTest.class,
-        ViewerIncidSeeCloseTest.class,
-        // list.importancia
-        IncidSeeUserComuImportanciaAcTest.class,
-        // list.open
         CtrlerIncidSeeOpenByComuTest.class,
-        IncidSeeOpenByComuAc_GCM_Test.class,
-        IncidSeeOpenByComuAc_Mn_Test.class,
-        IncidSeeOpenByComuAcTest.class,
-        ViewerIncidSeeOpenTest.class,
+        IncidSeeByComuAc_Close_Mn_Test.class,
+        IncidSeeByComuAc_Close_Test.class,
+        IncidSeeByComuAc_Open_GCM_Test.class,
+        IncidSeeByComuAc_Open_Mn_Test.class,
+        IncidSeeByComuAc_Open_Test.class,
+        ViewerIncidSeeCloseFrTest.class,
+        ViewerIncidSeeOpenFrTest.class,
 })
 public class IncidListSuite {
 }

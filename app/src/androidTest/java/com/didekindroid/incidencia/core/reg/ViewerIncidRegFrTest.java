@@ -1,7 +1,8 @@
 package com.didekindroid.incidencia.core.reg;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegFrLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -39,8 +41,10 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -63,30 +67,30 @@ public class ViewerIncidRegFrTest {
 
     ViewerIncidRegFr viewer;
     IncidRegAc activity;
-    UsuarioComunidad pepeUserComu;
+    UsuarioComunidad userComuIntent;
 
     @Rule
-    public ActivityTestRule<IncidRegAc> activityRule = new ActivityTestRule<IncidRegAc>(IncidRegAc.class) {
+    public IntentsTestRule<IncidRegAc> activityRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
         @Override
-        protected void beforeActivityLaunched()
+        protected Intent getActivityIntent()
         {
             try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
+                regTwoUserComuSameUser(asList(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE));
+                userComuIntent = userComuDaoRemote.seeUserComusByUser().get(1);
             } catch (IOException | UiException e) {
                 fail();
             }
+            return new Intent().putExtra(COMUNIDAD_ID.key, userComuIntent.getComunidad().getC_Id());
         }
     };
-
-    int fragmentLayoutId = R.id.incid_reg_frg;
     View frgView;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        frgView = activity.findViewById(fragmentLayoutId);
+        frgView = activity.findViewById(incidRegFrLayout);
+        assertThat(activity.getIntent().getLongExtra(COMUNIDAD_ID.key, 0), is(userComuIntent.getComunidad().getC_Id()));
 
         AtomicReference<ViewerIncidRegFr> viewerAtomic = new AtomicReference<>(null);
         viewerAtomic.compareAndSet(null, activity.incidRegFr.viewer);
@@ -113,10 +117,10 @@ public class ViewerIncidRegFrTest {
     @Test
     public void testDoViewInViewer() throws Exception
     {
-        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
+        onView(withId(incidRegFrLayout)).check(matches(isDisplayed()));
 
         // Comunidad spinner.
-        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(pepeUserComu.getComunidad().getNombreComunidad()));
+        waitAtMost(6, SECONDS).until(isComuSpinnerWithText(userComuIntent.getComunidad().getNombreComunidad()));
         // Ámbito incidencia spinner.
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.incid_reg_ambito_spinner))))
                 .check(matches(withText(is(AMBITO_SPINNER_INIT_VALUE)))).check(matches(isDisplayed()));
@@ -139,8 +143,8 @@ public class ViewerIncidRegFrTest {
     public void testSaveState() throws Exception
     {
         Bundle bundleTest = new Bundle();
-        viewer.viewerAmbitoIncidSpinner.setItemSelectedId(11);
-        viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
+        viewer.viewerAmbitoIncidSpinner.setSelectedItemId(11);
+        viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
         // Solo hay una comunidad en el spinner.
         viewer.saveState(bundleTest);
 
@@ -155,13 +159,9 @@ public class ViewerIncidRegFrTest {
         final AtomicBoolean isRun = new AtomicBoolean(false);
 
         // Preconditions:
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(new Bundle(), null);
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.doViewInViewer(new Bundle(), null);
+            isRun.compareAndSet(false, true);
         });
         waitAtMost(4, SECONDS).untilTrue(isRun);
 
@@ -170,14 +170,10 @@ public class ViewerIncidRegFrTest {
         viewer.atomIncidBean.get().setCodAmbitoIncid((short) 29);
         viewer.atomIncidImportBean.get().setImportancia((short) 1);
         isRun.set(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                EditText editText = frgView.findViewById(R.id.incid_reg_desc_ed);
-                editText.setText("Descripción válida");
-                isRun.compareAndSet(false, true);
-            }
+        activity.runOnUiThread(() -> {
+            EditText editText = frgView.findViewById(R.id.incid_reg_desc_ed);
+            editText.setText("Descripción válida");
+            isRun.compareAndSet(false, true);
         });
         waitAtMost(1, SECONDS).untilTrue(isRun);
 

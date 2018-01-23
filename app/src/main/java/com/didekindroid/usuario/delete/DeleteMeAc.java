@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.delete;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -7,8 +8,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.router.ActivityRouter;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
+import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
@@ -27,10 +30,10 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends AppCompatActivity {
+public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     View acView;
-    CtrlerDeleteMeIf controller;
+    CtrlerUsuarioIf controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,15 +45,8 @@ public class DeleteMeAc extends AppCompatActivity {
         setContentView(acView);
         doToolBar(this, true);
 
-        Button mUnregisterButton = (Button) findViewById(R.id.delete_me_ac_unreg_button);
-        mUnregisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("mUnregisterButton.OnClickListener().onClickLinkToImportanciaUsers()");
-                controller.deleteMeRemote(new DeleteMeSingleObserver());
-            }
-        });
+        Button mUnregisterButton = findViewById(R.id.delete_me_ac_unreg_button);
+        mUnregisterButton.setOnClickListener(v -> controller.deleteMe(new DeleteMeSingleObserver()));
     }
 
     @Override
@@ -59,7 +55,7 @@ public class DeleteMeAc extends AppCompatActivity {
         Timber.d("onStart()");
         super.onStart();
         // Controller initialization.
-        controller = new CtrlerDeleteMe();
+        controller = new CtrlerUsuario();
         // Preconditions.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
     }
@@ -70,12 +66,6 @@ public class DeleteMeAc extends AppCompatActivity {
         Timber.d("onStop()");
         super.onStop();
         controller.clearSubscriptions();
-    }
-
-    public void replaceComponent(Bundle bundle)
-    {
-        Timber.d("initAcWithBundle()");
-        new ActivityInitiator(this).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
     }
 
     // ============================================================
@@ -100,6 +90,13 @@ public class DeleteMeAc extends AppCompatActivity {
 
     // .............................. HELPERS ..................................
 
+    @Override
+    public Activity getActivity()
+    {
+        Timber.d("getActivity()");
+        return this;
+    }
+
     @SuppressWarnings("WeakerAccess")
     class DeleteMeSingleObserver extends DisposableSingleObserver<Boolean> {
 
@@ -108,7 +105,7 @@ public class DeleteMeAc extends AppCompatActivity {
         {
             Timber.d("onSuccess(), Thread: %s", Thread.currentThread().getName());
             assertTrue(isDeleted, user_should_have_been_deleted);
-            replaceComponent(new Bundle());
+            initAcWithFlag(null, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
         }
 
         @SuppressWarnings("ThrowableResultOfMethodCallIgnored")

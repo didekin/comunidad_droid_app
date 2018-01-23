@@ -1,11 +1,9 @@
 package com.didekindroid.router;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-import timber.log.Timber;
+import com.didekindroid.api.router.FragmentInitiatorIf;
 
 /**
  * User: pedro@didekin
@@ -13,10 +11,16 @@ import timber.log.Timber;
  * Time: 11:12
  */
 
-public class FragmentInitiator {
+public class FragmentInitiator<T extends Fragment> implements FragmentInitiatorIf<T> {
 
     private final AppCompatActivity activity;
     private final int containerId;
+
+    FragmentInitiator(AppCompatActivity activity)
+    {
+        this.activity = activity;
+        containerId = 0;
+    }
 
     public FragmentInitiator(AppCompatActivity activity, int containerId)
     {
@@ -24,15 +28,13 @@ public class FragmentInitiator {
         this.containerId = containerId;
     }
 
-    public void initFragment(@NonNull Bundle bundle, Fragment fragment, String fragmentTag)
+    public AppCompatActivity getActivity()
     {
-        {
-            Timber.d("initAcWithBundle()");
-            fragment.setArguments(bundle);
-            activity.getSupportFragmentManager().beginTransaction()
-                    .replace(containerId, fragment, fragmentTag)
-                    .addToBackStack(fragment.getClass().getName())
-                    .commit();
-        }
+        return activity;
+    }
+
+    public int getContainerId()
+    {
+        return containerId;
     }
 }

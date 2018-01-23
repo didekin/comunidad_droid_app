@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.listbyuser;
 
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
@@ -9,18 +10,18 @@ import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuariocomunidad.RolUi;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.app.TaskStackBuilder.create;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -30,20 +31,29 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regComu_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
 import static external.LongListMatchers.withAdaptedData;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,20 +70,18 @@ public class SeeUserComuByUserAcTest {
         protected void beforeActivityLaunched()
         {
             try {
-                UserComuDataTestUtil.regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
             } catch (UiException | IOException e) {
-                e.printStackTrace();
+                fail();
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addParentStack(SeeUserComuByUserAc.class).startActivities();
             }
         }
     };
     SeeUserComuByUserAc mActivity;
     SeeUserComuByUserFr mFragment;
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(3000);
-    }
 
     @Before
     public void setUp() throws Exception
@@ -85,6 +93,9 @@ public class SeeUserComuByUserAcTest {
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(mActivity);
+        }
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -96,7 +107,7 @@ public class SeeUserComuByUserAcTest {
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(mFragment.getFragmentView(), notNullValue());
+        assertThat(mFragment.getFrView(), notNullValue());
 
         onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
@@ -105,6 +116,16 @@ public class SeeUserComuByUserAcTest {
         onData(is(COMU_LA_FUENTE_PEPE)).check(matches(isDisplayed())).perform(click());
         onView(withId(userComuDataLayout)).check(matches(isDisplayed()));
         checkUp(seeUserComuByUserFrRsId);
+    }
+
+    @Test
+    public void test_newComunidadButton() throws Exception
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.new_comunidad_fab), click()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regComu_UserComuAcLayout));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test
@@ -119,7 +140,7 @@ public class SeeUserComuByUserAcTest {
         assertThat(adapter.getItem(2), is(COMU_PLAZUELA5_PEPE));
 
         for (int i = 0; i < adapter.getCount(); ++i) {
-            onView(withAdaptedData(Matchers.<Object>is(adapter.getItem(i)))).check(matches(isDisplayed()));
+            onView(withAdaptedData(Matchers.is(adapter.getItem(i)))).check(matches(isDisplayed()));
         }
     }
 

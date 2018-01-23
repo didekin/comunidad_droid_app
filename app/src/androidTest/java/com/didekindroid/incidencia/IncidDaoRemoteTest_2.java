@@ -43,6 +43,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.http.GenericExceptionMsg.UNAUTHORIZED_TX_TO_USER;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
@@ -115,7 +116,7 @@ public class IncidDaoRemoteTest_2 {
 
         // Registro userComu en misma comunidad.
         UsuarioComunidad userComuJuan = makeUserComuWithComunidadId(COMU_REAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(userComuDaoRemote.regUserAndUserComu(userComuJuan).execute().body(), is(true));
+        assertThat(userComuMockDao.regUserAndUserComu(userComuJuan).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         Thread.sleep(1000);
         // Return 1: only one record inserted or updated.
@@ -126,7 +127,7 @@ public class IncidDaoRemoteTest_2 {
                         .build()),
                 is(1));
 
-        IncidImportancia incidImportancia = IncidDaoRemote.incidenciaDao.seeIncidImportancia(incidencia_1.getIncidenciaId()).getIncidImportancia();
+        IncidImportancia incidImportancia = incidenciaDao.seeIncidImportancia(incidencia_1.getIncidenciaId()).getIncidImportancia();
         assertThat(incidImportancia.getImportancia(), is((short) 2));
         assertThat(incidImportancia.getIncidencia().getDescripcion(), CoreMatchers.is(INCID_DEFAULT_DESC));
     }
@@ -174,7 +175,7 @@ public class IncidDaoRemoteTest_2 {
         signPepeWithIncidencia();
         // Registro userComu en misma comunidad y lo asocio a la incidencia.
         UsuarioComunidad userComuJuan = makeUserComuWithComunidadId(COMU_REAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(userComuDaoRemote.regUserAndUserComu(userComuJuan).execute().body(), is(true));
+        assertThat(userComuMockDao.regUserAndUserComu(userComuJuan).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         userComuJuan = userComuDaoRemote.getUserComuByUserAndComu(pepeUserComu.getComunidad().getC_Id());
         IncidImportancia newIncidImportancia = new IncidImportancia.IncidImportanciaBuilder(incidencia_1)
@@ -268,7 +269,7 @@ public class IncidDaoRemoteTest_2 {
         signPepeWithIncidencia(COMU_ESCORIAL_PEPE);
         // Registro userComu Juan en misma comunidad.
         juanUserComu = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(userComuDaoRemote.regUserAndUserComu(juanUserComu).execute().body(), is(true));
+        assertThat(userComuMockDao.regUserAndUserComu(juanUserComu).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         juanUserComu = userComuDaoRemote.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
         // Añado registro incidImportancia de Juan.
@@ -329,7 +330,7 @@ public class IncidDaoRemoteTest_2 {
 
         // Registro userComu en misma comunidad.
         juanUserComu = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(userComuDaoRemote.regUserAndUserComu(juanUserComu).execute().body(), is(true));
+        assertThat(userComuMockDao.regUserAndUserComu(juanUserComu).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         juanUserComu = userComuDaoRemote.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
         assertThat(juanUserComu != null && juanUserComu.hasAdministradorAuthority(), is(false));

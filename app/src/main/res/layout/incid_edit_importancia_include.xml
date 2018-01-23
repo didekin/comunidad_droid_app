@@ -3,24 +3,17 @@
     android:id="@+id/incid_edit_importancia_block"
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/baseLayout"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
     <!--Rótulo -->
     <TextView
         android:id="@+id/incid_importancia_rot"
         style="@style/textBase.textFieldLabel1"
         android:text="@string/incid_importancia_user_rot"
-        android:layout_weight="0"/>
+        />
     <!-- Selección importancia-->
     <Spinner
         android:id="@+id/incid_reg_importancia_spinner"
         style="@style/spinnerBase"
-        android:layout_weight="1"/>
-    <!-- Enlace a fragmento con importancia asignada por otros miembros de la comunidad.-->
-    <TextView
-        android:id="@+id/incid_importancia_otros_view"
-        style="@style/textBase.activityLink1"
-        android:layout_weight="1"
-        android:gravity="start"
-        android:layout_marginStart="@dimen/double_horizontal_margin"
-        android:text="@string/incid_importancia_otros_txt"/>
+        />
 </LinearLayout>

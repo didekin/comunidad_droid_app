@@ -19,6 +19,9 @@
     <string name="euros_rot">EUR</string>
     <string name="decimal_separator">,</string>
     <string name="navigate_up_txt">Desplazarse hacia arriba</string>
+    <string name="modif_button_rot">Modificar</string>
+    <string name="continuar_button_rot">Continuar</string>
+    <string name="borrar_button_rot">Borrar</string>
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
     <string name="exception_generic_message">No podemos continuar. Inténtalo en unos segundos nuevamente.</string>
@@ -35,10 +38,9 @@
     <string name="proteccion_datos_txt" tools:ignore="Typos">
         Versión 30 septiembre de 2017 \n\n
 
-        La presente Política de Privacidad informa sobre el modo en que Pedro Nevado Raja,
-        autor de la aplicación Dídekin, recoge y trata la información recogida sobre usted,
-        en cuanto usuario de la aplicación. Al registrarse en Dídekin, usted acepta esta
-        política de privacidad.\n\n
+        La presente Política de Privacidad informa sobre el modo en que Dídekin recoge y
+        trata la información recogida sobre los usuarios de la aplicación.
+        Al registrarse en Dídekin, usted acepta esta política de privacidad.\n\n
 
         1. OBJETIVO DE LA APLICACIÓN\n\n
 
@@ -110,19 +112,21 @@
 
         8. OBLIGACIONES LEGALES  \n\n
 
-        De conformidad con lo establecido por la Ley Orgánica 15/1999, de 13 de diciembre, de Protección de Datos de Carácter Personal,
-        Pedro Nevado Raja, propietario de Dídekin, le informa de la existencia de un fichero automatizado con los datos personales y de comunidades,
-        creado por él y bajo su responsabilidad."
+        De conformidad con lo establecido por la Ley Orgánica 15/1999, de 13 de diciembre,
+        de Protección de Datos de Carácter Personal, Pedro Nevado Raja (NIF: 51640599X),
+        propietario de Dídekin, con domicilio en Ronda de la Plazuela 8 bis, de Las Rozas de Madrid,
+        le informa de la existencia de un fichero automatizado con los datos personales y de comunidades,
+        creado por él y bajo su responsabilidad." \n
+
     </string>
     <string name="confidencialidad_button_rot">Continuar</string>
     <!--******************************************************************************-->
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
-    <string name="no_incidencia_by_user">No hay incidencias que mostrar</string>
+    <string name="no_incidencia_to_show">No hay incidencias que mostrar</string>
     <string name="incidencia_not_registered">Intenta nuevamente registrar la incidencia.</string>
-    <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la
-        incidencia.
+    <string name="incidencia_wrong_init">Verifica que sigue abierta la incidencia.
     </string>
     <string name="resolucion_duplicada">Ya existe resolución para esta incidencia</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
@@ -131,11 +135,11 @@
     <string name="incid_gcm_incidencia_closed_body">Incidencia resuelta en tu comunidad.</string>
     <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de resolución.</string>
     <!-- ============================== MENUS ================================= -->
-    <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
+    <string name="incid_closed_see_by_comu_ac_mn">Incidencias cerradas</string>
     <string name="incid_comment_reg_ac_mn">Comentar</string>
     <string name="incid_comments_see_ac_mn">Comentarios</string>
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
-    <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
+    <string name="incid_open_see_by_comu_ac_mn">Incidencias abiertas</string>
     <string name="incid_resolucion_ac_mn">Resolución</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="incid_incidencia_rot">Incidencia:</string>
@@ -150,17 +154,13 @@
     <string name="incid_comments_see_no_comments">No hay comentarios.</string>
     <!-- =============== IncidEditAc =============== -->
     <string name="incid_edit_ac_label">Incidencia</string>
-    <string name="incid_edit_modif_button_rot">Modificar incidencia</string>
-    <string name="incid_edit_borrar_txt">Para borrar definitivamente la incidencia:</string>
-    <string name="incid_edit_borrar_button_rot">Borrar</string>
-    <string name="incid_importancia_reg_edit_button_rot">Confirmar</string>
     <string name="no_importancia_by_user">No hay otras valoraciones en la comunidad</string>
+    <string name="incid_incidencia_importancia_rot">Importancia en la comunidad:</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint">-- Describe la incidencia (max. 300 caracteres) --</string>
     <string name="incid_reg_ac_button_rot">Registrar incidencia</string>
     <string name="incid_reg_importancia">Importancia</string>
-    <string name="incid_importancia_otros_txt">>> Ver comunidad</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
     <!-- =============== IncidResolucionRegEditSeeAc =============== -->
@@ -168,7 +168,7 @@
     <string name="incid_resolucion_coste_final_rot">Coste final EUR:</string>
     <string name="incid_resolucion_avance_rot">Nueva información</string>
     <string name="incid_resolucion_modif_button_rot">Modificar</string>
-    <string name="incid_resolucion_close_button_rot">Modificar y cerrar incidencia</string>
+    <string name="incid_resolucion_close_button_rot">Modificar y cerrar</string>
     <string name="incid_resolucion_plan_rot">Plan:</string>
     <string name="incid_resolucion_avance_hint">-- avance o cambio en el plan --</string>
     <string name="incid_resolucion_avances_rot">Historial de avances:</string>
@@ -185,9 +185,7 @@
     <string name="incid_resolucion_coste_prev_rot">Coste estimado EUR:</string>
     <string name="incid_resolucion_coste_prev_hint">-- tu estimación --</string>
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
-    <!-- ====== IncidResolucionSeeDefaultFr ====== -->
-    <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
-    <!-- ===================== IncidSeeOpenByComuAc ===================== -->
+    <!-- ===================== IncidSeeByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_apertura_rot">Apertura:</string>
     <string name="incid_cierre_rot">Cierre:</string>
@@ -198,27 +196,25 @@
     <string name="incid_ambito_rot">Ámbito:</string>
     <string name="incid_see_resolucion_label">Resolución:</string>
     <string name="incid_see_resolucion_fecha_alta_label">iniciada</string>
-    <!-- ============ IncidSeeClosedByComuAc ========== -->
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
-    <!-- ============ IncidSeeUserComuImportanciaFr ========== -->
-    <string name="incid_incidencia_importancia_rot">Importancia en la comunidad:</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
     <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
+    <string name="comunidad_duplicate">Esta comunidad ya había sido registrada</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí.</string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string>
     <string name="password_wrong">La contraseña no se corresponde con tu usuario.</string>
     <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
     <string name="password_remote_change">Ya está modificada tu contraseña.</string>
-    <string name="send_password_by_mail_dialog">¿Deseas que te enviemos una nueva contraseña por correo electrónico?</string>
+    <string name="send_password_by_mail_dialog">¿Te enviamos una nueva contraseña a la dirección de correo electrónico que has escrito?</string>
     <string name="send_password_by_mail_YES">Enviádmela</string>
-    <string name="send_password_by_mail_NO">No la enviéis</string>
     <string name="user_email_wrong">No hemos podido enviar la nueva contraseña. Tu dirección de correo electrónico puede ser errónea.</string>
     <string name="user_without_signedUp">"Haz login. O busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
+    <string name="user_with_token_null">"Haz login para continuar."</string>
     <string name="user_data_not_modified_msg">No hemos podido modificar tus datos.</string>
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Datos comunidad</string>
@@ -251,15 +247,17 @@
     <string name="login_ac_rotulo">Inicio de sesión</string>
     <string name="login_ac_button_txt">Valida tus datos</string>
     <!-- ================== PasswordChangeAc ============== -->
-    <string name="password_change_ac_label">Didekin</string>
+    <string name="password_ac_label">Tu contraseña</string>
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
-    <string name="password_change_ac_button_txt">Cambia tu contraseña</string>
     <string name="password_send_txt">Si no recuerdas tu contraseña, podemos enviarte una nueva.</string>
     <string name="password_send_button_txt">Envío de nueva contraseña</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Registro en comunidad</string>
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
+    <string name="receive_password_by_mail_dialog">
+        Hemos enviado tu nueva contraseña a tu dirección de correo electrónico.\nHaz login a continuación.
+    </string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
     <string name="reg_usercomu_portal_hint">-- Portal --</string>
@@ -283,7 +281,7 @@
     <string name="municipio_spinner">municipio</string>
     <string name="municipio">Municipio</string>
     <string name="tipo_via">Tipo vía</string>
-    <string name="tipo_via_spinner">tipo de vía </string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
+    <string name="tipo_via_spinner">tipo de vía </string>
     <string name="nombre_via_hint">Nombre de la vía, sin número</string>
     <string name="nombre_via">Nombre de la vía</string>
     <string name="numero_en_via">Número</string>
@@ -317,7 +315,6 @@
     <string name="comu_list_no_result_txt">No hemos encontrado ningún resultado para tu búsqueda
     </string>
     <!-- ================= UserDataAc ===================== -->
-    <string name="user_data_ac_label">Tus datos</string>
     <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>
     <string name="user_data_ac_password_txt">Valida los cambios.</string>
     <string name="user_data_ac_password_hint">Contraseña actual</string>

@@ -38,8 +38,8 @@ import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdDataWithPswdValidation;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdWithPswdValidation;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
@@ -124,7 +124,7 @@ public class PasswordChangeAcTest {
         onView(withId(R.id.password_validation_ediT)).check(matches(withText(containsString(""))))
                 .check(matches(withHint(R.string.user_data_ac_password_hint)))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.password_change_ac_button)).check(matches(withText(R.string.password_change_ac_button_txt)))
+        onView(withId(R.id.password_change_ac_button)).check(matches(withText(R.string.modif_button_rot)))
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.password_send_ac_button)).check(matches(withText(R.string.password_send_button_txt)))
@@ -144,7 +144,7 @@ public class PasswordChangeAcTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
 
         isClean.set(true);
@@ -157,7 +157,7 @@ public class PasswordChangeAcTest {
 
         checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);
 
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
 
         isClean.set(true);
@@ -173,7 +173,7 @@ public class PasswordChangeAcTest {
 
     private void doPswdChange()
     {
-        typePswdDataWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
+        typePswdWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
         waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));

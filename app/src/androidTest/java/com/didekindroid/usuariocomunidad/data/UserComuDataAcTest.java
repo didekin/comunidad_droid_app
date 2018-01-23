@@ -2,12 +2,10 @@ package com.didekindroid.usuariocomunidad.data;
 
 import android.content.Intent;
 import android.support.test.espresso.NoActivityResumedException;
-import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -25,13 +23,17 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
@@ -167,7 +169,7 @@ public class UserComuDataAcTest {
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
-        intended(IntentMatchers.hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 
@@ -175,22 +177,32 @@ public class UserComuDataAcTest {
     public void testComuDataMn() throws InterruptedException
     {
         // Only one user associated to the comunidad: the menu shows the item.
+        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showComuDataMn);
         COMU_DATA_AC.checkItemRegisterUser(activity);
-        intended(IntentMatchers.hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 
     @Test
-    public void testIncidSeeByComuMn() throws InterruptedException
+    public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
+        onView(withText(R.string.incid_see_by_user_ac_label)).check(matches(isDisplayed()));
+        checkUp(userComuDataLayout);
+    }
+
+    @Test
+    public void testIncidSeeCloseByComuMn() throws InterruptedException
+    {
+        INCID_SEE_CLOSED_BY_COMU_AC.checkMenuItem(activity);
+        onView(withText(R.string.incid_closed_by_user_ac_label)).check(matches(isDisplayed()));
         checkUp(userComuDataLayout);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
-        INCID_REG_AC.checkMenuItem_WTk(activity);
+        INCID_REG_AC.checkMenuItem(activity);
         checkUp(userComuDataLayout);
     }
 }

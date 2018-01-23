@@ -38,7 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -90,6 +90,7 @@ public class ViewerUserComuDataAcTest {
     };
 
     UserComuDataAc activity;
+    ViewerUserComuDataAc viewer;
 
     @Before
     public void setUp() throws Exception
@@ -98,6 +99,8 @@ public class ViewerUserComuDataAcTest {
         AtomicReference<ViewerUserComuDataAc> viewerAtomic = new AtomicReference<>(null);
         viewerAtomic.compareAndSet(null, activity.viewer);
         waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
+        viewer = viewerAtomic.get();
+
     }
 
     @After
@@ -105,6 +108,8 @@ public class ViewerUserComuDataAcTest {
     {
         cleanOptions(CLEAN_PEPE);
     }
+
+    // .............................. VIEWER ..................................
 
     @Test
     public void test_NewViewerUserComuDataAc() throws Exception
@@ -119,26 +124,6 @@ public class ViewerUserComuDataAcTest {
         checkUserComuData(activity.viewer.userComuIntent);
         onView(withId(R.id.usercomu_data_ac_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.usercomu_data_ac_delete_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test_SetAcMenu() throws Exception
-    {
-        // Mock test.
-        Menu mockMenu = activity.viewer.acMenu;
-        activity.viewer.acMenu = null;
-        CtrlerUsuarioComunidad mockController = new CtrlerUsuarioComunidad() {
-            @Override
-            public boolean checkIsOldestAdmonUser(DisposableSingleObserver<Boolean> observer, Comunidad comunidad)
-            {
-                assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                return false;
-            }
-        };
-        activity.viewer.setController(mockController);
-        activity.viewer.setAcMenu(mockMenu);
-        assertThat(flagLocalExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
-        assertThat(activity.viewer.acMenu, is(mockMenu));
     }
 
     // .............................. LISTENERS ..................................
@@ -177,18 +162,28 @@ public class ViewerUserComuDataAcTest {
     // .............................. SUBSCRIBERS ..................................
 
     @Test
-    public void test_ModifyUserComuObserver()
+    public void test_ModifyComuObserver_1()
     {
-        ViewerUserComuDataAc.ModifyUserComuObserver observer = activity.viewer.new ModifyUserComuObserver();
-        just(1).subscribeWith(observer);
-        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
+        // Exec and check.
+        just(1).subscribeWith(viewer.new ModifyUserComuObserver(true));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).untilTrue(viewer.showComuDataMn);
+    }
+
+    @Test
+    public void test_ModifyComuObserver_2()
+    {
+        // Exec and check.
+        just(1).subscribeWith(viewer.new ModifyUserComuObserver(false));
+        waitAtMost(10, SECONDS).untilFalse(viewer.showComuDataMn);
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+
     }
 
     @Test
     public void test_DeleteUserComuObserver_1()
     {
-        ViewerUserComuDataAc.DeleteUserComuObserver observer = activity.viewer.new DeleteUserComuObserver();
-        just(IS_USER_DELETED).subscribeWith(observer);
+        just(IS_USER_DELETED).subscribeWith(viewer.new DeleteUserComuObserver());
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
         intended(hasFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK));
     }
@@ -196,8 +191,7 @@ public class ViewerUserComuDataAcTest {
     @Test
     public void test_DeleteUserComuObserver_2()
     {
-        ViewerUserComuDataAc.DeleteUserComuObserver observer = activity.viewer.new DeleteUserComuObserver();
-        just(1).subscribeWith(observer);
+        just(1).subscribeWith(viewer.new DeleteUserComuObserver());
         onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
     }
 

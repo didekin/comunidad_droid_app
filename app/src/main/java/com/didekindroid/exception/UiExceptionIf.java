@@ -3,6 +3,7 @@ package com.didekindroid.exception;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.didekindroid.api.router.ActionForUiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 
 /**
@@ -21,14 +22,4 @@ public interface UiExceptionIf {
 
     ErrorBean getErrorBean();
 
-    interface UiExceptionRouterIf {
-        ActionForUiExceptionIf getActionForException(UiException uiException);
-    }
-
-    interface ActionForUiExceptionIf {
-
-        Class<? extends Activity> getActivityToGoClass();
-
-        int getToastResourceId();
-    }
 }

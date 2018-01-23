@@ -1,18 +1,17 @@
 package com.didekindroid.comunidad;
 
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ActivityNextMock;
 import com.didekindroid.api.ListMockFr;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,7 +19,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Maybe;
@@ -35,7 +34,6 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCOR
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -73,8 +71,10 @@ import static org.junit.Assert.assertThat;
 public class ViewerComuSearchResultsFrTest {
 
     final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
     @Rule
     public IntentsTestRule<ActivityMock> intentsTestRule = new IntentsTestRule<>(ActivityMock.class, false, true);
+
     ViewerComuSearchResultsFr viewer;
     ActivityMock activity;
     ListMockFr mockFr;
@@ -84,20 +84,7 @@ public class ViewerComuSearchResultsFrTest {
     public void setUp()
     {
         activity = intentsTestRule.getActivity();
-        mockFr = new ListMockFr();
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, mockFr, "mockFr")
-                        .commitNow();
-                mockFr = (ListMockFr) activity.getSupportFragmentManager().findFragmentByTag("mockFr");
-                isRun.compareAndSet(false, true);
-            }
-        });
-        waitAtMost(4, SECONDS).untilTrue(isRun);
+        mockFr = (ListMockFr) activity.getSupportFragmentManager().findFragmentById(R.id.list_mock_frg);
         viewer = ViewerComuSearchResultsFr.newViewerComuSearchResultsFr(mockFr.getView(), activity);
 
         isPepeToDelete = false;
@@ -144,49 +131,30 @@ public class ViewerComuSearchResultsFrTest {
         } finally {
             resetAllSchedulers();
         }
-        waitAtMost(4, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(1));
-        assertThat((Comunidad) viewer.getViewInViewer().getAdapter().getItem(0), is(comunidadToSearch));
-    }
-
-    @Test
-    public void test_ReplaceComponent() throws Exception
-    {
-        viewer.replaceComponent(new Bundle(0), ActivityNextMock.class);
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.next_mock_ac_layout));
+        assertThat(viewer.getViewInViewer().getAdapter().getItem(0), is(comunidadToSearch));
     }
 
     @Test
     public void test_OnSuccessLoadList() throws Exception
     {
         final List<Comunidad> comunidades = asList(COMU_REAL, COMU_EL_ESCORIAL);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadList(comunidades);
-            }
-        });
+        activity.runOnUiThread(() -> viewer.onSuccessLoadList(comunidades));
 
-        waitAtMost(4, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(6, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(2));
         onView(withId(android.R.id.list)).check(
-                matches(withAdaptedData(Matchers.<Object>is(COMU_REAL))));
+                matches(withAdaptedData(is(COMU_REAL))));
         onView(withId(android.R.id.list)).check(
-                matches(withAdaptedData(Matchers.<Object>is(COMU_EL_ESCORIAL))));
+                matches(withAdaptedData(is(COMU_EL_ESCORIAL))));
     }
 
     @Test   // User IS registered.
     public void test_OnSuccessEmptyList() throws Exception
     {
         viewer.getController().updateIsRegistered(true);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessEmptyList(COMU_REAL);
-            }
-        });
+        activity.runOnUiThread(() -> viewer.onSuccessEmptyList(COMU_REAL));
 
         waitAtMost(4, SECONDS).until(isToastInView(R.string.no_result_search_comunidad, activity));
         intended(hasExtra(COMUNIDAD_SEARCH.key, COMU_REAL));
@@ -199,13 +167,9 @@ public class ViewerComuSearchResultsFrTest {
     {
 
         final ViewerComuSearchResultsFr.ComuSearchResultListener listener = viewer.new ComuSearchResultListener();
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadList(singletonList(COMU_REAL));
-                listener.onItemClick(viewer.getViewInViewer(), new View(activity), 0, 0L);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadList(singletonList(COMU_REAL));
+            listener.onItemClick(viewer.getViewInViewer(), new View(activity), 0, 0L);
         });
 
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regUser_UserComuAcLayout));
@@ -227,13 +191,9 @@ public class ViewerComuSearchResultsFrTest {
         viewer.getController().updateIsRegistered(true);
 
         final ViewerComuSearchResultsFr.ComuSearchResultListener listener = viewer.new ComuSearchResultListener();
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.onSuccessLoadList(singletonList(COMU_REAL));
-                listener.onItemClick(viewer.getViewInViewer(), new View(activity), 0, 0L);
-            }
+        activity.runOnUiThread(() -> {
+            viewer.onSuccessLoadList(singletonList(COMU_REAL));
+            listener.onItemClick(viewer.getViewInViewer(), new View(activity), 0, 0L);
         });
 
         waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));

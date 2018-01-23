@@ -11,12 +11,12 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
+        CtrlerAuthTokenTest.class,
         JceTests.class,
         Oauth2DaoRemoteTest.class,
         OauthTokenObservableTest.class,
         TokenIdentityCacherTest_1.class,
-//        TokenIdentityCacherTest_2.class,
-        CtrlerAuthTokenTest.class,
+/*        TokenIdentityCacherTest_2.class,*/
 })
 public class SecuritySuite {
 }

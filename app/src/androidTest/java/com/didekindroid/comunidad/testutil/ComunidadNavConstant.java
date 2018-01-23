@@ -10,6 +10,7 @@ import com.didekindroid.R;
 
 public class ComunidadNavConstant {
 
+    public static final int confidencialidadLayout = R.id.confidencialidad_ac_layout;
     public static final int comuSearchAcLayout = R.id.comu_search_ac_linearlayout;
     public static final int comuSearchResultsListLayout = R.id.comu_list_fragment;
     public static final int comuDataAcLayout = R.id.comu_data_ac_layout;

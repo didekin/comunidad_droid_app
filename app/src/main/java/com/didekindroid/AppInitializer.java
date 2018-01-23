@@ -4,7 +4,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.StrictMode;
 
-import com.didekindroid.exception.UiExceptionIf.UiExceptionRouterIf;
+import com.didekindroid.api.router.UiExceptionRouterIf;
 import com.didekindroid.security.JksInAndroidApp;
 import com.didekinlib.http.JksInClient;
 import com.didekinlib.http.retrofit.RetrofitHandler;

@@ -17,19 +17,22 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -71,7 +74,7 @@ public class UsuarioDaoRemoteTest {
         whatClean = CLEAN_PEPE;
 
         signUpAndUpdateTk(COMU_REAL_PEPE);
-        boolean isDeleted = usuarioDao.deleteAccessToken(TKhandler.getTokenCache().get().getValue());
+        boolean isDeleted = usuarioDaoRemote.deleteAccessToken(TKhandler.getTokenCache().get().getValue());
         assertThat(isDeleted, is(true));
     }
 
@@ -81,7 +84,7 @@ public class UsuarioDaoRemoteTest {
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
         // Borramos.
-        assertThat(usuarioDao.deleteUser(), is(true));
+        assertThat(usuarioDaoRemote.deleteUser(), is(true));
     }
 
     @Test
@@ -90,8 +93,8 @@ public class UsuarioDaoRemoteTest {
         whatClean = CLEAN_PEPE;
 
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        assertThat(usuarioDao.modifyUserGcmToken("pepe_test_gcm_token"), is(1));
-        assertThat(usuarioDao.getGcmToken(), is("pepe_test_gcm_token"));
+        assertThat(usuarioDaoRemote.modifyUserGcmToken("pepe_test_gcm_token"), is(1));
+        assertThat(usuarioDaoRemote.getGcmToken(), is("pepe_test_gcm_token"));
     }
 
     @Test
@@ -100,7 +103,7 @@ public class UsuarioDaoRemoteTest {
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        Usuario usuario = usuarioDao.getUserData();
+        Usuario usuario = usuarioDaoRemote.getUserData();
         assertThat(usuario.getUserName(), is(USER_JUAN.getUserName()));
 
         whatClean = CLEAN_JUAN;
@@ -111,7 +114,7 @@ public class UsuarioDaoRemoteTest {
     {
         // User not in DB.
         try {
-            usuarioDao.loginInternal("user@notfound.com", "password_wrong");
+            usuarioDaoRemote.loginInternal("user@notfound.com", "password_wrong");
             fail();
         } catch (UiException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USER_NAME_NOT_FOUND.getHttpMessage()));
@@ -124,7 +127,7 @@ public class UsuarioDaoRemoteTest {
         whatClean = CLEAN_JUAN;
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        assertThat(usuarioDao.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
+        assertThat(usuarioDaoRemote.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
     }
 
     @Test
@@ -132,15 +135,18 @@ public class UsuarioDaoRemoteTest {
     {
         whatClean = CLEAN_JUAN;
 
-        // Changed alias; not user.
+        // Changed alias; not userName.
         Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         Usuario usuarioIn = new Usuario.UsuarioBuilder()
+                .copyUsuario(usuario_1)
+                .password(USER_JUAN.getPassword())
                 .alias("new_alias_juan")
-                .uId(usuario_1.getuId())
                 .build();
 
-        int rowUpdated = usuarioDao.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
+        int rowUpdated = usuarioDaoRemote.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
         assertThat(rowUpdated, is(1));
+        // Login data has not changed.
+        assertThat(usuarioDaoRemote.loginInternal(usuarioIn.getUserName(), usuarioIn.getPassword()), is(true));
     }
 
     @Test
@@ -148,22 +154,22 @@ public class UsuarioDaoRemoteTest {
     {
         whatClean = CLEAN_NOTHING;
 
-        // Changed user.
+        // Preconditions.
         Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_PEPE);
+        assertThat(usuarioDaoRemote.loginInternal(USER_PEPE.getUserName(), USER_PEPE.getPassword()), is(true));
+
         Usuario usuarioIn = new Usuario.UsuarioBuilder()
-                .userName("new_pepe@pepe.com")
+                .userName(USER_DROID.getUserName())
                 .alias("new_alias_pepe")
                 .uId(usuario_1.getuId())
                 .build();
 
-        int rowUpdated = usuarioDao.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
+        int rowUpdated = usuarioDaoRemote.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
         assertThat(rowUpdated, is(1));
-
-        cleanOneUser(new Usuario.UsuarioBuilder()
-                .copyUsuario(usuarioIn)
-                .password(USER_PEPE.getPassword())
-                .build()
-        );
+        // Login data has changed: not only userName, but password.
+        assertThat(usuarioDaoRemote.loginInternal(USER_DROID.getUserName(), USER_PEPE.getPassword()), is(false));
+        // Clean.
+        assertThat(userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body(), is(true));
     }
 
     @Test
@@ -171,8 +177,8 @@ public class UsuarioDaoRemoteTest {
     {
         whatClean = CLEAN_JUAN;
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-        assertThat(usuarioDao.modifyUserGcmToken("GCMToken12345X"), is(1));
-        assertThat(usuarioDao.modifyUserGcmToken("GCMToken98765Z"), is(1));
+        assertThat(usuarioDaoRemote.modifyUserGcmToken("GCMToken12345X"), is(1));
+        assertThat(usuarioDaoRemote.modifyUserGcmToken("GCMToken98765Z"), is(1));
     }
 
     @Test
@@ -180,7 +186,7 @@ public class UsuarioDaoRemoteTest {
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         String newPassword = "new_juan_password";
-        assertThat(usuarioDao.passwordChange(TKhandler.getTokenCache().get(), newPassword), is(1));
+        assertThat(usuarioDaoRemote.passwordChange(TKhandler.getTokenCache().get(), newPassword), is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
                 .userName(USER_JUAN.getUserName())
@@ -189,17 +195,30 @@ public class UsuarioDaoRemoteTest {
     }
 
     @Test
-    public void testPasswordSend() throws UiException, IOException
+    public void testPasswordSend_1() throws UiException, IOException
     {
         // If exception, login data are not changed.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         try {
-            usuarioDao.sendPassword("wrong_userName");
+            usuarioDaoRemote.sendPassword("wrong_userName");
             fail();
         } catch (UiException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USER_NAME_NOT_FOUND.getHttpMessage()));
         }
-        assertThat(usuarioDao.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
+        assertThat(usuarioDaoRemote.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
+    }
+
+    @Test
+    public void testPasswordSend_2() throws UiException, IOException
+    {
+        signUpAndUpdateTk(COMU_REAL_DROID);
+        // Exec and check.
+        assertThat(usuarioDaoRemote.sendPassword(USER_DROID.getUserName()), is(true));
+        // Login data has changed.
+        assertThat(usuarioDaoRemote.loginInternal(USER_DROID.getUserName(), USER_DROID.getPassword()), is(false));
+        // Clean.
+        assertThat(userComuMockDao.deleteUser(USER_DROID.getUserName()).execute().body(), is(true));
+
     }
 
 //    ====================== NON INTERFACE TESTS =========================
