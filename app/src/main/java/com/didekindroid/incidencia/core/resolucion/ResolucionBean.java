@@ -3,16 +3,16 @@ package com.didekindroid.incidencia.core.resolucion;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
-import com.didekindroid.util.FechaPickerBean;
+import com.didekindroid.lib_one.util.FechaPickerBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static com.didekindroid.util.UIutils.formatTimeToString;
-import static com.didekindroid.util.UIutils.getIntFromStringDecimal;
-import static com.didekindroid.util.UIutils.isCalendarPreviousTimeStamp;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeToString;
+import static com.didekindroid.lib_one.util.UIutils.getIntFromStringDecimal;
+import static com.didekindroid.lib_one.util.UIutils.isCalendarPreviousTimeStamp;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
 import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;

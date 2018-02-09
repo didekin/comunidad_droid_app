@@ -9,9 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.AbstractSingleObserver;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.AbstractSingleObserver;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
@@ -23,24 +22,24 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterModifiedUserAlias;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.checkInternet;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterModifiedUser;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkInternet;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
-import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
 
 /**
  * User: pedro@didekin
  * Date: 22/03/17
  * Time: 10:27
  */
-final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf, ActivityInitiatorIf {
+final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf {
 
     final EditText emailView;
     final EditText aliasView;
@@ -196,7 +195,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
                             {
                                 Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
                                 assertTrue(isCompleted, "AbstractSingleObserver.onSuccess() should be TRUE");
-                                initAcFromRouter(null, afterModifiedUserAlias);
+                                afterModifiedUser.initActivity(activity);
                             }
                         },
                         oldUser.get(),

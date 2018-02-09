@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
-import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
+import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
@@ -40,13 +40,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
+import static com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper.DB_NAME;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_ESTIM_DEFAULT_String;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UIutils.SPAIN_LOCALE;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;

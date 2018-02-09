@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
@@ -24,7 +24,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionEditFr;

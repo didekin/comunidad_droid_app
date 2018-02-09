@@ -2,7 +2,7 @@ package com.didekindroid.usuario.userdata;
 
 import android.view.View;
 
-import com.didekindroid.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
 import com.didekinlib.model.usuario.Usuario;
 

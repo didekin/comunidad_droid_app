@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekinlib.model.comunidad.Comunidad;
 

@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -35,7 +35,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionSeeFr;
@@ -55,7 +55,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

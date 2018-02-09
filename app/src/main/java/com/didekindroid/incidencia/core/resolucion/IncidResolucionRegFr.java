@@ -11,10 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.util.FechaPickerFr;
-import com.didekindroid.util.FechaPickerUser;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.util.FechaPickerFr;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -25,30 +23,24 @@ import java.sql.Timestamp;
 
 import timber.log.Timber;
 
-import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_resolucionDup;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterResolucionReg;
-import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterResolucionReg;
+import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
 
 /**
  * User: pedro@didekin
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionRegFr extends Fragment implements ActivityInitiatorIf {
-
-    IncidImportancia incidImportancia;
-    ResolucionBean resolucionBean;
-    TextView fechaViewForPicker;
-    View frView;
+public class IncidResolucionRegFr extends Fragment {
 
     static IncidResolucionRegFr newInstance(IncidImportancia incidImportancia)
     {
@@ -59,6 +51,10 @@ public class IncidResolucionRegFr extends Fragment implements ActivityInitiatorI
         fr.setArguments(args);
         return fr;
     }
+    IncidImportancia incidImportancia;
+    ResolucionBean resolucionBean;
+    TextView fechaViewForPicker;
+    View frView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +65,7 @@ public class IncidResolucionRegFr extends Fragment implements ActivityInitiatorI
         resolucionBean = new ResolucionBean();
         fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
         fechaViewForPicker.setOnClickListener(clickListener -> {
-            FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerUser(fechaViewForPicker, resolucionBean));
+            FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerResolucion(fechaViewForPicker, resolucionBean));
             fechaPicker.show(getActivity().getFragmentManager(), "fechaPicker");
         });
 
@@ -171,16 +167,12 @@ public class IncidResolucionRegFr extends Fragment implements ActivityInitiatorI
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                if (uiException.getErrorBean().getMessage().equals(RESOLUCION_DUPLICATE.getHttpMessage())) {
-                    makeToast(getActivity(), show_resolucionDup.getToastResourceId());
-                } else {
-                    uiException.processMe(getActivity());
-                }
+                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity());
             } else {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                initAcFromRouter(bundle, afterResolucionReg);
+                afterResolucionReg.initActivity(getActivity(), bundle);
             }
         }
     }

@@ -6,10 +6,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.security.CtrlerAuthToken;
-import com.didekindroid.security.CtrlerAuthTokenIf;
+import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.security.CtrlerAuthToken;
+import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -17,9 +16,10 @@ import java.io.Serializable;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.comunidadFound_several;
 
 /**
  * User: pedro@didekin
@@ -27,7 +27,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:21
  */
 
-class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> implements ActivityInitiatorIf {
+class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> {
 
     ViewerComuSearchAc(View view, AppCompatActivity activity)
     {
@@ -74,7 +74,7 @@ class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> i
             } else {
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidadFromViewer);
-                initAcFromActivity(bundle);
+                comunidadFound_several.initActivity(activity, bundle);
             }
         }
     }

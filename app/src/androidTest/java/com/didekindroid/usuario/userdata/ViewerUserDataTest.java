@@ -5,10 +5,10 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake;
-import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -40,7 +40,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;

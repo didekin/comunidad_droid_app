@@ -1,21 +1,21 @@
 package com.didekindroid.usuario.dao;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.dao.UsuarioDaoTestUtil.SendPswdCallable;
 import com.didekindroid.usuario.dao.UsuarioDaoTestUtil.SendPswdCallableError;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.http.auth.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.AuthDao.authDao;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUpdatedCacheAfterPswd;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuario.dao.UsuarioObservable.deleteMeSingle;
 import static com.didekindroid.usuario.dao.UsuarioObservable.loginPswdSendSingle;
 import static com.didekindroid.usuario.dao.UsuarioObservable.loginSingle;
@@ -35,7 +35,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -220,7 +220,7 @@ public class UsuarioObservableTest {
     private void finishLoginPswdSendSingle() throws UiException
     {
         // Es necesario conseguir un nuevo token.
-        TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
+        TKhandler.initIdentityCache(authDao.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
         usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
     }

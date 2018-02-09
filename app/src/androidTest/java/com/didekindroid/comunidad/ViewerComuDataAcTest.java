@@ -5,8 +5,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -32,7 +32,6 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunic
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceCmp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -113,12 +112,6 @@ public class ViewerComuDataAcTest {
     {
         onView(withId(comuDataAcLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test_ReplaceComponent() throws Exception
-    {
-        checkViewerReplaceCmp(viewer, seeUserComuByUserFrRsId, null);
     }
 
     @Test

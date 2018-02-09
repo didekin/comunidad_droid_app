@@ -9,12 +9,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
-import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
@@ -25,14 +24,14 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterModifiedUserComu;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterModifiedUserComu;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_deleted;
-import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 
 /**
  * User: pedro@didekin
@@ -40,8 +39,7 @@ import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
  * Time: 09:27
  */
 
-final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> implements
-        ActivityInitiatorIf {
+final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
     @SuppressWarnings("WeakerAccess")
     UsuarioComunidad userComuIntent;
@@ -159,7 +157,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
             Timber.d("onSuccess()");
             showComuDataMn.set(rowsUpdated == 1 && upDateMenu);
             Timber.d("Update menu = %b", showComuDataMn.get());
-            initAcFromRouter(new Bundle(0), afterModifiedUserComu);
+            afterModifiedUserComu.initActivity(activity);
         }
     }
 
@@ -178,7 +176,7 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
                 activity.startActivity(intent);
                 activity.finish();
             } else {
-                initAcFromRouter(new Bundle(0), afterModifiedUserComu);
+                afterModifiedUserComu.initActivity(activity);
             }
         }
     }

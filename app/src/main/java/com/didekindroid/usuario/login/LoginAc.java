@@ -6,12 +6,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityRouter;
 
 import timber.log.Timber;
 
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * User: pedro
@@ -74,7 +74,7 @@ public class LoginAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                ActivityRouter.doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

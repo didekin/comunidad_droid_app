@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -16,7 +17,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doFragmentTextView;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;

@@ -7,12 +7,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.util.UIutils;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
-import com.didekindroid.util.UIutils;
-import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -44,7 +44,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_resolucionDup;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
@@ -53,6 +52,9 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeToString;
+import static com.didekindroid.lib_one.util.UIutils.isCalendarPreviousTimeStamp;
+import static com.didekindroid.router.UiExceptionRouter.show_resolucionDup;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -63,9 +65,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.reSetDatePicker;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.util.UIutils.formatTimeToString;
-import static com.didekindroid.util.UIutils.isCalendarPreviousTimeStamp;
-import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
+import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -225,7 +225,7 @@ public class IncidResolucionRegAcTest {
         };
         resolucionRegister.doInBackground(new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia()).buildAsFk());
         activity.runOnUiThread(() -> resolucionRegister.onPostExecute(0));
-        waitAtMost(2, SECONDS).until(isToastInView(show_resolucionDup.getToastResourceId(), activity));
+        waitAtMost(2, SECONDS).until(isToastInView(show_resolucionDup.getResourceIdForToast(), activity));
     }
 
     @Test

@@ -7,7 +7,7 @@ import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.core.Incidencia_GCM_abs_Test;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -18,13 +18,13 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

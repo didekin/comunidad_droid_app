@@ -1,6 +1,6 @@
 package com.didekindroid.usuariocomunidad.util;
 
-import com.didekindroid.util.BundleKey;
+import com.didekindroid.lib_one.util.BundleKey;
 
 /**
  * User: pedro@didekin

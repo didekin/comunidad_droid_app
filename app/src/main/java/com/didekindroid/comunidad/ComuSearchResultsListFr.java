@@ -14,8 +14,8 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchResultsFr.newViewerComuSearchResultsFr;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 
 /**
  * Preconditions:

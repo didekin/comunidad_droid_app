@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.exception.UiException;
-import com.didekinlib.http.ErrorBean;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekinlib.http.exception.ErrorBean;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,7 +31,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -98,13 +98,10 @@ public class ViewerFirebaseTokenTest {
         viewer.getController().updateIsRegistered(true);
         assertThat(viewer.getController().isGcmTokenSentServer(), is(false));
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                Single.<Integer>error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED))).subscribeWith(viewer.new RegGcmTokenObserver());
-            }
-        });
+        activity.runOnUiThread(
+                () -> Single.<Integer>error(
+                        new UiException(new ErrorBean(USER_DATA_NOT_INSERTED))
+                ).subscribeWith(viewer.new RegGcmTokenObserver()));
 
         assertThat(viewer.getController().isGcmTokenSentServer(), is(false));
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));

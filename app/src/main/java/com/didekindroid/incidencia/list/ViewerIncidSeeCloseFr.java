@@ -9,13 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.CtrlerSelectListIf;
-import com.didekindroid.api.ObserverSingleSelectItem;
-import com.didekindroid.api.ObserverSingleSelectList;
-import com.didekindroid.api.SpinnerEventItemSelectIf;
-import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.ViewerSelectList;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.CtrlerSelectListIf;
+import com.didekindroid.lib_one.api.ObserverSingleSelectItem;
+import com.didekindroid.lib_one.api.ObserverSingleSelectList;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.ViewerSelectList;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -25,10 +24,10 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.selectedClosedIncid;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.router.LeadRouter.selectedClosedIncid;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
-import static com.didekindroid.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
-import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -52,7 +51,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
-        implements SpinnerEventListener, ActivityInitiatorIf {
+        implements SpinnerEventListener {
 
     ViewerComuSpinner comuSpinnerViewer;
     View emptyListView;
@@ -164,7 +163,7 @@ public class ViewerIncidSeeCloseFr extends
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        initAcFromRouter(bundle, selectedClosedIncid);
+        selectedClosedIncid.initActivity(activity, bundle);
     }
 
     void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)

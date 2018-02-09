@@ -5,8 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.api.router.FragmentInitiatorIf;
+import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
@@ -14,10 +13,10 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.comment.IncidCommentSeeListFr.newInstance;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_initialized;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.CommonAssertionMsg.fragment_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.fragment_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
 /**
  * Preconditions:
@@ -26,8 +25,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. An intent key is passed with an IncidenciaUser instance on to the option menu 'incid_comment_reg_mn'.
  */
-public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInitiatorIf,
-        FragmentInitiatorIf<IncidCommentSeeListFr> {
+public class IncidCommentSeeAc extends AppCompatActivity implements FragmentInitiatorIf<IncidCommentSeeListFr> {
 
     IncidCommentSeeListFr fragment;
     Incidencia incidencia;
@@ -53,15 +51,13 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
         initFragmentTx(newInstance(incidencia));
     }
 
-// =====================  ActivityInitiatorIf  ===================
+// =====================  FragmentInitiatorIf  ===================
 
     @Override
     public AppCompatActivity getActivity()
     {
         return this;
     }
-
-// =====================  FragmentInitiatorIf  ===================
 
     @Override
     public int getContainerId()
@@ -80,7 +76,7 @@ public class IncidCommentSeeAc extends AppCompatActivity implements ActivityInit
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

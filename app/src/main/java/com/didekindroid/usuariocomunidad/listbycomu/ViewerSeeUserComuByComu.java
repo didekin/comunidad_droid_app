@@ -7,7 +7,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -22,8 +22,8 @@ import timber.log.Timber;
 
 import static android.R.id.list;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin

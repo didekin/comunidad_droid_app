@@ -2,7 +2,7 @@ package com.didekindroid.incidencia.utils;
 
 import android.os.Bundle;
 
-import com.didekindroid.util.BundleKey;
+import com.didekindroid.lib_one.util.BundleKey;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 /**
@@ -12,7 +12,6 @@ import com.didekinlib.model.incidencia.dominio.Incidencia;
  */
 public enum IncidBundleKey implements BundleKey {
 
-    AMBITO_INCIDENCIA_POSITION,
     INCID_ACTIVITY_VIEW_ID,
     INCID_IMPORTANCIA_NUMBER,
     INCID_IMPORTANCIA_OBJECT,

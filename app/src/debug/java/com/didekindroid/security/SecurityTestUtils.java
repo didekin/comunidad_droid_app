@@ -1,14 +1,14 @@
 package com.didekindroid.security;
 
 
-import com.didekindroid.exception.UiException;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekinlib.http.auth.SpringOauthToken;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.AuthDao.authDao;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 
 /**
  * User: pedro@didekin
@@ -26,7 +26,7 @@ public final class SecurityTestUtils {
 
     public static void updateSecurityData(String userName, String password) throws UiException
     {
-        SpringOauthToken token = Oauth2.getPasswordUserToken(userName, password);
+        SpringOauthToken token = authDao.getPasswordUserToken(userName, password);
         TKhandler.initIdentityCache(token);
         TKhandler.updateIsRegistered(true);
     }
@@ -42,7 +42,7 @@ public final class SecurityTestUtils {
         );
     }
 
-    static SpringOauthToken doSpringOauthToken()
+    public static SpringOauthToken doSpringOauthToken()
     {
         return doSpringOauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef");
     }

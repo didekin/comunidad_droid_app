@@ -29,7 +29,6 @@ import static android.media.RingtoneManager.TYPE_NOTIFICATION;
 import static android.media.RingtoneManager.getDefaultUri;
 import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.firebase.NotificationChannelId.INCID_NOTIFICATION_CHANNEL;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
@@ -113,7 +112,9 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
         }
     },;
 
-    // ======================= STATIC METHODS =========================
+    // ======================= STATIC MEMBERS =========================
+
+    private static final String incid_notification_channel = "IncidenciaNotificationChannel";
 
     private static final Map<String, IncidDownStreamMsgHandler> typeToHandler = new HashMap<>();
 
@@ -188,7 +189,7 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
     Notification doNotification(Context context, PendingIntent resultPendingIntent)
     {
         Resources resources = context.getResources();
-        return new NotificationCompat.Builder(context, INCID_NOTIFICATION_CHANNEL.name())
+        return new NotificationCompat.Builder(context, incid_notification_channel)
                 .setSmallIcon(R.drawable.ic_info_outline_white_36dp)
                 .setLargeIcon(decodeResource(resources, R.drawable.ic_launcher))
                 .setSound(getDefaultUri(TYPE_NOTIFICATION))

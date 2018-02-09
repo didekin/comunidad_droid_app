@@ -1,6 +1,6 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 

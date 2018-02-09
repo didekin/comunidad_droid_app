@@ -5,10 +5,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin

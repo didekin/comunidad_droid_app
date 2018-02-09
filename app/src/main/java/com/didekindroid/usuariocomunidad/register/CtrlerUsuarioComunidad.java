@@ -1,9 +1,9 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.ObserverCacheCleaner;
-import com.didekindroid.exception.UiException;
-import com.didekinlib.http.ErrorBean;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.ObserverCacheCleaner;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -12,11 +12,11 @@ import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.security.TokenIdentityCacher.updateRegisterAction;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.updateRegisterAction;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.util.DaoUtil.getResponseBody;
-import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
+import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static io.reactivex.Completable.error;
 import static io.reactivex.Completable.fromAction;
 import static io.reactivex.Single.fromCallable;
@@ -37,7 +37,7 @@ public class CtrlerUsuarioComunidad extends Controller {
     {
         Timber.d("userAndComuRegistered()");
 
-        return fromCallable(() -> getResponseBody(userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute()))
+        return fromCallable(() -> httpInitializer.get().getResponseBody(userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute()))
                 .flatMapCompletable(isUserInDb -> {
                     if (isUserInDb) {
                         return fromAction(() -> updateRegisterAction.accept(true));
@@ -57,7 +57,7 @@ public class CtrlerUsuarioComunidad extends Controller {
     {
         Timber.d("userAndUserComuRegistered");
 
-        return fromCallable(() -> getResponseBody(userComuDaoRemote.regUserAndUserComu(usuarioComunidad).execute()))
+        return fromCallable(() -> httpInitializer.get().getResponseBody(userComuDaoRemote.regUserAndUserComu(usuarioComunidad).execute()))
                 .flatMapCompletable(isUserInDb -> {
                     if (isUserInDb) {
                         return fromAction(() -> updateRegisterAction.accept(true));

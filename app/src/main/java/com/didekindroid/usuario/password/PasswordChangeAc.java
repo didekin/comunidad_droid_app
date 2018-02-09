@@ -9,7 +9,7 @@ import com.didekindroid.R;
 import timber.log.Timber;
 
 import static com.didekindroid.usuario.password.ViewerPasswordChange.newViewerPswdChange;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
 
 /**
  * Preconditions:

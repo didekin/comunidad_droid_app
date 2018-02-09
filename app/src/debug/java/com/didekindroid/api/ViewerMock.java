@@ -4,6 +4,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.didekindroid.lib_one.api.ControllerIf;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.Viewer;
+
 import timber.log.Timber;
 
 /**
@@ -19,7 +24,7 @@ public class ViewerMock<T extends View, C extends ControllerIf> extends Viewer<T
         this(null, activity);
     }
 
-    ViewerMock(T view, AppCompatActivity activity)
+    public ViewerMock(T view, AppCompatActivity activity)
     {
         super(view, activity, null);
     }

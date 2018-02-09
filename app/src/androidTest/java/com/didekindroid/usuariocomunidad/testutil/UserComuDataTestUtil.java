@@ -1,6 +1,6 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -15,7 +15,7 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZU
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;

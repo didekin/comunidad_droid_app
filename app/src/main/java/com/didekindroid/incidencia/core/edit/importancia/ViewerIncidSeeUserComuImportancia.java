@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ListView;
 
-import com.didekindroid.api.ObserverSingleList;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.ViewerListIf;
+import com.didekindroid.lib_one.api.ObserverSingleList;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.ViewerListIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -20,8 +20,8 @@ import timber.log.Timber;
 
 import static android.R.id.list;
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaByUsers;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin

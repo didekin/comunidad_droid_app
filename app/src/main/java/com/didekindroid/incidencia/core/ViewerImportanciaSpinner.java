@@ -7,9 +7,9 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.CtrlerSelectList;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.CtrlerSelectList;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerSelectList;
 
 import java.io.Serializable;
 import java.util.Arrays;

@@ -2,8 +2,8 @@ package com.didekindroid.usuario.dao;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.exception.UiException;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekinlib.http.auth.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -17,7 +17,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUpdatedCacheAfterPswd;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
@@ -25,7 +25,7 @@ import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;

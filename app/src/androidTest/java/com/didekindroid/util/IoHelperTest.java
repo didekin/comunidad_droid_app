@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.util.IoHelper.doArrayFromFile;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.util.IoHelper.doArrayFromFile;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,7 +24,7 @@ public class IoHelperTest {
     @Test
     public void testDoArrayFromFile() throws Exception
     {
-        List<String> tipos = doArrayFromFile(creator.get().getContext(), R.raw.tipos_vias);
+        List<String> tipos = doArrayFromFile(httpInitializer.get().getContext(), R.raw.tipos_vias);
         assertThat(tipos.size(),is(TIPO_VIA_FILE_SIZE));
         assertThat(tipos,hasItems("Acces","Galeria","Zumardi"));
     }

@@ -5,7 +5,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;

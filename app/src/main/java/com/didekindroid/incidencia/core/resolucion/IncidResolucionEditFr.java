@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.core.resolucion;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,12 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.incidencia.utils.IncidBundleKey;
-import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.util.FechaPickerFr;
-import com.didekindroid.util.FechaPickerUser;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.lib_one.util.FechaPickerFr;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -33,7 +29,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
@@ -42,30 +38,23 @@ import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidenci
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.closeIncidencia;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.errorClosingIncid;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifyResolucion;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifyResolucionError;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.util.UIutils.getCalendarFromTimeMillis;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.getStringFromInteger;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UIutils.getCalendarFromTimeMillis;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.closeIncidencia;
+import static com.didekindroid.router.LeadRouter.modifyResolucion;
+import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
 
 /**
  * User: pedro@didekin
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionEditFr extends Fragment implements ActivityInitiatorIf {
-
-    Resolucion resolucion;
-    IncidImportancia incidImportancia;
-    ResolucionBean resolucionBean;
-    TextView fechaViewForPicker;
-    View frView;
+public class IncidResolucionEditFr extends Fragment {
 
     static IncidResolucionEditFr newInstance(IncidImportancia incidImportancia, Resolucion resolucion)
     {
@@ -77,6 +66,11 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
         fr.setArguments(args);
         return fr;
     }
+    Resolucion resolucion;
+    IncidImportancia incidImportancia;
+    ResolucionBean resolucionBean;
+    TextView fechaViewForPicker;
+    View frView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +82,7 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
 
         fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
         fechaViewForPicker.setOnClickListener(clickListener -> {
-            FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerUser(fechaViewForPicker, resolucionBean));
+            FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerResolucion(fechaViewForPicker, resolucionBean));
             fechaPicker.show(getActivity().getFragmentManager(), "fechaPicker");
         });
 
@@ -232,15 +226,14 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent(getActivity(), modifyResolucionError.getActivityToGo());
-                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId())
-                        .putExtra(INCID_CLOSED_LIST_FLAG.key, false);
-                uiException.processMe(getActivity(), intent);
+                Bundle bundle = new Bundle(1);
+                bundle.putLong(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
+                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                initAcFromRouter(bundle, modifyResolucion);
+                modifyResolucion.initActivity(getActivity(), bundle);
             }
         }
     }
@@ -273,13 +266,12 @@ public class IncidResolucionEditFr extends Fragment implements ActivityInitiator
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent(getActivity(), errorClosingIncid.getActivityToGo());
-                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId())
-                        .putExtra(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, false);
-                uiException.processMe(getActivity(), intent);
+                Bundle bundle = new Bundle(1);
+                bundle.putLong(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
+                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
-                initAcFromRouter(INCID_CLOSED_LIST_FLAG.getBundleForKey(true), closeIncidencia);
+                closeIncidencia.initActivity(getActivity(), INCID_CLOSED_LIST_FLAG.getBundleForKey(true));
             }
         }
     }

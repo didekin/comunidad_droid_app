@@ -1,15 +1,14 @@
 package com.didekindroid.comunidad;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.security.CtrlerAuthToken;
-import com.didekindroid.security.CtrlerAuthTokenIf;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.security.CtrlerAuthToken;
+import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
 import com.didekindroid.testutil.ViewerTestWrapper;
 
 import org.junit.Before;
@@ -21,6 +20,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtras;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
@@ -29,18 +32,12 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunic
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceCmp;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -57,7 +54,7 @@ public class ViewerComuSearchAcTest {
     final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<ComuSearchAc> activityRule = new ActivityTestRule<>(ComuSearchAc.class, true, true);
+    public IntentsTestRule<ComuSearchAc> activityRule = new IntentsTestRule<>(ComuSearchAc.class, true, true);
     ComuSearchAc activity;
 
     @Before
@@ -105,36 +102,22 @@ public class ViewerComuSearchAcTest {
     }
 
     @Test
-    public void test_ReplaceComponent() throws Exception
-    {
-        Bundle bundle = new Bundle(1);
-        bundle.putSerializable(COMUNIDAD_SEARCH.key, signUpWithTkGetComu(COMU_REAL_PEPE));
-        checkViewerReplaceCmp(activity.viewerAc, comuSearchResultsListLayout, bundle);
-        cleanOptions(CLEAN_PEPE);
-    }
-
-    @Test
     public void test_ComuSearchButtonListener()
     {
         checkMunicipioSpinner("municipio"); /* Esperamos por los viejos datos.*/
         typeComunidadData();
 
         ViewerRegComuFr viewerRegComuFrOld = activity.viewerAc.getChildViewer(ViewerRegComuFr.class);
-        activity.viewerAc = new ViewerComuSearchAc(activity.acView, activity) {
-            @Override
-            public void initAcFromActivity(@NonNull Bundle bundle)
-            {
-                assertThat(bundle.getSerializable(COMUNIDAD_SEARCH.key), is(COMU_REAL));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-            }
-        };
         activity.setChildInParentViewer(viewerRegComuFrOld);
         activity.viewerAc.setController(new CtrlerAuthToken());
 
         Button button = activity.acView.findViewById(R.id.searchComunidad_Bton);
         button.setOnClickListener(activity.viewerAc.new ComuSearchButtonListener());
         button.callOnClick();
-        waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_B));
+        intended(allOf(
+                hasExtras(hasEntry(COMUNIDAD_SEARCH.key, is(COMU_REAL))),
+                hasComponent(ComuSearchResultsAc.class.getName())
+        ));
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

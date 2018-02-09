@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.userdata;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,14 +7,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -24,7 +22,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class UserDataAc extends AppCompatActivity {
 
     ViewerUserData viewer;
     View acView;
@@ -50,14 +48,6 @@ public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
 //    ============================================================
 //    ..... ACTION BAR ....
 //    ============================================================
@@ -78,14 +68,14 @@ public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             case R.id.password_change_ac_mn:
-                initAcFromMenu(user_name.getBundleForKey(viewer.oldUser.get().getUserName()),resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this, user_name.getBundleForKey(viewer.oldUser.get().getUserName()));
             case R.id.delete_me_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:
-                initAcFromMenu(null, resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

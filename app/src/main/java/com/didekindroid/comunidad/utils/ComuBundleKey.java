@@ -2,7 +2,7 @@ package com.didekindroid.comunidad.utils;
 
 import android.os.Bundle;
 
-import com.didekindroid.util.BundleKey;
+import com.didekindroid.lib_one.util.BundleKey;
 
 /**
  * User: pedro@didekin
@@ -24,11 +24,7 @@ public enum ComuBundleKey implements BundleKey {
             return bundle;
         }
     },
-    COMUNIDAD_SEARCH,
-    COMUNIDAD_AUTONOMA_ID,
-    MUNICIPIO_SPINNER_EVENT,
-    PROVINCIA_ID,
-    TIPO_VIA_ID,;
+    COMUNIDAD_SEARCH,;
 
     public static final String intentPackage = "ComuBundleKey.";
 

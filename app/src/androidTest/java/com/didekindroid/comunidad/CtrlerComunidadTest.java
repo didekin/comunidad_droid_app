@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.MaybeObserverMock;
 import com.didekindroid.api.SingleObserverMock;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.annotations.NonNull;
 
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.TIPO_VIA_ID;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -101,7 +101,7 @@ public class CtrlerComunidadTest {
         } finally {
             resetAllSchedulers();
         }
-        checkFinal(1, AFTER_METHOD_EXEC_A);
+        checkFinal(AFTER_METHOD_EXEC_A);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class CtrlerComunidadTest {
         } finally {
             resetAllSchedulers();
         }
-        checkFinal(1, AFTER_METHOD_EXEC_A);
+        checkFinal(AFTER_METHOD_EXEC_A);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class CtrlerComunidadTest {
         } finally {
             resetAllSchedulers();
         }
-        checkFinal(1, AFTER_METHOD_EXEC_B);
+        checkFinal(AFTER_METHOD_EXEC_B);
     }
 
     @Test
@@ -168,7 +168,7 @@ public class CtrlerComunidadTest {
         } finally {
             resetAllSchedulers();
         }
-        checkFinal(1, AFTER_METHOD_EXEC_B);
+        checkFinal(AFTER_METHOD_EXEC_B);
     }
 
     @Test  // Empty list.
@@ -187,14 +187,14 @@ public class CtrlerComunidadTest {
         } finally {
             resetAllSchedulers();
         }
-        checkFinal(1, AFTER_METHOD_EXEC_B);
+        checkFinal(AFTER_METHOD_EXEC_B);
     }
 
     //    =================================== HELPERS ===================================
 
-    private void checkFinal(int size, String flagExec)
+    private void checkFinal(String flagExec)
     {
-        assertThat(controller.getSubscriptions().size(), is(size));
+        assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(flagExec));
     }
 }

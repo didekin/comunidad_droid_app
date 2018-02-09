@@ -6,7 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseToken;
@@ -41,7 +41,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;

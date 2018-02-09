@@ -7,7 +7,7 @@ import com.didekindroid.R;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -27,7 +27,7 @@ public class UsuarioBeanTests {
     @Before
     public void doBefore()
     {
-        resources = creator.get().getContext().getResources();
+        resources = httpInitializer.get().getContext().getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
     }
 

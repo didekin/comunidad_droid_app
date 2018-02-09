@@ -21,9 +21,9 @@ import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
+import static com.didekindroid.router.MnRouter.confidencialidad_mn;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -93,6 +93,6 @@ public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMain_abs_Test {
     public void test_OnNavigationItemSelected_1() throws InterruptedException
     {
         // Exec and check.
-        checkMainDrawerMenu(confidencialidad.resourceId, confidencialidadLayout, comuSearchAcLayout);
+        checkMainDrawerMenu(confidencialidad_mn.getMnItemRsId(), confidencialidadLayout, comuSearchAcLayout);
     }
 }

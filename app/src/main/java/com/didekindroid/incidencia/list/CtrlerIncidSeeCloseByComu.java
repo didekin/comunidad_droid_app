@@ -3,8 +3,8 @@ package com.didekindroid.incidencia.list;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.CtrlerSelectListIf;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.CtrlerSelectListIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -14,9 +14,9 @@ import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 

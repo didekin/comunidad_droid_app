@@ -8,12 +8,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.contrib.PickerActions;
+import android.support.test.espresso.matcher.RootMatchers;
+import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -22,17 +31,20 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ControllerIf;
-import com.didekindroid.api.CtrlerSelectListIf;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerMock;
-import com.didekindroid.api.ViewerSelectListIf;
-import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.util.BundleKey;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ControllerIf;
+import com.didekindroid.lib_one.api.CtrlerSelectListIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerSelectListIf;
+import com.didekindroid.lib_one.util.BundleKey;
+import com.didekinlib.http.auth.SpringOauthToken;
 
+import org.awaitility.Awaitility;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -53,44 +65,15 @@ import timber.log.Timber;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.pressBack;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
-import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance;
 import static android.view.Gravity.LEFT;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -121,7 +104,7 @@ public final class ActivityTestUtils {
         return () -> {
             try {
                 for (int resourceId : resourceIds) {
-                    onView(withId(resourceId)).check(matches(isDisplayed()));
+                    Espresso.onView(ViewMatchers.withId(resourceId)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
                 }
                 return true;
             } catch (NoMatchingViewException ne) {
@@ -135,7 +118,7 @@ public final class ActivityTestUtils {
         return () -> {
             try {
                 for (int resourceId : stringId) {
-                    onView(withText(resourceId)).check(doesNotExist());
+                    Espresso.onView(ViewMatchers.withText(resourceId)).check(ViewAssertions.doesNotExist());
                 }
                 return true;
             } catch (NoMatchingViewException ne) {
@@ -148,7 +131,7 @@ public final class ActivityTestUtils {
     {
         return () -> {
             try {
-                onView(viewMatcher).check(matches(isDisplayed()));
+                Espresso.onView(viewMatcher).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
                 return true;
             } catch (NoMatchingViewException ne) {
                 return false;
@@ -160,7 +143,7 @@ public final class ActivityTestUtils {
     {
         return () -> {
             try {
-                viewInteraction.check(matches(isDisplayed()));
+                viewInteraction.check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
                 return true;
             } catch (NoMatchingViewException ne) {
                 return false;
@@ -172,7 +155,7 @@ public final class ActivityTestUtils {
     {
         return () -> {
             try {
-                onView(viewMatcher).check(matches(isDisplayed())).perform(viewActions);
+                Espresso.onView(viewMatcher).check(ViewAssertions.matches(ViewMatchers.isDisplayed())).perform(viewActions);
                 return true;
             } catch (NoMatchingViewException ne) {
                 return false;
@@ -184,9 +167,9 @@ public final class ActivityTestUtils {
     {
         return () -> {
             try {
-                onData(objectMatcher)
-                        .check(matches(isDisplayed()))
-                        .perform(click());
+                Espresso.onData(objectMatcher)
+                        .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+                        .perform(ViewActions.click());
                 return true;
             } catch (NoMatchingViewException | PerformException e) {
                 return false;
@@ -223,8 +206,8 @@ public final class ActivityTestUtils {
                 return false;
             }
         });
-        assertThat(controller.getSubscriptions().size(), is(++oldNumberSubscriptions));
-        assertThat(controller.getSubscriptions().size() > 0, is(true));
+        Assert.assertThat(controller.getSubscriptions().size(), CoreMatchers.is(++oldNumberSubscriptions));
+        Assert.assertThat(controller.getSubscriptions().size() > 0, CoreMatchers.is(true));
         return controller.getSubscriptions();
     }
 
@@ -234,17 +217,17 @@ public final class ActivityTestUtils {
         for (ControllerIf controller : controllers) {
             atomicInteger.addAndGet(addSubscription(controller).size());
         }
-        assertThat(atomicInteger.get() >= controllers.length, is(true));
+        Assert.assertThat(atomicInteger.get() >= controllers.length, CoreMatchers.is(true));
 
         activity.runOnUiThread(() -> {
-            getInstrumentation().callActivityOnStop(activity);
+            InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
             atomicInteger.set(0);
             for (ControllerIf controller : controllers) {
                 atomicInteger.addAndGet(controller.getSubscriptions().size());
             }
         });
 
-        waitAtMost(6, SECONDS).untilAtomic(atomicInteger, is(0));
+        Awaitility.waitAtMost(6, SECONDS).untilAtomic(atomicInteger, CoreMatchers.is(0));
     }
 
     //    ============================= DATE PICKERS ===================================
@@ -258,7 +241,7 @@ public final class ActivityTestUtils {
         // Aumentamos la fecha estimada en un número de meses.
         newCalendar.add(MONTH, monthsToAdd);
         // Android PickerActions substract 1 from the month passed to setDate(), so we increased the month parameter value in 1 before passing it.
-        onView(withClassName(is(DatePicker.class.getName())))
+        Espresso.onView(ViewMatchers.withClassName(CoreMatchers.is(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(newCalendar.get(Calendar.YEAR), newCalendar.get(MONTH) + 1, newCalendar.get(DAY_OF_MONTH)));
         return newCalendar;
     }
@@ -266,10 +249,10 @@ public final class ActivityTestUtils {
     public static void closeDatePicker(Context context)
     {
         if (SDK_INT == KITKAT) {
-            onView(withId(android.R.id.button1)).perform(click());
+            Espresso.onView(ViewMatchers.withId(android.R.id.button1)).perform(ViewActions.click());
         }
         if (SDK_INT > KITKAT) {
-            onView(withText(context.getString(android.R.string.ok))).perform(click());
+            Espresso.onView(ViewMatchers.withText(context.getString(android.R.string.ok))).perform(ViewActions.click());
         }
     }
 
@@ -279,7 +262,7 @@ public final class ActivityTestUtils {
     {
         AtomicBoolean isRegistered = new AtomicBoolean(false);
         isRegistered.compareAndSet(false, viewer.getController().isRegisteredUser());
-        waitAtMost(4, SECONDS).untilTrue(isRegistered);
+        Awaitility.waitAtMost(4, SECONDS).untilTrue(isRegistered);
     }
 
     public static void checkUpdateTokenCache(SpringOauthToken oldToken)
@@ -289,25 +272,25 @@ public final class ActivityTestUtils {
 
     public static void checkInitTokenCache()
     {
-        assertThat(TKhandler.getTokenCache().get(), notNullValue());
-        assertThat(TKhandler.getTokenCache().get().getValue().isEmpty(), is(false));
-        assertThat(TKhandler.getRefreshTokenValue().isEmpty(), is(false));
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
+        Assert.assertThat(TKhandler.getTokenCache().get(), CoreMatchers.notNullValue());
+        Assert.assertThat(TKhandler.getTokenCache().get().getValue().isEmpty(), CoreMatchers.is(false));
+        Assert.assertThat(TKhandler.getRefreshTokenValue().isEmpty(), CoreMatchers.is(false));
+        Assert.assertThat(TKhandler.getRefreshTokenFile().exists(), CoreMatchers.is(true));
     }
 
     public static void checkNoInitCache()
     {
-        assertThat(TKhandler.getTokenCache().get(), nullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
+        Assert.assertThat(TKhandler.getTokenCache().get(), CoreMatchers.nullValue());
+        Assert.assertThat(TKhandler.getRefreshTokenFile().exists(), CoreMatchers.is(false));
     }
 
     public static void checkUpdatedCacheAfterPswd(boolean isPswdUpdated, SpringOauthToken oldToken)
     {
         checkInitTokenCache();
         if (isPswdUpdated) {
-            assertThat(TKhandler.getTokenCache().get(), not(is(oldToken)));
+            Assert.assertThat(TKhandler.getTokenCache().get(), CoreMatchers.not(CoreMatchers.is(oldToken)));
         } else {
-            assertThat(TKhandler.getTokenCache().get(), is(oldToken));
+            Assert.assertThat(TKhandler.getTokenCache().get(), CoreMatchers.is(oldToken));
         }
     }
 
@@ -317,7 +300,7 @@ public final class ActivityTestUtils {
     @NonNull
     public static Menu doMockMenu(Activity activity, int menuMockRsId)
     {
-        PopupMenu popupMenu = new PopupMenu(getTargetContext(), null);
+        PopupMenu popupMenu = new PopupMenu(InstrumentationRegistry.getTargetContext(), null);
         Menu menu = popupMenu.getMenu();
         activity.getMenuInflater().inflate(menuMockRsId, menu);
         return menu;
@@ -326,51 +309,51 @@ public final class ActivityTestUtils {
     public static void checkAppBarMenu(Activity activity, int menuResourceId, int actionResourceId)
     {
         try {
-            onView(withText(menuResourceId)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
+            Espresso.onView(ViewMatchers.withText(menuResourceId)).check(ViewAssertions.doesNotExist());
+            Espresso.openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
         } catch (Throwable e) {
         } finally {
-            onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
-            waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
+            Espresso.onView(ViewMatchers.withText(menuResourceId)).check(ViewAssertions.matches(ViewMatchers.isDisplayed())).perform(ViewActions.click());
+            Awaitility.waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
         }
     }
 
     public static void checkAppBarMnNotExist(Activity activity, int menuResourceId)
     {
-        onView(withText(menuResourceId)).check(doesNotExist());
+        Espresso.onView(ViewMatchers.withText(menuResourceId)).check(ViewAssertions.doesNotExist());
         try {
-            openActionBarOverflowOrOptionsMenu(activity);
+            Espresso.openActionBarOverflowOrOptionsMenu(activity);
         } catch (NoMatchingViewException e) {
         }
-        waitAtMost(4, SECONDS).until(isTextIdNonExist(menuResourceId));
+        Awaitility.waitAtMost(4, SECONDS).until(isTextIdNonExist(menuResourceId));
     }
 
     public static void checkDrawerMenu(int drawerLayoutId, int navigationViewId, int menuResourceId, int actionResourceId)
     {
-        onView(withId(drawerLayoutId)).check(matches(isClosed(LEFT))).perform(open());
-        onView(withId(navigationViewId)).perform(navigateTo(menuResourceId));
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
+        Espresso.onView(ViewMatchers.withId(drawerLayoutId)).check(ViewAssertions.matches(isClosed(LEFT))).perform(DrawerActions.open());
+        Espresso.onView(ViewMatchers.withId(navigationViewId)).perform(NavigationViewActions.navigateTo(menuResourceId));
+        Awaitility.waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
     }
 
     /*    ============================= NAVIGATION ===================================*/
 
     public static void clickNavigateUp()
     {
-        onView(allOf(
-                withContentDescription(R.string.navigate_up_txt),
-                isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        Espresso.onView(CoreMatchers.allOf(
+                ViewMatchers.withContentDescription(R.string.navigate_up_txt),
+                ViewMatchers.isClickable())
+        ).check(ViewAssertions.matches(ViewMatchers.isDisplayed())).perform(ViewActions.click());
     }
 
     public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
     {
-        viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
+        viewInteraction.perform(ViewActions.closeSoftKeyboard()).perform(ViewActions.pressBack());
         for (Integer layout : activityLayoutIds) {
             try {
-                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
+                Awaitility.waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
             } catch (Exception e) {
-                fail();
+                Assert.fail();
             }
         }
     }
@@ -380,9 +363,9 @@ public final class ActivityTestUtils {
         clickNavigateUp();
         for (Integer layout : activityLayoutIds) {
             try {
-                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
+                Awaitility.waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
             } catch (Exception e) {
-                fail();
+                Assert.fail();
             }
         }
     }
@@ -392,8 +375,8 @@ public final class ActivityTestUtils {
     {
         Timber.d("============= getStageByActivity() =================");
 
-        final FutureTask<Stage> taskGetActivities = new FutureTask<>(() -> getInstance().getLifecycleStageOf(activity));
-        getInstrumentation().runOnMainSync(taskGetActivities);
+        final FutureTask<Stage> taskGetActivities = new FutureTask<>(() -> ActivityLifecycleMonitorRegistry.getInstance().getLifecycleStageOf(activity));
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(taskGetActivities);
         return taskGetActivities.get();
     }
 
@@ -401,8 +384,8 @@ public final class ActivityTestUtils {
     {
         Timber.d("============= getActivitesInTaskByStage() =================");
 
-        final FutureTask<Collection<Activity>> taskGetActivities = new FutureTask<>(() -> getInstance().getActivitiesInStage(stage));
-        getInstrumentation().runOnMainSync(taskGetActivities);
+        final FutureTask<Collection<Activity>> taskGetActivities = new FutureTask<>(() -> ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage));
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(taskGetActivities);
         return taskGetActivities.get();
     }
 
@@ -416,17 +399,6 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkViewerReplaceCmp(final ViewerIf<? extends View, ? extends ControllerIf> viewer, int resorceIdNextView, Bundle bundle)
-    {
-        if (bundle == null) {
-            bundle = new Bundle(0);
-        }
-        final Bundle finalBundle = bundle;
-
-        viewer.getActivity().runOnUiThread(() -> new ActivityInitiator(viewer.getActivity()).initAcFromActivity(finalBundle));
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));
-    }
-
     //    ============================ SPINNERS ============================
 
     public static <E extends Serializable> void checkSpinnerCtrlerLoadItems(CtrlerSelectListIf<E> controller, Long... entityId)
@@ -435,7 +407,7 @@ public final class ActivityTestUtils {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
             Timber.d("checkSpinnerCtrlerLoadItems(), Thread: %s", Thread.currentThread().getName());
-            assertThat(controller.loadItemsByEntitiyId(new DisposableSingleObserver<List<E>>() {
+            Assert.assertThat(controller.loadItemsByEntitiyId(new DisposableSingleObserver<List<E>>() {
                 @Override
                 public void onSuccess(List<E> es)
                 {
@@ -444,13 +416,13 @@ public final class ActivityTestUtils {
                 @Override
                 public void onError(Throwable e)
                 {
-                    fail();
+                    Assert.fail();
                 }
-            }, entityId), is(true));
+            }, entityId), CoreMatchers.is(true));
         } finally {
             resetAllSchedulers();
         }
-        assertThat(controller.getSubscriptions().size(), is(1));
+        Assert.assertThat(controller.getSubscriptions().size(), CoreMatchers.is(1));
     }
 
     //    ============================ TOASTS ============================
@@ -459,14 +431,14 @@ public final class ActivityTestUtils {
     {
         Resources resources = activity.getResources();
 
-        ViewInteraction toast = onView(
-                withText(containsString(resources.getText(resourceId).toString())))
-                .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        ViewInteraction toast = Espresso.onView(
+                ViewMatchers.withText(Matchers.containsString(resources.getText(resourceId).toString())))
+                .inRoot(RootMatchers.withDecorView(CoreMatchers.not(activity.getWindow().getDecorView())))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
         if (resourceFieldsErrorId != null) {
             for (int field : resourceFieldsErrorId) {
-                toast.check(matches(withText(containsString(resources.getText(field).toString()))));
+                toast.check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString(resources.getText(field).toString()))));
             }
         }
     }
@@ -490,14 +462,14 @@ public final class ActivityTestUtils {
         viewer.setSelectedItemId(18L);
         Bundle bundle = new Bundle(1);
         viewer.saveState(bundle);
-        assertThat(bundle.getLong(bundleKey.getKey()), is(18L));
+        Assert.assertThat(bundle.getLong(bundleKey.getKey()), CoreMatchers.is(18L));
     }
 
     public static <T extends AppCompatActivity & ChildViewersInjectorIf> void checkChildInViewer(T activity)
     {
         final ViewerMock viewerChild = new ViewerMock(activity);
         activity.setChildInParentViewer(viewerChild);
-        assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), is(viewerChild));
+        Assert.assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), CoreMatchers.is(viewerChild));
     }
 }
 

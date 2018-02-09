@@ -9,7 +9,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 6
-        versionName "a-0.6"
+        versionName "a-0.6.10"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* , "en"  Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
@@ -109,7 +109,8 @@ dependencies {
     implementation rootProject.ext.didekinlib_model
     implementation rootProject.ext.didekinlib_http
     implementation rootProject.ext.timber
-    runtimeOnly rootProject.ext.retrofit2
+    implementation rootProject.ext.retrofit2
+//    runtimeOnly rootProject.ext.retrofit2    TODO: restaurar
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
     androidTestImplementation rootProject.ext.testRuler

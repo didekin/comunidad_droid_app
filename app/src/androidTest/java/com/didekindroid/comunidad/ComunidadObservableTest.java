@@ -2,7 +2,7 @@ package com.didekindroid.comunidad;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;

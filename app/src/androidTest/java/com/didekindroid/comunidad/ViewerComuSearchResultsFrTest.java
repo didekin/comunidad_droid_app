@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ListMockFr;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 

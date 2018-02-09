@@ -1,6 +1,6 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
-import com.didekindroid.api.CtrlerSelectList;
+import com.didekindroid.lib_one.api.CtrlerSelectList;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.util.List;

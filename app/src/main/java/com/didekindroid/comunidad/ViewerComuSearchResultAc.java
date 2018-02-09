@@ -6,10 +6,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.Viewer;
 
 import timber.log.Timber;
+
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 
 /**
  * User: pedro@didekin
@@ -27,7 +29,7 @@ final class ViewerComuSearchResultAc extends Viewer<View, Controller> {
     static ViewerComuSearchResultAc newViewerComuSearchResultAc(ComuSearchResultsAc activity)
     {
         ViewerComuSearchResultAc instance = new ViewerComuSearchResultAc(activity.acView, activity);
-        instance.setController(new Controller());
+        instance.setController(new Controller(TKhandler));
         return instance;
     }
 

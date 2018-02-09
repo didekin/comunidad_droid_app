@@ -7,10 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.AbstractSingleObserver;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.AbstractSingleObserver;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
@@ -22,20 +21,21 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_userData_wrongMail_action;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifyPswd;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.sendNewPswd;
+import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.modifyPswd;
+import static com.didekindroid.router.LeadRouter.sendNewPswd;
+import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
+import static com.didekindroid.router.UiExceptionRouter.show_userData_wrongMail;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
-import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.PASSWORD;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 
 /**
  * User: pedro@didekin
@@ -45,23 +45,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Preconditions:
  * 1. An intent is received with the userName. If not, the viewer accessed user data directly.
  */
-public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> implements ActivityInitiatorIf {
-
-    final AtomicReference<UsuarioBean> usuarioBean;
-    @SuppressWarnings("WeakerAccess")
-    final AtomicReference<Usuario> oldUserPswd;
-    final AtomicReference<String> userName;
-
-    private ViewerPasswordChange(PasswordChangeAc activity)
-    {
-        super(activity.acView, activity, null);
-        usuarioBean = new AtomicReference<>(null);
-        oldUserPswd = new AtomicReference<>(null);
-        userName = new AtomicReference<>(null);
-        if (activity.getIntent().hasExtra(user_name.key)) {
-            userName.set(activity.getIntent().getStringExtra(user_name.key));
-        }
-    }
+public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
 
     static ViewerPasswordChange newViewerPswdChange(PasswordChangeAc activity)
     {
@@ -79,6 +63,21 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
             });
         }
         return instance;
+    }
+    final AtomicReference<UsuarioBean> usuarioBean;
+    @SuppressWarnings("WeakerAccess")
+    final AtomicReference<Usuario> oldUserPswd;
+    final AtomicReference<String> userName;
+
+    private ViewerPasswordChange(PasswordChangeAc activity)
+    {
+        super(activity.acView, activity, null);
+        usuarioBean = new AtomicReference<>(null);
+        oldUserPswd = new AtomicReference<>(null);
+        userName = new AtomicReference<>(null);
+        if (activity.getIntent().hasExtra(user_name.key)) {
+            userName.set(activity.getIntent().getStringExtra(user_name.key));
+        }
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -157,11 +156,11 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
 
         if (errorMsg.equals(USER_NAME_NOT_FOUND.getHttpMessage())
                 || errorMsg.equals(PASSWORD_NOT_SENT.getHttpMessage())) {
-            uiException.processMe(activity, show_userData_wrongMail_action);
+            show_userData_wrongMail.initActivity(activity);
         } else if (errorMsg.equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
         } else {
-            uiException.processMe(activity);
+            getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(activity);
         }
     }
 
@@ -173,7 +172,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
         {
             Timber.d("onComplete(), Thread: %s", Thread.currentThread().getName());
             makeToast(activity, R.string.password_remote_change);
-            initAcFromRouter(null, modifyPswd);
+            modifyPswd.initActivity(activity);
         }
 
         @Override
@@ -193,7 +192,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> impl
             if (isSendPassword) {
                 makeToast(activity, R.string.password_new_in_login);
             }
-            initAcFromRouter(null, sendNewPswd);
+            sendNewPswd.initActivity(activity);
         }
 
         @Override

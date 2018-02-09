@@ -12,12 +12,12 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.CtrlerSelectListIf;
-import com.didekindroid.api.SpinnerEventItemSelectIf;
-import com.didekindroid.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.CtrlerSelectListIf;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.api.SpinnerTextMockFr;
 import com.didekindroid.api.ViewerMock;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;

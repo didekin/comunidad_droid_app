@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 

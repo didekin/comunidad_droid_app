@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;

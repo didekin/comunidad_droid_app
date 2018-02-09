@@ -6,10 +6,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -18,10 +17,11 @@ import java.io.Serializable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterRegComuAndUserComu;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * User: pedro@didekin
@@ -29,8 +29,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:31
  */
 
-final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> implements
-        ActivityInitiatorIf {
+final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
     private ViewerRegComuUserComuAc(View view, AppCompatActivity activity)
     {
@@ -89,7 +88,7 @@ final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsu
         {
             Timber.d("onSuccess()");
             assertTrue(rowInserted, user_and_comunidad_should_be_registered);
-            initAcFromActivity(new Bundle(0));
+            afterRegComuAndUserComu.initActivity(activity);
             dispose();
         }
 

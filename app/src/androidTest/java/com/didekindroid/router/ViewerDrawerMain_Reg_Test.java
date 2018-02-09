@@ -6,7 +6,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,11 +21,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.incid_closed;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.incid_open;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.user_comus;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.user_data;
+import static com.didekindroid.router.MnRouter.confidencialidad_mn;
+import static com.didekindroid.router.MnRouter.incid_see_closed_by_comu_mn;
+import static com.didekindroid.router.MnRouter.incid_see_open_by_comu_mn;
+import static com.didekindroid.router.MnRouter.see_usercomu_by_user_mn;
+import static com.didekindroid.router.MnRouter.user_data_mn;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
@@ -136,10 +136,10 @@ public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMain_abs_Test {
     public void test_OnNavigationItemSelected_2() throws IOException, UiException, InterruptedException
     {
         // Exec and check. All come UP to ComuSearch because there is not previous navigation.
-        checkMainDrawerMenu(confidencialidad.resourceId, confidencialidadLayout, comuSearchAcLayout);
-        checkMainDrawerMenu(user_comus.resourceId, seeUserComuByUserFrRsId, comuSearchAcLayout);
-        checkMainDrawerMenu(user_data.resourceId, userDataAcRsId, comuSearchAcLayout);
-        checkMainDrawerMenu(incid_open.resourceId, incidSeeByComuAcLayout, comuSearchAcLayout);
-        checkMainDrawerMenu(incid_closed.resourceId, incidSeeByComuAcLayout, comuSearchAcLayout);
+        checkMainDrawerMenu(confidencialidad_mn.getMnItemRsId(), confidencialidadLayout, comuSearchAcLayout);
+        checkMainDrawerMenu(see_usercomu_by_user_mn.getMnItemRsId(), seeUserComuByUserFrRsId, comuSearchAcLayout);
+        checkMainDrawerMenu(user_data_mn.getMnItemRsId(), userDataAcRsId, comuSearchAcLayout);
+        checkMainDrawerMenu(incid_see_open_by_comu_mn.getMnItemRsId(), incidSeeByComuAcLayout, comuSearchAcLayout);
+        checkMainDrawerMenu(incid_see_closed_by_comu_mn.getMnItemRsId(), incidSeeByComuAcLayout, comuSearchAcLayout);
     }
 }

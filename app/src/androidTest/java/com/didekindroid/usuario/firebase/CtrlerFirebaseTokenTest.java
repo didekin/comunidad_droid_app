@@ -2,7 +2,7 @@ package com.didekindroid.usuario.firebase;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.firebase.InstanceIdService.ServiceDisposableSingleObserver;
 
 import org.junit.After;

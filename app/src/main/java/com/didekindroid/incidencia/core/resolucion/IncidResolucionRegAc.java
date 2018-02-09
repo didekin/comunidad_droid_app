@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.FragmentInitiatorIf;
+import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -15,11 +15,11 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.resolucion.IncidResolucionRegFr.newInstance;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -120,7 +120,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements FragmentI
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

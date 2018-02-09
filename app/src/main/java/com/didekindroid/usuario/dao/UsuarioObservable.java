@@ -8,13 +8,13 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import timber.log.Timber;
 
-import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCache;
-import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromUserPswd;
-import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheConsumer;
-import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
+import static com.didekindroid.lib_one.security.OauthTokenObservable.oauthTokenAndInitCache;
+import static com.didekindroid.lib_one.security.OauthTokenObservable.oauthTokenFromUserPswd;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.cleanTkCacheConsumer;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_should_be_initialized;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.Single.just;
 import static java.lang.Boolean.TRUE;
@@ -97,7 +97,7 @@ class UsuarioObservable {
         assertTrue(newUser.getUserName() != null, user_name_should_be_initialized);
         return oauthTokenFromUserPswd(oldUser)
                 .flatMap(oldUserToken -> Completable.fromCallable(() -> usuarioDao.modifyUserWithToken(oldUserToken, newUser))
-                        .doOnComplete(((UsuarioDaoRemote) usuarioDao).identityCacher::cleanIdentityCache)
+                        .doOnComplete(((UsuarioDao) usuarioDao).identityCacher::cleanIdentityCache)
                         .toSingleDefault(TRUE));
     }
 }

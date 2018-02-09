@@ -10,20 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewIncidencia;
+import static com.didekindroid.router.LeadRouter.writeNewIncidencia;
 
 /**
  * Preconditions:
  * A list of IncidenciaUser instances, whose incidencias are closed, are shown.
  */
-public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
+public class IncidSeeByComuFr extends Fragment {
 
     View frView;
     ViewerIncidSeeCloseFr viewer;
@@ -45,7 +44,7 @@ public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         FloatingActionButton fab = frView.findViewById(R.id.incid_new_incid_fab);
-        fab.setOnClickListener(v -> initAcFromRouter(COMUNIDAD_ID.getBundleForKey(viewer.getComuSpinner().getSelectedItemId()), writeNewIncidencia));
+        fab.setOnClickListener(v -> writeNewIncidencia.initActivity(getActivity(), COMUNIDAD_ID.getBundleForKey(viewer.getComuSpinner().getSelectedItemId())));
         return frView;
     }
 

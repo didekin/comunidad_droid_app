@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.selectedOpenIncid;
+import static com.didekindroid.router.LeadRouter.selectedOpenIncid;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
@@ -33,7 +32,7 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. An intent is passed with an IncidResolucionBundle instance, where the selected incidencia is embedded.
  */
-public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements ActivityInitiatorIf {
+public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
@@ -65,7 +64,7 @@ public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr implements
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        initAcFromRouter(bundle, selectedOpenIncid);
+        selectedOpenIncid.initActivity(activity, bundle);
     }
 
     /* ==================================  VIEWER  =================================*/

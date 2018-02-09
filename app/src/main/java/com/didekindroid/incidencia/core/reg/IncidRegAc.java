@@ -6,17 +6,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.FragmentInitiatorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegAc.newViewerIncidRegAc;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
 /**
  * Preconditions:
@@ -105,7 +105,7 @@ public class IncidRegAc extends AppCompatActivity implements ChildViewersInjecto
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

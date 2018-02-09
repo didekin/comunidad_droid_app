@@ -3,7 +3,7 @@ package com.didekindroid.usuario.firebase;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Viewer;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;

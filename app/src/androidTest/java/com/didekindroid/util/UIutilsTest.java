@@ -4,8 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 
-import com.didekindroid.util.UIutils;
 import com.didekindroid.R;
+import com.didekindroid.lib_one.util.UIutils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +20,13 @@ import java.util.Locale;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.os.Build.VERSION_CODES.M;
-import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
-import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.util.UIutils.formatDoubleZeroDecimal;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.util.UIutils.formatTimeToString;
-import static com.didekindroid.util.UIutils.getIntFromStringDecimal;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
+import static com.didekindroid.lib_one.util.UIutils.SPAIN_LOCALE;
+import static com.didekindroid.lib_one.util.UIutils.formatDoubleZeroDecimal;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeToString;
+import static com.didekindroid.lib_one.util.UIutils.getIntFromStringDecimal;
 import static java.text.DateFormat.LONG;
 import static java.text.DateFormat.MEDIUM;
 import static java.text.DateFormat.getDateInstance;
@@ -49,7 +49,7 @@ public class UIutilsTest {
     @Before
     public void setUp()
     {
-        context = creator.get().getContext();
+        context = httpInitializer.get().getContext();
     }
 
     @Test
@@ -160,7 +160,7 @@ public class UIutilsTest {
     public void testNameFile() throws Exception
     {
         assertThat(app_preferences_file.toString(),
-                is("com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file"));
+                is("com.didekindroid.lib_one.security.IdentityCacher.SharedPrefFiles.app_preferences_file"));
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

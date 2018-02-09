@@ -3,7 +3,7 @@ package com.didekindroid.comunidad;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.model.comunidad.Comunidad;

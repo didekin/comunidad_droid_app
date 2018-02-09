@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ObserverCacheCleaner;
-import com.didekindroid.api.ParentViewerInjected;
+import com.didekindroid.lib_one.api.ObserverCacheCleaner;
+import com.didekindroid.lib_one.api.ParentViewerInjected;
 import com.didekindroid.usuario.ViewerRegUserFr;
-import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -20,8 +20,8 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
 
 /**
  * User: pedro@didekin

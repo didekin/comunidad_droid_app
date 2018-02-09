@@ -1,10 +1,11 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
+import com.didekinlib.http.HttpHandler;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import retrofit2.Call;
 
-import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 
 /**
  * User: pedro@didekin
@@ -15,17 +16,13 @@ import static com.didekindroid.AppInitializer.creator;
 @SuppressWarnings("WeakerAccess")
 public final class UserComuMockDaoRemote implements UserComuMockEndPoints {
 
-    public static final UserComuMockDaoRemote userComuMockDao = new UserComuMockDaoRemote();
+    public static final UserComuMockDaoRemote userComuMockDao =
+            new UserComuMockDaoRemote(httpInitializer.get().getHttpHandler());
     private final UserComuMockEndPoints endPoint;
 
-    private UserComuMockDaoRemote()
+    private UserComuMockDaoRemote(HttpHandler httpHandlerIn)
     {
-        this(creator.get().getRetrofitHandler().getService(UserComuMockEndPoints.class));
-    }
-
-    public UserComuMockDaoRemote(UserComuMockEndPoints endPoint)
-    {
-        this.endPoint = endPoint;
+        endPoint = httpHandlerIn.getService(UserComuMockEndPoints.class);
     }
 
     @Override

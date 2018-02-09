@@ -6,17 +6,15 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.comunidad.spinner.MunicipioSpinnerEventItemSelect;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.comunidad.spinner.MunicipioSpinnerEventItemSelect;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -41,11 +39,11 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doProvinci
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCalleNumero;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_AUTONOMA_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.MUNICIPIO_SPINNER_EVENT;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.PROVINCIA_ID;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.COMUNIDAD_AUTONOMA_ID;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.MUNICIPIO_SPINNER_EVENT;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.PROVINCIA_ID;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.TIPO_VIA_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -181,13 +179,7 @@ public class ViewerRegComuFrTest {
     public void test_OnSuccessLoadComunidad() throws Exception
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                fragment.viewer.onSuccessLoadComunidad(COMU_LA_FUENTE, null);
-            }
-        });
+        activity.runOnUiThread(() -> fragment.viewer.onSuccessLoadComunidad(COMU_LA_FUENTE, null));
         checkMunicipioSpinner(COMU_LA_FUENTE.getMunicipio().getNombre());
         checkRegComuFrView(COMU_LA_FUENTE, "Valencia");
     }
@@ -235,8 +227,7 @@ public class ViewerRegComuFrTest {
         viewerParentAtomic.compareAndSet(null, fragment.viewerInjector);
         waitAtMost(4, SECONDS).untilAtomic(viewerFrAtomic, notNullValue());
         waitAtMost(2, SECONDS).untilAtomic(viewerParentAtomic, notNullValue());
-        assertThat(fragment.viewerInjector.getParentViewer().getChildViewer(fragment.viewer.getClass()),
-                Matchers.<ViewerIf>is(fragment.viewer));
+        assertThat(fragment.viewerInjector.getParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
     }
 
     @Test
@@ -255,13 +246,7 @@ public class ViewerRegComuFrTest {
                 return 0;
             }
         };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
+        activity.runOnUiThread(() -> getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0)));
         waitAtMost(6, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
     }
 

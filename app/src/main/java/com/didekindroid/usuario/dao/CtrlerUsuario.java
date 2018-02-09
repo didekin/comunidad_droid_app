@@ -2,7 +2,7 @@ package com.didekindroid.usuario.dao;
 
 import android.support.annotation.NonNull;
 
-import com.didekindroid.api.Controller;
+import com.didekindroid.lib_one.api.Controller;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
@@ -11,6 +11,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuario.dao.UsuarioObservable.deleteMeSingle;
 import static com.didekindroid.usuario.dao.UsuarioObservable.loginPswdSendSingle;
 import static com.didekindroid.usuario.dao.UsuarioObservable.loginUpdateTkCache;
@@ -18,7 +19,6 @@ import static com.didekindroid.usuario.dao.UsuarioObservable.passwordChangeWithP
 import static com.didekindroid.usuario.dao.UsuarioObservable.userAliasModified;
 import static com.didekindroid.usuario.dao.UsuarioObservable.userData;
 import static com.didekindroid.usuario.dao.UsuarioObservable.userNameModified;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 

@@ -7,9 +7,9 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -39,9 +39,9 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrNotErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.lib_one.incidencia.spinner.IncidenciaSpinnerKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;

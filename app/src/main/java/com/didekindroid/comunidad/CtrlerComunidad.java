@@ -1,6 +1,6 @@
 package com.didekindroid.comunidad;
 
-import com.didekindroid.api.Controller;
+import com.didekindroid.lib_one.api.Controller;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 

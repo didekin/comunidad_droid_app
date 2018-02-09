@@ -1,7 +1,8 @@
 package com.didekindroid.incidencia.core;
 
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.ControllerListIf;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.ControllerListIf;
+import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;

@@ -2,9 +2,10 @@ package com.didekindroid.usuariocomunidad.repository;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.HttpHandler;
+import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -20,13 +21,13 @@ import java.util.List;
 
 import retrofit2.Response;
 
-import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -48,9 +49,9 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.ma
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
-import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
-import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.TOKEN_NULL;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
+import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -70,12 +71,14 @@ public class UserComuDaoRemoteTest {
 
     CleanUserEnum whatClean;
     File refreshTkFile;
+    HttpHandler httpHandler;
 
     @Before
     public void setUp() throws Exception
     {
         refreshTkFile = TKhandler.getRefreshTokenFile();
         whatClean = CLEAN_NOTHING;
+        httpHandler = httpInitializer.get().getHttpHandler();
     }
 
     @After
@@ -253,7 +256,7 @@ public class UserComuDaoRemoteTest {
 
         Response<Boolean> response = userComuMockDao.regUserAndUserComu(userComu).execute();
         assertThat(response.isSuccessful(), is(false));
-        ErrorBean errorBean = creator.get().getRetrofitHandler().getErrorBean(response);
+        ErrorBean errorBean = httpHandler.getErrorBean(response);
         assertThat(errorBean, notNullValue());
         assertThat(errorBean.getMessage(), is(USER_NAME_DUPLICATE.getHttpMessage()));
         assertThat(errorBean.getHttpStatus(), is(USER_NAME_DUPLICATE.getHttpStatus()));

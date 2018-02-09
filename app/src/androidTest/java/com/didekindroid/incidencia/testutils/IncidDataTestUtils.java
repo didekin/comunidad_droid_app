@@ -1,6 +1,6 @@
 package com.didekindroid.incidencia.testutils;
 
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.util.UIutils.getStringFromInteger;
+import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

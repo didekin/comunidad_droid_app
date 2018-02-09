@@ -1,7 +1,6 @@
 package com.didekindroid.usuariocomunidad.data;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,10 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -20,10 +18,10 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc.newViewerUserComuDataAc;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -41,7 +39,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * ComuSearchAc.
  */
 @SuppressWarnings("ConstantConditions")
-public class UserComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
+public class UserComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     ViewerUserComuDataAc viewer;
     RegUserComuFr regUserComuFr;
@@ -91,14 +89,6 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
         viewer.setChildViewer(childViewer);
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
     // ============================================================
     //    ..... ACTION BAR ....
     // ============================================================
@@ -138,22 +128,22 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
             case R.id.comu_data_ac_mn:
             case R.id.incid_reg_ac_mn:
-                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(oldUserComu.getComunidad().getC_Id()), resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this, COMUNIDAD_ID.getBundleForKey(oldUserComu.getComunidad().getC_Id()));
                 return true;
             case R.id.incid_see_open_by_comu_ac_mn:
                 bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(false);
                 bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
-                initAcFromMenu(bundle, resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this, bundle);
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
                 bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(true);
                 bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
-                initAcFromMenu(bundle, resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

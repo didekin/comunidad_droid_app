@@ -1,14 +1,13 @@
 package com.didekindroid.comunidad;
 
 import android.content.Intent;
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.exception.UiException;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Rule;

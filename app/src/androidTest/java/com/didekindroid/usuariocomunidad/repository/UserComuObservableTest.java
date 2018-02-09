@@ -3,7 +3,7 @@ package com.didekindroid.usuariocomunidad.repository;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 

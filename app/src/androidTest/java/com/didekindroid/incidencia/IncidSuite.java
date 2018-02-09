@@ -24,8 +24,8 @@ import org.junit.runners.Suite;
         // list
         IncidListSuite.class,
         // .
-        IncidDaoRemoteTest_1.class,
-        IncidDaoRemoteTest_2.class,
+        IncidenciaDaoTest_1.class,
+        IncidenciaDaoTest_2.class,
         IncidObservableTest.class,
 })
 public class IncidSuite {

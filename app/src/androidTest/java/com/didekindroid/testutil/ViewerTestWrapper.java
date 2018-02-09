@@ -2,7 +2,7 @@ package com.didekindroid.testutil;
 
 import android.os.Bundle;
 
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Viewer;
 
 import java.util.concurrent.atomic.AtomicReference;
 

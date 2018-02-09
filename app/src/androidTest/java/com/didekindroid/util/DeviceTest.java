@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.util.Device.getDeviceLanguage;
+import static com.didekindroid.lib_one.util.Device.getDeviceLanguage;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;

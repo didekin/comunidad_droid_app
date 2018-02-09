@@ -8,9 +8,8 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.testutil.ComunidadNavConstant;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;

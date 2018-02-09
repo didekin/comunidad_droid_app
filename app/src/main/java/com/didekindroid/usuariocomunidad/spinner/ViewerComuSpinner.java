@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.api.ObserverSingleSelectList;
-import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.ObserverSingleSelectList;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerSelectList;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;

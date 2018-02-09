@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuariocomunidad.RolUi;
 
@@ -32,7 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;

@@ -7,8 +7,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;

@@ -6,8 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.api.router.FragmentInitiatorIf;
+import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 
 import timber.log.Timber;
 
@@ -15,12 +14,11 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.list.IncidSeeByComuFr.newInstance;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_listFlag_should_be_initialized;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
-public class IncidSeeByComuAc extends AppCompatActivity implements ActivityInitiatorIf,
-        FragmentInitiatorIf<IncidSeeByComuFr> {
+public class IncidSeeByComuAc extends AppCompatActivity implements FragmentInitiatorIf<IncidSeeByComuFr> {
 
     IncidSeeByComuFr fragment;
     long comunidadId;
@@ -36,7 +34,7 @@ public class IncidSeeByComuAc extends AppCompatActivity implements ActivityIniti
         assertTrue(getIntent().hasExtra(INCID_CLOSED_LIST_FLAG.key), incid_listFlag_should_be_initialized);
         boolean isClosedList = getIntent().getBooleanExtra(INCID_CLOSED_LIST_FLAG.key, false);
 
-        if (isClosedList){
+        if (isClosedList) {
             setTitle(R.string.incid_closed_by_user_ac_label);
         } else {
             setTitle(R.string.incid_see_by_user_ac_label);
@@ -97,7 +95,7 @@ public class IncidSeeByComuAc extends AppCompatActivity implements ActivityIniti
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             case R.id.incid_see_open_by_comu_ac_mn:
                 initReplaceFragmentTx(newInstance(comunidadId, false));
@@ -110,7 +108,7 @@ public class IncidSeeByComuAc extends AppCompatActivity implements ActivityIniti
                 getIntent().putExtra(INCID_CLOSED_LIST_FLAG.key, true);
                 return true;
             case R.id.incid_reg_ac_mn:
-                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0)), resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this, COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0)));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

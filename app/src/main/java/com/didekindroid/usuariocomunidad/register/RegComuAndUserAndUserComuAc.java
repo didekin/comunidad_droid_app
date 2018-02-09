@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,18 +7,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.usuario.RegUserFr;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -27,8 +25,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The comunidad has not been registered either, by other users.
  * 3. There is not extras in the activity intent.
  */
-public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
-        ChildViewersInjectorIf, ActivityInitiatorIf {
+public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -78,14 +75,6 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         viewer.setChildViewer(viewerChild);
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
 //    ============================================================
 //    ..... ACTION BAR ....
 //    ============================================================
@@ -107,10 +96,8 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
-                return true;
             case R.id.login_ac_mn:
-                initAcFromMenu(null, resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

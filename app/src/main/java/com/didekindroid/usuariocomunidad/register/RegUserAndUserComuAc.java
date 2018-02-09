@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,19 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegUserAndUserComuAc.newViewerRegUserAndUserComuAc;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * User: pedro@didekin
@@ -42,7 +40,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The activity SeeUserComuByComuAc is started.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegUserAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
+public class RegUserAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     View acView;
     ViewerRegUserAndUserComuAc viewer;
@@ -95,14 +93,6 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
         viewer.setChildViewer(viewerChild);
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
 //    ============================================================
 //    ..... ACTION BAR ....
 //    ============================================================
@@ -135,10 +125,8 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
-                return true;
             case R.id.login_ac_mn:
-                initAcFromMenu(null, resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

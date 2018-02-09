@@ -3,7 +3,6 @@ package com.didekindroid.usuariocomunidad.listbyuser;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.router.UiExceptionRouter;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
@@ -20,13 +19,12 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.newComunidadUserComu;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.userComuItemSelected;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
+import static com.didekindroid.router.LeadRouter.userComuItemSelected;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
 
 /**
  * Preconditions:
@@ -38,7 +36,7 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * <p/>
  * 1. An object UsuarioComunidad is passed to the listener activity.
  */
-public class SeeUserComuByUserFr extends Fragment implements ActivityInitiatorIf {
+public class SeeUserComuByUserFr extends Fragment {
 
     public SeeUserComuByUserAdapter mAdapter;
     Activity activity;
@@ -74,7 +72,7 @@ public class SeeUserComuByUserFr extends Fragment implements ActivityInitiatorIf
                     view.setSelected(true);
                     Bundle bundle = new Bundle(1);
                     bundle.putSerializable(USERCOMU_LIST_OBJECT.key, (Serializable) frView.getItemAtPosition(position));
-                    initAcFromRouter(bundle, userComuItemSelected);
+                    userComuItemSelected.initActivity(getActivity(), bundle);
                 }
         );
     }
@@ -120,7 +118,7 @@ public class SeeUserComuByUserFr extends Fragment implements ActivityInitiatorIf
             if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
                 assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
-                uiException.processMe(getActivity());
+                UiExceptionRouter.getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(activity);
             }
             if (usuarioComunidades != null) {
                 Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");

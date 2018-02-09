@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.usuario.login.PasswordMailDialog.newInstance;
-import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;

@@ -8,7 +8,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -38,7 +38,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdWithPswdValidation;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;

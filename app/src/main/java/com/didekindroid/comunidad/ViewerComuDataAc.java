@@ -7,9 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -19,16 +18,17 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comuData_should_be_modified;
 import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comunidadId_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterMofiedComunidad;
 
 /**
  * User: pedro@didekin
  * Date: 08/05/17
  * Time: 14:09
  */
-class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> implements ActivityInitiatorIf {
+class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> {
 
     ViewerComuDataAc(View view, AppCompatActivity activity)
     {
@@ -95,7 +95,7 @@ class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> imple
         {
             Timber.d("onSuccess()");
             assertTrue(rowsUpdated == 1, comuData_should_be_modified);
-            initAcFromActivity(null);
+            afterMofiedComunidad.initActivity(activity, null);
         }
 
         @Override

@@ -6,16 +6,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekindroid.router.ActivityRouter;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 
 import timber.log.Timber;
 
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserComuAc.newViewerRegComuUserComuAc;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -84,7 +84,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ChildView
 
         switch (resourceId) {
             case android.R.id.home:
-                ActivityRouter.doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

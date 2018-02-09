@@ -1,35 +1,37 @@
 package com.didekindroid.router;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.AbstractSingleObserver;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.AbstractSingleObserver;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 
 import timber.log.Timber;
 
 import static android.view.Gravity.START;
 import static android.view.View.VISIBLE;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.default_menu;
-import static com.didekindroid.router.ViewerDrawerMain.DynamicMenuItem.rsIdToMenuItem;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.router.MnRouter.incid_see_closed_by_comu_mn;
+import static com.didekindroid.router.MnRouter.incid_see_open_by_comu_mn;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.MnRouter.see_usercomu_by_user_mn;
+import static com.didekindroid.router.MnRouter.user_data_mn;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
-import static com.didekindroid.util.UIutils.doWrongMenuItem;
+import static java.util.EnumSet.of;
 
 /**
  * User: pedro@didekin
@@ -39,6 +41,7 @@ import static com.didekindroid.util.UIutils.doWrongMenuItem;
 
 public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
+    private EnumSet<MnRouter> menuItemsToDraw;
     @SuppressWarnings("WeakerAccess")
     TextView drawerHeaderRot;
     NavigationView navView;
@@ -46,6 +49,7 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
     private ViewerDrawerMain(DrawerLayout view, AppCompatActivity activity)
     {
         super(view, activity, null);
+        menuItemsToDraw = of(user_data_mn, see_usercomu_by_user_mn, incid_see_open_by_comu_mn, incid_see_closed_by_comu_mn);
         navView = view.findViewById(R.id.drawer_main_nav_view);
         drawerHeaderRot = navView.getHeaderView(0).findViewById(R.id.drawer_main_header_text);
     }
@@ -115,84 +119,27 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
         Timber.d("buildMenu()");
         Menu drawerMenu = navView.getMenu();
         boolean isRegistered = controller.isRegisteredUser();
-        for (DynamicMenuItem menuItem : DynamicMenuItem.menuItemsToDraw) {
-            drawerMenu.findItem(menuItem.resourceId).setVisible(isRegistered).setEnabled(isRegistered);
+        for (MnRouter menuItem : menuItemsToDraw) {
+            drawerMenu.findItem(menuItem.getMnItemRsId()).setVisible(isRegistered).setEnabled(isRegistered);
         }
     }
 
-    enum DynamicMenuItem {
-
-        user_data(R.id.user_data_ac_mn),
-        user_comus(R.id.see_usercomu_by_user_ac_mn),
-        incid_open(R.id.incid_see_open_by_comu_ac_mn) {
-            @Override
-            void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
-            {
-                listener.initAcFromMenu(INCID_CLOSED_LIST_FLAG.getBundleForKey(false), resourceId);
-            }
-        },
-        incid_closed(R.id.incid_see_closed_by_comu_ac_mn) {
-            @Override
-            void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
-            {
-                listener.initAcFromMenu(INCID_CLOSED_LIST_FLAG.getBundleForKey(true), resourceId);
-            }
-        },
-        confidencialidad(R.id.confidencialidad_ac_mn),
-        default_menu(-11) {
-            @Override
-            void processMenu(DrawerMainMnItemSelListener activity, MenuItem menuItem)
-            {
-                doWrongMenuItem(menuItem);
-            }
-        },;
-
-        // ................. Static methods ................
-
-        static final SparseArray<DynamicMenuItem> rsIdToMenuItem = new SparseArray<>();
-        static final DynamicMenuItem[] menuItemsToDraw = new DynamicMenuItem[]{user_data, user_comus, incid_open, incid_closed};
-
-        static {
-            for (DynamicMenuItem menuItem : values()) {
-                rsIdToMenuItem.put(menuItem.resourceId, menuItem);
-            }
-        }
-
-        // ................. Instance methods ...............
-
-        final int resourceId;
-
-        DynamicMenuItem(int itemRsId)
-        {
-            resourceId = itemRsId;
-        }
-
-        void processMenu(DrawerMainMnItemSelListener listener, MenuItem menuItem)
-        {
-            listener.initAcFromMenu(null, resourceId);
-        }
+    Set<MnRouter> getMenuItemsToDraw()
+    {
+        return Collections.unmodifiableSet(menuItemsToDraw);
     }
 
-    class DrawerMainMnItemSelListener implements NavigationView.OnNavigationItemSelectedListener, ActivityInitiatorIf {
+    class DrawerMainMnItemSelListener implements NavigationView.OnNavigationItemSelectedListener {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item)
         {
             Timber.d("onNavigationItemSelected()");
             item.setChecked(true);
-
-            rsIdToMenuItem.get(item.getItemId(), default_menu).processMenu(this, item);
+            resourceIdToMnItem.get(item.getItemId()).initActivity(getActivity());
             /* Closing drawer on item click*/
             view.closeDrawer(START);
             return true;
-        }
-
-        // ====================  ActivityInitiatorIf  ===============
-
-        @Override
-        public Activity getActivity()
-        {
-            return activity;
         }
     }
 }

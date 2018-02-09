@@ -9,8 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -23,20 +22,20 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_noRegUser;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_regUserComu;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.comunidadFound_editUserComu;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.noComunidadFound_noRegUser;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.noComunidadFound_regComuUserComu;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.comunidadFound_editUserComu;
+import static com.didekindroid.router.LeadRouter.comunidadFound_noRegUser;
+import static com.didekindroid.router.LeadRouter.comunidadFound_regUserComu;
+import static com.didekindroid.router.LeadRouter.noComunidadFound_noRegUser;
+import static com.didekindroid.router.LeadRouter.noComunidadFound_regComuUserComu;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * User: pedro@didekin
  * Date: 17/06/17
  * Time: 16:29
  */
-final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> implements ActivityInitiatorIf {
+final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> {
 
     private ViewerComuSearchResultsFr(@NonNull View frView, @NonNull AppCompatActivity activity)
     {
@@ -80,9 +79,9 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidad);
         if (controller.isRegisteredUser()) {
-            initAcFromRouter(bundle, noComunidadFound_regComuUserComu);
+            noComunidadFound_regComuUserComu.initActivity(activity, bundle);
         } else {
-            initAcFromRouter(bundle, noComunidadFound_noRegUser);
+            noComunidadFound_noRegUser.initActivity(activity, bundle);
         }
         activity.finish();
     }
@@ -101,7 +100,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             if (!controller.isRegisteredUser()) {
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidadSelect);
-                initAcFromRouter(bundle, comunidadFound_noRegUser);
+                comunidadFound_noRegUser.initActivity(activity, bundle);
             } else {
                 controller.getUserComu(new UsuarioComunidadObserver(comunidadSelect), comunidadSelect);
             }
@@ -124,7 +123,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onSuccess()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
-            initAcFromRouter(bundle, comunidadFound_editUserComu);
+            comunidadFound_editUserComu.initActivity(activity, bundle);
         }
 
         @Override
@@ -140,7 +139,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onComplete()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            initAcFromRouter(bundle, comunidadFound_regUserComu);
+            comunidadFound_regUserComu.initActivity(activity, bundle);
         }
     }
 

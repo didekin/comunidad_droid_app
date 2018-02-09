@@ -1,18 +1,16 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
 /**
  * User: pedro@didekin
@@ -22,7 +20,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Preconditions:
  * 1. a long comunidadId is passed as an intent key.
  */
-public class SeeUserComuByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class SeeUserComuByComuAc extends AppCompatActivity {
 
     SeeUserComuByComuFr fragment;
 
@@ -36,14 +34,6 @@ public class SeeUserComuByComuAc extends AppCompatActivity implements ActivityIn
         doToolBar(this, true);
 
         fragment = (SeeUserComuByComuFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
-    }
-
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
     // ============================================================
@@ -66,12 +56,12 @@ public class SeeUserComuByComuAc extends AppCompatActivity implements ActivityIn
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                initAcFromMenu(null, resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

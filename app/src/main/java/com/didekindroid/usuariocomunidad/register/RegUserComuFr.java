@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
 
 import timber.log.Timber;
 

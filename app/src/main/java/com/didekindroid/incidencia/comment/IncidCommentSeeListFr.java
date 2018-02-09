@@ -10,8 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -19,10 +18,11 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewComment;
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
+import static com.didekindroid.router.LeadRouter.writeNewComment;
+import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
 
 /**
  * Preconditions:
@@ -30,7 +30,7 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * <p/>
  * Postconditions:
  */
-public class IncidCommentSeeListFr extends Fragment implements ActivityInitiatorIf {
+public class IncidCommentSeeListFr extends Fragment {
 
     IncidCommentSeeAdapter mAdapter;
     View mView;
@@ -55,7 +55,7 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
         mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
         // Floating button.
         FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
-        fab.setOnClickListener(v -> initAcFromRouter(getArguments(), writeNewComment));
+        fab.setOnClickListener(v -> writeNewComment.initActivity(getActivity(), getArguments()));
         return mView;
     }
 
@@ -104,7 +104,7 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
 
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                uiException.processMe(getActivity());
+                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity());
             }
             if (incidComments != null && !incidComments.isEmpty()) {
                 Timber.d("onPostExecute(): incidComments != null");

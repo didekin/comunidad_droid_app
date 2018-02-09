@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 

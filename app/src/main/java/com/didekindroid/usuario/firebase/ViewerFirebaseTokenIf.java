@@ -2,7 +2,7 @@ package com.didekindroid.usuario.firebase;
 
 import android.view.View;
 
-import com.didekindroid.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 
 /**
  * User: pedro@didekin

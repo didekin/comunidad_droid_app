@@ -2,8 +2,9 @@ package com.didekindroid.security;
 
 import android.content.Context;
 
-import com.didekindroid.exception.UiException;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekinlib.http.auth.SpringOauthToken;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;

@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.dao;
 
-import com.didekindroid.exception.UiException;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekinlib.http.auth.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 /**

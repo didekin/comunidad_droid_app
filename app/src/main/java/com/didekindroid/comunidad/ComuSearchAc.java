@@ -1,7 +1,6 @@
 package com.didekindroid.comunidad;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,18 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerManagerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerManagerIf;
 import com.didekindroid.router.ViewerDrawerMain;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Postconditions:
@@ -34,7 +33,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  */
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjectorIf,
-        ViewerManagerIf, ActivityInitiatorIf {
+        ViewerManagerIf {
 
     View acView;
     RegComuFr regComuFrg;
@@ -91,14 +90,6 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
     {
         Timber.d("setChildInParentViewer()");
         viewerAc.setChildViewer(viewerChild);
-    }
-
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
     /* ==================================== ViewerManagerIf ====================================*/
@@ -163,7 +154,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
                 return true;
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                initAcFromMenu(null, resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

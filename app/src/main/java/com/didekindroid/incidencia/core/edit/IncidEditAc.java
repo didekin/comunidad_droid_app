@@ -7,11 +7,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.api.router.FragmentInitiatorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -21,9 +20,9 @@ import static com.didekindroid.incidencia.core.edit.ViewerIncidEditAc.newViewerI
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
 /**
  * Preconditions:
@@ -36,8 +35,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf,
-        FragmentInitiatorIf<IncidEditFr> {
+public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf, FragmentInitiatorIf<IncidEditFr> {
 
     View acView;
     ViewerIncidEditAc viewer;
@@ -104,15 +102,13 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         viewer.setChildViewer(childViewer);
     }
 
-// ================  ActivityInitiatorIf  ====================
+// ================  FragmentInitiatorIf  ====================
 
     @Override
     public AppCompatActivity getActivity()
     {
         return this;
     }
-
-// ================  FragmentInitiatorIf  ====================
 
     @Override
     public int getContainerId()
@@ -163,11 +159,11 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
-                initAcFromMenu(INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()), resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(this, INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()));
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 viewer.checkResolucion();

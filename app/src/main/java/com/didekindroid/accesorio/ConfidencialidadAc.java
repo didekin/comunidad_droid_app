@@ -9,9 +9,9 @@ import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.doWrongMenuItem;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.navigateUp;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
 public class ConfidencialidadAc extends AppCompatActivity {
 
@@ -25,7 +25,7 @@ public class ConfidencialidadAc extends AppCompatActivity {
 
         // Adding Floating Action Button to bottom right of main view
         FloatingActionButton fab = findViewById(R.id.confidencialidad_fab);
-        fab.setOnClickListener(v -> doUpMenu(this));
+        fab.setOnClickListener(v -> navigateUp.initActivity(this));
     }
 
     @Override
@@ -36,11 +36,10 @@ public class ConfidencialidadAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
-                doWrongMenuItem(item);
-                return false;
+                return super.onOptionsItemSelected(item);
         }
     }
 }

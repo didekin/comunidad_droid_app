@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.Menu;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -49,7 +49,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;

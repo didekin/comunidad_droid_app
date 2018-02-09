@@ -24,8 +24,9 @@
     <string name="borrar_button_rot">Borrar</string>
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
-    <string name="exception_generic_message">No podemos continuar. Inténtalo en unos segundos nuevamente.</string>
     <string name="error_validation_msg">Los siguientes datos no son válidos:</string>
+    <!-- TODO: quitar entrada siguiente. ¿Está en la librería-->
+    <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <!-- Google Cloud Messages -->
     <string name="gcm_message_generic_subtext">Pulsa aquí para ver los detalles.</string>
     <!--******************************************************************************-->
@@ -200,8 +201,8 @@
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
+    <string name="comunidad_null_in_register">Comunidad</string>
     <!-- ============================ MESSAGES ============================== -->
-    <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
     <string name="comunidad_duplicate">Esta comunidad ya había sido registrada</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí.</string>
@@ -215,7 +216,6 @@
     <string name="user_email_wrong">No hemos podido enviar la nueva contraseña. Tu dirección de correo electrónico puede ser errónea.</string>
     <string name="user_without_signedUp">"Haz login. O busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="user_with_token_null">"Haz login para continuar."</string>
-    <string name="user_data_not_modified_msg">No hemos podido modificar tus datos.</string>
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Datos comunidad</string>
     <string name="comu_search_ac_mn">Buscar comunidad</string>
@@ -276,7 +276,6 @@
     <string name="reg_usercomu_checbox_pro_rot">Propietario</string>
     <string name="reg_usercomu_checbox_inq_rot">Arrendatario</string>
     <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
-    <string name="reg_usercomu_comunidad_null">Comunidad</string>
     <!-- .......... RegComuFr ........... -->
     <string name="municipio_spinner">municipio</string>
     <string name="municipio">Municipio</string>

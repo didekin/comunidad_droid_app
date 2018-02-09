@@ -3,9 +3,9 @@ package com.didekindroid.usuariocomunidad.register;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ObserverCacheCleaner;
+import com.didekindroid.lib_one.api.ObserverCacheCleaner;
 import com.didekindroid.api.SingleObserverMock;
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -52,7 +52,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.ma
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
-import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;

@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
-import com.didekindroid.util.CommonAssertionMsg;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -19,8 +17,8 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 
 /**
  * Preconditions:

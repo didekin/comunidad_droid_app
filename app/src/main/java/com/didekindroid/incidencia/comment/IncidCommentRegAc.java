@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.comment;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,24 +9,26 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.util.UIutils;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiExceptionIf;
+import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.lib_one.util.UIutils;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.comment_should_be_registered;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterRegComment;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
 
 /**
  * Preconditions:
@@ -37,7 +38,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * 2. A comment is persisted, associated the usuarioComunidad and incidencia implicits in the
  * incidenciaUser in the received intent.
  */
-public class IncidCommentRegAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class IncidCommentRegAc extends AppCompatActivity {
 
     Incidencia mIncidencia;
     Button mComentarButton;
@@ -73,21 +74,11 @@ public class IncidCommentRegAc extends AppCompatActivity implements ActivityInit
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-//    ============================================================
-//    .................... ActivityInitiatorIf ....................
-/*    ============================================================*/
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
 //    ============================================================
@@ -118,7 +109,7 @@ public class IncidCommentRegAc extends AppCompatActivity implements ActivityInit
     @SuppressWarnings("WeakerAccess")
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
-        UiException uiException;
+        UiExceptionIf uiException;
 
         @Override
         protected Integer doInBackground(IncidComment... comments)
@@ -142,12 +133,12 @@ public class IncidCommentRegAc extends AppCompatActivity implements ActivityInit
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                uiException.processMe(IncidCommentRegAc.this);
+                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(IncidCommentRegAc.this);
             } else if (!(isDestroyed() || isChangingConfigurations())) {
                 assertTrue(rowInserted == 1, comment_should_be_registered);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
-                initAcFromActivity(bundle);
+                afterRegComment.initActivity(IncidCommentRegAc.this, bundle);
             } else {
                 Timber.i("onPostExcecute(): activity destroyed");
             }

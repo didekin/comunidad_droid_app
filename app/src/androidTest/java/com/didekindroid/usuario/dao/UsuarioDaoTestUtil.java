@@ -1,11 +1,11 @@
 package com.didekindroid.usuario.dao;
 
-import com.didekindroid.exception.UiException;
-import com.didekinlib.http.ErrorBean;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekinlib.http.exception.ErrorBean;
 
 import java.util.concurrent.Callable;
 
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * User: pedro@didekin

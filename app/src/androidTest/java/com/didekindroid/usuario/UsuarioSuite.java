@@ -2,7 +2,7 @@ package com.didekindroid.usuario;
 
 import com.didekindroid.usuario.dao.CtrlerUsuario_Test;
 import com.didekindroid.usuario.dao.UsuarioObservableTest;
-import com.didekindroid.usuario.dao.UsuarioDaoRemoteTest;
+import com.didekindroid.usuario.dao.UsuarioDaoTest;
 import com.didekindroid.usuario.delete.DeleteMeAcTest;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenTest;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenTest;
@@ -27,7 +27,7 @@ import org.junit.runners.Suite;
         // dao
         CtrlerUsuario_Test.class,
         UsuarioObservableTest.class,
-        UsuarioDaoRemoteTest.class,
+        UsuarioDaoTest.class,
         // delete
         DeleteMeAcTest.class,
         // firebase

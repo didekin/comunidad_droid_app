@@ -6,17 +6,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegUserComuAc.newViewerRegUserComuAc;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * User: pedro@didekin
@@ -99,7 +99,7 @@ public class RegUserComuAc extends AppCompatActivity implements ChildViewersInje
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -5,22 +5,21 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ObserverSingleSelectList;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.SpinnerEventItemSelectIf;
-import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.comunidad.spinner.ComuAutonomaSpinnerEventItemSelect;
-import com.didekindroid.comunidad.spinner.MunicipioSpinnerEventItemSelect;
-import com.didekindroid.comunidad.spinner.ProvinciaSpinnerEventItemSelect;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
-import com.didekindroid.comunidad.spinner.ViewerComuAutonomaSpinner;
-import com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner;
-import com.didekindroid.comunidad.spinner.ViewerProvinciaSpinner;
-import com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner;
+import com.didekindroid.lib_one.comunidad.spinner.ComuAutonomaSpinnerEventItemSelect;
+import com.didekindroid.lib_one.comunidad.spinner.MunicipioSpinnerEventItemSelect;
+import com.didekindroid.lib_one.comunidad.spinner.ProvinciaSpinnerEventItemSelect;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
+import com.didekindroid.lib_one.comunidad.spinner.ViewerComuAutonomaSpinner;
+import com.didekindroid.lib_one.comunidad.spinner.ViewerMunicipioSpinner;
+import com.didekindroid.lib_one.comunidad.spinner.ViewerProvinciaSpinner;
+import com.didekindroid.lib_one.comunidad.spinner.ViewerTipoViaSpinner;
+import com.didekindroid.lib_one.api.ObserverSingleSelectList;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
@@ -31,10 +30,10 @@ import java.io.Serializable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.spinner.ViewerComuAutonomaSpinner.newViewerComuAutonomaSpinner;
-import static com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner.newViewerMunicipioSpinner;
-import static com.didekindroid.comunidad.spinner.ViewerProvinciaSpinner.newViewerProvinciaSpinner;
-import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
+import static com.didekindroid.lib_one.comunidad.spinner.ViewerComuAutonomaSpinner.newViewerComuAutonomaSpinner;
+import static com.didekindroid.lib_one.comunidad.spinner.ViewerMunicipioSpinner.newViewerMunicipioSpinner;
+import static com.didekindroid.lib_one.comunidad.spinner.ViewerProvinciaSpinner.newViewerProvinciaSpinner;
+import static com.didekindroid.lib_one.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
 
 /**
  * User: pedro@didekin
@@ -81,13 +80,13 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
         editNombreVia = view.findViewById(R.id.comunidad_nombre_via_editT);
 
         tipoViaSpinner =
-                newViewerTipoViaSpinner((Spinner) view.findViewById(R.id.tipo_via_spinner), activity, this);
+                newViewerTipoViaSpinner(view.findViewById(R.id.tipo_via_spinner), activity, this);
         comuAutonomaSpinner =
-                newViewerComuAutonomaSpinner((Spinner) view.findViewById(R.id.autonoma_comunidad_spinner), activity, this);
+                newViewerComuAutonomaSpinner(view.findViewById(R.id.autonoma_comunidad_spinner), activity, this);
         provinciaSpinner =
-                newViewerProvinciaSpinner((Spinner) view.findViewById(R.id.provincia_spinner), activity, this);
+                newViewerProvinciaSpinner(view.findViewById(R.id.provincia_spinner), activity, this);
         municipioSpinner =
-                newViewerMunicipioSpinner((Spinner) view.findViewById(R.id.municipio_spinner), activity, this);
+                newViewerMunicipioSpinner(view.findViewById(R.id.municipio_spinner), activity, this);
 
         return this;
     }

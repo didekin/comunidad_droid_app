@@ -12,7 +12,7 @@ import com.didekinlib.model.incidencia.dominio.IncidComment;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin
@@ -53,9 +53,9 @@ class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
 
         IncidCommentViewHolder(View convertView)
         {
-            mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_comment_fecha_view);
-            mRedactorView = (TextView) convertView.findViewById(R.id.incid_comment_redactor_view);
-            mDescripcionView = (TextView) convertView.findViewById(R.id.incid_comment_descripcion_view);
+            mFechaAltaView = convertView.findViewById(R.id.incid_comment_fecha_view);
+            mRedactorView = convertView.findViewById(R.id.incid_comment_redactor_view);
+            mDescripcionView = convertView.findViewById(R.id.incid_comment_descripcion_view);
         }
 
         void initializeTextInViews(IncidComment comment)

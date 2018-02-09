@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.firebase;
 
 
-import com.didekindroid.api.ControllerIf;
+import com.didekindroid.lib_one.api.ControllerIf;
 
 import io.reactivex.observers.DisposableSingleObserver;
 
@@ -12,8 +12,6 @@ import io.reactivex.observers.DisposableSingleObserver;
  */
 
 public interface CtrlerFirebaseTokenIf extends ControllerIf {
-
-    String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
 
     boolean checkGcmTokenAsync(DisposableSingleObserver<Integer> observer);
 

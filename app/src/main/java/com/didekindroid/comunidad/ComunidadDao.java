@@ -1,9 +1,10 @@
 package com.didekindroid.comunidad;
 
-import com.didekindroid.exception.UiException;
-import com.didekindroid.security.IdentityCacher;
-import com.didekinlib.http.ErrorBean;
-import com.didekinlib.http.retrofit.ComunidadEndPoints;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekinlib.http.HttpHandler;
+import com.didekinlib.http.comunidad.ComunidadEndPoints;
+import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.EOFException;
@@ -14,10 +15,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.util.DaoUtil.getResponseBody;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * User: pedro@didekin
@@ -27,19 +27,14 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 @SuppressWarnings("WeakerAccess")
 public final class ComunidadDao implements ComunidadEndPoints {
 
-    public static final ComunidadDao comunidadDao = new ComunidadDao();
+    public static final ComunidadDao comunidadDao = new ComunidadDao(TKhandler, httpInitializer.get().getHttpHandler());
     private final ComunidadEndPoints endPoint;
     private final IdentityCacher identityCacher;
 
-    private ComunidadDao()
+    private ComunidadDao(IdentityCacher identityCacherIn, HttpHandler httpHandlerIn)
     {
-        this(creator.get().getRetrofitHandler().getService(ComunidadEndPoints.class), TKhandler);
-    }
-
-    public ComunidadDao(ComunidadEndPoints endPoint, IdentityCacher identityCacher)
-    {
-        this.endPoint = endPoint;
-        this.identityCacher = identityCacher;
+        identityCacher = identityCacherIn;
+        endPoint = httpHandlerIn.getService(ComunidadEndPoints.class);
     }
 
     //  ================================== ComunidadEndPoints implementation ============================
@@ -75,7 +70,7 @@ public final class ComunidadDao implements ComunidadEndPoints {
 
         try {
             Response<Comunidad> response = getComuData(identityCacher.checkBearerTokenInCache(), idComunidad).execute();
-            return getResponseBody(response);
+            return httpInitializer.get().getResponseBody(response);
         } catch (EOFException eo) {
             return null;
         } catch (IOException e) {

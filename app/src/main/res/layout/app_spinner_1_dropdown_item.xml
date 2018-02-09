@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
                  android:id="@+id/app_spinner_1_dropdown_item"
-                 android:maxLines="1"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:paddingStart="4dp"
@@ -11,4 +10,4 @@
                  android:textColor="@color/black"
                  android:ellipsize="marquee"
                  android:textSize="@dimen/text_decription_widget"
-        />
+                 android:singleLine="true"/>

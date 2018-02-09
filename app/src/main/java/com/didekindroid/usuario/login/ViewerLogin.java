@@ -8,8 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
@@ -21,15 +20,16 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.checkInternet;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterLogin;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.login.PasswordMailDialog.newInstance;
-import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkInternet;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
-import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 
 /**
  * User: pedro@didekin
@@ -37,7 +37,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ActivityInitiatorIf {
+public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
 
     final AtomicReference<UsuarioBean> usuarioBean;
     private AtomicInteger counterWrong;
@@ -138,7 +138,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements Ac
 
         if (isLoginOk) {
             Timber.d("login OK");
-            initAcFromActivity(null);
+            afterLogin.initActivity(activity);
             activity.finish();
         } else {
             int counter = counterWrong.addAndGet(1);

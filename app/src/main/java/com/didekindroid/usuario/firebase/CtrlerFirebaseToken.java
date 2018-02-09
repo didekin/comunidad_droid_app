@@ -2,20 +2,19 @@ package com.didekindroid.usuario.firebase;
 
 import android.content.SharedPreferences;
 
-import com.didekindroid.api.Controller;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.security.IdentityCacher;
 import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
+import static com.didekindroid.lib_one.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -36,14 +35,10 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
      */
     static Single<Integer> updatedGcmTkSingle()
     {
-        return Single.fromCallable(new Callable<Integer>() {
-                                       @Override
-                                       public Integer call() throws Exception
-                                       {
-                                           String token = FirebaseInstanceId.getInstance().getToken();
-                                           return usuarioDaoRemote.modifyUserGcmToken(token);
-                                       }
-                                   }
+        return Single.fromCallable(() -> {
+                    String token = FirebaseInstanceId.getInstance().getToken();
+                    return usuarioDaoRemote.modifyUserGcmToken(token);
+                }
         );
     }
 
@@ -54,7 +49,7 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
     {
         Timber.d("isGcmTokenSentServer()");
         SharedPreferences sharedPref = getIdentityCacher().getContext().getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
-        return sharedPref.getBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
+        return sharedPref.getBoolean(IdentityCacher.is_notification_token_sent_server, false);
     }
 
 
@@ -65,7 +60,7 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
         assertTrue(isRegisteredUser(), user_should_be_registered);
         SharedPreferences sharedPref = getIdentityCacher().getContext().getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
+        editor.putBoolean(IdentityCacher.is_notification_token_sent_server, isSentToServer);
         editor.apply();
     }
 

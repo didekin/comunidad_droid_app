@@ -8,10 +8,10 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
-import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Before;
@@ -31,7 +31,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -40,13 +39,8 @@ import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -202,20 +196,6 @@ public class ViewerLoginTest {
     {
         activity.runOnUiThread(() -> activity.viewerLogin.processBackSendPswdInView(true));
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
-    }
-
-    @Test
-    public void test_initAcWithBundle() throws Exception
-    {
-        // Preconditions: usuario registrado.
-        signUpAndUpdateTk(COMU_REAL_DROID);
-        // Exec.
-        activity.viewerLogin.initAcFromActivity(null);
-        // Check.
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
-        assertThat(activity.isFinishing() || activity.isDestroyed(), is(true));
-        // Clean.
-        cleanOptions(CLEAN_DROID);
     }
 
     // =========================  LyfeCicle  =========================

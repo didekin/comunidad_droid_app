@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
-import com.didekinlib.http.ErrorBean;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.http.auth.SpringOauthToken;
+import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -22,7 +22,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
@@ -38,9 +38,9 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUse
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static io.reactivex.Completable.complete;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;

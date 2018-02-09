@@ -2,7 +2,7 @@ package com.didekindroid.usuario;
 
 import android.os.Bundle;
 
-import com.didekindroid.util.BundleKey;
+import com.didekindroid.lib_one.util.BundleKey;
 
 /**
  * User: pedro@didekin

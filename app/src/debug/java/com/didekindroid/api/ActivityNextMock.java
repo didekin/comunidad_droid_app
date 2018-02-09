@@ -9,8 +9,8 @@ import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
 public class ActivityNextMock extends AppCompatActivity {
 
@@ -39,7 +39,8 @@ public class ActivityNextMock extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy()
+    {
         Timber.d("onDestroy()");
         super.onDestroy();
     }
@@ -52,7 +53,7 @@ public class ActivityNextMock extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

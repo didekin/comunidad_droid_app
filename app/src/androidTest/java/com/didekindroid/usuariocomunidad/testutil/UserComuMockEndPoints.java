@@ -8,8 +8,8 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-import static com.didekinlib.http.UsuarioServConstant.OPEN;
-import static com.didekinlib.http.UsuarioServConstant.USER_PARAM;
+import static com.didekinlib.http.usuario.UsuarioServConstant.OPEN;
+import static com.didekinlib.http.usuario.UsuarioServConstant.USER_PARAM;
 
 /**
  * User: pedro@didekin

@@ -5,15 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.ControllerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.SpinnerEventItemSelectIf;
-import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.ControllerIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
-import com.didekindroid.incidencia.core.IncidenciaBean;
-import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
+import com.didekindroid.lib_one.incidencia.IncidenciaBean;
+import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
 import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
@@ -24,8 +24,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
+import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
@@ -56,7 +57,7 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
 
         AppCompatActivity activity = parentViewer.getActivity();
         ViewerIncidRegFr instance = new ViewerIncidRegFr(view, activity, parentViewer);
-        instance.setController(new Controller());
+        instance.setController(new Controller(TKhandler));
         instance.viewerAmbitoIncidSpinner =
                 newViewerAmbitoIncidSpinner(instance.getViewInViewer().findViewById(R.id.incid_reg_ambito_spinner), instance);
         instance.viewerImportanciaSpinner =

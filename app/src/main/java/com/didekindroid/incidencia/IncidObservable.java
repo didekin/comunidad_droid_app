@@ -12,7 +12,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Single;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static io.reactivex.Single.fromCallable;
 
 /**

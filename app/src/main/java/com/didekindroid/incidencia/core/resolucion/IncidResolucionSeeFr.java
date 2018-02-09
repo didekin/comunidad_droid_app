@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -21,17 +20,17 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.util.UIutils.getStringFromInteger;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
 
 /**
  * User: pedro@didekin
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorIf {
+public class IncidResolucionSeeFr extends Fragment {
 
     View frView;
     Resolucion resolucion;
@@ -97,10 +96,10 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(getActivity());
+                resourceIdToMnItem.get(resourceId).initActivity(getActivity());
                 return true;
             case R.id.incid_comments_see_ac_mn:
-                initAcFromMenu(INCIDENCIA_OBJECT.getBundleForKey(getArguments().getSerializable(INCIDENCIA_OBJECT.key)), resourceId);
+                resourceIdToMnItem.get(resourceId).initActivity(getActivity(), INCIDENCIA_OBJECT.getBundleForKey(getArguments().getSerializable(INCIDENCIA_OBJECT.key)));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

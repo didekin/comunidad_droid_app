@@ -5,9 +5,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;

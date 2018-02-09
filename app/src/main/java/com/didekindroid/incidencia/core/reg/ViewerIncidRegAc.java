@@ -7,9 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
+import com.didekindroid.lib_one.api.ParentViewerInjected;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -20,13 +19,13 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.afterRegNewIncid;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.LeadRouter.afterRegNewIncid;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
-import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * User: pedro@didekin
@@ -34,7 +33,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
+public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
@@ -86,7 +85,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenci
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
         bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
-        initAcFromRouter(bundle, afterRegNewIncid);
+        afterRegNewIncid.initActivity(activity, bundle);
     }
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)

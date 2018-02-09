@@ -3,9 +3,8 @@ package com.didekindroid.incidencia.core.edit;
 import android.os.Bundle;
 import android.view.View;
 
-import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.ParentViewerInjected;
 import com.didekindroid.usuario.UsuarioAssertionMsg;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -18,17 +17,17 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.editResolucion;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.regResolucion;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.router.LeadRouter.editResolucion;
+import static com.didekindroid.router.LeadRouter.regResolucion;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
  * Date: 04/04/17
  * Time: 15:06
  */
-final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
+final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> {
 
     IncidAndResolBundle resolBundle;
 
@@ -78,7 +77,7 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
             for (ViewerIncidEditFr child : getChildViewersFromSuperClass(ViewerIncidEditFr.class)) {
                 child.setHasResolucion();
             }
-            initAcFromRouter(bundle, editResolucion);
+            editResolucion.initActivity(activity, bundle);
         }
 
         @Override
@@ -94,7 +93,7 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
             Timber.d("onComplete()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
-            initAcFromRouter(bundle, regResolucion);
+            regResolucion.initActivity(activity, bundle);
         }
     }
 }

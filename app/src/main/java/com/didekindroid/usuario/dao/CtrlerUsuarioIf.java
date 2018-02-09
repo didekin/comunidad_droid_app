@@ -2,7 +2,7 @@ package com.didekindroid.usuario.dao;
 
 import android.support.annotation.NonNull;
 
-import com.didekindroid.api.ControllerIf;
+import com.didekindroid.lib_one.api.ControllerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;

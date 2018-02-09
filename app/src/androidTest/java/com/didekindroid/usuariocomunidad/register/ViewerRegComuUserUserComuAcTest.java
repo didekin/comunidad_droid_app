@@ -5,8 +5,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.usuario.login.LoginAc;

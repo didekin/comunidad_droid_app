@@ -7,10 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -21,13 +20,13 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.erasedOpenIncid;
+import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.router.LeadRouter.erasedOpenIncid;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
-import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -38,7 +37,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * 1. An incidencia with resolucion is not allowed to be erased.
  * 2. An incidencia can be erased by a user with adm function.
  */
-final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityInitiatorIf {
+final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
 
     ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
 
@@ -108,7 +107,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr implements ActivityIn
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
         bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
-        initAcFromRouter(bundle, erasedOpenIncid);
+        erasedOpenIncid.initActivity(getActivity(), bundle);
     }
 
     //    ============================  LIFE CYCLE   ===================================

@@ -5,9 +5,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;

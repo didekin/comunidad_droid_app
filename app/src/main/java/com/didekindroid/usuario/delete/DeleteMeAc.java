@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.delete;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -8,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.router.ActivityRouter;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
 
@@ -18,11 +15,14 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
+import static com.didekindroid.router.LeadRouter.defaultAcForNoRegUser;
+import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_deleted;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 
 /**
  * Preconditions:
@@ -30,7 +30,7 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class DeleteMeAc extends AppCompatActivity {
 
     View acView;
     CtrlerUsuarioIf controller;
@@ -81,7 +81,7 @@ public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf
 
         switch (resourceId) {
             case android.R.id.home:
-                ActivityRouter.doUpMenu(this);
+                resourceIdToMnItem.get(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -89,13 +89,6 @@ public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf
     }
 
     // .............................. HELPERS ..................................
-
-    @Override
-    public Activity getActivity()
-    {
-        Timber.d("getActivity()");
-        return this;
-    }
 
     @SuppressWarnings("WeakerAccess")
     class DeleteMeSingleObserver extends DisposableSingleObserver<Boolean> {
@@ -105,7 +98,7 @@ public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf
         {
             Timber.d("onSuccess(), Thread: %s", Thread.currentThread().getName());
             assertTrue(isDeleted, user_should_have_been_deleted);
-            initAcWithFlag(null, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
+            defaultAcForNoRegUser.initActivity(DeleteMeAc.this, null, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
         }
 
         @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
@@ -113,7 +106,7 @@ public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf
         public void onError(Throwable e)
         {
             Timber.d("onErrorObserver, Thread: %s", Thread.currentThread().getName());
-            getUiExceptionFromThrowable(e).processMe(DeleteMeAc.this);
+            getExceptionRouter(getUiExceptionFromThrowable(e).getErrorHtppMsg()).initActivity(DeleteMeAc.this);
         }
     }
 }

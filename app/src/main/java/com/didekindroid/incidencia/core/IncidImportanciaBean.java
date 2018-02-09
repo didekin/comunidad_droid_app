@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 

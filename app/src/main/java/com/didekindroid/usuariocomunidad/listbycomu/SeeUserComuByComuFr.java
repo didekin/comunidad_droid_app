@@ -14,8 +14,8 @@ import com.didekindroid.comunidad.ComunidadBean;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 
 
 /**

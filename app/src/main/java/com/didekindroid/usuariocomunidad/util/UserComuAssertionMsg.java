@@ -6,9 +6,7 @@ package com.didekindroid.usuariocomunidad.util;
  * Time: 11:19
  */
 
-public final class
-
-UserComuAssertionMsg {
+public final class UserComuAssertionMsg {
 
     public static final String usercomu_should_have_admAuthority = "Usuario should have adm powers in comunidad";
     public static final String usercomu_list_should_be_initialized = "Comunidades User's list should be initialized";
