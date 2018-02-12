@@ -23,7 +23,7 @@ import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucio
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
 
 /**
  * User: pedro@didekin

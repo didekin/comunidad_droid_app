@@ -11,7 +11,6 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.router.UiExceptionRouter;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
@@ -22,6 +21,7 @@ import timber.log.Timber;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
 import static com.didekindroid.router.LeadRouter.userComuItemSelected;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
@@ -118,7 +118,7 @@ public class SeeUserComuByUserFr extends Fragment {
             if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
                 assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
-                UiExceptionRouter.getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(activity);
+                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(activity);
             }
             if (usuarioComunidades != null) {
                 Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");

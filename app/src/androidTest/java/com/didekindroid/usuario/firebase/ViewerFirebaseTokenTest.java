@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.http.exception.ErrorBean;
 
@@ -23,9 +23,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;

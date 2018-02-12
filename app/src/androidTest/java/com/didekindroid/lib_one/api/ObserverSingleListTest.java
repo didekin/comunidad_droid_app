@@ -5,8 +5,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.AdapterView;
 
-import com.didekindroid.api.ActivityMock;
 import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekinlib.http.exception.ErrorBean;
 
 import org.junit.Before;
@@ -22,9 +23,9 @@ import io.reactivex.Single;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
 import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.is;
@@ -80,6 +81,12 @@ public class ObserverSingleListTest {
         {
             assertThat(itemsList.size(), is(3));
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_C), is(BEFORE_METHOD_EXEC));
+        }
+
+        @Override
+        public UiExceptionRouterIf getExceptionRouter()
+        {
+            return httpMsg -> (RouterActionIf) () -> ActivityNextMock.class;
         }
 
         @Override

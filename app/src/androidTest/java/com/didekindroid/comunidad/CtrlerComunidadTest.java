@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.api.MaybeObserverMock;
 import com.didekindroid.api.SingleObserverMock;
 import com.didekindroid.lib_one.api.exception.UiException;
@@ -25,11 +25,11 @@ import io.reactivex.annotations.NonNull;
 
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
 import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.TIPO_VIA_ID;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoMain;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoMain;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;

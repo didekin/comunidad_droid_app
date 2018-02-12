@@ -3,7 +3,7 @@ package com.didekindroid.comunidad.testutil;
 import android.app.Activity;
 
 import com.didekindroid.R;
-import com.didekindroid.testutil.MenuTestUtilIf;
+import com.didekindroid.lib_one.testutil.MenuTestUtilIf;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;

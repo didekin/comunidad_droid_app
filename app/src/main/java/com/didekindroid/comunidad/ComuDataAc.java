@@ -17,7 +17,7 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.ViewerComuDataAc.newViewerComuDataAc;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
 
 /**
  * Preconditions:

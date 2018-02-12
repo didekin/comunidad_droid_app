@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.SpinnerTextMockFr;
+import com.didekindroid.lib_one.api.ActivityMock;
+import com.didekindroid.lib_one.api.SpinnerTextMockFr;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,9 +24,9 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.TIPO_VIA_ID;
 import static com.didekindroid.lib_one.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.TestUtilOne.checkSavedStateWithItemSelected;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;

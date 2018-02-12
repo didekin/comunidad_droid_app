@@ -22,7 +22,7 @@ import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
 import static com.didekindroid.router.LeadRouter.writeNewComment;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * Preconditions:
@@ -104,7 +104,7 @@ public class IncidCommentSeeListFr extends Fragment {
 
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity());
+                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity());
             }
             if (incidComments != null && !incidComments.isEmpty()) {
                 Timber.d("onPostExecute(): incidComments != null");

@@ -14,7 +14,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.ArrayMap;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.google.firebase.messaging.RemoteMessage;
 

@@ -10,8 +10,9 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ObserverCacheCleaner;
 import com.didekindroid.lib_one.api.ParentViewerInjected;
-import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -22,6 +23,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -31,11 +33,6 @@ import static com.didekindroid.lib_one.util.UIutils.makeToast;
 
 final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
-    private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
-    }
-
     static ViewerRegUserAndUserComuAc newViewerRegUserAndUserComuAc(RegUserAndUserComuAc activity)
     {
         Timber.d("newViewerRegUserAndUserComuAc()");
@@ -44,7 +41,18 @@ final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, Ctrler
         return instance;
     }
 
+    private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity);
+    }
+
     // ==================================== ViewerIf ====================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

@@ -11,7 +11,7 @@ import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAc;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionRegAc;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.router.RouterTo;
+import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
@@ -25,7 +25,7 @@ import com.didekindroid.usuariocomunidad.register.RegUserComuAc;
  * Date: 05/02/2018
  * Time: 16:37
  */
-public enum LeadRouter implements RouterTo {
+public enum LeadRouter implements RouterActionIf {
 
     // General defaults.
     defaultAcForRegUser(LoginAc.class),

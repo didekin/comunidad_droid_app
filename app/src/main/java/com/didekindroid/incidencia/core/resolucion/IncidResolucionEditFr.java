@@ -47,7 +47,7 @@ import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.closeIncidencia;
 import static com.didekindroid.router.LeadRouter.modifyResolucion;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -66,6 +66,7 @@ public class IncidResolucionEditFr extends Fragment {
         fr.setArguments(args);
         return fr;
     }
+
     Resolucion resolucion;
     IncidImportancia incidImportancia;
     ResolucionBean resolucionBean;
@@ -228,7 +229,7 @@ public class IncidResolucionEditFr extends Fragment {
             if (uiException != null) {
                 Bundle bundle = new Bundle(1);
                 bundle.putLong(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
-                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
+                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
                 Bundle bundle = new Bundle(1);
@@ -268,7 +269,7 @@ public class IncidResolucionEditFr extends Fragment {
             if (uiException != null) {
                 Bundle bundle = new Bundle(1);
                 bundle.putLong(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
-                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
+                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
                 closeIncidencia.initActivity(getActivity(), INCID_CLOSED_LIST_FLAG.getBundleForKey(true));

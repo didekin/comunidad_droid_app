@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.security.SecurityTestUtils;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekinlib.http.auth.SpringOauthToken;
@@ -17,12 +16,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.didekindroid.lib_one.security.SecurityTestUtils.doSpringOauthToken;
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.cleanTkCacheConsumer;
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.initTokenAction;
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.initTokenAndRegisterFunc;
-import static com.didekindroid.security.SecurityTestUtils.doSpringOauthToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.lib_one.util.IoHelper.readStringFromFile;

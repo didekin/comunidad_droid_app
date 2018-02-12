@@ -10,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.util.UIutils;
+import com.didekindroid.router.UiExceptionRouter;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekinlib.http.exception.ErrorBean;
@@ -54,7 +55,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.lib_one.util.UIutils.formatTimeToString;
 import static com.didekindroid.lib_one.util.UIutils.isCalendarPreviousTimeStamp;
-import static com.didekindroid.router.UiExceptionRouter.show_resolucionDup;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -85,6 +86,7 @@ public class IncidResolucionRegAcTest {
     IncidResolucionRegAc activity;
     IncidImportancia incidImportancia;
     TaskStackBuilder taskStackBuilder;
+    UiExceptionRouter uiExceptionRouter = (UiExceptionRouter) uiException_router;
 
     @Rule
     public IntentsTestRule<IncidResolucionRegAc> testRule = new IntentsTestRule<IncidResolucionRegAc>(IncidResolucionRegAc.class) {
@@ -225,7 +227,12 @@ public class IncidResolucionRegAcTest {
         };
         resolucionRegister.doInBackground(new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia()).buildAsFk());
         activity.runOnUiThread(() -> resolucionRegister.onPostExecute(0));
-        waitAtMost(2, SECONDS).until(isToastInView(show_resolucionDup.getResourceIdForToast(), activity));
+        waitAtMost(2, SECONDS).until(
+                isToastInView(
+                        uiExceptionRouter.getActionFromMsg(resolucionRegister.uiException.getErrorHtppMsg()).getResourceIdForToast(),
+                        activity
+                )
+        );
     }
 
     @Test

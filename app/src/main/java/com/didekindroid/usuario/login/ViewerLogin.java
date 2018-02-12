@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
@@ -27,6 +28,7 @@ import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterLogin;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.login.PasswordMailDialog.newInstance;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
@@ -39,6 +41,13 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUN
 
 public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
 
+    static ViewerLogin newViewerLogin(LoginAc activity)
+    {
+        Timber.d("newViewerLogin()");
+        ViewerLogin instance = new ViewerLogin(activity);
+        instance.setController(new CtrlerUsuario());
+        return instance;
+    }
     final AtomicReference<UsuarioBean> usuarioBean;
     private AtomicInteger counterWrong;
 
@@ -49,12 +58,12 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         usuarioBean = new AtomicReference<>(null);
     }
 
-    static ViewerLogin newViewerLogin(LoginAc activity)
+    // .............................. ViewerIf ..................................
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
     {
-        Timber.d("newViewerLogin()");
-        ViewerLogin instance = new ViewerLogin(activity);
-        instance.setController(new CtrlerUsuario());
-        return instance;
+        return uiException_router;
     }
 
     @Override

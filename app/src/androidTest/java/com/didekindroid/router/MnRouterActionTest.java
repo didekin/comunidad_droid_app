@@ -9,8 +9,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ActivityNextMock;
+import com.didekindroid.lib_one.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityNextMock;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  * Time: 14:20
  */
 @RunWith(AndroidJUnit4.class)
-public class MnRouterTest {
+public class MnRouterActionTest {
 
     @Rule
     public IntentsTestRule<ActivityMock> activityRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {

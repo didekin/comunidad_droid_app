@@ -5,11 +5,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
-import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +14,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -77,8 +74,8 @@ public class ComuSearchAcTest {
         checkRegComuFrViewEmpty();
 
         // Parent injection.
-        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
-        assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewerAc));
+        assertThat(activity.regComuFrg.viewerInjector, is(activity));
+        assertThat(activity.regComuFrg.viewer.getParentViewer(), is(activity.viewerAc));
         checkSpinnersDoInViewerOffNull(activity.regComuFrg.viewer);
     }
 

@@ -10,6 +10,7 @@ import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.api.ViewerListIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -46,6 +47,13 @@ public final class ViewerIncidSeeUserComuImportancia extends Viewer<ListView, Ct
     }
 
     // ==================================  VIEWER  =================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable incidencia)

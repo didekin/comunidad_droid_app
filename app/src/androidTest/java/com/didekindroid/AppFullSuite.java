@@ -2,7 +2,6 @@ package com.didekindroid;
 
 import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.incidencia.IncidSuite;
-import com.didekindroid.lib_one.security.SecuritySuite;
 import com.didekindroid.usuario.UsuarioSuite;
 import com.didekindroid.usuariocomunidad.UserComuSuite;
 
@@ -20,8 +19,6 @@ import org.junit.runners.Suite;
         ComunidadSuite.class,
         // incidencia
         IncidSuite.class,
-        // security
-        SecuritySuite.class,
         // usuario
         UsuarioSuite.class,
         // usuariocomunidad

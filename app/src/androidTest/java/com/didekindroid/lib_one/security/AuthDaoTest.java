@@ -1,4 +1,4 @@
-package com.didekindroid.security;
+package com.didekindroid.lib_one.security;
 
 import android.support.test.runner.AndroidJUnit4;
 
@@ -22,7 +22,7 @@ import retrofit2.Response;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static com.didekindroid.lib_one.security.AuthDao.authDao;
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
@@ -49,7 +49,7 @@ import static org.junit.Assert.fail;
  * Time: 11:07
  */
 @RunWith(AndroidJUnit4.class)
-public class AuthDaoRemoteTest {      // TODO: mover tests a AuthDaoAbsTest
+public class AuthDaoTest {
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

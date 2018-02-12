@@ -9,6 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewerInjected;
 import com.didekindroid.lib_one.security.CtrlerAuthToken;
 import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.comunidadFound_several;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -28,11 +30,6 @@ import static com.didekindroid.router.LeadRouter.comunidadFound_several;
  */
 
 class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> {
-
-    ViewerComuSearchAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
-    }
 
     static ViewerComuSearchAc newViewerComuSearch(ComuSearchAc activity)
     {
@@ -43,7 +40,19 @@ class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> {
         return instance;
     }
 
+    ViewerComuSearchAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity);
+    }
+
     /* ==================================== ViewerIf ====================================*/
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return uiException_router;
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

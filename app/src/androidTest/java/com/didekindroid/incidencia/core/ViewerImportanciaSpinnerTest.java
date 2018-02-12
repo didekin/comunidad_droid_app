@@ -6,9 +6,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.SpinnerTextMockFr;
-import com.didekindroid.api.ViewerMock;
+import com.didekindroid.lib_one.api.ActivityMock;
+import com.didekindroid.lib_one.api.SpinnerTextMockFr;
+import com.didekindroid.lib_one.api.ViewerMock;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.reg;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -44,14 +46,14 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
 
 
     @SuppressWarnings("WeakerAccess")
-    ViewerIncidRegFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
+    ViewerIncidRegFr(View view, AppCompatActivity activity, @NonNull ParentViewerInjectedIf parentViewer)
     {
         super(view, activity, parentViewer);
         atomIncidBean = new AtomicReference<>(null);
         atomIncidImportBean = new AtomicReference<>(null);
     }
 
-    static ViewerIncidRegFr newViewerIncidRegFr(View view, ParentViewerInjectedIf parentViewer)
+    static ViewerIncidRegFr newViewerIncidRegFr(View view, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerIncidRegFr()");
 
@@ -67,6 +69,8 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
         return instance;
     }
 
+    // .............................. ViewerIf ..................................
+
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
@@ -76,6 +80,13 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
         viewerComuSpinner.doViewInViewer(savedState, viewBean);
         atomIncidImportBean.compareAndSet(null, new IncidImportanciaBean());
         viewerImportanciaSpinner.doViewInViewer(savedState, atomIncidImportBean.get());
+    }
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
     }
 
     @Override

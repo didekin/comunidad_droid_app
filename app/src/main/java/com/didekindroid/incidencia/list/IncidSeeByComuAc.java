@@ -16,7 +16,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_listFlag_should_be_initialized;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
 
 public class IncidSeeByComuAc extends AppCompatActivity implements FragmentInitiatorIf<IncidSeeByComuFr> {
 

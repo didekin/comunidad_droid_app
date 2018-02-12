@@ -14,7 +14,7 @@ import com.didekindroid.lib_one.api.ViewerIf;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserComuAc.newViewerRegComuUserComuAc;
 
 /**

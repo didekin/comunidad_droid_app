@@ -1,7 +1,7 @@
 package com.didekindroid.comunidad;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekindroid.lib_one.security.IdentityCacherIf;
 import com.didekinlib.http.HttpHandler;
 import com.didekinlib.http.comunidad.ComunidadEndPoints;
 import com.didekinlib.http.exception.ErrorBean;
@@ -29,9 +29,9 @@ public final class ComunidadDao implements ComunidadEndPoints {
 
     public static final ComunidadDao comunidadDao = new ComunidadDao(TKhandler, httpInitializer.get().getHttpHandler());
     private final ComunidadEndPoints endPoint;
-    private final IdentityCacher identityCacher;
+    private final IdentityCacherIf identityCacher;
 
-    private ComunidadDao(IdentityCacher identityCacherIn, HttpHandler httpHandlerIn)
+    private ComunidadDao(IdentityCacherIf identityCacherIn, HttpHandler httpHandlerIn)
     {
         identityCacher = identityCacherIn;
         endPoint = httpHandlerIn.getService(ComunidadEndPoints.class);

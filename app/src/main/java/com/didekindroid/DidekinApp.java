@@ -5,10 +5,12 @@ import android.app.FragmentManager;
 import android.os.StrictMode;
 
 import com.didekindroid.lib_one.HttpInitializer;
+import com.didekindroid.lib_one.JksInitializer;
 
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.JksInitializer.jksInitializer;
 import static io.reactivex.internal.functions.Functions.emptyConsumer;
 import static io.reactivex.plugins.RxJavaPlugins.setErrorHandler;
 
@@ -30,11 +32,13 @@ public final class DidekinApp extends Application {
     {
         super.onCreate();
         initDebugBuildConfig();
+        jksInitializer.compareAndSet(null, new JksInitializer(getApplicationContext(), bks_pswd, bks_name));
         httpInitializer.compareAndSet(
                 null,
-                new HttpInitializer.HttpInitializerBuilder(this)
-                        .httpHandler(webHost, webHostPort, timeOut)
-                        .jksInClient(bks_pswd, bks_name)
+                new HttpInitializer.HttpInitializerBuilder(getApplicationContext())
+                        .webHostAndPort(webHost, webHostPort)
+                        .timeOut(timeOut)
+                        .jksInClient(jksInitializer.get().getJksInClient())
                         .build()
         );
         // To avoid closing the application for the default Android uncaught exception handler.

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.AbstractSingleObserver;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
@@ -28,7 +29,8 @@ import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterModifiedUser;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
@@ -41,13 +43,19 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
  */
 final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf {
 
+    static ViewerUserData newViewerUserData(UserDataAc activity)
+    {
+        Timber.d("newViewerUserData()");
+        ViewerUserData instance = new ViewerUserData(activity.acView, activity);
+        instance.setController(new CtrlerUsuario());
+        return instance;
+    }
     final EditText emailView;
     final EditText aliasView;
     final EditText passwordView;
     final AtomicReference<UsuarioBean> usuarioBean;
     final AtomicReference<Usuario> oldUser;
     final AtomicReference<Usuario> newUser;
-
 
     private ViewerUserData(View view, AppCompatActivity activity)
     {
@@ -58,14 +66,6 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         oldUser = new AtomicReference<>(null);
         newUser = new AtomicReference<>(null);
         usuarioBean = new AtomicReference<>(null);
-    }
-
-    static ViewerUserData newViewerUserData(UserDataAc activity)
-    {
-        Timber.d("newViewerUserData()");
-        ViewerUserData instance = new ViewerUserData(activity.acView, activity);
-        instance.setController(new CtrlerUsuario());
-        return instance;
     }
 
     @Override
@@ -205,7 +205,13 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         }
     }
 
-    // ================================= Viewer callbacks ==================================
+    // ================================= ViewerIf ==================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
+    }
 
     @SuppressWarnings("ThrowableNotThrown")
     @Override

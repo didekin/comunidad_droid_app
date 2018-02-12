@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import com.didekindroid.lib_one.api.ObserverSingleSelectList;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 
 import java.io.Serializable;
 import java.util.List;
@@ -85,6 +86,13 @@ public final class ViewerTipoViaSpinner extends
     }
 
     // ==================================== ViewerIf ====================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

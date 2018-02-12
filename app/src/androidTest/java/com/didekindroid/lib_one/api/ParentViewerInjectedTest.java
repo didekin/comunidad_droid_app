@@ -4,12 +4,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ViewerMock;
-import com.didekindroid.lib_one.api.Controller;
-import com.didekindroid.lib_one.api.ParentViewerInjected;
-import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.RouterActionIf;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,7 +33,13 @@ public class ParentViewerInjectedTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        parentViewerInjected = new ParentViewerInjected<>(null, activity);
+        parentViewerInjected = new ParentViewerInjected<View, Controller>(null, activity) {
+            @Override
+            public UiExceptionRouterIf getExceptionRouter()
+            {
+                return httpMsg -> (RouterActionIf) () -> ActivityNextMock.class;
+            }
+        };
     }
 
     @Test
@@ -53,7 +55,13 @@ public class ParentViewerInjectedTest {
     {
         final ViewerMock childViewer = new ViewerMock(activity);
         parentViewerInjected.setChildViewer(childViewer);
-        final Viewer<View, Controller> childViewer2 = new Viewer<>(null, activity, null);
+        final Viewer<View, Controller> childViewer2 = new Viewer<View, Controller>(null, activity, null) {
+            @Override
+            public UiExceptionRouterIf getExceptionRouter()
+            {
+                return httpMsg -> (RouterActionIf) () -> ActivityNextMock.class;
+            }
+        };
         parentViewerInjected.setChildViewer(childViewer2);
         assertThat(parentViewerInjected.getChildViewersFromSuperClass(ViewerIf.class).size(), is(2));
     }

@@ -3,8 +3,6 @@ package com.didekindroid.lib_one.api;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

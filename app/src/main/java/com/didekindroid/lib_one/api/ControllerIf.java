@@ -1,6 +1,6 @@
 package com.didekindroid.lib_one.api;
 
-import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekindroid.lib_one.security.IdentityCacherIf;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -19,5 +19,5 @@ public interface ControllerIf {
 
     void updateIsRegistered(boolean isRegisteredUser);
 
-    IdentityCacher getIdentityCacher();
+    IdentityCacherIf getIdentityCacher();
 }

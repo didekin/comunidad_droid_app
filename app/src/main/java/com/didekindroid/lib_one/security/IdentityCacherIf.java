@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Time: 18:17
  */
 @SuppressWarnings("WeakerAccess")
-public interface IdentityCacher {
+public interface IdentityCacherIf {
 
     String identity_token_should_be_notnull = "Identity token should be not null";
     String is_notification_token_sent_server = "isGcmTokenSentToServer";

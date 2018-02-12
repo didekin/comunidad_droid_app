@@ -5,7 +5,8 @@ import android.view.View;
 
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.lib_one.api.ParentViewerInjected;
-import com.didekindroid.usuario.UsuarioAssertionMsg;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.util.CommonAssertionMsg;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -20,7 +21,8 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.router.LeadRouter.editResolucion;
 import static com.didekindroid.router.LeadRouter.regResolucion;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 
 /**
  * User: pedro@didekin
@@ -29,6 +31,13 @@ import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_regist
  */
 final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> {
 
+    static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity)
+    {
+        Timber.d("newViewerIncidEditAc()");
+        ViewerIncidEditAc instance = new ViewerIncidEditAc(activity);
+        instance.setController(new CtrlerIncidenciaCore());
+        return instance;
+    }
     IncidAndResolBundle resolBundle;
 
     private ViewerIncidEditAc(IncidEditAc activity)
@@ -36,12 +45,12 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
         super(activity.acView, activity);
     }
 
-    static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity)
+    // .................................... ViewerIf .................................
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
     {
-        Timber.d("newViewerIncidEditAc()");
-        ViewerIncidEditAc instance = new ViewerIncidEditAc(activity);
-        instance.setController(new CtrlerIncidenciaCore());
-        return instance;
+        return uiException_router;
     }
 
     @Override
@@ -56,7 +65,7 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
     void checkResolucion()
     {
         Timber.d("checkResolucion()");
-        assertTrue(controller.isRegisteredUser(), UsuarioAssertionMsg.user_should_be_registered);
+        assertTrue(controller.isRegisteredUser(), CommonAssertionMsg.user_should_be_registered);
         controller.seeResolucion(
                 new ResolucionObserver(),
                 resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId());

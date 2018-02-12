@@ -19,9 +19,9 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.doToolBar;
 import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.router.LeadRouter.defaultAcForNoRegUser;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_deleted;
 
 /**
@@ -106,7 +106,7 @@ public class DeleteMeAc extends AppCompatActivity {
         public void onError(Throwable e)
         {
             Timber.d("onErrorObserver, Thread: %s", Thread.currentThread().getName());
-            getExceptionRouter(getUiExceptionFromThrowable(e).getErrorHtppMsg()).initActivity(DeleteMeAc.this);
+            uiException_router.getActionFromMsg(getUiExceptionFromThrowable(e).getErrorHtppMsg()).initActivity(DeleteMeAc.this);
         }
     }
 }

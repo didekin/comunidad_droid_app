@@ -44,9 +44,9 @@ ext {
     sourceCompatibilityVersion = JavaVersion.VERSION_1_8
     targetCompatibilityVersion = JavaVersion.VERSION_1_8
 
-    didekinlib_model = ':didekinlib_model-a-0.4.6:@jar'
-    didekinlib_http = ':didekinlib_http-a-0.4.6:@jar'
-    didekinlib_gcm = ':didekinlib_gcm-a-0.4.6:@jar'
+    didekinlib_model = ':didekinlib_model-a-0.4.7:@jar'
+    didekinlib_http = ':didekinlib_http-a-0.4.7:@jar'
+    didekinlib_gcm = ':didekinlib_gcm-a-0.4.7:@jar'
 
     retrofit2 = ['com.squareup.retrofit2:retrofit:2.3.0',
                  'com.squareup.retrofit2:converter-gson:2.3.0',

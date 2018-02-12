@@ -5,9 +5,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.lib_one.api.CtrlerSelectList;
-import com.didekindroid.lib_one.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.RouterActionIf;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -43,6 +42,12 @@ public class ViewerSelectListTest {
         final AtomicBoolean execFlag = new AtomicBoolean(false);
         activity.runOnUiThread(() -> {
             viewer = new ViewerSelectList<Spinner, CtrlerSelectList<String>, String>(new Spinner(activity), activity, null) {
+                @Override
+                public UiExceptionRouterIf getExceptionRouter()
+                {
+                    return httpMsg -> (RouterActionIf) () -> ActivityNextMock.class;
+                }
+
                 @Override
                 public void initSelectedItemId(Bundle savedState)
                 {

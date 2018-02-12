@@ -27,8 +27,8 @@ import static com.didekindroid.lib_one.util.UIutils.doToolBar;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterRegComment;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * Preconditions:
@@ -133,7 +133,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(IncidCommentRegAc.this);
+                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(IncidCommentRegAc.this);
             } else if (!(isDestroyed() || isChangingConfigurations())) {
                 assertTrue(rowInserted == 1, comment_should_be_registered);
                 Bundle bundle = new Bundle(1);

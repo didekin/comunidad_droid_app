@@ -4,8 +4,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.SpinnerTextMockFr;
+import com.didekindroid.lib_one.api.ActivityMock;
+import com.didekindroid.lib_one.api.SpinnerTextMockFr;
 
 import org.junit.Before;
 import org.junit.Rule;

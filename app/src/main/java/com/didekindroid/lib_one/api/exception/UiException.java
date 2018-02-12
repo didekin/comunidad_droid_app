@@ -27,4 +27,5 @@ public class UiException extends Exception implements UiExceptionIf {
     {
         return errorBean.getMessage();
     }
+
 }

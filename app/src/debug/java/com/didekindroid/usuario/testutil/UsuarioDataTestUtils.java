@@ -4,7 +4,7 @@ import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
 
 /**

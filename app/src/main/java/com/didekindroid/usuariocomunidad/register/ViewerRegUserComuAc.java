@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewerInjected;
 import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -22,7 +23,8 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterRegUserComu;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 
 /**
@@ -33,11 +35,6 @@ import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_a
 
 final class ViewerRegUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
-    private ViewerRegUserComuAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
-    }
-
     static ViewerRegUserComuAc newViewerRegUserComuAc(RegUserComuAc activity)
     {
         Timber.d("newViewerRegUserComuAc()");
@@ -46,7 +43,18 @@ final class ViewerRegUserComuAc extends ParentViewerInjected<View, CtrlerUsuario
         return instance;
     }
 
+    private ViewerRegUserComuAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity);
+    }
+
     // ==================================== ViewerIf ====================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

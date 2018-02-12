@@ -3,7 +3,7 @@
               style="@style/baseLayout.withPadding"
               xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              tools:context="com.didekindroid.api.ActivityMock"
+              tools:context="com.didekindroid.lib_one.api.ActivityMock"
               tools:showIn="@layout/mock_ac"
               android:layout_marginTop="@dimen/app_bar_bottom_margin">
     <Spinner

@@ -1,11 +1,13 @@
-package com.didekindroid.lib_one.api.exception;
+package com.didekindroid.router;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
@@ -17,28 +19,31 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasFlag;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.router.UiExceptionRouter.generic;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
-import static com.didekindroid.router.UiExceptionRouter.show_comunidad_duplicate;
-import static com.didekindroid.router.UiExceptionRouter.show_comunidad_search;
-import static com.didekindroid.router.UiExceptionRouter.show_incidReg;
-import static com.didekindroid.router.UiExceptionRouter.show_incid_open_list;
-import static com.didekindroid.router.UiExceptionRouter.show_login_noPowers;
-import static com.didekindroid.router.UiExceptionRouter.show_login_noUser;
-import static com.didekindroid.router.UiExceptionRouter.show_login_tokenNull;
-import static com.didekindroid.router.UiExceptionRouter.show_resolucionDup;
-import static com.didekindroid.router.UiExceptionRouter.show_userData_wrongMail;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.router.UiExceptionAction.generic;
+import static com.didekindroid.router.UiExceptionAction.show_comunidad_duplicate;
+import static com.didekindroid.router.UiExceptionAction.show_comunidad_search;
+import static com.didekindroid.router.UiExceptionAction.show_incidReg;
+import static com.didekindroid.router.UiExceptionAction.show_incid_open_list;
+import static com.didekindroid.router.UiExceptionAction.show_login_noPowers;
+import static com.didekindroid.router.UiExceptionAction.show_login_noUser;
+import static com.didekindroid.router.UiExceptionAction.show_login_tokenNull;
+import static com.didekindroid.router.UiExceptionAction.show_resolucionDup;
+import static com.didekindroid.router.UiExceptionAction.show_userData_wrongMail;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
@@ -59,8 +64,6 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USERCOMU_WRONG_INIT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -69,7 +72,7 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings({"ThrowableInstanceNeverThrown", "ThrowableResultOfMethodCallIgnored"})
 @RunWith(AndroidJUnit4.class)
-public class UiExceptionTest {
+public class UiExceptionActionTest {
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -80,6 +83,7 @@ public class UiExceptionTest {
     @Rule
     public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<>(ActivityMock.class, true, true);
     ActivityMock activity;
+    UiExceptionRouterIf router = uiException_router;
 
     @Before
     public void setUp() throws Exception
@@ -90,40 +94,26 @@ public class UiExceptionTest {
     //  ===========================================================================
 
     @Test
-    public void testSetUp()
-    {
-        assertThat(activity, notNullValue());
-    }
-
-    @Test
     public void test_generic() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-
-        waitAtMost(5, SECONDS).until(isToastInView(generic.getResourceIdForToast(), activity));
-        onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
+        runAndCheck(ue, generic, comuSearchAcLayout, FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     @Test
     public void test_show_comunidad_duplicate() throws Exception
     {
+        // Precondition to avoid exception in next Activity.
+        TKhandler.updateIsRegistered(false);
         final UiException ue = new UiException(new ErrorBean(COMUNIDAD_DUPLICATE));
-
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-        waitAtMost(5, SECONDS).until(isToastInView(show_comunidad_duplicate.getResourceIdForToast(), activity));
-        onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
+        runAndCheck(ue, show_comunidad_duplicate, comuSearchAcLayout);
     }
 
     @Test
     public void test_show_comunidad_search() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(COMUNIDAD_NOT_FOUND));
-
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-        waitAtMost(5, SECONDS).until(isToastInView(show_comunidad_search.getResourceIdForToast(), activity));
-        onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
+        runAndCheck(ue, show_comunidad_search, comuSearchAcLayout);
     }
 
     @Test
@@ -131,12 +121,8 @@ public class UiExceptionTest {
     {
         // Preconditions.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-
-        waitAtMost(5, SECONDS).until(isToastInView(show_incidReg.getResourceIdForToast(), activity));
-        onView(withId(incidRegAcLayout)).check(matches(isDisplayed()));
+        runAndCheck(ue, show_incidReg, incidRegAcLayout);
 
         cleanOptions(CLEAN_JUAN);
     }
@@ -147,10 +133,7 @@ public class UiExceptionTest {
         // Preconditions.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-
-        waitAtMost(5, SECONDS).until(isToastInView(show_incid_open_list.getResourceIdForToast(), activity));
-        onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed())); // Lista de incidencias abiertas.
+        runAndCheck(ue, show_incid_open_list, incidSeeGenericFrLayout);
 
         cleanOptions(CLEAN_JUAN);
     }
@@ -159,32 +142,21 @@ public class UiExceptionTest {
     public void test_show_login_noPowers() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_USER_WRONG_INIT));
-
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-
-        waitAtMost(5, SECONDS).until(isToastInView(show_login_noPowers.getResourceIdForToast(), activity));
-        onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
+        runAndCheck(ue, show_login_noPowers, loginAcResourceId);
     }
 
     @Test
     public void test_show_login_noUser() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(USERCOMU_WRONG_INIT));
-
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-
-        waitAtMost(5, SECONDS).until(isToastInView(show_login_noUser.getResourceIdForToast(), activity));
-        onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
+        runAndCheck(ue, show_login_noUser, loginAcResourceId);
     }
 
     @Test
     public void test_show_login_tokenNull() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(TOKEN_NULL));
-
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed((loginAcResourceId)));
-        waitAtMost(4, SECONDS).until(isToastInView(show_login_tokenNull.getResourceIdForToast(), activity));
+        runAndCheck(ue, show_login_tokenNull, loginAcResourceId);
     }
 
     @Test
@@ -200,10 +172,7 @@ public class UiExceptionTest {
         intentIn.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
 
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
-
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-        waitAtMost(5, SECONDS).until(isToastInView(show_resolucionDup.getResourceIdForToast(), activity));
-        onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
+        runAndCheck(ue, show_resolucionDup, incidSeeGenericFrLayout);
 
         cleanOptions(CLEAN_JUAN);
     }
@@ -213,13 +182,25 @@ public class UiExceptionTest {
     {
         // Preconditions.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-
         final UiException ue = new UiException(new ErrorBean(PASSWORD_NOT_SENT));
-        activity.runOnUiThread(() -> getExceptionRouter(ue.getErrorHtppMsg()).initActivity(activity));
-
-        waitAtMost(5, SECONDS).until(isToastInView(show_userData_wrongMail.getResourceIdForToast(), activity));
-        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
+        runAndCheck(ue, show_userData_wrongMail, userDataAcRsId);
 
         cleanOptions(CLEAN_JUAN);
+    }
+
+    // ============================  Helpers ==============================
+
+    private void runAndCheck(UiException ue, UiExceptionAction uiExceptionAction, int checkLayout)
+    {
+        activity.runOnUiThread(() -> router.getActionFromMsg(ue.getErrorHtppMsg()).initActivity(activity));
+        waitAtMost(5, SECONDS).until(isToastInView(uiExceptionAction.getResourceIdForToast(), activity));
+        onView(withId(checkLayout)).check(matches(isDisplayed()));
+        intended(hasFlag(FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    private void runAndCheck(UiException ue, UiExceptionAction uiExceptionAction, int checkLayout, int flags)
+    {
+        runAndCheck(ue, uiExceptionAction, checkLayout);
+        intended(hasFlag(flags));
     }
 }

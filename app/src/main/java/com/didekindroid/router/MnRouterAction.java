@@ -1,11 +1,11 @@
 package com.didekindroid.router;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.SparseArray;
 
 import com.didekindroid.R;
 import com.didekindroid.accesorio.ConfidencialidadAc;
@@ -13,7 +13,7 @@ import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.router.RouterTo;
+import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;
@@ -22,6 +22,9 @@ import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -32,9 +35,7 @@ import static android.support.v4.app.NavUtils.getParentActivityIntent;
 import static android.support.v4.app.NavUtils.navigateUpTo;
 import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_listFlag_should_be_initialized;
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.router.LeadRouter.defaultAcForNoRegUser;
 import static com.didekindroid.router.LeadRouter.defaultAcForRegUser;
 import static com.didekindroid.router.LeadRouter.writeNewComment;
@@ -46,7 +47,7 @@ import static com.didekindroid.router.LeadRouter.writeNewIncidencia;
  * Time: 17:02
  */
 
-public enum MnRouter implements RouterTo {
+public enum MnRouterAction implements RouterActionIf {
 
     // UP.
     navigateUp(android.R.id.home, null) {
@@ -79,18 +80,24 @@ public enum MnRouter implements RouterTo {
     incid_reg_mn(R.id.incid_reg_ac_mn, writeNewIncidencia.activityToGo),
     incid_see_closed_by_comu_mn(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeByComuAc.class) {
         @Override
-        public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle, @NonNull int flags)
+        public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle)
         {
-            assertTrue(bundle.getBoolean(INCID_CLOSED_LIST_FLAG.key), incid_listFlag_should_be_initialized);
-            super.initActivity(activity, bundle, flags);
+            Timber.d("initActivity(), incid_see_closed_by_comu_mn");
+            if (bundle == null || !bundle.containsKey(INCID_CLOSED_LIST_FLAG.key)) {
+                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(false);
+            }
+            super.initActivity(activity, bundle);
         }
     },
     incid_see_open_by_comu_mn(R.id.incid_see_open_by_comu_ac_mn, IncidSeeByComuAc.class) {
         @Override
-        public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle, @NonNull int flags)
+        public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle)
         {
-            assertTrue(!bundle.getBoolean(INCID_CLOSED_LIST_FLAG.key), incid_listFlag_should_be_initialized);
-            super.initActivity(activity, bundle, flags);
+            Timber.d("initActivity(), incid_see_open_by_comu_mn");
+            if (bundle == null || !bundle.containsKey(INCID_CLOSED_LIST_FLAG.key)) {
+                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(true);
+            }
+            super.initActivity(activity, bundle);
         }
     },
     // COMUNIDAD.
@@ -104,24 +111,27 @@ public enum MnRouter implements RouterTo {
     // USUARIO_COMUNIDAD.
     reg_nueva_comunidad_mn(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserComuAc.class) {
         @Override
-        public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle, int flags)
+        public void initActivity(@NonNull Activity activity)
         {
+            Timber.d("initActivity(), reg_nueva_comunidad_mn");
+            // for not registered users
             if (!TKhandler.isRegisteredUser()) {
-                reg_nueva_comunidad_mn_noreg_user.initActivity(activity, bundle, flags);
+                activity.startActivity(new Intent(activity, RegComuAndUserAndUserComuAc.class));
+            } else {
+                super.initActivity(activity);
             }
         }
     },
     see_usercomu_by_comu_mn(R.id.see_usercomu_by_comu_ac_mn, SeeUserComuByComuAc.class),
-    see_usercomu_by_user_mn(R.id.see_usercomu_by_user_ac_mn, SeeUserComuByUserAc.class),
-    // for not registered users
-    reg_nueva_comunidad_mn_noreg_user(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class),;
+    see_usercomu_by_user_mn(R.id.see_usercomu_by_user_ac_mn, SeeUserComuByUserAc.class),;
 
     // ==========================  Static members ============================
 
-    public static final SparseArray<MnRouter> resourceIdToMnItem = new SparseArray<>();
+    @SuppressLint("UseSparseArrays")
+    public static final Map<Integer, MnRouterAction> resourceIdToMnItem = new HashMap<>();
 
     static {
-        for (MnRouter menuItem : values()) {
+        for (MnRouterAction menuItem : values()) {
             resourceIdToMnItem.put(menuItem.mnItemRsId, menuItem);
         }
     }
@@ -131,7 +141,7 @@ public enum MnRouter implements RouterTo {
     private final int mnItemRsId;
     private final Class<? extends Activity> acToGo;
 
-    MnRouter(int menuItemRsIdIn, Class<? extends Activity> classToGo)
+    MnRouterAction(int menuItemRsIdIn, Class<? extends Activity> classToGo)
     {
         mnItemRsId = menuItemRsIdIn;
         acToGo = classToGo;

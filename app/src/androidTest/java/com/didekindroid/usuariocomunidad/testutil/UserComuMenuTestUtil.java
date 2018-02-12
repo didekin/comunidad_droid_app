@@ -3,7 +3,7 @@ package com.didekindroid.usuariocomunidad.testutil;
 import android.app.Activity;
 
 import com.didekindroid.R;
-import com.didekindroid.testutil.MenuTestUtilIf;
+import com.didekindroid.lib_one.testutil.MenuTestUtilIf;
 
 import static com.didekindroid.testutil.ActivityTestUtils.checkAppBarMenu;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;

@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -28,6 +29,7 @@ import static com.didekindroid.router.LeadRouter.comunidadFound_noRegUser;
 import static com.didekindroid.router.LeadRouter.comunidadFound_regUserComu;
 import static com.didekindroid.router.LeadRouter.noComunidadFound_noRegUser;
 import static com.didekindroid.router.LeadRouter.noComunidadFound_regComuUserComu;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 
 /**
@@ -37,11 +39,6 @@ import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_
  */
 final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> {
 
-    private ViewerComuSearchResultsFr(@NonNull View frView, @NonNull AppCompatActivity activity)
-    {
-        super(frView.findViewById(android.R.id.list), activity, null);
-    }
-
     static ViewerComuSearchResultsFr newViewerComuSearchResultsFr(View frView, AppCompatActivity activity)
     {
         Timber.d("newViewerComuSearchResultsFr()");
@@ -50,7 +47,18 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         return instance;
     }
 
+    private ViewerComuSearchResultsFr(@NonNull View frView, @NonNull AppCompatActivity activity)
+    {
+        super(frView.findViewById(android.R.id.list), activity, null);
+    }
+
     // ==================================  VIEWER  =================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

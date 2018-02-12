@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekindroid.lib_one.security.IdentityCacherIf;
 import com.didekinlib.http.HttpHandler;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.http.incidencia.IncidenciaServEndPoints;
@@ -33,15 +33,15 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
 
     public static final IncidenciaDao incidenciaDao = new IncidenciaDao(TKhandler, httpInitializer.get().getHttpHandler());
     private final IncidenciaServEndPoints endPoint;
-    private final IdentityCacher identityCacher;
+    private final IdentityCacherIf identityCacher;
 
-    private IncidenciaDao(IdentityCacher identityCacherIn, HttpHandler httpHandlerIn)
+    private IncidenciaDao(IdentityCacherIf identityCacherIn, HttpHandler httpHandlerIn)
     {
         identityCacher = identityCacherIn;
         endPoint = httpHandlerIn.getService(IncidenciaServEndPoints.class);
     }
 
-    public IncidenciaDao(IncidenciaServEndPoints endPoint, IdentityCacher identityCacher)
+    public IncidenciaDao(IncidenciaServEndPoints endPoint, IdentityCacherIf identityCacher)
     {
         this.endPoint = endPoint;
         this.identityCacher = identityCacher;

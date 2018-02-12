@@ -33,7 +33,7 @@ import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterResolucionReg;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -51,6 +51,7 @@ public class IncidResolucionRegFr extends Fragment {
         fr.setArguments(args);
         return fr;
     }
+
     IncidImportancia incidImportancia;
     ResolucionBean resolucionBean;
     TextView fechaViewForPicker;
@@ -167,7 +168,7 @@ public class IncidResolucionRegFr extends Fragment {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(getActivity());
+                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity());
             } else {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Bundle bundle = new Bundle(1);

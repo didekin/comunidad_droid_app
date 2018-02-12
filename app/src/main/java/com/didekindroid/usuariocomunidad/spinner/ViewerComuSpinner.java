@@ -11,6 +11,7 @@ import com.didekindroid.lib_one.api.ObserverSingleSelectList;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -83,6 +84,13 @@ public class ViewerComuSpinner extends
     }
 
     // ==================================== ViewerIf ====================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

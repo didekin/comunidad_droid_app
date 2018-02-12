@@ -1,4 +1,4 @@
-package com.didekindroid.lib_one.router;
+package com.didekindroid.router;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;

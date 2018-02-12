@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+
 import java.io.Serializable;
 
 /**
@@ -16,6 +18,8 @@ import java.io.Serializable;
 public interface ViewerIf<T extends View, C extends ControllerIf> {
 
     AppCompatActivity getActivity();
+
+    UiExceptionRouterIf getExceptionRouter();
 
     void onErrorInObserver(Throwable error);
 
@@ -31,7 +35,7 @@ public interface ViewerIf<T extends View, C extends ControllerIf> {
     void setController(@NonNull C controller);
 
     /**
-     *  The data saved by this method is used in doViewInViewer().
+     * The data saved by this method is used in doViewInViewer().
      */
     void saveState(Bundle savedState);
 

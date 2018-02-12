@@ -5,14 +5,13 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doFragmentTextView;
+import static com.didekindroid.lib_one.testutil.TestUtilOne.doFragmentTextView;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;

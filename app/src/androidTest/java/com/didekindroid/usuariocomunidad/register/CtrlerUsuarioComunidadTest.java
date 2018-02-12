@@ -1,11 +1,15 @@
 package com.didekindroid.usuariocomunidad.register;
 
 import android.support.test.rule.ActivityTestRule;
+import android.view.View;
 
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityNextMock;
 import com.didekindroid.lib_one.api.ObserverCacheCleaner;
 import com.didekindroid.api.SingleObserverMock;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -22,13 +26,13 @@ import io.reactivex.functions.Predicate;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -79,7 +83,13 @@ public class CtrlerUsuarioComunidadTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        viewer = new Viewer<>(null, activity, null);
+        viewer = new Viewer<View, CtrlerUsuarioComunidad>(null, activity, null) {
+            @Override
+            public UiExceptionRouterIf getExceptionRouter()
+            {
+                return httpMsg -> (RouterActionIf) () -> ActivityNextMock.class;
+            }
+        };
         viewer.setController(new CtrlerUsuarioComunidad());
         controller = viewer.getController();
     }

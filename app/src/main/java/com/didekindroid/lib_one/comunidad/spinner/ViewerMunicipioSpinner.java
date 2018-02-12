@@ -1,6 +1,7 @@
 package com.didekindroid.lib_one.comunidad.spinner;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,6 +10,7 @@ import android.widget.Spinner;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
@@ -37,7 +39,7 @@ public final class ViewerMunicipioSpinner extends
     final SpinnerEventListener eventListener;
     MunicipioSpinnerEventItemSelect spinnerEvent;
 
-    private ViewerMunicipioSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
+    private ViewerMunicipioSpinner(Spinner view, AppCompatActivity activity, @NonNull ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
@@ -87,6 +89,12 @@ public final class ViewerMunicipioSpinner extends
     }
 
     /* ==================================== ViewerIf ====================================*/
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return getParentViewer().getExceptionRouter();
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

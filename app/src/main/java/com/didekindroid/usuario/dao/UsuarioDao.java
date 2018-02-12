@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.dao;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekindroid.lib_one.security.IdentityCacherIf;
 import com.didekinlib.http.HttpHandler;
 import com.didekinlib.http.auth.SpringOauthToken;
 import com.didekinlib.http.exception.ErrorBean;
@@ -30,10 +30,10 @@ import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL
 public final class UsuarioDao implements UsuarioEndPoints, UsuarioDaoIf {
 
     public static final UsuarioDaoIf usuarioDaoRemote = new UsuarioDao(TKhandler, httpInitializer.get().getHttpHandler());
-    final IdentityCacher identityCacher;
+    final IdentityCacherIf identityCacher;
     private final UsuarioEndPoints endPoint;
 
-    private UsuarioDao(IdentityCacher identityCacherIn, HttpHandler httpHandlerIn)
+    private UsuarioDao(IdentityCacherIf identityCacherIn, HttpHandler httpHandlerIn)
     {
         endPoint = httpHandlerIn.getService(UsuarioEndPoints.class);
         identityCacher = identityCacherIn;

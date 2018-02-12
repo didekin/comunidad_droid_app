@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -24,7 +25,8 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterRegNewIncid;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 
 /**
@@ -35,13 +37,6 @@ import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFir
 @SuppressWarnings("WeakerAccess")
 public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> {
 
-    ViewerFirebaseTokenIf viewerFirebaseToken;
-
-    public ViewerIncidRegAc(IncidRegAc activity)
-    {
-        super(activity.acView, activity);
-    }
-
     static ViewerIncidRegAc newViewerIncidRegAc(IncidRegAc activity)
     {
         Timber.d("newViewerIncidRegAc()");
@@ -51,6 +46,14 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenci
         // We initialize viewerIncidRegFr in its associated fragment.
         return instance;
     }
+    ViewerFirebaseTokenIf viewerFirebaseToken;
+
+    public ViewerIncidRegAc(IncidRegAc activity)
+    {
+        super(activity.acView, activity);
+    }
+
+    // .............................. ViewerIf ..................................
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -62,6 +65,12 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenci
         viewerFirebaseToken.checkGcmTokenAsync();
         Button registerButton = activity.findViewById(R.id.incid_reg_ac_button);
         registerButton.setOnClickListener(new RegButtonOnClickListener());
+    }
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekindroid.lib_one.security.IdentityCacherIf;
 
 import timber.log.Timber;
 
@@ -15,8 +15,8 @@ import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.doToolBar;
 import static com.didekindroid.router.LeadRouter.newComunAndUserComu;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 
 /**
  * Preconditions:
@@ -30,7 +30,7 @@ import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_regist
 public class SeeUserComuByUserAc extends AppCompatActivity {
 
     SeeUserComuByUserFr mFragment;
-    IdentityCacher identityCacher;
+    IdentityCacherIf identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

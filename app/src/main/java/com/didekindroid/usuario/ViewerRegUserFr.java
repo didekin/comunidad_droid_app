@@ -1,5 +1,6 @@
 package com.didekindroid.usuario;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -8,6 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
@@ -20,12 +22,19 @@ import timber.log.Timber;
 
 public class ViewerRegUserFr extends Viewer<View, Controller> {
 
-    ViewerRegUserFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
+    ViewerRegUserFr(View view, AppCompatActivity activity, @NonNull ParentViewerInjectedIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
     // ==================================== ViewerIf ===================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
+    }
 
     // ==================================== Helpers ====================================
 

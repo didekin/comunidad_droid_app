@@ -11,7 +11,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.lib_one.security.AuthDao.authDao;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static io.reactivex.Single.fromCallable;
 
 /**

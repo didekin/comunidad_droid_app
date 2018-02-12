@@ -3,7 +3,7 @@ package com.didekindroid.lib_one.comunidad.spinner;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.lib_one.comunidad.repository.ComunidadDataDb;
 
 import org.junit.After;
@@ -12,8 +12,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
-import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.lib_one.testutil.TestUtilOne.checkSpinnerCtrlerLoadItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

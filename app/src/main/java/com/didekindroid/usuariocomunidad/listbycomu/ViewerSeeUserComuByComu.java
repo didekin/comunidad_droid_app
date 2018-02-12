@@ -7,8 +7,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -21,9 +22,10 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.R.id.list;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 
 /**
  * User: pedro@didekin
@@ -32,6 +34,13 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
  */
 public final class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList> {
 
+    static ViewerSeeUserComuByComu newViewerUserComuByComu(View frView, AppCompatActivity activity)
+    {
+        Timber.d("newViewerUserComuByComu()");
+        ViewerSeeUserComuByComu instance = new ViewerSeeUserComuByComu(frView, activity);
+        instance.setController(new CtrlerUserComuByComuList());
+        return instance;
+    }
     final TextView nombreComuView;
 
     private ViewerSeeUserComuByComu(View frView, AppCompatActivity activity)
@@ -42,15 +51,13 @@ public final class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserCo
         view.addHeaderView(new View(activity), null, true);
     }
 
-    static ViewerSeeUserComuByComu newViewerUserComuByComu(View frView, AppCompatActivity activity)
-    {
-        Timber.d("newViewerUserComuByComu()");
-        ViewerSeeUserComuByComu instance = new ViewerSeeUserComuByComu(frView, activity);
-        instance.setController(new CtrlerUserComuByComuList());
-        return instance;
-    }
-
     // ==================================  VIEWER  =================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable comunidadBean)

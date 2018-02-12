@@ -1,9 +1,9 @@
 package com.didekindroid;
 
 import com.didekindroid.accesorio.ConfidencialidadAcTest;
-import com.didekindroid.lib_one.api.ApiSuite;
-import com.didekindroid.lib_one.api.exception.UiExceptionTest;
-import com.didekindroid.lib_one.router.FragmentInitiatorTest;
+import com.didekindroid.lib_one.LibOneSuite;
+import com.didekindroid.router.UiExceptionActionTest;
+import com.didekindroid.router.FragmentInitiatorTest;
 import com.didekindroid.router.ViewerDrawerMain_NotReg_Test;
 import com.didekindroid.router.ViewerDrawerMain_Reg_Test;
 import com.didekindroid.util.DeviceTest;
@@ -23,9 +23,9 @@ import org.junit.runners.Suite;
         // Accesorio.
         ConfidencialidadAcTest.class,
         // api.
-        ApiSuite.class,
+        LibOneSuite.class,
         // exception
-        UiExceptionTest.class,
+        UiExceptionActionTest.class,
         // router.
         FragmentInitiatorTest.class,
         ViewerDrawerMain_NotReg_Test.class,

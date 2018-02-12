@@ -1,4 +1,4 @@
-package com.didekindroid.testutil;
+package com.didekindroid.lib_one.testutil;
 
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;

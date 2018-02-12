@@ -1,4 +1,4 @@
-package com.didekindroid.api;
+package com.didekindroid.lib_one.api;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

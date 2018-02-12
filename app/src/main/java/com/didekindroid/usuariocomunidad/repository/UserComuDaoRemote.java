@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad.repository;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.security.IdentityCacher;
+import com.didekindroid.lib_one.security.IdentityCacherIf;
 import com.didekinlib.http.HttpHandler;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.http.usuariocomunidad.UsuarioComunidadEndPoints;
@@ -32,9 +32,9 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
 
     public static final UserComuDaoRemote userComuDaoRemote = new UserComuDaoRemote(TKhandler, httpInitializer.get().getHttpHandler());
     private final UsuarioComunidadEndPoints endPoint;
-    private final IdentityCacher identityCacher;
+    private final IdentityCacherIf identityCacher;
 
-    public UserComuDaoRemote(IdentityCacher identityCacherIn, HttpHandler httpHandlerIn)
+    public UserComuDaoRemote(IdentityCacherIf identityCacherIn, HttpHandler httpHandlerIn)
     {
         endPoint = httpHandlerIn.getService(UsuarioComunidadEndPoints.class);
         identityCacher = identityCacherIn;

@@ -3,8 +3,6 @@ package com.didekindroid.lib_one;
 import android.content.Context;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.security.JksInAndroidApp;
-import com.didekindroid.lib_one.util.CommonAssertionMsg;
 import com.didekinlib.http.HttpHandler;
 import com.didekinlib.http.JksInClient;
 import com.didekinlib.model.common.dominio.BeanBuilder;
@@ -14,6 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import retrofit2.Response;
 
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.httpInitializer_wrong_build_data;
+import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -25,15 +25,13 @@ public final class HttpInitializer {
 
     public static final AtomicReference<HttpInitializer> httpInitializer = new AtomicReference<>();
     private final Context context;
-    private final JksInClient jksInClient;
     private final HttpHandler httpHandler;
 
     @SuppressWarnings("SyntheticAccessorCall")
     private HttpInitializer(HttpInitializerBuilder builder)
     {
         context = builder.context;
-        httpHandler = builder.httpHandler;
-        jksInClient = builder.jksInClient;
+        httpHandler = new HttpHandler(builder.webHostPortStr, builder.jksInClient, builder.timeOut);
     }
 
     public Context getContext()
@@ -59,8 +57,9 @@ public final class HttpInitializer {
 
     public static class HttpInitializerBuilder implements BeanBuilder<HttpInitializer> {
 
-        private HttpHandler httpHandler = null;
         private Context context;
+        private String webHostPortStr;
+        private int timeOut;
         private JksInClient jksInClient;
 
         public HttpInitializerBuilder(Context context)
@@ -68,23 +67,22 @@ public final class HttpInitializer {
             this.context = context;
         }
 
-        public HttpInitializerBuilder httpHandler(int webHost, int webHostPort, int timeOut)
+        public HttpInitializerBuilder webHostAndPort(int webHostIn, int webPortIn)
         {
-            httpHandler = new HttpHandler(context.getString(webHost) + context.getString(webHostPort), parseInt(context.getString(timeOut)));
+            webHostPortStr = context.getString(webHostIn) + context.getString(webPortIn);
             return this;
         }
 
-        public HttpInitializerBuilder jksInClient(int bksPswd, int bksName)
+        public HttpInitializerBuilder timeOut(int timeOutIn)
         {
-            String bksPasswordStr = context.getString(bksPswd);
-            String bksNameStr = context.getString(bksName);
+            timeOut = parseInt(context.getString(timeOutIn));
+            return this;
+        }
 
-            int bksRawFileResourceId = context.getResources().getIdentifier(bksNameStr, "raw", context.getPackageName());
-
-            if (bksPasswordStr.isEmpty() || bksRawFileResourceId <= 0) {
-                throw new IllegalStateException("BKS should be initialized in client application.");
-            }
-            jksInClient = new JksInAndroidApp(bksPasswordStr, bksRawFileResourceId);
+        public HttpInitializerBuilder jksInClient(JksInClient jksInClientIn)
+        {
+            assertTrue(jksInClientIn != null, httpInitializer_wrong_build_data);
+            jksInClient = jksInClientIn;
             return this;
         }
 
@@ -92,11 +90,7 @@ public final class HttpInitializer {
         @Override
         public HttpInitializer build()
         {
-            HttpInitializer httpInitializer = new HttpInitializer(this);
-            if (httpInitializer.httpHandler == null || httpInitializer.jksInClient == null) {
-                throw new IllegalStateException(CommonAssertionMsg.httpInitializer_wrong_build_data);
-            }
-            return httpInitializer;
+            return new HttpInitializer(this);
         }
     }
 }

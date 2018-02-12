@@ -20,6 +20,7 @@ import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
 import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
@@ -115,6 +116,13 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
             }
         }
         initializeSpinnersFromComunidad(comunidad, savedState);
+    }
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.didekindroid.testutil;
+package com.didekindroid.lib_one.testutil;
 
 import android.app.Activity;
 

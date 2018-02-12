@@ -13,6 +13,7 @@ import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.security.CtrlerAuthToken;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -23,8 +24,8 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 
 /**
  * User: pedro@didekin
@@ -32,11 +33,6 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
  * Time: 09:56
  */
 public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
-
-    private ViewerRegUserComuFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
-    {
-        super(view, activity, parentViewer);
-    }
 
     static ViewerRegUserComuFr newViewerRegUserComuFr(@NonNull View view, @NonNull ParentViewerInjectedIf parentViewer)
     {
@@ -46,7 +42,19 @@ public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
         return instance;
     }
 
+    private ViewerRegUserComuFr(View view, AppCompatActivity activity, @NonNull ParentViewerInjectedIf parentViewer)
+    {
+        super(view, activity, parentViewer);
+    }
+
     // ==================================== ViewerIf ===================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

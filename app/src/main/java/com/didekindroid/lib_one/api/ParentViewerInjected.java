@@ -17,12 +17,12 @@ import timber.log.Timber;
  * Time: 15:25
  */
 
-public class ParentViewerInjected<T extends View, C extends ControllerIf> extends Viewer<T, C> implements
+public abstract class ParentViewerInjected<T extends View, C extends ControllerIf> extends Viewer<T, C> implements
         ParentViewerInjectedIf<T, C> {
 
     private final Map<Class<? extends ViewerIf>, ViewerIf> childViewers;
 
-    public ParentViewerInjected(T view, AppCompatActivity activity)
+    protected ParentViewerInjected(T view, AppCompatActivity activity)
     {
         super(view, activity, null);
         childViewers = new HashMap<>(1);

@@ -13,4 +13,5 @@ public interface UiExceptionIf {
     ErrorBean getErrorBean();
 
     String getErrorHtppMsg();
+
 }

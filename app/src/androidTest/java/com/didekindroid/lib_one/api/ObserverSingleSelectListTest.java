@@ -6,8 +6,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Spinner;
 
-import com.didekindroid.api.ActivityMock;
 import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekinlib.http.exception.ErrorBean;
 
 import org.junit.Before;
@@ -21,9 +22,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Single;
 
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -65,6 +66,12 @@ public class ObserverSingleSelectListTest {
                                     public void onSuccessLoadItemList(List<String> itemsList)
                                     {
                                         assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                                    }
+
+                                    @Override
+                                    public UiExceptionRouterIf getExceptionRouter()
+                                    {
+                                        return httpMsg -> (RouterActionIf) () -> ActivityNextMock.class;
                                     }
 
                                     @Override

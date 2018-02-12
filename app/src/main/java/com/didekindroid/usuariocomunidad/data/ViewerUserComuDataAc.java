@@ -12,6 +12,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.lib_one.api.ParentViewerInjected;
 import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -29,7 +30,8 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterModifiedUserComu;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_deleted;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 
@@ -41,6 +43,13 @@ import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 
 final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
+    static ViewerUserComuDataAc newViewerUserComuDataAc(UserComuDataAc activity)
+    {
+        Timber.d("newViewerUserComuDataAc()");
+        ViewerUserComuDataAc instance = new ViewerUserComuDataAc(activity.acView, activity);
+        instance.setController(new CtrlerUsuarioComunidad());
+        return instance;
+    }
     @SuppressWarnings("WeakerAccess")
     UsuarioComunidad userComuIntent;
     Menu acMenu;
@@ -51,12 +60,12 @@ final class ViewerUserComuDataAc extends ParentViewerInjected<View, CtrlerUsuari
         super(view, activity);
     }
 
-    static ViewerUserComuDataAc newViewerUserComuDataAc(UserComuDataAc activity)
+    // ================================= ViewerIf ==================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
     {
-        Timber.d("newViewerUserComuDataAc()");
-        ViewerUserComuDataAc instance = new ViewerUserComuDataAc(activity.acView, activity);
-        instance.setController(new CtrlerUsuarioComunidad());
-        return instance;
+        return uiException_router;
     }
 
     @Override

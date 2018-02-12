@@ -1,4 +1,4 @@
-package com.didekindroid.lib_one.router;
+package com.didekindroid.router;
 
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.api.ListMockFr;
 
 import org.junit.Before;

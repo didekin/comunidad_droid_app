@@ -1,4 +1,4 @@
-package com.didekindroid.api;
+package com.didekindroid.lib_one.api;
 
 import android.app.Activity;
 import android.os.Bundle;

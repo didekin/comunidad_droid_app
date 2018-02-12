@@ -15,6 +15,7 @@ import com.didekindroid.lib_one.api.ObserverSingleSelectList;
 import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -27,6 +28,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIS
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.router.LeadRouter.selectedClosedIncid;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
@@ -53,17 +55,6 @@ public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
         implements SpinnerEventListener {
 
-    ViewerComuSpinner comuSpinnerViewer;
-    View emptyListView;
-
-    ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
-    {
-        super(frView.findViewById(android.R.id.list), activity, null);
-        emptyListView = frView.findViewById(android.R.id.empty);
-        // To get visible a divider on top of the list: true.
-        view.addHeaderView(new View(activity), null, true);
-    }
-
     static ViewerIncidSeeCloseFr newViewerIncidSeeClose(View view, AppCompatActivity activity, boolean isListClosed)
     {
         Timber.d("newViewerIncidSeeClose()");
@@ -74,6 +65,16 @@ public class ViewerIncidSeeCloseFr extends
         parentInstance.setController(new CtrlerIncidSeeCloseByComu());
         parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_comunidad_spinner), parentInstance);
         return parentInstance;
+    }
+    ViewerComuSpinner comuSpinnerViewer;
+    View emptyListView;
+
+    ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
+    {
+        super(frView.findViewById(android.R.id.list), activity, null);
+        emptyListView = frView.findViewById(android.R.id.empty);
+        // To get visible a divider on top of the list: true.
+        view.addHeaderView(new View(activity), null, true);
     }
 
     ViewerComuSpinner getComuSpinner()
@@ -91,6 +92,12 @@ public class ViewerIncidSeeCloseFr extends
         initSelectedItemId(savedState);
         comuSpinnerViewer.doViewInViewer(savedState, viewBean);
         view.setOnItemClickListener(new ListItemOnClickListener());
+    }
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
     }
 
     @Override

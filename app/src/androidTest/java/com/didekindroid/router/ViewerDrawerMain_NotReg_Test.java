@@ -23,11 +23,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
-import static com.didekindroid.router.MnRouter.confidencialidad_mn;
+import static com.didekindroid.router.MnRouterAction.confidencialidad_mn;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -44,8 +47,11 @@ public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMain_abs_Test {
     @Before
     public void setUp()
     {
+        // Preconditions.
+        cleanWithTkhandler();
+        waitAtMost(4, SECONDS).until(() -> activityRule.getActivity().getViewerDrawer(), notNullValue());
         viewerDrawer = activityRule.getActivity().getViewerDrawer();
-        assertThat(viewerDrawer.getController().isRegisteredUser(), is(false));
+
     }
 
     //    ============================ TESTS ==============================

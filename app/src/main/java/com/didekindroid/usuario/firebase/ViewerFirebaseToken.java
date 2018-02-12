@@ -4,9 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
+
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -17,11 +20,6 @@ public class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> imp
         ViewerFirebaseTokenIf<View> {
 
 
-    protected ViewerFirebaseToken(AppCompatActivity activity)
-    {
-        super(null, activity, null);
-    }
-
     public static ViewerFirebaseTokenIf<View> newViewerFirebaseToken(AppCompatActivity activity)
     {
         Timber.d("newViewerFirebaseToken()");
@@ -30,11 +28,24 @@ public class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> imp
         return viewer;
     }
 
+    protected ViewerFirebaseToken(AppCompatActivity activity)
+    {
+        super(null, activity, null);
+    }
+
     @Override
     public void checkGcmTokenAsync()
     {
         Timber.d("checkGcmTokenAsync()");
         controller.checkGcmTokenAsync(new RegGcmTokenObserver());
+    }
+
+    // .............................. ViewerIf ..................................
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
     }
 
     // ............................ SUBSCRIBERS ..................................

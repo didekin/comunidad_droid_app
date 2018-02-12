@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.AbstractSingleObserver;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -25,11 +26,12 @@ import timber.log.Timber;
 
 import static android.view.Gravity.START;
 import static android.view.View.VISIBLE;
-import static com.didekindroid.router.MnRouter.incid_see_closed_by_comu_mn;
-import static com.didekindroid.router.MnRouter.incid_see_open_by_comu_mn;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
-import static com.didekindroid.router.MnRouter.see_usercomu_by_user_mn;
-import static com.didekindroid.router.MnRouter.user_data_mn;
+import static com.didekindroid.router.MnRouterAction.incid_see_closed_by_comu_mn;
+import static com.didekindroid.router.MnRouterAction.incid_see_open_by_comu_mn;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.router.MnRouterAction.see_usercomu_by_user_mn;
+import static com.didekindroid.router.MnRouterAction.user_data_mn;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
 import static java.util.EnumSet.of;
 
@@ -41,7 +43,7 @@ import static java.util.EnumSet.of;
 
 public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
-    private EnumSet<MnRouter> menuItemsToDraw;
+    private EnumSet<MnRouterAction> menuItemsToDraw;
     @SuppressWarnings("WeakerAccess")
     TextView drawerHeaderRot;
     NavigationView navView;
@@ -63,6 +65,12 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
     }
 
     /* ==================================== ViewerIf ====================================*/
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -119,12 +127,12 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
         Timber.d("buildMenu()");
         Menu drawerMenu = navView.getMenu();
         boolean isRegistered = controller.isRegisteredUser();
-        for (MnRouter menuItem : menuItemsToDraw) {
+        for (MnRouterAction menuItem : menuItemsToDraw) {
             drawerMenu.findItem(menuItem.getMnItemRsId()).setVisible(isRegistered).setEnabled(isRegistered);
         }
     }
 
-    Set<MnRouter> getMenuItemsToDraw()
+    Set<MnRouterAction> getMenuItemsToDraw()
     {
         return Collections.unmodifiableSet(menuItemsToDraw);
     }

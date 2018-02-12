@@ -5,18 +5,18 @@
     <application tools:ignore="AllowBackup">
         <!-- Activity for UIException tests. -->
         <activity
-            android:name=".api.ActivityMock"
+            android:name=".lib_one.api.ActivityMock"
             android:label="@string/mockActivity_label"
             android:launchMode="singleTask">
         </activity>
         <activity
-            android:name=".api.ActivityNextMock"
+            android:name=".lib_one.api.ActivityNextMock"
             android:label="@string/mock_next_DefaultActivity_label"
-            android:parentActivityName=".api.ActivityMock"
+            android:parentActivityName=".lib_one.api.ActivityMock"
             android:launchMode="standard">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".api.ActivityMock"/>
+                android:value=".lib_one.api.ActivityMock"/>
         </activity>
     </application>
 </manifest>

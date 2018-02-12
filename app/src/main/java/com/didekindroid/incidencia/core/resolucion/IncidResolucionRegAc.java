@@ -15,7 +15,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.resolucion.IncidResolucionRegFr.newInstance;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.router.MnRouter.resourceIdToMnItem;
+import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
 import static com.didekindroid.lib_one.util.UIutils.assertTrue;

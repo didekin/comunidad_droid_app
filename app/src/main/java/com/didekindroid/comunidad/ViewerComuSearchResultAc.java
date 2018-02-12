@@ -8,10 +8,12 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -21,16 +23,24 @@ import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 
 final class ViewerComuSearchResultAc extends Viewer<View, Controller> {
 
-    private ViewerComuSearchResultAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity, null);
-    }
-
     static ViewerComuSearchResultAc newViewerComuSearchResultAc(ComuSearchResultsAc activity)
     {
         ViewerComuSearchResultAc instance = new ViewerComuSearchResultAc(activity.acView, activity);
         instance.setController(new Controller(TKhandler));
         return instance;
+    }
+
+    private ViewerComuSearchResultAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity, null);
+    }
+
+    // .............................. ViewerIf ..................................
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        return uiException_router;
     }
 
     // .............................. HELPERS ..................................
@@ -42,7 +52,7 @@ final class ViewerComuSearchResultAc extends Viewer<View, Controller> {
     void updateActivityMenu(Menu menu)
     {
         Timber.d("updateActivityMenu()");
-        if(!controller.isRegisteredUser()){
+        if (!controller.isRegisteredUser()) {
             return;
         }
         MenuItem comuDataItem = menu.findItem(R.id.see_usercomu_by_user_ac_mn);

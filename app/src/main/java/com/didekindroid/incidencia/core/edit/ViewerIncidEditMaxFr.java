@@ -10,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
 import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -39,13 +40,6 @@ import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userco
  */
 final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
 
-    ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
-
-    private ViewerIncidEditMaxFr(View view, ParentViewerInjectedIf parentViewer)
-    {
-        super(view, parentViewer.getActivity(), parentViewer);
-    }
-
     static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
@@ -57,6 +51,22 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
                 newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), instance);
         instance.setController(new CtrlerIncidenciaCore());
         return instance;
+    }
+
+    ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
+
+    private ViewerIncidEditMaxFr(View view, ParentViewerInjectedIf parentViewer)
+    {
+        super(view, parentViewer.getActivity(), parentViewer);
+    }
+
+    // .............................. ViewerIf ..................................
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return getParentViewer().getExceptionRouter();
     }
 
     @Override

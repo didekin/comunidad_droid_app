@@ -10,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.AbstractSingleObserver;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
@@ -28,9 +29,9 @@ import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.modifyPswd;
 import static com.didekindroid.router.LeadRouter.sendNewPswd;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
-import static com.didekindroid.router.UiExceptionRouter.show_userData_wrongMail;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.UiExceptionAction.show_userData_wrongMail;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
@@ -64,6 +65,7 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         }
         return instance;
     }
+
     final AtomicReference<UsuarioBean> usuarioBean;
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<Usuario> oldUserPswd;
@@ -80,11 +82,12 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
-    void processBackUserDataLoaded(Usuario usuario)
+    // .............................. ViewerIf ..................................
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
     {
-        Timber.d("processBackUserDataLoaded()");
-        userName.compareAndSet(null, usuario.getUserName());
+        return uiException_router;
     }
 
     @Override
@@ -111,6 +114,30 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         sendPswdButton.setOnClickListener(
                 v -> controller.sendNewPassword(new PswdSendSingleObserver(), new Usuario.UsuarioBuilder().userName(userName.get()).build())
         );
+    }
+
+    @Override
+    public void onErrorInObserver(Throwable error)
+    {
+        Timber.d("onErrorInObserver()");
+        UiException uiException = getUiExceptionFromThrowable(error);
+        String errorMsg = uiException.getErrorBean().getMessage();
+
+        if (errorMsg.equals(USER_NAME_NOT_FOUND.getHttpMessage())
+                || errorMsg.equals(PASSWORD_NOT_SENT.getHttpMessage())) {
+            show_userData_wrongMail.initActivity(activity);
+        } else if (errorMsg.equals(BAD_REQUEST.getHttpMessage())) {
+            makeToast(activity, R.string.password_wrong);
+        } else {
+            uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(activity);
+        }
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    void processBackUserDataLoaded(Usuario usuario)
+    {
+        Timber.d("processBackUserDataLoaded()");
+        userName.compareAndSet(null, usuario.getUserName());
     }
 
     boolean checkLoginData()
@@ -145,23 +172,6 @@ public final class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
                 ((EditText) view.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText().toString(),
                 ((EditText) view.findViewById(R.id.password_validation_ediT)).getText().toString()
         };
-    }
-
-    @Override
-    public void onErrorInObserver(Throwable error)
-    {
-        Timber.d("onErrorInObserver()");
-        UiException uiException = getUiExceptionFromThrowable(error);
-        String errorMsg = uiException.getErrorBean().getMessage();
-
-        if (errorMsg.equals(USER_NAME_NOT_FOUND.getHttpMessage())
-                || errorMsg.equals(PASSWORD_NOT_SENT.getHttpMessage())) {
-            show_userData_wrongMail.initActivity(activity);
-        } else if (errorMsg.equals(BAD_REQUEST.getHttpMessage())) {
-            makeToast(activity, R.string.password_wrong);
-        } else {
-            getExceptionRouter(uiException.getErrorHtppMsg()).initActivity(activity);
-        }
     }
 
     // ...................... SUBSCRIBERS .........................

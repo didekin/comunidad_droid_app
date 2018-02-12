@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewerInjected;
 import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UIutils.makeToast;
 import static com.didekindroid.router.LeadRouter.afterMofiedComunidad;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -29,11 +31,6 @@ import static com.didekindroid.router.LeadRouter.afterMofiedComunidad;
  * Time: 14:09
  */
 class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> {
-
-    ViewerComuDataAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
-    }
 
     static ViewerComuDataAc newViewerComuDataAc(@NonNull ComuDataAc activity)
     {
@@ -44,7 +41,19 @@ class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> {
         return instance;
     }
 
+    ViewerComuDataAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity);
+    }
+
     // ==================================== ViewerIf ====================================
+
+    @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return uiException_router;
+    }
 
     @Override
     public void doViewInViewer(Bundle savedState, final Serializable viewBean)

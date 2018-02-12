@@ -29,9 +29,9 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.TOKEN_NULL;
  * Date: 25/06/15
  * Time: 17:28
  */
-public final class TokenIdentityCacher implements IdentityCacher {
+public final class TokenIdentityCacher implements IdentityCacherIf {
 
-    public static final IdentityCacher TKhandler = new TokenIdentityCacher(httpInitializer.get().getContext());
+    public static final IdentityCacherIf TKhandler = new TokenIdentityCacher(httpInitializer.get().getContext());
 
     //  ======================================================================================
     //    .................................... ACTIONS AND FUNCTIONS .................................

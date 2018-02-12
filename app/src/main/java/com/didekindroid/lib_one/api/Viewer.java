@@ -10,22 +10,20 @@ import java.io.Serializable;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.util.UIutils.getUiExceptionFromThrowable;
-import static com.didekindroid.router.UiExceptionRouter.getExceptionRouter;
 
 /**
  * User: pedro@didekin
  * Date: 15/03/17
  * Time: 13:37
  */
-@SuppressWarnings("WeakerAccess")
-public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<T, C> {
+public abstract class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<T, C> {
 
     protected final T view;
     protected final AppCompatActivity activity;
     protected final ViewerIf parentViewer;
     protected C controller;
 
-    public Viewer(T view, AppCompatActivity activity, ViewerIf parentViewer)
+    protected Viewer(T view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         this.view = view;
         this.activity = activity;
@@ -39,12 +37,11 @@ public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<
         return activity;
     }
 
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     @Override
     public void onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
-        getExceptionRouter(getUiExceptionFromThrowable(error).getErrorHtppMsg()).initActivity(activity);
+        getExceptionRouter().getActionFromMsg(getUiExceptionFromThrowable(error).getErrorHtppMsg()).initActivity(activity);
     }
 
     @Override
