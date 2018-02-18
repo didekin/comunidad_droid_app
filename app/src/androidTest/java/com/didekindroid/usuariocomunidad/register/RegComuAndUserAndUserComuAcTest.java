@@ -25,16 +25,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadDefault;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
+import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
+import static com.didekindroid.testutil.ActivityTestUtil.checkChildInViewer;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtil.focusOnView;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
@@ -45,6 +45,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
 
 /**
  * User: pedro
@@ -157,7 +158,7 @@ public class RegComuAndUserAndUserComuAcTest {
         // Precondition.
         assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
         // Exec and check.
-        LOGIN_AC.checkItemNoRegisterUser(activity);
+        LOGIN_AC.checkItem(activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Exec and check navigate-up.
             checkUp(comuSearchAcLayout);

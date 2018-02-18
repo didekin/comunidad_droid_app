@@ -32,18 +32,18 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGe
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -73,7 +73,7 @@ public class ViewerIncidEditMinFrTest {
         {
             try {
                 signUpWithTkGetComu(COMU_REAL_PEPE);
-                IncidImportancia incidImportancia = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0), (short) 2);
+                IncidImportancia incidImportancia = makeRegGetIncidImportancia(userComuDao.seeUserComusByUser().get(0), (short) 2);
                 // Premisa: usuario no iniciador y usuario no ADM.
                 assertThat(COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
                 incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
@@ -127,7 +127,7 @@ public class ViewerIncidEditMinFrTest {
     {
         assertThat(viewer.getController(), instanceOf(CtrlerIncidenciaCore.class));
         assertThat(viewer.getParentViewer(), allOf(
-                is(activity.getParentViewer()),
+                is(activity.getInjectedParentViewer()),
                 notNullValue()
         ));
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());

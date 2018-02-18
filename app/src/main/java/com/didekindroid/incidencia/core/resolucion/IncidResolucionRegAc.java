@@ -7,19 +7,19 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.core.resolucion.IncidResolucionRegFr.newInstance;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_should_have_admAuthority;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -36,7 +36,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements FragmentI
 
     IncidImportancia incidImportancia;
     Resolucion resolucion;
-    ViewerFirebaseTokenIf viewerFirebaseToken;
+    ViewerNotifyTokenIf viewerFirebaseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -120,7 +120,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements FragmentI
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

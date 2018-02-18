@@ -7,10 +7,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.IncidBundleKey;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.incidencia.utils.IncidBundleKey;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.incidencia.IncidenciaBean;
@@ -23,11 +23,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidContextualName.incid_open_just_modified;
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.modifiedOpenIncid;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
@@ -95,7 +95,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> {
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
         bundle.putBoolean(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, false);
-        modifiedOpenIncid.initActivity(getActivity(), bundle);
+        getContextualRouter().getActionFromContextNm(incid_open_just_modified).initActivity(getActivity(), bundle);
     }
 
     //    ============================  LIFE CYCLE   ===================================

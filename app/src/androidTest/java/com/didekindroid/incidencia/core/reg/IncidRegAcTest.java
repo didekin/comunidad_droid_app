@@ -31,33 +31,33 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_FUENTE;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regSeveralUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -84,7 +84,7 @@ public class IncidRegAcTest {
         {
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-                usuarioComunidades = userComuDaoRemote.seeUserComusByUser();
+                usuarioComunidades = userComuDao.seeUserComusByUser();
             } catch (IOException | UiException e) {
                 fail();
             }
@@ -183,7 +183,7 @@ public class IncidRegAcTest {
     @Test
     public void testOnCreate()
     {
-        assertThat(activity.getParentViewer(), notNullValue());
+        assertThat(activity.getInjectedParentViewer(), notNullValue());
         assertThat(activity.incidRegFr.getArguments().getLong(COMUNIDAD_ID.key), is(usuarioComunidades.get(0).getComunidad().getC_Id()));
         assertThat(activity.incidRegFr.viewerInjector, instanceOf(IncidRegAc.class));
         assertThat(activity.incidRegFr.viewer.getParentViewer(), is(activity.viewer));

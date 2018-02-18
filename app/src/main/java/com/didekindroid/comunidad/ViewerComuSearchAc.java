@@ -6,21 +6,21 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.security.CtrlerAuthToken;
 import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.comunidadFound_several;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
+import static com.didekindroid.router.ContextualAction.showComuFound;
 import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
@@ -29,7 +29,7 @@ import static com.didekindroid.router.UiExceptionRouter.uiException_router;
  * Time: 14:21
  */
 
-class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> {
+class ViewerComuSearchAc extends ParentViewer<View, CtrlerAuthTokenIf> {
 
     static ViewerComuSearchAc newViewerComuSearch(ComuSearchAc activity)
     {
@@ -83,7 +83,7 @@ class ViewerComuSearchAc extends ParentViewerInjected<View, CtrlerAuthTokenIf> {
             } else {
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidadFromViewer);
-                comunidadFound_several.initActivity(activity, bundle);
+                showComuFound.initActivity(activity, bundle);
             }
         }
     }

@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.Menu;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -36,19 +37,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_B;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
@@ -171,9 +172,10 @@ public class ViewerUserComuDataAcTest {
     }
 
     @Test
-    public void test_ModifyComuObserver_2()
+    public void test_ModifyComuObserver_2() throws InterruptedException
     {
-        // Exec and check.
+
+        TimeUnit.SECONDS.sleep(4);// Exec and check.
         just(1).subscribeWith(viewer.new ModifyUserComuObserver(false));
         waitAtMost(10, SECONDS).untilFalse(viewer.showComuDataMn);
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
@@ -201,7 +203,7 @@ public class ViewerUserComuDataAcTest {
     public void test_OnCreate() throws Exception
     {
         // Check for initialization of fragments viewers.
-        ParentViewerInjectedIf viewerParent = activity.viewer;
+        ParentViewerIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
     }
 

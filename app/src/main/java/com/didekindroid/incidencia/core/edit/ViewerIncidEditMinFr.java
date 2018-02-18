@@ -7,8 +7,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
@@ -24,7 +23,12 @@ import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewe
  */
 final class ViewerIncidEditMinFr extends ViewerIncidEditFr {
 
-    static ViewerIncidEditMinFr newViewerIncidEditMinFr(@NonNull View frView, @NonNull ParentViewerInjectedIf parentViewer)
+    private ViewerIncidEditMinFr(View view, ParentViewerIf parentViewer)
+    {
+        super(view, parentViewer.getActivity(), parentViewer);
+    }
+
+    static ViewerIncidEditMinFr newViewerIncidEditMinFr(@NonNull View frView, @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
         ViewerIncidEditMinFr instance = new ViewerIncidEditMinFr(frView, parentViewer);
@@ -34,19 +38,7 @@ final class ViewerIncidEditMinFr extends ViewerIncidEditFr {
         return instance;
     }
 
-    private ViewerIncidEditMinFr(View view, ParentViewerInjectedIf parentViewer)
-    {
-        super(view, parentViewer.getActivity(), parentViewer);
-    }
-
     // .............................. ViewerIf ..................................
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, @NonNull Serializable viewBean)

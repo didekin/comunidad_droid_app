@@ -25,7 +25,7 @@ public class CtrlerComuSpinner extends CtrlerSelectList<Comunidad> {
     public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Comunidad>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        return subscriptions
+        return getSubscriptions()
                 .add(comunidadesByUser().subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribeWith(observer)

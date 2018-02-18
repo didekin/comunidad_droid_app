@@ -13,7 +13,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
 import static java.lang.Thread.sleep;
 
 /**
@@ -25,14 +24,9 @@ import static java.lang.Thread.sleep;
 public enum ComuMenuTestUtil implements MenuTestUtilIf {
 
     COMU_DATA_AC {
-        @Override
-        public void checkItemNoRegisterUser(Activity activity)
-        {
-            throw new UnsupportedOperationException(COMU_DATA_AC.name() + REGISTERED_USER);
-        }
 
         @Override
-        public void checkItemRegisterUser(Activity activity) throws InterruptedException
+        public void checkItem(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.comu_data_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
@@ -43,14 +37,9 @@ public enum ComuMenuTestUtil implements MenuTestUtilIf {
     },
 
     COMU_SEARCH_AC {
-        @Override
-        public void checkItemNoRegisterUser(Activity activity) throws InterruptedException
-        {
-            checkItemRegisterUser(activity);
-        }
 
         @Override
-        public void checkItemRegisterUser(Activity activity) throws InterruptedException
+        public void checkItem(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.comu_search_ac_mn)).check(doesNotExist());
             sleep(1000);

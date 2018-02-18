@@ -8,7 +8,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
+import com.didekindroid.comunidad.util.ComuBundleKey;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -31,15 +31,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.USER_DATA_AC;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuRol;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPlantaPuerta;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPortalEscalera;
@@ -85,7 +85,7 @@ public class SeeUserComuByComuAcTest {
         {
             try {
                 signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                usuarioComunidad = userComuDaoRemote.seeUserComusByUser().get(0);
+                usuarioComunidad = userComuDao.seeUserComusByUser().get(0);
                 comunidadId = usuarioComunidad.getComunidad().getC_Id();
             } catch (IOException | UiException e) {
                 fail();
@@ -152,21 +152,21 @@ public class SeeUserComuByComuAcTest {
     @Test
     public void testUserComuByUserMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
     @Test
     public void testUserDataMn() throws InterruptedException
     {
-        USER_DATA_AC.checkItemRegisterUser(activity);
+        USER_DATA_AC.checkItem(activity);
         checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test
     public void testComuSearchMn() throws InterruptedException
     {
-        COMU_SEARCH_AC.checkItemRegisterUser(activity);
+        COMU_SEARCH_AC.checkItem(activity);
         // En este caso no hay opción de 'navigate-up'.
     }
 }

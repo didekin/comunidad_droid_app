@@ -4,7 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.lib_one.api.exception.UiException;
 
@@ -23,17 +23,17 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.focusOnView;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static io.reactivex.Single.just;
@@ -129,7 +129,7 @@ public class ViewerRegComuUserComuAcTest {
     public void test_OnCreate() throws Exception
     {
         // Check for initialization of fragments viewers.
-        ParentViewerInjectedIf viewerParent = activity.viewer;
+        ParentViewerIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegComuFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
         test_DoViewInViewer();

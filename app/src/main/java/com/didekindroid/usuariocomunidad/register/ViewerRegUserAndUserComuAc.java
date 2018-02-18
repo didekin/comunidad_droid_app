@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,10 +8,9 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ObserverCacheCleaner;
-import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.api.ParentViewer;
+import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
 import com.didekindroid.lib_one.util.ConnectionUtils;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
-import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -21,9 +19,10 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.usuario.UserContextualName.new_user_usercomu_just_registered;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
@@ -31,7 +30,12 @@ import static com.didekindroid.router.UiExceptionRouter.uiException_router;
  * Time: 10:37
  */
 
-final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
+final class ViewerRegUserAndUserComuAc extends ParentViewer<View, CtrlerUsuarioComunidad> {
+
+    private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity);
+    }
 
     static ViewerRegUserAndUserComuAc newViewerRegUserAndUserComuAc(RegUserAndUserComuAc activity)
     {
@@ -41,18 +45,7 @@ final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, Ctrler
         return instance;
     }
 
-    private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
-    }
-
     // ==================================== ViewerIf ====================================
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        return uiException_router;
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -69,8 +62,8 @@ final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, Ctrler
     void onRegisterSuccess(UsuarioComunidad userComu)
     {
         Timber.d("onRegisterSuccess()");
-        DialogFragment newFragment = PasswordSentDialog.newInstance(userComu.getUsuario());
-        newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
+        getContextualRouter().getActionFromContextNm(new_user_usercomu_just_registered)
+                .initActivity(activity, usuario_object.getBundleForKey(userComu.getUsuario()));
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -23,17 +23,17 @@ import java.sql.Timestamp;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidContextualName.new_incid_resolucion_just_registered;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_registered;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.afterResolucionReg;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
@@ -41,6 +41,11 @@ import static com.didekindroid.router.UiExceptionRouter.uiException_router;
  * Time: 15:52
  */
 public class IncidResolucionRegFr extends Fragment {
+
+    IncidImportancia incidImportancia;
+    ResolucionBean resolucionBean;
+    TextView fechaViewForPicker;
+    View frView;
 
     static IncidResolucionRegFr newInstance(IncidImportancia incidImportancia)
     {
@@ -51,11 +56,6 @@ public class IncidResolucionRegFr extends Fragment {
         fr.setArguments(args);
         return fr;
     }
-
-    IncidImportancia incidImportancia;
-    ResolucionBean resolucionBean;
-    TextView fechaViewForPicker;
-    View frView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -168,12 +168,14 @@ public class IncidResolucionRegFr extends Fragment {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity());
+                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
+                        .initActivity(getActivity());
             } else {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                afterResolucionReg.initActivity(getActivity(), bundle);
+                routerInitializer.get().getContextRouter().getActionFromContextNm(new_incid_resolucion_just_registered)
+                        .initActivity(getActivity(), bundle);
             }
         }
     }

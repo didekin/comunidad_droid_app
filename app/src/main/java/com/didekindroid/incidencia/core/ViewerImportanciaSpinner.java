@@ -10,7 +10,6 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.CtrlerSelectList;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ import java.util.List;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 
 /**
  * User: pedro@didekin
@@ -29,6 +28,14 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 
 public final class ViewerImportanciaSpinner extends
         ViewerSelectList<Spinner, CtrlerSelectList<String>, String> {
+
+    @SuppressWarnings("WeakerAccess")
+    IncidImportanciaBean bean;
+
+    private ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull ViewerIf parentViewer)
+    {
+        super(view, parentViewer.getActivity(), parentViewer);
+    }
 
     public static ViewerImportanciaSpinner newViewerImportanciaSpinner(@NonNull Spinner view, @NonNull ViewerIf parentViewer)
     {
@@ -42,13 +49,6 @@ public final class ViewerImportanciaSpinner extends
             }
         });
         return instance;
-    }
-    @SuppressWarnings("WeakerAccess")
-    IncidImportanciaBean bean;
-
-    private ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull ViewerIf parentViewer)
-    {
-        super(view, parentViewer.getActivity(), parentViewer);
     }
 
     // ==================================== ViewerSelectListIf ====================================
@@ -68,13 +68,6 @@ public final class ViewerImportanciaSpinner extends
     }
 
     // ==================================== ViewerIf ====================================
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

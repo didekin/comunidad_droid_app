@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.io.Serializable;
@@ -14,8 +14,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.LeadRouter.selectedOpenIncid;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.incidencia.IncidContextualName.incid_open_just_selected;
+import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
@@ -34,7 +34,7 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  */
 public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
 
-    ViewerFirebaseTokenIf viewerFirebaseToken;
+    ViewerNotifyTokenIf viewerFirebaseToken;
 
     private ViewerIncidSeeOpenFr(View frView, AppCompatActivity activity)
     {
@@ -64,7 +64,7 @@ public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        selectedOpenIncid.initActivity(activity, bundle);
+        getContextualRouter().getActionFromContextNm(incid_open_just_selected).initActivity(activity, bundle);
     }
 
     /* ==================================  VIEWER  =================================*/

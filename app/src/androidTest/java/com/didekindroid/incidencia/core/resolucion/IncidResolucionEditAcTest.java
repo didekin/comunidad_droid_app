@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
+import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyToken;
+import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -31,15 +31,15 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -173,10 +173,10 @@ public class IncidResolucionEditAcTest {
                 .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
         // Run
-        CtrlerFirebaseTokenIf controller = CtrlerFirebaseToken.class.cast(activity.viewerFirebaseToken.getController());
+        CtrlerNotifyTokenIf controller = CtrlerNotifyToken.class.cast(activity.viewerFirebaseToken.getController());
         TimeUnit.SECONDS.sleep(4);
         // Check.
-        assertThat(controller.isGcmTokenSentServer(), is(true));
+        assertThat(controller.getTkCacher().isGcmTokenSentServer(), is(true));
     }
 
     @Test

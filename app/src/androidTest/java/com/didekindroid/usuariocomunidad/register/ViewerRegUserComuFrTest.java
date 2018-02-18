@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ViewerIf;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
@@ -18,12 +18,12 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -63,8 +63,8 @@ public class ViewerRegUserComuFrTest {
     public void test_OnActivityCreated() throws Exception
     {
         assertThat(fragment.viewer.getController(), notNullValue());
-        assertThat(ChildViewersInjectorIf.class.isInstance(activity), is(true));
-        ParentViewerInjectedIf parentViewer = (ParentViewerInjectedIf) fragment.viewer.getParentViewer();
+        assertThat(InjectorOfParentViewerIf.class.isInstance(activity), is(true));
+        ParentViewerIf parentViewer = (ParentViewerIf) fragment.viewer.getParentViewer();
         assertThat(parentViewer.getChildViewer(ViewerRegUserComuFr.class), CoreMatchers.<ViewerIf>is(fragment.viewer));
     }
 

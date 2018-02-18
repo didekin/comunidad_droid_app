@@ -3,7 +3,7 @@ package com.didekindroid.incidencia;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.lib_one.usuario.UserTestData;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
@@ -36,17 +36,17 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResoluc
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUserComuWithComunidadId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
 import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USERCOMU_WRONG_INIT;
@@ -67,7 +67,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidenciaDaoTest_1 {
 
-    UsuarioDataTestUtils.CleanUserEnum whatClean;
+    UserTestData.CleanUserEnum whatClean;
     Usuario pepe;
     UsuarioComunidad pepeUserComu;
 
@@ -76,7 +76,7 @@ public class IncidenciaDaoTest_1 {
     {
         whatClean = CLEAN_PEPE;
         pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
+        pepeUserComu = userComuDao.seeUserComusByUser().get(0);
     }
 
     @After
@@ -524,7 +524,4 @@ public class IncidenciaDaoTest_1 {
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         assertThat(incidenciaDao.seeUserComusImportancia(incidencia.getIncidenciaId()).size(), is(1));
     }
-
-    //    ============================= HELPER METHODS ===============================
-
 }

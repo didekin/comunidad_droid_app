@@ -12,18 +12,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.router.MnRouterIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_initialized;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
 
 /**
  * User: pedro@didekin
@@ -92,14 +93,16 @@ public class IncidResolucionSeeFr extends Fragment {
     {
         Timber.d("onOptionsItemSelected()");
 
+        MnRouterIf mnRouter = routerInitializer.get().getMnRouter();
         int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(getActivity());
+                mnRouter.getActionFromMnItemId(resourceId).initActivity(getActivity());
                 return true;
             case R.id.incid_comments_see_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(getActivity(), INCIDENCIA_OBJECT.getBundleForKey(getArguments().getSerializable(INCIDENCIA_OBJECT.key)));
+                mnRouter.getActionFromMnItemId(resourceId)
+                        .initActivity(getActivity(), INCIDENCIA_OBJECT.getBundleForKey(getArguments().getSerializable(INCIDENCIA_OBJECT.key)));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -34,7 +34,7 @@ public class CtrlerIncidenciaCore extends Controller implements ControllerListIf
     public boolean eraseIncidencia(DisposableSingleObserver<Integer> observer, Incidencia incidencia)
     {
         Timber.d("eraseIncidencia()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 incidenciaDeleted(incidencia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -45,7 +45,7 @@ public class CtrlerIncidenciaCore extends Controller implements ControllerListIf
     public String getAmbitoIncidDesc(short ambitoId)
     {
         Timber.d("getAmbitoIncidDesc()");
-        IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(getIdentityCacher().getContext());
+        IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(getTkCacher().getContext());
         String ambitoDesc = dbHelper.getAmbitoDescByPk(ambitoId);
         dbHelper.close();
         return ambitoDesc;
@@ -57,7 +57,7 @@ public class CtrlerIncidenciaCore extends Controller implements ControllerListIf
                                                                  long entityId)
     {
         Timber.d("loadItemsByEntityId()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 singleObservable
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -68,7 +68,7 @@ public class CtrlerIncidenciaCore extends Controller implements ControllerListIf
     public boolean modifyIncidImportancia(DisposableSingleObserver<Integer> observer, IncidImportancia newIncidImportancia)
     {
         Timber.d("modifyIncidImportancia()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 incidImportanciaModified(newIncidImportancia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -79,7 +79,7 @@ public class CtrlerIncidenciaCore extends Controller implements ControllerListIf
     public boolean registerIncidImportancia(DisposableSingleObserver<Integer> observer, IncidImportancia incidImportancia)
     {
         Timber.d("registerIncidImportancia()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 incidImportanciaRegistered(incidImportancia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -90,7 +90,7 @@ public class CtrlerIncidenciaCore extends Controller implements ControllerListIf
     public boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, final long incidenciaId)
     {
         Timber.d("seeResolucion()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 resolucion(incidenciaId)
                         .subscribeOn(io())
                         .observeOn(mainThread())

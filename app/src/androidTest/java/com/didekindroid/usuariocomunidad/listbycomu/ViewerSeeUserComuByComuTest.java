@@ -31,24 +31,24 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_B;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuRol;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuNoPortalNoEscalera;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPlantaNoPuerta;
@@ -85,7 +85,7 @@ public class ViewerSeeUserComuByComuTest {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
-                usuarioComunidad = userComuDaoRemote.seeUserComusByUser().get(0);
+                usuarioComunidad = userComuDao.seeUserComusByUser().get(0);
             } catch (IOException | UiException e) {
                 fail();
             }

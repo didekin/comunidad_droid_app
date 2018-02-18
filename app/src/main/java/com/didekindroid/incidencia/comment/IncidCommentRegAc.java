@@ -12,23 +12,22 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.api.exception.UiExceptionIf;
 import com.didekindroid.lib_one.util.ConnectionUtils;
-import com.didekindroid.lib_one.util.UIutils;
+import com.didekindroid.lib_one.util.UiUtil;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidContextualName.new_incid_comment_just_registered;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.comment_should_be_registered;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.comment_should_be_registered;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.afterRegComment;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * Preconditions:
@@ -74,7 +73,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -96,7 +95,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
             Timber.d("registerComment(); comment == null");
             makeToast(this, errorMsg.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast);
+            UiUtil.makeToast(this, R.string.no_internet_conn_toast);
         } else {
             new IncidCommentRegister().execute(comment);
         }
@@ -133,12 +132,14 @@ public class IncidCommentRegAc extends AppCompatActivity {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(IncidCommentRegAc.this);
+                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
+                        .initActivity(IncidCommentRegAc.this);
             } else if (!(isDestroyed() || isChangingConfigurations())) {
                 assertTrue(rowInserted == 1, comment_should_be_registered);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
-                afterRegComment.initActivity(IncidCommentRegAc.this, bundle);
+                routerInitializer.get().getContextRouter().getActionFromContextNm(new_incid_comment_just_registered)
+                        .initActivity(IncidCommentRegAc.this, bundle);
             } else {
                 Timber.i("onPostExcecute(): activity destroyed");
             }

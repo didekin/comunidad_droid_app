@@ -11,12 +11,13 @@ import com.didekindroid.lib_one.security.IdentityCacherIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.LeadRouter.newComunAndUserComu;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.comunidad.util.ComuContextualName.to_reg_new_comu_usercomu;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
+
 
 /**
  * Preconditions:
@@ -37,7 +38,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity {
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
-        identityCacher = TKhandler;
+        identityCacher = secInitializer.get().getTkCacher();
 
         // Preconditions: the user is registered.
         assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
@@ -45,7 +46,9 @@ public class SeeUserComuByUserAc extends AppCompatActivity {
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
         FloatingActionButton fab = findViewById(R.id.new_comunidad_fab);
-        fab.setOnClickListener(v -> newComunAndUserComu.initActivity(this, null));
+        fab.setOnClickListener(
+                v -> routerInitializer.get().getContextRouter()
+                        .getActionFromContextNm(to_reg_new_comu_usercomu).initActivity(this));
         mFragment = (SeeUserComuByUserFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
     }
 
@@ -71,7 +74,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity {
             case android.R.id.home:
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

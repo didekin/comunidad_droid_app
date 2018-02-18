@@ -5,12 +5,17 @@ import android.app.FragmentManager;
 import android.os.StrictMode;
 
 import com.didekindroid.lib_one.HttpInitializer;
-import com.didekindroid.lib_one.JksInitializer;
+import com.didekindroid.lib_one.security.SecInitializer;
+import com.didekindroid.lib_one.RouterInitializer;
 
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.lib_one.JksInitializer.jksInitializer;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.router.ContextualRouter.context_router;
+import static com.didekindroid.router.MnRouter.mn_router;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static io.reactivex.internal.functions.Functions.emptyConsumer;
 import static io.reactivex.plugins.RxJavaPlugins.setErrorHandler;
 
@@ -32,15 +37,20 @@ public final class DidekinApp extends Application {
     {
         super.onCreate();
         initDebugBuildConfig();
-        jksInitializer.compareAndSet(null, new JksInitializer(getApplicationContext(), bks_pswd, bks_name));
+        secInitializer.compareAndSet(null, new SecInitializer(getApplicationContext(), bks_pswd, bks_name));
         httpInitializer.compareAndSet(
                 null,
                 new HttpInitializer.HttpInitializerBuilder(getApplicationContext())
                         .webHostAndPort(webHost, webHostPort)
                         .timeOut(timeOut)
-                        .jksInClient(jksInitializer.get().getJksInClient())
+                        .jksInClient(secInitializer.get().getJksInClient())
                         .build()
         );
+        routerInitializer.compareAndSet(null, new RouterInitializer.RouterInitializerBuilder()
+                .contexRouter(context_router)
+                .exceptionRouter(uiException_router)
+                .mnRouter(mn_router)
+                .build());
         // To avoid closing the application for the default Android uncaught exception handler.
         setErrorHandler(emptyConsumer());
     }

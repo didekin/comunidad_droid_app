@@ -11,11 +11,11 @@ import com.didekindroid.R;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchResultAc.newViewerComuSearchResultAc;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * Preconditions:
@@ -109,7 +109,7 @@ public class ComuSearchResultsAc extends AppCompatActivity {
             case android.R.id.home:
             case R.id.reg_nueva_comunidad_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

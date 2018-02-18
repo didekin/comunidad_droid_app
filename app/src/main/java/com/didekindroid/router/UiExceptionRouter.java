@@ -2,14 +2,13 @@ package com.didekindroid.router;
 
 import android.support.annotation.NonNull;
 
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 
 import java.util.Map;
 
 import timber.log.Timber;
 
 import static com.didekindroid.router.UiExceptionAction.exceptionMsgMap;
-import static com.didekindroid.router.UiExceptionAction.generic;
 
 /**
  * User: pedro@didekin
@@ -31,7 +30,6 @@ public final class UiExceptionRouter implements UiExceptionRouterIf {
     public UiExceptionAction getActionFromMsg(@NonNull String httpMsg)
     {
         Timber.d("getActionFromMsg()");
-        UiExceptionAction router = actionMap.get(httpMsg);
-        return router == null ? generic : router;
+        return actionMap.get(httpMsg);
     }
 }

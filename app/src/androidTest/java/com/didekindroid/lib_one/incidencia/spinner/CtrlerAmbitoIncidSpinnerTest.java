@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 
 import static com.didekindroid.lib_one.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static com.didekindroid.lib_one.testutil.TestUtilOne.checkSpinnerCtrlerLoadItems;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkSpinnerCtrlerLoadItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

@@ -8,7 +8,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import static com.didekindroid.lib_one.security.AuthDao.authDao;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+
 
 /**
  * User: pedro@didekin
@@ -18,14 +20,18 @@ import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 
 public final class SecurityTestUtils {
 
-    public static void updateSecurityData(String userName, String password) throws UiException
+    private SecurityTestUtils()
     {
-        SpringOauthToken token = authDao.getPasswordUserToken(userName, password);
-        TKhandler.initIdentityCache(token);
-        TKhandler.updateIsRegistered(true);
     }
 
     //    ============================ SECURITY ============================
+
+    public static void updateSecurityData(String userName, String password) throws UiException
+    {
+        SpringOauthToken token = authDao.getPasswordUserToken(userName, password);
+        secInitializer.get().getTkCacher().initIdentityCache(token);
+        secInitializer.get().getTkCacher().updateIsRegistered(true);
+    }
 
     static SpringOauthToken doSpringOauthToken(String accessToken, String refreshToken)
     {
@@ -48,7 +54,32 @@ public final class SecurityTestUtils {
         return doSpringOauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", refreshTokenKey);
     }
 
-    private SecurityTestUtils()
+    public static void checkInitTokenCache(IdentityCacherIf tkCacherIn)
     {
+        assertTrue(tkCacherIn.getTokenCache().get() != null, "TokenCache is OK");
+        assertTrue(!tkCacherIn.getTokenCache().get().getValue().isEmpty(), "TokenCache is OK");
+        assertTrue(!tkCacherIn.getRefreshTokenValue().isEmpty(), "TokenCache is OK");
+        assertTrue(tkCacherIn.getRefreshTokenFile().exists(), "TokenCache is OK");
+    }
+
+    public static void checkNoInitCache(IdentityCacherIf tkCacherIn)
+    {
+        assertTrue(tkCacherIn.getTokenCache().get() == null, "TokenCache is OK");
+        assertTrue(!tkCacherIn.getRefreshTokenFile().exists(), "TokenCache is OK");
+    }
+
+    static void checkUpdateTokenCache(SpringOauthToken oldToken, IdentityCacherIf tkCacherIn)
+    {
+        checkUpdatedCacheAfterPswd(true, oldToken, tkCacherIn);
+    }
+
+    public static void checkUpdatedCacheAfterPswd(boolean isPswdUpdated, SpringOauthToken oldToken, IdentityCacherIf tkCacherIn)
+    {
+        checkInitTokenCache(tkCacherIn);
+        if (isPswdUpdated) {
+            assertTrue(!tkCacherIn.getTokenCache().get().equals(oldToken), "TokenCache is OK");
+        } else {
+            assertTrue(tkCacherIn.getTokenCache().get().equals(oldToken), "TokenCache is OK");
+        }
     }
 }

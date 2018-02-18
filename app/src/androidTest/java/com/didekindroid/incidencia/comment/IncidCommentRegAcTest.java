@@ -40,16 +40,16 @@ import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.fail;
@@ -71,7 +71,7 @@ public class IncidCommentRegAcTest {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
-                UsuarioComunidad juanReal = userComuDaoRemote.seeUserComusByUser().get(0);
+                UsuarioComunidad juanReal = userComuDao.seeUserComusByUser().get(0);
                 incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanReal)
@@ -140,11 +140,11 @@ public class IncidCommentRegAcTest {
     }
 
     @Test
-    public void testRegComment_2()
+    public void testRegComment_2() throws InterruptedException
     {
         // Caso OK.
         onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment is now valid")).perform(closeSoftKeyboard());
-
+        Thread.sleep(1000);
         onView(withId(R.id.incid_comment_reg_button)).perform(scrollTo(), click());
         // Verificación.
         onView(withId(R.id.incid_comments_see_ac)).check(matches(isDisplayed()));

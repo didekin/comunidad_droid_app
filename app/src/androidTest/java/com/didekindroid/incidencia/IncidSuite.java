@@ -1,6 +1,8 @@
 package com.didekindroid.incidencia;
 
-import com.didekindroid.incidencia.comment.IncidCommentSuite;
+import com.didekindroid.incidencia.comment.IncidCommentRegAcTest;
+import com.didekindroid.incidencia.comment.IncidCommentSeeAcTest_1;
+import com.didekindroid.incidencia.comment.IncidCommentSeeAcTest_2;
 import com.didekindroid.incidencia.core.IncidCoreSuite;
 import com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandlerTest;
 import com.didekindroid.incidencia.list.IncidListSuite;
@@ -16,7 +18,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         // comment
-        IncidCommentSuite.class,
+        IncidCommentRegAcTest.class,
+        IncidCommentSeeAcTest_1.class,
+        IncidCommentSeeAcTest_2.class,
         // core
         IncidCoreSuite.class,
         // firebase

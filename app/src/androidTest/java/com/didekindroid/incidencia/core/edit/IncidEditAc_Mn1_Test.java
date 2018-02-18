@@ -40,21 +40,21 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.testutil.ActivityTestUtils.checkAppBarMnNotExist;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUserComuWithComunidadId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -93,7 +93,7 @@ public class IncidEditAc_Mn1_Test {
         checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
         checkScreenEditMaxPowerFrNotErase(activity.resolBundle);
 
-        INCID_COMMENT_REG_AC.checkMenuItem(activity);
+        INCID_COMMENT_REG_AC.checkItem(activity);
         checkUp();
         checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
     }
@@ -106,7 +106,7 @@ public class IncidEditAc_Mn1_Test {
         checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
         checkScreenEditMaxPowerFrNotErase(activity.resolBundle);
 
-        INCID_COMMENTS_SEE_AC.checkMenuItem(activity);
+        INCID_COMMENTS_SEE_AC.checkItem(activity);
         checkUp();
         checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
     }
@@ -142,7 +142,7 @@ public class IncidEditAc_Mn1_Test {
         assertThat(activity.resolBundle.hasResolucion(), is(false));
         assertThat(activity.resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(true));
 
-        INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem(activity);
+        INCID_RESOLUCION_REG_EDIT_AC.checkItem(activity);
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidResolucionRegFrLayout));
 
         checkBack(onView(withId(incidResolucionRegFrLayout)));

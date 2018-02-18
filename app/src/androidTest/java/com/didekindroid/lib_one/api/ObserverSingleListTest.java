@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.AdapterView;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekinlib.http.exception.ErrorBean;
 
@@ -23,9 +23,9 @@ import io.reactivex.Single;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_C;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_WITH_EXCEPTION_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
 import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.is;

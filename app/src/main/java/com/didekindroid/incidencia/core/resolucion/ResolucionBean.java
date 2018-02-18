@@ -10,9 +10,9 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static com.didekindroid.lib_one.util.UIutils.formatTimeToString;
-import static com.didekindroid.lib_one.util.UIutils.getIntFromStringDecimal;
-import static com.didekindroid.lib_one.util.UIutils.isCalendarPreviousTimeStamp;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
+import static com.didekindroid.lib_one.util.UiUtil.getIntFromStringDecimal;
+import static com.didekindroid.lib_one.util.UiUtil.isCalendarPreviousTimeStamp;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
 import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;

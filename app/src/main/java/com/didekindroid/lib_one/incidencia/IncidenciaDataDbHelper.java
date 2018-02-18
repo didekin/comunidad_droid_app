@@ -22,7 +22,7 @@ import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.cursor_should_be_in_first_position;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin

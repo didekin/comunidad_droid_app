@@ -6,24 +6,16 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekinlib.http.auth.SpringOauthToken;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.doSpringOauthToken;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.cleanTkCacheConsumer;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.initTokenAction;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.initTokenAndRegisterFunc;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.util.IoHelper.readStringFromFile;
 import static com.didekinlib.http.auth.AuthClient.doBearerAccessTkHeader;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -44,17 +36,14 @@ public class TokenIdentityCacherTest_1 {
     public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     Activity activity;
+    TokenIdentityCacher tkCacher;
 
     @Before
     public void getFixture()
     {
+        cleanWithTkhandler();
         activity = activityRule.getActivity();
-    }
-
-    @After
-    public void cleanFileToken() throws UiException
-    {
-        cleanOptions(CLEAN_TK_HANDLER);
+        tkCacher = (TokenIdentityCacher) secInitializer.get().getTkCacher();
     }
 
     // ===================================== TESTS ==========================================
@@ -63,16 +52,16 @@ public class TokenIdentityCacherTest_1 {
     public void testInitTokenAndBackFile() throws Exception
     {
         // Precondition: no file with refreshToken. We receive a fully initialized token instance.
-        assertThat(TKhandler.getRefreshTokenFile(), notNullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenValue(), nullValue());
-        assertThat(TKhandler.getTokenCache().get(), nullValue());
+        assertThat(tkCacher.getRefreshTokenFile(), notNullValue());
+        assertThat(tkCacher.getRefreshTokenFile().exists(), is(false));
+        assertThat(tkCacher.getRefreshTokenValue(), nullValue());
+        assertThat(tkCacher.getTokenCache().get(), nullValue());
 
         SpringOauthToken springOauthToken = doSpringOauthToken();
-        TKhandler.initIdentityCache(springOauthToken);
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
-        assertThat(TKhandler.getRefreshTokenValue(), is(springOauthToken.getRefreshToken().getValue()));
-        assertThat(TKhandler.getTokenCache().get(), is(springOauthToken));
+        tkCacher.initIdentityCache(springOauthToken);
+        assertThat(tkCacher.getRefreshTokenFile().exists(), is(true));
+        assertThat(tkCacher.getRefreshTokenValue(), is(springOauthToken.getRefreshToken().getValue()));
+        assertThat(tkCacher.getTokenCache().get(), is(springOauthToken));
     }
 
     @Test
@@ -80,20 +69,20 @@ public class TokenIdentityCacherTest_1 {
     {
         // Preconditions: there exist token data and file.
         SpringOauthToken springOauthToken = doSpringOauthToken();
-        TKhandler.initIdentityCache(springOauthToken);
+        tkCacher.initIdentityCache(springOauthToken);
 
-        TKhandler.cleanIdentityCache();
+        tkCacher.cleanIdentityCache();
         // Assertions.
-        assertThat(TKhandler.getRefreshTokenValue(), nullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getTokenCache().get(), nullValue());
+        assertThat(tkCacher.getRefreshTokenValue(), nullValue());
+        assertThat(tkCacher.getRefreshTokenFile().exists(), is(false));
+        assertThat(tkCacher.getTokenCache().get(), nullValue());
     }
 
     @Test
     public void testDoBearerAccessTkHeader()
     {
         // Precondition: no file with refreshToken.
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
+        assertThat(tkCacher.getRefreshTokenFile().exists(), is(false));
 
         SpringOauthToken springOauthToken = doSpringOauthToken();
         String bearerTk = doBearerAccessTkHeader(springOauthToken);
@@ -103,38 +92,39 @@ public class TokenIdentityCacherTest_1 {
     @Test
     public void testUpdateIsRegistered_1() throws Exception
     {
-        TKhandler.updateIsRegistered(false);
-        assertThat(TKhandler.isRegisteredUser(), is(false));
-        TKhandler.updateIsRegistered(true);
-        assertThat(TKhandler.isRegisteredUser(), is(true));
+        tkCacher.updateIsRegistered(false);
+        assertThat(tkCacher.isRegisteredUser(), is(false));
+        tkCacher.updateIsRegistered(true);
+        assertThat(tkCacher.isRegisteredUser(), is(true));
     }
 
     @Test
     public void testUpdateIsRegistered_2() throws Exception
     {
-        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken();
-        TKhandler.updateIsRegistered(false);
-        // Actualiza a falso.
-        assertThat(controller.isGcmTokenSentServer(), is(false));
-        TKhandler.updateIsRegistered(true);
-        // No actualizamos a verdadero.
-        assertThat(controller.isGcmTokenSentServer(), is(false));
+        // Precondition: registered flag and  GCM token sent to server flags BOTH true.
+        tkCacher.updateIsRegistered(true);
+        tkCacher.updateIsGcmTokenSentServer(true);
+        // Update to false BOTH: registered flag and GCM token sent to server flag.
+        tkCacher.updateIsRegistered(false);
+        assertThat(tkCacher.isGcmTokenSentServer(), is(false));
+        // Update to true ONE: registerd flag.
+        tkCacher.updateIsRegistered(true);
+        assertThat(tkCacher.isGcmTokenSentServer(), is(false));
     }
 
     @Test
-    public void testUpdateIsRegistered() throws Exception
+    public void test_IsGcmTokenSentServer() throws Exception
     {
-        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken();
-        TKhandler.updateIsRegistered(true);
-        controller.updateIsGcmTokenSentServer(true);
-
-        TKhandler.updateIsRegistered(false);
-        // Check the change in the flag.
-        assertThat(controller.isGcmTokenSentServer(), is(false));
-
-        TKhandler.updateIsRegistered(true);
-        // No change in flag.
-        assertThat(controller.isGcmTokenSentServer(), is(false));
+        // Precondition: the user is registered.
+        tkCacher.updateIsRegistered(true);
+        // Exec.
+        tkCacher.updateIsGcmTokenSentServer(true);
+        // Check.
+        assertThat(tkCacher.isGcmTokenSentServer(), is(true));
+        // Exec.
+        tkCacher.updateIsGcmTokenSentServer(false);
+        // Check.
+        assertThat(tkCacher.isGcmTokenSentServer(), is(false));
     }
 
     // ===================================== ACTIONS TESTS =========================================
@@ -143,7 +133,7 @@ public class TokenIdentityCacherTest_1 {
     public void testInitTokenAction() throws Exception
     {
         SpringOauthToken token = doSpringOauthToken();
-        initTokenAction.accept(token);
+        tkCacher.initIdentityCache(token);
         checkSiCacheAndFile(token);
     }
 
@@ -151,7 +141,7 @@ public class TokenIdentityCacherTest_1 {
     public void testCleanTokenCacheAction() throws Exception
     {
         // No user registered. We test for the non-nullity of refreshTokenFile.
-        cleanTkCacheConsumer.accept(true);
+        tkCacher.cleanIdentityCache();
         checkNoCacheAndFile();
     }
 
@@ -161,36 +151,36 @@ public class TokenIdentityCacherTest_1 {
     public void testInitTokenAndRegisterFunc_1() throws Exception
     {
         SpringOauthToken token = doSpringOauthToken();
-        assertThat(initTokenAndRegisterFunc.apply(true, token), is(true));
+        assertThat(tkCacher.getInitTokenAndRegisterFunc().apply(true, token), is(true));
         checkSiCacheAndFile(token);
-        assertThat(TKhandler.isRegisteredUser(), is(true));
+        assertThat(tkCacher.isRegisteredUser(), is(true));
     }
 
     @Test
     public void testInitTokenAndRegisterFunc_2() throws Exception
     {
         SpringOauthToken token = doSpringOauthToken();
-        initTokenAndRegisterFunc.apply(false, token);
+        tkCacher.getInitTokenAndRegisterFunc().apply(false, token);
         checkNoCacheAndFile();
-        assertThat(TKhandler.isRegisteredUser(), is(false));
+        assertThat(tkCacher.isRegisteredUser(), is(false));
     }
 
     @Test
     public void testCleanTokenAndUnregisterFunc_1() throws Exception
     {
         initTokenHelper();
-        cleanTokenAndUnregisterFunc.apply(true);
+        tkCacher.getCleanIdentityFunc().apply(true);
         checkNoCacheAndFile();
-        assertThat(TKhandler.isRegisteredUser(), is(false));
+        assertThat(tkCacher.isRegisteredUser(), is(false));
     }
 
     @Test
     public void testCleanTokenAndUnregisterFunc_2() throws Exception
     {
         SpringOauthToken token = initTokenHelper();
-        cleanTokenAndUnregisterFunc.apply(false);
+        tkCacher.getCleanIdentityFunc().apply(false);
         checkSiCacheAndFile(token);
-        assertThat(TKhandler.isRegisteredUser(), is(true));
+        assertThat(tkCacher.isRegisteredUser(), is(true));
     }
 
     // ............................... HELPERS ..............................
@@ -198,22 +188,22 @@ public class TokenIdentityCacherTest_1 {
     private SpringOauthToken initTokenHelper() throws Exception
     {
         SpringOauthToken token = doSpringOauthToken();
-        initTokenAndRegisterFunc.apply(true, token);
-        assertThat(TKhandler.getTokenCache().get(), is(token));
-        assertThat(TKhandler.isRegisteredUser(), is(true));
+        tkCacher.getInitTokenAndRegisterFunc().apply(true, token);
+        assertThat(tkCacher.getTokenCache().get(), is(token));
+        assertThat(tkCacher.isRegisteredUser(), is(true));
         return token;
     }
 
     private void checkNoCacheAndFile()
     {
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getTokenCache().get(), is(nullValue()));
+        assertThat(tkCacher.getRefreshTokenFile().exists(), is(false));
+        assertThat(tkCacher.getTokenCache().get(), is(nullValue()));
     }
 
     private void checkSiCacheAndFile(SpringOauthToken token)
     {
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
-        assertThat(readStringFromFile(TKhandler.getRefreshTokenFile()), is(token.getRefreshToken().getValue()));
-        assertThat(TKhandler.getTokenCache().get().getValue(), is(token.getValue()));
+        assertThat(tkCacher.getRefreshTokenFile().exists(), is(true));
+        assertThat(readStringFromFile(tkCacher.getRefreshTokenFile()), is(token.getRefreshToken().getValue()));
+        assertThat(tkCacher.getTokenCache().get().getValue(), is(token.getValue()));
     }
 }

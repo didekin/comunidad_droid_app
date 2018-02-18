@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekindroid.lib_one.api.router.RouterActionIf;
 
 import timber.log.Timber;

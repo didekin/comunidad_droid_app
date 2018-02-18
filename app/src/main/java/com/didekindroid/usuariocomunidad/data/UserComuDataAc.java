@@ -8,20 +8,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.router.MnRouterIf;
 import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc.newViewerUserComuDataAc;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 
 /**
  * Preconditions:
@@ -39,7 +40,7 @@ import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_
  * ComuSearchAc.
  */
 @SuppressWarnings("ConstantConditions")
-public class UserComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class UserComuDataAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     ViewerUserComuDataAc viewer;
     RegUserComuFr regUserComuFr;
@@ -73,12 +74,12 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -123,27 +124,29 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
     {
         Timber.d("onOptionsItemSelected()");
 
+        MnRouterIf router = routerInitializer.get().getMnRouter();
         int resourceId = item.getItemId();
         Bundle bundle;
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
             case R.id.comu_data_ac_mn:
             case R.id.incid_reg_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this, COMUNIDAD_ID.getBundleForKey(oldUserComu.getComunidad().getC_Id()));
+                router.getActionFromMnItemId(resourceId)
+                        .initActivity(this, COMUNIDAD_ID.getBundleForKey(oldUserComu.getComunidad().getC_Id()));
                 return true;
             case R.id.incid_see_open_by_comu_ac_mn:
                 bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(false);
                 bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
-                resourceIdToMnItem.get(resourceId).initActivity(this, bundle);
+                router.getActionFromMnItemId(resourceId).initActivity(this, bundle);
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
                 bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(true);
                 bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
-                resourceIdToMnItem.get(resourceId).initActivity(this, bundle);
+                router.getActionFromMnItemId(resourceId).initActivity(this, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

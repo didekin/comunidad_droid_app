@@ -6,11 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.router.MnRouterIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * User: pedro@didekin
@@ -52,16 +53,17 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
+        MnRouterIf router = routerInitializer.get().getMnRouter();
 
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

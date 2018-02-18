@@ -7,9 +7,8 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.util.ConnectionUtils;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -18,12 +17,11 @@ import java.io.Serializable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.afterRegComuAndUserComu;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
+import static com.didekindroid.comunidad.util.ComuContextualName.new_comu_usercomu_just_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 
 /**
  * User: pedro@didekin
@@ -31,7 +29,12 @@ import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_a
  * Time: 14:31
  */
 
-final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
+final class ViewerRegComuUserComuAc extends ParentViewer<View, CtrlerUsuarioComunidad> {
+
+    private ViewerRegComuUserComuAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity);
+    }
 
     static ViewerRegComuUserComuAc newViewerRegComuUserComuAc(RegComuAndUserComuAc activity)
     {
@@ -41,18 +44,7 @@ final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsu
         return instance;
     }
 
-    private ViewerRegComuUserComuAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
-    }
-
     // ==================================== ViewerIf ====================================
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        return uiException_router;
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -96,7 +88,8 @@ final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsu
         {
             Timber.d("onSuccess()");
             assertTrue(rowInserted, user_and_comunidad_should_be_registered);
-            afterRegComuAndUserComu.initActivity(activity);
+            getContextualRouter().getActionFromContextNm(new_comu_usercomu_just_registered)
+                    .initActivity(activity);
             dispose();
         }
 

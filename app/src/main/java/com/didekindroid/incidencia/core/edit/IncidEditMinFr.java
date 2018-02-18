@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFr.newViewerIncidEditMinFr;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 
 /**
  * User: pedro@didekin
@@ -55,9 +55,9 @@ public class IncidEditMinFr extends IncidEditFr {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
 
-        viewerInjector = (ChildViewersInjectorIf) getActivity();
+        viewerInjector = (InjectorOfParentViewerIf) getActivity();
 
-        viewer = newViewerIncidEditMinFr(frView, viewerInjector.getParentViewer());
+        viewer = newViewerIncidEditMinFr(frView, viewerInjector.getInjectedParentViewer());
         viewer.doViewInViewer(savedInstanceState, resolBundle);
         viewerInjector.setChildInParentViewer(viewer);
 

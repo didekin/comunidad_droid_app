@@ -29,21 +29,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.v4.app.TaskStackBuilder.create;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkChildInViewer;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAcTest.execCheckRegisterError;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.is;
@@ -177,7 +177,7 @@ public class RegUserAndUserComuAcTest {
     private void doLoginUnRegUser() throws InterruptedException
     {
         activity.runOnUiThread(() -> activity.onPrepareOptionsMenu(activity.acMenu));
-        LOGIN_AC.checkItemNoRegisterUser(activity);
+        LOGIN_AC.checkItem(activity);
     }
 }
 

@@ -6,7 +6,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -30,16 +29,16 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.isStatementTrue;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -67,7 +66,7 @@ public class ViewerIncidSeeOpenFrTest {
         {
             try {
                 signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                incidImportancia = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0),
+                incidImportancia = makeRegGetIncidImportancia(userComuDao.seeUserComusByUser().get(0),
                         (short) 2);
                 // Cierre incidencias..
                 resolucion = insertGetResolucionNoAdvances(incidImportancia);
@@ -108,8 +107,8 @@ public class ViewerIncidSeeOpenFrTest {
     public void test_DoViewInViewer() throws Exception
     {
         // GcmToken.
-        waitAtMost(3, SECONDS).until(
-                ((CtrlerFirebaseTokenIf) viewer.viewerFirebaseToken.getController())::isGcmTokenSentServer);
+        waitAtMost(8, SECONDS).until(
+                viewer.viewerFirebaseToken.getController().getTkCacher()::isGcmTokenSentServer);
     }
 
     //    ============================  TESTS  ===================================

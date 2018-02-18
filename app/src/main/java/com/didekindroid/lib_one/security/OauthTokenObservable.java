@@ -10,7 +10,8 @@ import io.reactivex.Single;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.security.AuthDao.authDao;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static io.reactivex.Single.fromCallable;
 
@@ -20,7 +21,7 @@ import static io.reactivex.Single.fromCallable;
  * Time: 14:35
  */
 @SuppressWarnings("AnonymousInnerClassMayBeStatic")
-public class OauthTokenObservable {
+public final class OauthTokenObservable {
 
     /**
      * @return a Single to obtain a new access token with userName and password credentials.
@@ -42,9 +43,10 @@ public class OauthTokenObservable {
     static Completable oauthTokenFromRefreshTk(@NonNull final String refreshToken)
     {
         Timber.d("oauthTokenFromRefreshTk()");
-        assertTrue(TokenIdentityCacher.TKhandler.isRegisteredUser(), user_should_be_registered);
+        assertTrue(secInitializer.get().getTkCacher().isRegisteredUser(), user_should_be_registered);
 
-        return fromCallable(() -> authDao.getRefreshUserToken(refreshToken)).doOnSuccess(TokenIdentityCacher.initTokenAction)
+        return fromCallable(() -> authDao.getRefreshUserToken(refreshToken))
+                .doOnSuccess(secInitializer.get().getTkCacher()::initIdentityCache)
                 .toCompletable();
     }
 
@@ -59,7 +61,7 @@ public class OauthTokenObservable {
     {
         Timber.d("oauthTokenAndInitCache()");
         return oauthTokenFromUserPswd(usuario)
-                .doOnSuccess(TokenIdentityCacher.initTokenUpdateRegisterAction)
+                .doOnSuccess(secInitializer.get().getTkCacher().getInitTokenUpdateRegisterAction())
                 .toCompletable();
     }
 
@@ -73,7 +75,7 @@ public class OauthTokenObservable {
     {
         Timber.d("oauthTokenAndInitCache()");
         return oauthTokenFromUserPswd(usuario)
-                .doOnSuccess(TokenIdentityCacher.initTokenUpdateRegisterAction)
+                .doOnSuccess(secInitializer.get().getTkCacher().getInitTokenUpdateRegisterAction())
                 .toCompletable();
     }
 }

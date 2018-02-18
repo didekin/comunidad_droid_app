@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ParentViewerInjected;
+import com.didekindroid.lib_one.api.ParentViewer;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekindroid.lib_one.util.ConnectionUtils;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -17,12 +17,12 @@ import java.io.Serializable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comuData_should_be_modified;
-import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comunidadId_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.afterMofiedComunidad;
+import static com.didekindroid.comunidad.util.ComuContextualName.comu_data_just_modified;
+import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comuData_should_be_modified;
+import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comunidadId_should_be_initialized;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
@@ -30,7 +30,12 @@ import static com.didekindroid.router.UiExceptionRouter.uiException_router;
  * Date: 08/05/17
  * Time: 14:09
  */
-class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> {
+class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
+
+    ViewerComuDataAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity);
+    }
 
     static ViewerComuDataAc newViewerComuDataAc(@NonNull ComuDataAc activity)
     {
@@ -39,11 +44,6 @@ class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> {
         instance.setController(new CtrlerComunidad());
         // We initialize viewerRegComuFr in its associated fragment.
         return instance;
-    }
-
-    ViewerComuDataAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
     }
 
     // ==================================== ViewerIf ====================================
@@ -104,7 +104,7 @@ class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> {
         {
             Timber.d("onSuccess()");
             assertTrue(rowsUpdated == 1, comuData_should_be_modified);
-            afterMofiedComunidad.initActivity(activity, null);
+            getContextualRouter().getActionFromContextNm(comu_data_just_modified).initActivity(activity);
         }
 
         @Override

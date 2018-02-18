@@ -22,7 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.RolUi.formatRolToString;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;

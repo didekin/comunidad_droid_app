@@ -2,8 +2,8 @@ package com.didekindroid.lib_one.security;
 
 import android.util.Base64;
 
+import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekinlib.http.HttpHandler;
 import com.didekinlib.http.auth.AuthClient;
 import com.didekinlib.http.auth.AuthEndPoints;
 import com.didekinlib.http.auth.SpringOauthToken;
@@ -29,12 +29,14 @@ import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL
  */
 public final class AuthDao implements AuthEndPoints {
 
-    public static final AuthDao authDao = new AuthDao(httpInitializer.get().getHttpHandler());
+    public static final AuthDao authDao = new AuthDao(httpInitializer.get());
+    private final HttpInitializerIf http_initializer;
     private final AuthEndPoints endPoint;
 
-    private AuthDao(HttpHandler httpHandler)
+    private AuthDao(HttpInitializerIf httpInitializerIn)
     {
-        endPoint = httpHandler.getService(AuthEndPoints.class);
+        http_initializer = httpInitializerIn;
+        endPoint = http_initializer.getHttpHandler().getService(AuthEndPoints.class);
     }
 
     //  ================================== AuthEndPoints implementation ============================
@@ -70,13 +72,13 @@ public final class AuthDao implements AuthEndPoints {
                     userName,
                     password,
                     PASSWORD_GRANT).execute();
-            return httpInitializer.get().getResponseBody(response);
+            return http_initializer.getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
-    public SpringOauthToken getRefreshUserToken(String refreshTokenKey) throws UiException
+    SpringOauthToken getRefreshUserToken(String refreshTokenKey) throws UiException
     {
         Timber.d("getRefreshUserToken()");
         try {
@@ -85,7 +87,7 @@ public final class AuthDao implements AuthEndPoints {
                     refreshTokenKey,
                     REFRESH_TOKEN_GRANT
             ).execute();
-            return httpInitializer.get().getResponseBody(response);
+            return http_initializer.getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
@@ -95,7 +97,7 @@ public final class AuthDao implements AuthEndPoints {
 //                          HELPER METHODS
 //  =============================================================================
 
-    public String doAuthBasicHeader(AuthClient cliente)
+    String doAuthBasicHeader(AuthClient cliente)
     {
         String baseString = cliente.getId() + ":" + cliente.getSecret();
         String base64AuthData = Base64.encodeToString(baseString.getBytes(), Base64.DEFAULT);

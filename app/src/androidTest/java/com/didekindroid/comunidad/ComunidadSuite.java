@@ -1,15 +1,5 @@
 package com.didekindroid.comunidad;
 
-import com.didekindroid.lib_one.comunidad.repository.ComunidadDbHelperTest;
-import com.didekindroid.lib_one.comunidad.spinner.CtrlerComAutonomaSpinnerTest;
-import com.didekindroid.lib_one.comunidad.spinner.CtrlerMunicipioSpinnerTest;
-import com.didekindroid.lib_one.comunidad.spinner.CtrlerProvinciaSpinnerTest;
-import com.didekindroid.lib_one.comunidad.spinner.CtrlerTipoViaSpinnerTest;
-import com.didekindroid.lib_one.comunidad.spinner.ViewerComuAutonomaSpinnerTest;
-import com.didekindroid.lib_one.comunidad.spinner.ViewerMunicipioSpinnerTest;
-import com.didekindroid.lib_one.comunidad.spinner.ViewerProvinciaSpinnerTest;
-import com.didekindroid.lib_one.comunidad.spinner.ViewerTipoViaSpinnerTest;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -34,17 +24,6 @@ import org.junit.runners.Suite;
         ViewerComuSearchResultsFrTest.class,
         ViewerRegComuFr_Mock_Test.class,
         ViewerRegComuFrTest.class,
-        // repository
-        ComunidadDbHelperTest.class,
-        // spinner
-        CtrlerComAutonomaSpinnerTest.class,
-        CtrlerMunicipioSpinnerTest.class,
-        CtrlerProvinciaSpinnerTest.class,
-        CtrlerTipoViaSpinnerTest.class,
-        ViewerComuAutonomaSpinnerTest.class,
-        ViewerMunicipioSpinnerTest.class,
-        ViewerProvinciaSpinnerTest.class,
-        ViewerTipoViaSpinnerTest.class,
 })
 public class ComunidadSuite {
 }

@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.lib_one.api.ParentViewerInjected;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.util.CommonAssertionMsg;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -16,20 +15,26 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableMaybeObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.router.LeadRouter.editResolucion;
-import static com.didekindroid.router.LeadRouter.regResolucion;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidContextualName.to_edit_incid_resolucion;
+import static com.didekindroid.incidencia.IncidContextualName.to_register_new_incid_resolucion;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
  * Date: 04/04/17
  * Time: 15:06
  */
-final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> {
+final class ViewerIncidEditAc extends ParentViewer<View, CtrlerIncidenciaCore> {
+
+    IncidAndResolBundle resolBundle;
+
+    private ViewerIncidEditAc(IncidEditAc activity)
+    {
+        super(activity.acView, activity);
+    }
 
     static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity)
     {
@@ -38,20 +43,8 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
         instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
-    IncidAndResolBundle resolBundle;
-
-    private ViewerIncidEditAc(IncidEditAc activity)
-    {
-        super(activity.acView, activity);
-    }
 
     // .................................... ViewerIf .................................
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        return uiException_router;
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -86,7 +79,7 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
             for (ViewerIncidEditFr child : getChildViewersFromSuperClass(ViewerIncidEditFr.class)) {
                 child.setHasResolucion();
             }
-            editResolucion.initActivity(activity, bundle);
+            getContextualRouter().getActionFromContextNm(to_edit_incid_resolucion).initActivity(activity, bundle);
         }
 
         @Override
@@ -102,7 +95,8 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
             Timber.d("onComplete()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
-            regResolucion.initActivity(activity, bundle);
+            getContextualRouter().getActionFromContextNm(to_register_new_incid_resolucion)
+                    .initActivity(activity, bundle);
         }
     }
 }

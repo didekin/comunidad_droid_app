@@ -6,17 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.core.IncidImportanciaBean;
+import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
 import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.ControllerIf;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
-import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -26,9 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
@@ -46,20 +44,20 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
 
 
     @SuppressWarnings("WeakerAccess")
-    ViewerIncidRegFr(View view, AppCompatActivity activity, @NonNull ParentViewerInjectedIf parentViewer)
+    ViewerIncidRegFr(View view, AppCompatActivity activity, @NonNull ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         atomIncidBean = new AtomicReference<>(null);
         atomIncidImportBean = new AtomicReference<>(null);
     }
 
-    static ViewerIncidRegFr newViewerIncidRegFr(View view, @NonNull ParentViewerInjectedIf parentViewer)
+    static ViewerIncidRegFr newViewerIncidRegFr(View view, @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerIncidRegFr()");
 
         AppCompatActivity activity = parentViewer.getActivity();
         ViewerIncidRegFr instance = new ViewerIncidRegFr(view, activity, parentViewer);
-        instance.setController(new Controller(TKhandler));
+        instance.setController(new Controller());
         instance.viewerAmbitoIncidSpinner =
                 newViewerAmbitoIncidSpinner(instance.getViewInViewer().findViewById(R.id.incid_reg_ambito_spinner), instance);
         instance.viewerImportanciaSpinner =
@@ -80,13 +78,6 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
         viewerComuSpinner.doViewInViewer(savedState, viewBean);
         atomIncidImportBean.compareAndSet(null, new IncidImportanciaBean());
         viewerImportanciaSpinner.doViewInViewer(savedState, atomIncidImportBean.get());
-    }
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
     }
 
     @Override

@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.incidencia.core.edit.importancia.ViewerIncidSeeUserComuImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -13,9 +13,9 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.edit.importancia.ViewerIncidSeeUserComuImportancia.newViewerIncidSeeUserComuImportancia;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -26,7 +26,7 @@ import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 public abstract class IncidEditFr extends Fragment {
 
     View frView;
-    ChildViewersInjectorIf viewerInjector;
+    InjectorOfParentViewerIf viewerInjector;
     ViewerIncidSeeUserComuImportancia viewerIncidImportancia;
     IncidAndResolBundle resolBundle;
 
@@ -68,7 +68,7 @@ public abstract class IncidEditFr extends Fragment {
 
     void initViewerImportancia(@Nullable Bundle savedInstanceState)
     {
-        viewerIncidImportancia = newViewerIncidSeeUserComuImportancia(frView, viewerInjector.getParentViewer());
+        viewerIncidImportancia = newViewerIncidSeeUserComuImportancia(frView, viewerInjector.getInjectedParentViewer());
         viewerIncidImportancia.doViewInViewer(savedInstanceState, resolBundle.getIncidImportancia().getIncidencia());
         viewerInjector.setChildInParentViewer(viewerIncidImportancia);
     }

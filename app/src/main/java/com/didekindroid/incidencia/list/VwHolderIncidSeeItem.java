@@ -8,7 +8,7 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
-import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 
 /**
  * User: pedro@didekin

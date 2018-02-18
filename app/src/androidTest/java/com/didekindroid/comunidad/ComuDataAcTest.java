@@ -7,10 +7,10 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.comunidad.util.ComuBundleKey;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.testutil.ViewerTestWrapper;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
@@ -39,16 +39,16 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCa
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkIsRegistered;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -140,7 +140,7 @@ public class ComuDataAcTest {
     @Test
     public void test_GetViewerAsParent() throws Exception
     {
-        assertThat(activity.getParentViewer(), Matchers.<ViewerIf>is(activity.viewer));
+        assertThat(activity.getInjectedParentViewer(), Matchers.<ViewerIf>is(activity.viewer));
     }
 
     //  =========================  TESTS FOR ACTIVITY LIFECYCLE  ===========================
@@ -148,12 +148,12 @@ public class ComuDataAcTest {
     @Test
     public void test_OnCreate() throws Exception
     {
-        assertThat(activity, isA(ChildViewersInjectorIf.class));
+        assertThat(activity, isA(InjectorOfParentViewerIf.class));
         assertThat(activity.acView, notNullValue());
         assertThat(activity.viewer, notNullValue());
         assertThat(activity.regComuFrg, notNullValue());
 
-        assertThat(activity.viewer, isA(ParentViewerInjectedIf.class));
+        assertThat(activity.viewer, isA(ParentViewerIf.class));
         assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.is(activity.viewer));
     }
@@ -189,7 +189,7 @@ public class ComuDataAcTest {
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
+        SEE_USERCOMU_BY_COMU_AC.checkItem(activity);
         intended(hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

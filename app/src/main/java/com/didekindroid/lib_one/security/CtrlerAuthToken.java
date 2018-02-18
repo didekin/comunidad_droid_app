@@ -32,11 +32,11 @@ public class CtrlerAuthToken extends Controller implements CtrlerAuthTokenIf {
         Timber.d("refreshAccessToken()");
 
         if (isRegisteredUser()
-                && identityCacher.getTokenCache().get() != null
-                && identityCacher.getTokenCache().get().getRefreshToken() != null
-                && (identityCacher.getTokenCache().get().getValue() == null || identityCacher.getTokenCache().get().getValue().isEmpty())
+                && getTkCacher().getTokenCache().get() != null
+                && getTkCacher().getTokenCache().get().getRefreshToken() != null
+                && (getTkCacher().getTokenCache().get().getValue() == null || getTkCacher().getTokenCache().get().getValue().isEmpty())
                 ) {
-            updateTkCacheFromRefreshTk(identityCacher.getRefreshTokenValue(), viewer);
+            updateTkCacheFromRefreshTk(getTkCacher().getRefreshTokenValue(), viewer);
         }
     }
 
@@ -44,7 +44,7 @@ public class CtrlerAuthToken extends Controller implements CtrlerAuthTokenIf {
     public boolean updateTkCacheFromRefreshTk(final String refreshToken, Viewer viewer)
     {
         Timber.d("updateTkCacheFromRefreshTk()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 OauthTokenObservable.oauthTokenFromRefreshTk(refreshToken)
                         .subscribeOn(io())
                         .observeOn(mainThread())

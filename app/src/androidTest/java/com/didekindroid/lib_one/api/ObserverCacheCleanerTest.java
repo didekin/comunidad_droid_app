@@ -5,9 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.lib_one.api.router.RouterActionIf;
-import com.didekindroid.lib_one.security.SecurityTestUtils;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekinlib.http.exception.ErrorBean;
 
 import org.junit.Before;
@@ -17,15 +16,14 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.doSpringOauthToken;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_WITH_EXCEPTION_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
 import static io.reactivex.Completable.error;
 import static io.reactivex.Completable.fromSingle;
 import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -62,7 +60,7 @@ public class ObserverCacheCleanerTest {
                 super.onErrorInObserver(error);
             }
         };
-        viewer.setController(new Controller(TKhandler));
+        viewer.setController(new Controller());
     }
 
     @Test
@@ -75,12 +73,11 @@ public class ObserverCacheCleanerTest {
     public void test_OnError() throws Exception
     {
         // Preconditions.
-        TKhandler.initIdentityCache(SecurityTestUtils.doSpringOauthToken());
-        assertThat(viewer.getController().getIdentityCacher().getTokenCache().get(), notNullValue());
+        viewer.getController().getTkCacher().initIdentityCache(doSpringOauthToken());
 
         activity.runOnUiThread(() -> {
             assertThat(error(new UiException(new ErrorBean(BAD_REQUEST))).subscribeWith(new ObserverCacheCleaner(viewer)).isDisposed(), is(true));
-            assertThat(viewer.getController().getIdentityCacher().getTokenCache().get(), nullValue());
+            assertThat(viewer.getController().getTkCacher().getTokenCache().get(), nullValue());
             assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
         });
     }

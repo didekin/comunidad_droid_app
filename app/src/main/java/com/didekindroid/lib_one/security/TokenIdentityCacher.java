@@ -17,10 +17,12 @@ import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.security.IdentityCacherIf.SharedPrefFiles.app_preferences_file;
+import static com.didekindroid.lib_one.security.IdentityCacherIf.SharedPrefFiles.is_user_registered;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.IoHelper.readStringFromFile;
 import static com.didekindroid.lib_one.util.IoHelper.writeFileFromString;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekinlib.http.auth.AuthClient.doBearerAccessTkHeader;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.TOKEN_NULL;
 
@@ -31,65 +33,25 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.TOKEN_NULL;
  */
 public final class TokenIdentityCacher implements IdentityCacherIf {
 
-    public static final IdentityCacherIf TKhandler = new TokenIdentityCacher(httpInitializer.get().getContext());
-
-    //  ======================================================================================
-    //    .................................... ACTIONS AND FUNCTIONS .................................
-    //  ======================================================================================
-
-    public static final Function<Boolean, Boolean> cleanTokenAndUnregisterFunc = isDeletedUser -> {
-        if (isDeletedUser) {
-            TKhandler.cleanIdentityCache();
-            TKhandler.updateIsRegistered(false);
-        }
-        return isDeletedUser;
-    };
-
-    public static final Consumer<Boolean> cleanTkCacheConsumer = isUserModified -> {
-        if (isUserModified) {
-            TKhandler.cleanIdentityCache();
-        }
-    };
-
-    public static final Consumer<Boolean> updateRegisterAction = TKhandler::updateIsRegistered;
-
-    static final Consumer<SpringOauthToken> initTokenAction = TKhandler::initIdentityCache;
-
-    static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc = (isLoginValid, token) -> {
-        boolean isUpdatedTokenData = isLoginValid && token != null;
-        if (isUpdatedTokenData) {
-            TKhandler.initIdentityCache(token);
-            TKhandler.updateIsRegistered(true);
-        }
-        return isUpdatedTokenData;
-    };
-
-    static final Consumer<SpringOauthToken> initTokenUpdateRegisterAction = token -> {
-        TKhandler.initIdentityCache(token);
-        TKhandler.updateIsRegistered(true);
-    };
-
-    //  ======================================================================================
-    //    ............................... TOKEN CACHE .................................
-    //  ======================================================================================
     static final String refresh_token_filename = "tk_file";
+
     private final AtomicReference<SpringOauthToken> tokenCache;
     private final File refreshTokenFile;
     private final Context context;
 
-    private TokenIdentityCacher(Context context)
+    TokenIdentityCacher(Context contextIn)
     {
-        this(new File(context.getFilesDir(), refresh_token_filename), context);
+        this(new File(contextIn.getFilesDir(), refresh_token_filename), contextIn);
     }
 
     /**
      * It allows for a more friendly injection constructor.
      */
-    private TokenIdentityCacher(File refreshTkFile, Context inContext)
+    private TokenIdentityCacher(File refreshTkFile, Context contextIn)
     {
         Timber.d("TokenIdentityCacher(File refreshTkFile, Context inContext)");
         refreshTokenFile = refreshTkFile;
-        context = inContext;
+        context = contextIn;
         String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
         tokenCache = (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
                 new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) :
@@ -135,17 +97,11 @@ public final class TokenIdentityCacher implements IdentityCacherIf {
     {
         SharedPreferences sharedPref = context.getSharedPreferences
                 (SharedPrefFiles.app_preferences_file.toString(), MODE_PRIVATE);
-        boolean isRegistered = sharedPref.getBoolean(SharedPrefFiles.IS_USER_REG, false);
+        boolean isRegistered = sharedPref.getBoolean(is_user_registered, false);
         Timber.d("isRegisteredUser() = %b", isRegistered);
         return isRegistered;
     }
 
-    /**
-     * Invariants:
-     * 1. If a user is not registered (no record in database), she cannot be her gcm token recorded in database.
-     * 2. If a user is registered, his gcm token can or cannot been updated in database. Gcm token is not updated
-     * when a user is registered.
-     */
     @Override
     public void updateIsRegistered(boolean isRegisteredUser)
     {
@@ -153,11 +109,70 @@ public final class TokenIdentityCacher implements IdentityCacherIf {
 
         SharedPreferences sharedPref = context.getSharedPreferences(SharedPrefFiles.app_preferences_file.toString(), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(SharedPrefFiles.IS_USER_REG, isRegisteredUser);
+        editor.putBoolean(is_user_registered, isRegisteredUser);
         if (!isRegisteredUser) {
+            // We update new state about GCM token sent to server.
             editor.putBoolean(is_notification_token_sent_server, false);
         }
         editor.apply();
+    }
+
+    @Override
+    public boolean isGcmTokenSentServer()
+    {
+        Timber.d("isGcmTokenSentServer()");
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        return sharedPref.getBoolean(IdentityCacherIf.is_notification_token_sent_server, false);
+    }
+
+
+    @Override
+    public void updateIsGcmTokenSentServer(boolean isSentToServer)
+    {
+        Timber.d("updateIsGcmTokenSentServer(), isSentToServer = %b", isSentToServer);
+        assertTrue(isRegisteredUser(), user_should_be_registered);
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(IdentityCacherIf.is_notification_token_sent_server, isSentToServer);
+        editor.apply();
+    }
+
+    //  ======================================================================================
+    //    ............................ ACTIONS AND FUNCTIONS .................................
+    //  ======================================================================================
+
+    @Override
+    public Function<Boolean, Boolean> getCleanIdentityFunc()
+    {
+        return isDeletedUser -> {
+            if (isDeletedUser) {
+                cleanIdentityCache();
+                updateIsRegistered(false);
+            }
+            return isDeletedUser;
+        };
+    }
+
+    @Override
+    public BiFunction<Boolean, SpringOauthToken, Boolean> getInitTokenAndRegisterFunc()
+    {
+        return (isLoginValid, token) -> {
+            boolean isUpdatedTokenData = isLoginValid && token != null;
+            if (isUpdatedTokenData) {
+                initIdentityCache(token);
+                updateIsRegistered(true);
+            }
+            return isUpdatedTokenData;
+        };
+    }
+
+    @Override
+    public Consumer<SpringOauthToken> getInitTokenUpdateRegisterAction()
+    {
+        return token -> {
+            initIdentityCache(token);
+            updateIsRegistered(true);
+        };
     }
 
     //  ======================================================================================

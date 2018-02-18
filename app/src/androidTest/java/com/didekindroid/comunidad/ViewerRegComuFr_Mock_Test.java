@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_TRAV_PLAZUELA_11;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkComunidadTextsOffView;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersOffView;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersOffViewNull;

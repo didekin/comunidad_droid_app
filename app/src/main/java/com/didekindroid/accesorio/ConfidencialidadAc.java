@@ -9,9 +9,9 @@ import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.router.MnRouterAction.navigateUp;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
 
 public class ConfidencialidadAc extends AppCompatActivity {
 
@@ -36,7 +36,7 @@ public class ConfidencialidadAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad;
 
 import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc_Mock_Test;
-import com.didekindroid.usuariocomunidad.repository.UserComuDaoRemoteTest;
+import com.didekindroid.usuariocomunidad.repository.UserComuDaoTest;
 import com.didekindroid.usuariocomunidad.repository.UserComuObservableTest;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAcTest;
@@ -54,12 +54,13 @@ import org.junit.runners.Suite;
         ViewerRegUserComuAcTest.class,
         ViewerRegUserComuFrTest.class,
         // repository.
-        UserComuDaoRemoteTest.class,
+        UserComuDaoTest.class,
         UserComuObservableTest.class,
-        /* spinner*/
+        // spinner.
         CtrlerComuSpinnerTest.class,
         ViewerComuSpinnerTest.class,
         // .
+        UserComuMockDaoTest.class,
         UsuarioComunidadBeanTests.class,
 })
 public class UserComuSuite {

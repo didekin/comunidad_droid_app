@@ -7,9 +7,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseToken;
+import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyToken;
+import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyTokenIf;
+import com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -31,17 +31,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_B;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeListTwoUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regTwoUserComuSameUser;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -70,7 +70,7 @@ public class ViewerIncidRegAcTest {
         {
             try {
                 regTwoUserComuSameUser(makeListTwoUserComu());
-                List<Comunidad> comunidades = userComuDaoRemote.getComusByUser();
+                List<Comunidad> comunidades = userComuDao.getComusByUser();
                 comuReal = comunidades.get(0);
                 comuPlazuela5 = comunidades.get(1);
             } catch (IOException | UiException e) {
@@ -81,7 +81,7 @@ public class ViewerIncidRegAcTest {
 
     ViewerIncidRegAc viewer;
     IncidRegAc activity;
-    CtrlerFirebaseTokenIf ctrlerFirebaseToken;
+    CtrlerNotifyTokenIf ctrlerFirebaseToken;
 
     @Before
     public void setUp()
@@ -91,7 +91,7 @@ public class ViewerIncidRegAcTest {
         atomicViewer.compareAndSet(null, activity.viewer);
         waitAtMost(4, SECONDS).untilAtomic(atomicViewer, notNullValue());
         viewer = atomicViewer.get();
-        ctrlerFirebaseToken = (CtrlerFirebaseTokenIf) viewer.viewerFirebaseToken.getController();
+        ctrlerFirebaseToken = (CtrlerNotifyTokenIf) viewer.viewerFirebaseToken.getController();
     }
 
     @After
@@ -116,7 +116,7 @@ public class ViewerIncidRegAcTest {
     public void testDoViewInViewer() throws Exception
     {
         // The flag should be turned to true.
-        waitAtMost(6, SECONDS).until(ctrlerFirebaseToken::isGcmTokenSentServer);
+        waitAtMost(6, SECONDS).until(ctrlerFirebaseToken.getTkCacher()::isGcmTokenSentServer);
         onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_ac_button)).check(matches(isDisplayed()));
     }
@@ -167,15 +167,15 @@ public class ViewerIncidRegAcTest {
     @Test
     public void testSaveState()
     {
-        ViewerFirebaseToken viewerFirebaseToken = new ViewerFirebaseToken(activity) {
+        ViewerNotifyToken viewerNotifyToken = new ViewerNotifyToken(activity) {
             @Override
             public void saveState(Bundle savedState)
             {
                 assertThat(flagMethodExec_2.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
             }
         };
-        viewerFirebaseToken.setController(new CtrlerFirebaseToken());
-        viewer.viewerFirebaseToken = viewerFirebaseToken;
+        viewerNotifyToken.setController(new CtrlerNotifyToken());
+        viewer.viewerFirebaseToken = viewerNotifyToken;
         viewer.saveState(new Bundle());
         assertThat(flagMethodExec_2.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
     }

@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Controller;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.security.CtrlerAuthToken;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -24,8 +23,8 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -34,7 +33,12 @@ import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_re
  */
 public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
 
-    static ViewerRegUserComuFr newViewerRegUserComuFr(@NonNull View view, @NonNull ParentViewerInjectedIf parentViewer)
+    private ViewerRegUserComuFr(View view, AppCompatActivity activity, @NonNull ParentViewerIf parentViewer)
+    {
+        super(view, activity, parentViewer);
+    }
+
+    static ViewerRegUserComuFr newViewerRegUserComuFr(@NonNull View view, @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerRegUserComuFr()");
         ViewerRegUserComuFr instance = new ViewerRegUserComuFr(view, parentViewer.getActivity(), parentViewer);
@@ -42,19 +46,7 @@ public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
         return instance;
     }
 
-    private ViewerRegUserComuFr(View view, AppCompatActivity activity, @NonNull ParentViewerInjectedIf parentViewer)
-    {
-        super(view, activity, parentViewer);
-    }
-
     // ==================================== ViewerIf ===================================
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

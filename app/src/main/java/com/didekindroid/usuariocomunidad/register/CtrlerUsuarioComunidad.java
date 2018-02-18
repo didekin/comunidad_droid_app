@@ -13,8 +13,8 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.updateRegisterAction;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static io.reactivex.Completable.error;
@@ -37,10 +37,10 @@ public class CtrlerUsuarioComunidad extends Controller {
     {
         Timber.d("userAndComuRegistered()");
 
-        return fromCallable(() -> httpInitializer.get().getResponseBody(userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute()))
+        return fromCallable(() -> httpInitializer.get().getResponseBody(userComuDao.regComuAndUserAndUserComu(usuarioComunidad).execute()))
                 .flatMapCompletable(isUserInDb -> {
                     if (isUserInDb) {
-                        return fromAction(() -> updateRegisterAction.accept(true));
+                        return fromAction(() -> secInitializer.get().getTkCacher().updateIsRegistered(true));
                     } else {
                         return error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
                     }
@@ -50,17 +50,17 @@ public class CtrlerUsuarioComunidad extends Controller {
     static Single<Boolean> userComuAndComuRegistered(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userComuAndComuRegistered()");
-        return fromCallable(() -> userComuDaoRemote.regComuAndUserComu(usuarioComunidad));
+        return fromCallable(() -> userComuDao.regComuAndUserComu(usuarioComunidad));
     }
 
     static Completable userAndUserComuRegistered(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userAndUserComuRegistered");
 
-        return fromCallable(() -> httpInitializer.get().getResponseBody(userComuDaoRemote.regUserAndUserComu(usuarioComunidad).execute()))
+        return fromCallable(() -> httpInitializer.get().getResponseBody(userComuDao.regUserAndUserComu(usuarioComunidad).execute()))
                 .flatMapCompletable(isUserInDb -> {
                     if (isUserInDb) {
-                        return fromAction(() -> updateRegisterAction.accept(true));
+                        return fromAction(() -> secInitializer.get().getTkCacher().updateIsRegistered(true));
                     } else {
                         return error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
                     }
@@ -70,29 +70,29 @@ public class CtrlerUsuarioComunidad extends Controller {
     static Single<Integer> userComuRegistered(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userComuAndComuRegistered()");
-        return fromCallable(() -> userComuDaoRemote.regUserComu(usuarioComunidad));
+        return fromCallable(() -> userComuDao.regUserComu(usuarioComunidad));
     }
 
     static Single<Boolean> isOldestAdmonUser(final Comunidad comunidad)
     {
         Timber.d("isOldestAdmonUser()");
-        return fromCallable(() -> userComuDaoRemote.isOldestOrAdmonUserComu(comunidad.getC_Id()));
+        return fromCallable(() -> userComuDao.isOldestOrAdmonUserComu(comunidad.getC_Id()));
     }
 
     static Single<Integer> userComuModified(final UsuarioComunidad usuarioComunidad)
     {
         Timber.d("userComuModified()");
-        return fromCallable(() -> userComuDaoRemote.modifyUserComu(usuarioComunidad));
+        return fromCallable(() -> userComuDao.modifyUserComu(usuarioComunidad));
     }
 
     Single<Integer> userComuDeleted(final Comunidad comunidad)
     {
         Timber.d("userComuDeleted()");
-        return fromCallable(() -> userComuDaoRemote.deleteUserComu(comunidad.getC_Id()))
+        return fromCallable(() -> userComuDao.deleteUserComu(comunidad.getC_Id()))
                 .map(rowsUpdated -> {
                     if (rowsUpdated == IS_USER_DELETED) {
-                        identityCacher.cleanIdentityCache();
-                        identityCacher.updateIsRegistered(false);
+                        getTkCacher().cleanIdentityCache();
+                        getTkCacher().updateIsRegistered(false);
                     }
                     return rowsUpdated;
                 });
@@ -149,7 +149,7 @@ public class CtrlerUsuarioComunidad extends Controller {
     private boolean execObserverCacher(ObserverCacheCleaner observer, Completable completable)
     {
         Timber.d("execObserverCacher()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 completable
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -159,7 +159,7 @@ public class CtrlerUsuarioComunidad extends Controller {
     private <T> boolean execSingleObserver(DisposableSingleObserver<T> observer, Single<T> observable)
     {
         Timber.d("execSingleObserver()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 observable
                         .subscribeOn(io())
                         .observeOn(mainThread())

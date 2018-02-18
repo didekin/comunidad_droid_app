@@ -2,6 +2,7 @@ package com.didekindroid.lib_one;
 
 import android.content.Context;
 
+import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.http.HttpHandler;
 import com.didekinlib.http.JksInClient;
@@ -13,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import retrofit2.Response;
 
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.httpInitializer_wrong_build_data;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -21,7 +22,7 @@ import static java.lang.Integer.parseInt;
  * Date: 17/11/16
  * Time: 14:21
  */
-public final class HttpInitializer {
+public final class HttpInitializer implements HttpInitializerIf {
 
     public static final AtomicReference<HttpInitializer> httpInitializer = new AtomicReference<>();
     private final Context context;
@@ -34,16 +35,19 @@ public final class HttpInitializer {
         httpHandler = new HttpHandler(builder.webHostPortStr, builder.jksInClient, builder.timeOut);
     }
 
+    @Override
     public Context getContext()
     {
         return context;
     }
 
+    @Override
     public HttpHandler getHttpHandler()
     {
         return httpHandler;
     }
 
+    @Override
     public <T> T getResponseBody(Response<T> response) throws UiException, IOException
     {
         if (response.isSuccessful()) {

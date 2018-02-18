@@ -8,20 +8,20 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_initialized;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incidencia_should_be_initialized;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -47,7 +47,7 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
     IncidImportancia incidImportancia;
     Resolucion resolucion;
     Incidencia incidencia;
-    ViewerFirebaseTokenIf viewerFirebaseToken;
+    ViewerNotifyTokenIf viewerFirebaseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)   // TODO: completar documento navegación.
@@ -127,7 +127,7 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

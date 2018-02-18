@@ -28,7 +28,7 @@ public class CtrlerTipoViaSpinner extends CtrlerSelectList<TipoViaValueObj> {
         Timber.d("tipoViaList()");
 
         return Single.fromCallable(() -> {
-            ComunidadDbHelper dbHelper = new ComunidadDbHelper(getIdentityCacher().getContext());
+            ComunidadDbHelper dbHelper = new ComunidadDbHelper(getTkCacher().getContext());
             List<TipoViaValueObj> tiposVia = dbHelper.getTiposVia();
             dbHelper.close();
             return tiposVia;
@@ -39,7 +39,7 @@ public class CtrlerTipoViaSpinner extends CtrlerSelectList<TipoViaValueObj> {
     public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<TipoViaValueObj>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        return subscriptions.add(tipoViaList()
+        return getSubscriptions().add(tipoViaList()
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribeWith(observer)

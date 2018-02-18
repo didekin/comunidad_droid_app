@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.ObserverSingleSelectList;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.comunidad.spinner.ComuAutonomaSpinnerEventItemSelect;
 import com.didekindroid.lib_one.comunidad.spinner.MunicipioSpinnerEventItemSelect;
 import com.didekindroid.lib_one.comunidad.spinner.ProvinciaSpinnerEventItemSelect;
@@ -15,12 +20,6 @@ import com.didekindroid.lib_one.comunidad.spinner.ViewerComuAutonomaSpinner;
 import com.didekindroid.lib_one.comunidad.spinner.ViewerMunicipioSpinner;
 import com.didekindroid.lib_one.comunidad.spinner.ViewerProvinciaSpinner;
 import com.didekindroid.lib_one.comunidad.spinner.ViewerTipoViaSpinner;
-import com.didekindroid.lib_one.api.ObserverSingleSelectList;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
-import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
-import com.didekindroid.lib_one.api.SpinnerEventListener;
-import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
@@ -52,12 +51,12 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     private EditText editNumero;
     private EditText editSufijoNumero;
 
-    ViewerRegComuFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
+    ViewerRegComuFr(View view, AppCompatActivity activity, ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    static ViewerRegComuFr newViewerRegComuFr(@NonNull View view, @NonNull ParentViewerInjectedIf parentViewer)
+    static ViewerRegComuFr newViewerRegComuFr(@NonNull View view, @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerRegComuFr()");
         ViewerRegComuFr instance = new ViewerRegComuFr(view, parentViewer.getActivity(), parentViewer);
@@ -116,13 +115,6 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
             }
         }
         initializeSpinnersFromComunidad(comunidad, savedState);
-    }
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
     }
 
     @Override

@@ -8,9 +8,9 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -20,14 +20,14 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidContextualName.incidencia_just_erased;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.router.LeadRouter.erasedOpenIncid;
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_should_have_admAuthority;
 
 /**
  * User: pedro@didekin
@@ -40,7 +40,14 @@ import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userco
  */
 final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
 
-    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ParentViewerInjectedIf parentViewer)
+    ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
+
+    private ViewerIncidEditMaxFr(View view, ParentViewerIf parentViewer)
+    {
+        super(view, parentViewer.getActivity(), parentViewer);
+    }
+
+    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
 
@@ -51,13 +58,6 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
                 newViewerImportanciaSpinner(frView.findViewById(R.id.incid_reg_importancia_spinner), instance);
         instance.setController(new CtrlerIncidenciaCore());
         return instance;
-    }
-
-    ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
-
-    private ViewerIncidEditMaxFr(View view, ParentViewerInjectedIf parentViewer)
-    {
-        super(view, parentViewer.getActivity(), parentViewer);
     }
 
     // .............................. ViewerIf ..................................
@@ -117,7 +117,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
         bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
-        erasedOpenIncid.initActivity(getActivity(), bundle);
+        getContextualRouter().getActionFromContextNm(incidencia_just_erased).initActivity(getActivity(), bundle);
     }
 
     //    ============================  LIFE CYCLE   ===================================

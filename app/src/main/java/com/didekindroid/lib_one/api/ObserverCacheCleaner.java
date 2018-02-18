@@ -3,7 +3,7 @@ package com.didekindroid.lib_one.api;
 import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -37,7 +37,7 @@ public class ObserverCacheCleaner extends DisposableCompletableObserver {
     public void onError(Throwable e)
     {
         Timber.d("onError, Thread for subscriber: %s", Thread.currentThread().getName());
-        viewer.getController().getIdentityCacher().cleanIdentityCache();
+        viewer.getController().getTkCacher().cleanIdentityCache();
         viewer.onErrorInObserver(e);
         dispose();
     }

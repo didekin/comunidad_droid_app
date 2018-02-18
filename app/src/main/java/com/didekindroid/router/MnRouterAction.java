@@ -14,10 +14,10 @@ import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.router.RouterActionIf;
-import com.didekindroid.usuario.delete.DeleteMeAc;
-import com.didekindroid.usuario.login.LoginAc;
-import com.didekindroid.usuario.password.PasswordChangeAc;
-import com.didekindroid.usuario.userdata.UserDataAc;
+import com.didekindroid.usuario.DeleteMeAc;
+import com.didekindroid.usuario.LoginAc;
+import com.didekindroid.usuario.PasswordChangeAc;
+import com.didekindroid.usuario.UserDataAc;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
@@ -34,12 +34,16 @@ import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static android.support.v4.app.NavUtils.getParentActivityIntent;
 import static android.support.v4.app.NavUtils.navigateUpTo;
 import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.router.LeadRouter.defaultAcForNoRegUser;
-import static com.didekindroid.router.LeadRouter.defaultAcForRegUser;
-import static com.didekindroid.router.LeadRouter.writeNewComment;
-import static com.didekindroid.router.LeadRouter.writeNewIncidencia;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.parent_activity_should_be_not_null;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_not_be_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.router.ContextualAction.login_from_default;
+import static com.didekindroid.router.ContextualAction.regNewComment;
+import static com.didekindroid.router.ContextualAction.regNewIncidencia;
+import static com.didekindroid.router.ContextualAction.searchForComu;
+
 
 /**
  * User: pedro@didekin
@@ -55,29 +59,33 @@ public enum MnRouterAction implements RouterActionIf {
         public void initActivity(@NonNull Activity activity)
         {
             Timber.d("doUpMenuActivity()");
-            // To check if the user presses the Up button after entering your activity from another app's task.
-            if (shouldUpRecreateTask(activity, getParentActivityIntent(activity))) {
+
+            // Invariant: getParentActivityIntent() should return not null.
+            Intent parentAcIntent = getParentActivityIntent(activity);
+            assertTrue(parentAcIntent != null, parent_activity_should_be_not_null);
+
+            // Check if user presses the Up button after entering your activity from another app's task.
+            if (shouldUpRecreateTask(activity, parentAcIntent)) {
                 Intent intent =
                         new Intent(
                                 activity,
-                                TKhandler.isRegisteredUser() ? defaultAcForRegUser.activityToGo : defaultAcForNoRegUser.activityToGo
+                                secInitializer.get().getTkCacher().isRegisteredUser() ? login_from_default.getAcToGo() : searchForComu.getAcToGo()
                         );
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 return;
             }
 
-            Intent intent = getParentActivityIntent(activity);
-            intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_NEW_TASK);
-            navigateUpTo(activity, intent);
+            parentAcIntent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_NEW_TASK);
+            navigateUpTo(activity, parentAcIntent);
         }
     },
     // ACCESORIOS.
     confidencialidad_mn(R.id.confidencialidad_ac_mn, ConfidencialidadAc.class),
     // INCIDENCIAS.
-    incid_comment_reg_mn(R.id.incid_comment_reg_ac_mn, writeNewComment.activityToGo),
+    incid_comment_reg_mn(R.id.incid_comment_reg_ac_mn, regNewComment.getAcToGo()),
     incid_comments_see_mn(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class),
-    incid_reg_mn(R.id.incid_reg_ac_mn, writeNewIncidencia.activityToGo),
+    incid_reg_mn(R.id.incid_reg_ac_mn, regNewIncidencia.getAcToGo()),
     incid_see_closed_by_comu_mn(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeByComuAc.class) {
         @Override
         public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle)
@@ -105,7 +113,14 @@ public enum MnRouterAction implements RouterActionIf {
     comu_search_mn(R.id.comu_search_ac_mn, ComuSearchAc.class),
     // USUARIO.
     delete_me_mn(R.id.delete_me_ac_mn, DeleteMeAc.class),
-    login_mn(R.id.login_ac_mn, LoginAc.class),
+    login_mn(R.id.login_ac_mn, LoginAc.class) {
+        @Override
+        public void initActivity(@NonNull Activity activity)
+        {
+            assertTrue(!secInitializer.get().getTkCacher().isRegisteredUser(), user_should_not_be_registered);
+            super.initActivity(activity);
+        }
+    },
     password_change_mn(R.id.password_change_ac_mn, PasswordChangeAc.class),
     user_data_mn(R.id.user_data_ac_mn, UserDataAc.class),
     // USUARIO_COMUNIDAD.
@@ -115,7 +130,7 @@ public enum MnRouterAction implements RouterActionIf {
         {
             Timber.d("initActivity(), reg_nueva_comunidad_mn");
             // for not registered users
-            if (!TKhandler.isRegisteredUser()) {
+            if (!secInitializer.get().getTkCacher().isRegisteredUser()) {
                 activity.startActivity(new Intent(activity, RegComuAndUserAndUserComuAc.class));
             } else {
                 super.initActivity(activity);
@@ -136,9 +151,8 @@ public enum MnRouterAction implements RouterActionIf {
         }
     }
 
-    // ==========================  Instance members ============================
-
     private final int mnItemRsId;
+    // ==========================  Instance members ============================
     private final Class<? extends Activity> acToGo;
 
     MnRouterAction(int menuItemRsIdIn, Class<? extends Activity> classToGo)

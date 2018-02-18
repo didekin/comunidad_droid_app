@@ -17,13 +17,14 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.comunidad.ViewerComuSearchResultAc.newViewerComuSearchResultAc;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
 
 /**
  * User: pedro@didekin

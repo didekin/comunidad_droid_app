@@ -45,22 +45,23 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.closeDatePicker;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.reSetDatePicker;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.lib_one.util.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.lib_one.util.UIutils.formatTimeToString;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.router.UiExceptionAction.show_incid_open_list;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.lib_one.util.UiUtil.SPAIN_LOCALE;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static junit.framework.Assert.fail;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -234,7 +235,7 @@ public class IncidResolucionEditFrTest {
         checkBack(onView(withId(incidSeeByComuAcLayout)), incidResolucionEditFrLayout);
         // Error al intentar borrar otra vez la incidencia.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
+        waitAtMost(4, SECONDS).until(isToastInView(show_incid_open_list.getResourceIdForToast(), activity));
         onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
     }
 

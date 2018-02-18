@@ -7,7 +7,7 @@ import android.view.Gravity;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.usuario.dao.CtrlerUsuario;
+import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,9 +23,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.router.MnRouterAction.confidencialidad_mn;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.testutil.ActivityTestUtil.clickNavigateUp;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -39,7 +39,7 @@ import static org.junit.Assert.assertThat;
  * Time: 13:21
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMain_abs_Test {
+public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMain_Test_abs {
 
     @Rule
     public ActivityTestRule<ComuSearchAc> activityRule = new ActivityTestRule<>(ComuSearchAc.class, true, true);

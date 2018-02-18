@@ -10,11 +10,12 @@ import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.router.LeadRouter.afterClickPswdSentDialog;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_should_be_initialized;
-import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.usuario.UserContextualName.pswd_just_sent_to_user;
+import static com.didekindroid.lib_one.usuario.UsuarioAssertionMsg.user_name_should_be_initialized;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -23,14 +24,12 @@ import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
  */
 public class PasswordSentDialog extends DialogFragment {
 
-    public static PasswordSentDialog newInstance(Usuario usuario)
+    public static PasswordSentDialog newInstance(Bundle usuarioBundle)
     {
         Timber.d("newInstance()");
 
         PasswordSentDialog sentDialog = new PasswordSentDialog();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(usuario_object.key, usuario);
-        sentDialog.setArguments(bundle);
+        sentDialog.setArguments(usuarioBundle);
         return sentDialog;
     }
 
@@ -51,7 +50,8 @@ public class PasswordSentDialog extends DialogFragment {
                             dialog.dismiss();
                             Bundle bundle = new Bundle(1);
                             bundle.putString(user_name.key, usuarioArg.getUserName());
-                            afterClickPswdSentDialog.initActivity(getActivity(), bundle);
+                            routerInitializer.get().getContextRouter().getActionFromContextNm(pswd_just_sent_to_user)
+                                    .initActivity(getActivity(), bundle);
                         }
                 );
         return builder.create();

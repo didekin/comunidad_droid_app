@@ -9,7 +9,7 @@ import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 public class ActivityMock extends AppCompatActivity {
 

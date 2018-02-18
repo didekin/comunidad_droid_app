@@ -7,8 +7,9 @@ import com.didekindroid.lib_one.security.IdentityCacherIf;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.lib_one.util.UIutils.destroySubscriptions;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.destroySubscriptions;
+
 
 /**
  * User: pedro@didekin
@@ -17,18 +18,18 @@ import static com.didekindroid.lib_one.util.UIutils.destroySubscriptions;
  */
 public class Controller implements ControllerIf {
 
-    protected final CompositeDisposable subscriptions;
-    protected final IdentityCacherIf identityCacher;
+    private final CompositeDisposable subscriptions;
+    private final IdentityCacherIf tkCacher;
 
     public Controller()
     {
-        this(TKhandler);
+        this(secInitializer.get().getTkCacher());
     }
 
     public Controller(IdentityCacherIf identityCacher)
     {
         subscriptions = new CompositeDisposable();
-        this.identityCacher = identityCacher;
+        tkCacher = identityCacher;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class Controller implements ControllerIf {
     @Override
     public boolean isRegisteredUser()
     {
-        boolean isRegistered = identityCacher.isRegisteredUser();
+        boolean isRegistered = tkCacher.isRegisteredUser();
         Timber.d("isRegisteredUser() = %b", isRegistered);
         return isRegistered;
     }
@@ -57,14 +58,14 @@ public class Controller implements ControllerIf {
     public void updateIsRegistered(boolean isRegisteredUser)
     {
         Timber.d("updateIsRegistered()");
-        identityCacher.updateIsRegistered(isRegisteredUser);
+        tkCacher.updateIsRegistered(isRegisteredUser);
     }
 
     @Override
     @NonNull
-    public IdentityCacherIf getIdentityCacher()
+    public IdentityCacherIf getTkCacher()
     {
-        Timber.d("getIdentityCacher()");
-        return identityCacher;
+        Timber.d("getTkCacher()");
+        return tkCacher;
     }
 }

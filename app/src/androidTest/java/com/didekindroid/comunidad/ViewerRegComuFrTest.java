@@ -6,7 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.comunidad.spinner.MunicipioSpinnerEventItemSelect;
 import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
@@ -29,7 +29,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_FUENTE;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkProvinciaSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrView;
@@ -39,18 +39,18 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doProvinci
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCalleNumero;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.COMUNIDAD_AUTONOMA_ID;
 import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.MUNICIPIO_SPINNER_EVENT;
 import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.PROVINCIA_ID;
 import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.TIPO_VIA_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -223,11 +223,11 @@ public class ViewerRegComuFrTest {
     {
         AtomicReference<ViewerRegComuFr> viewerFrAtomic = new AtomicReference<>(null);
         viewerFrAtomic.compareAndSet(null, fragment.viewer);
-        AtomicReference<ChildViewersInjectorIf> viewerParentAtomic = new AtomicReference<>(null);
+        AtomicReference<InjectorOfParentViewerIf> viewerParentAtomic = new AtomicReference<>(null);
         viewerParentAtomic.compareAndSet(null, fragment.viewerInjector);
         waitAtMost(4, SECONDS).untilAtomic(viewerFrAtomic, notNullValue());
         waitAtMost(2, SECONDS).untilAtomic(viewerParentAtomic, notNullValue());
-        assertThat(fragment.viewerInjector.getParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
+        assertThat(fragment.viewerInjector.getInjectedParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
     }
 
     @Test

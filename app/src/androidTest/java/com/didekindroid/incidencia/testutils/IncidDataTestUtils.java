@@ -18,9 +18,9 @@ import java.util.Date;
 import java.util.List;
 
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
+import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -145,7 +145,7 @@ public final class IncidDataTestUtils {
     public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws IOException, UiException
     {
         signUpAndUpdateTk(userComu);
-        UsuarioComunidad userComuDb = userComuDaoRemote.seeUserComusByUser().get(0);
+        UsuarioComunidad userComuDb = userComuDao.seeUserComusByUser().get(0);
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComuDb.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComuDb.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComuDb)

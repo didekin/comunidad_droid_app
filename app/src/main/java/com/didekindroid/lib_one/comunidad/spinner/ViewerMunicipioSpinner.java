@@ -10,7 +10,6 @@ import android.widget.Spinner;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
@@ -20,7 +19,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.MUNICIPIO_SPINNER_EVENT;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -89,12 +88,6 @@ public final class ViewerMunicipioSpinner extends
     }
 
     /* ==================================== ViewerIf ====================================*/
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        return getParentViewer().getExceptionRouter();
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

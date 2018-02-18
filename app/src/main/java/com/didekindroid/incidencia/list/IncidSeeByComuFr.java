@@ -14,9 +14,10 @@ import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.router.LeadRouter.writeNewIncidencia;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidContextualName.to_register_new_incidencia;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 
 /**
  * Preconditions:
@@ -44,7 +45,13 @@ public class IncidSeeByComuFr extends Fragment {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         FloatingActionButton fab = frView.findViewById(R.id.incid_new_incid_fab);
-        fab.setOnClickListener(v -> writeNewIncidencia.initActivity(getActivity(), COMUNIDAD_ID.getBundleForKey(viewer.getComuSpinner().getSelectedItemId())));
+        fab.setOnClickListener(
+                v -> routerInitializer.get().getContextRouter().getActionFromContextNm(to_register_new_incidencia)
+                        .initActivity(
+                                getActivity(),
+                                COMUNIDAD_ID.getBundleForKey(viewer.getComuSpinner().getSelectedItemId())
+                        )
+        );
         return frView;
     }
 

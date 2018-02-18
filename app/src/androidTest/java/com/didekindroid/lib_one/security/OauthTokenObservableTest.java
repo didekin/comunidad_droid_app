@@ -13,16 +13,15 @@ import static com.didekindroid.lib_one.security.OauthTokenObservable.oauthTokenA
 import static com.didekindroid.lib_one.security.OauthTokenObservable.oauthTokenFromRefreshTk;
 import static com.didekindroid.lib_one.security.OauthTokenObservable.oauthTokenFromUserPswd;
 import static com.didekindroid.lib_one.security.OauthTokenObservable.oauthTokenInitCacheUpdateRegister;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUpdateTokenCache;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.checkInitTokenCache;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.checkUpdateTokenCache;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.lib_one.usuario.UserTestData.comu_real_rodrigo;
+import static com.didekindroid.lib_one.usuario.UserTestData.user_crodrigo;
+import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static io.reactivex.schedulers.Schedulers.io;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -38,10 +37,12 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class OauthTokenObservableTest {
 
+    TokenIdentityCacher tkCacher = (TokenIdentityCacher) secInitializer.get().getTkCacher();
+
     @After
     public void cleanFileToken() throws UiException
     {
-        cleanOptions(CLEAN_PEPE);
+        cleanOneUser(user_crodrigo);
     }
 
     //  ====================================================================================
@@ -52,8 +53,9 @@ public class OauthTokenObservableTest {
     @Test
     public void testOauthTokenFromUserPswd_1() throws Exception
     {
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        oauthTokenFromUserPswd(USER_PEPE).test().assertValueCount(1).assertComplete().assertNoErrors();
+        assertThat(usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body(), is(true));
+        updateSecurityData(user_crodrigo.getUserName(), user_crodrigo.getPassword());
+        oauthTokenFromUserPswd(user_crodrigo).test().assertValueCount(1).assertComplete().assertNoErrors();
     }
 
     /**
@@ -62,10 +64,11 @@ public class OauthTokenObservableTest {
     @Test
     public void testOauthTokenFromUserPswd_2() throws Exception
     {
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        assertThat(usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body(), is(true));
+        updateSecurityData(user_crodrigo.getUserName(), user_crodrigo.getPassword());
         try {
             trampolineReplaceIoScheduler();
-            oauthTokenFromUserPswd(USER_PEPE).subscribeOn(io()).test().assertValueCount(1).assertComplete().assertNoErrors();
+            oauthTokenFromUserPswd(user_crodrigo).subscribeOn(io()).test().assertValueCount(1).assertComplete().assertNoErrors();
         } finally {
             reset();
         }
@@ -77,17 +80,18 @@ public class OauthTokenObservableTest {
     @Test
     public void testOauthTokenFromRefreshTk_1() throws Exception
     {
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        assertThat(usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body(), is(true));
+        updateSecurityData(user_crodrigo.getUserName(), user_crodrigo.getPassword());
 
-        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
-        oauthTokenFromRefreshTk(TKhandler.getRefreshTokenValue()).test()
+        SpringOauthToken oldToken = tkCacher.getTokenCache().get();
+        oauthTokenFromRefreshTk(tkCacher.getRefreshTokenValue()).test()
                 .await()
                 .assertValueCount(0)
                 .assertNoErrors()
                 .assertComplete()
                 .assertTerminated();
 
-        checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken, tkCacher);
     }
 
     /**
@@ -96,12 +100,13 @@ public class OauthTokenObservableTest {
     @Test
     public void testOauthTokenFromRefreshTk_2() throws Exception
     {
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        assertThat(usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body(), is(true));
+        updateSecurityData(user_crodrigo.getUserName(), user_crodrigo.getPassword());
 
-        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
-        oauthTokenFromRefreshTk(TKhandler.getRefreshTokenValue())
+        SpringOauthToken oldToken = tkCacher.getTokenCache().get();
+        oauthTokenFromRefreshTk(tkCacher.getRefreshTokenValue())
                 .blockingAwait();
-        checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken, tkCacher);
     }
 
     /**
@@ -110,16 +115,17 @@ public class OauthTokenObservableTest {
     @Test
     public void testOauthTokenAndInitCache_1() throws Exception
     {
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        assertThat(usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body(), is(true));
+        updateSecurityData(user_crodrigo.getUserName(), user_crodrigo.getPassword());
 
-        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
-        oauthTokenAndInitCache(USER_PEPE).test()
+        SpringOauthToken oldToken = tkCacher.getTokenCache().get();
+        oauthTokenAndInitCache(user_crodrigo).test()
                 .awaitDone(4L, SECONDS)
                 .assertValueCount(0)
                 .assertComplete()
                 .assertTerminated();
 
-        checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken, tkCacher);
     }
 
     /**
@@ -128,28 +134,29 @@ public class OauthTokenObservableTest {
     @Test
     public void testOauthTokenAndInitCache_2() throws Exception
     {
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        assertThat(usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body(), is(true));
+        updateSecurityData(user_crodrigo.getUserName(), user_crodrigo.getPassword());
 
-        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
+        SpringOauthToken oldToken = tkCacher.getTokenCache().get();
         // For completeness, to test the change in the registered status, we 'unregister' the user.
-        TKhandler.updateIsRegistered(false);
-        oauthTokenAndInitCache(USER_PEPE)
+        tkCacher.updateIsRegistered(false);
+        oauthTokenAndInitCache(user_crodrigo)
                 .blockingAwait();
-        checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken, tkCacher);
         // Check register status.
-        assertThat(TKhandler.isRegisteredUser(), is(true));
+        assertThat(tkCacher.isRegisteredUser(), is(true));
     }
 
     @Test
     public void test_OauthTokenInitCacheUpdateRegister() throws Exception
     {
-        userComuMockDao.regComuAndUserAndUserComu(COMU_ESCORIAL_PEPE).execute().body();
+        usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body();
         // User not registered.
-        assertThat(TKhandler.isRegisteredUser(), is(false));
-        assertThat(TKhandler.getTokenCache().get(), nullValue());
+        assertThat(tkCacher.isRegisteredUser(), is(false));
+        assertThat(tkCacher.getTokenCache().get(), nullValue());
 
-        oauthTokenInitCacheUpdateRegister(USER_PEPE).blockingAwait();
-        checkInitTokenCache();
-        assertThat(TKhandler.isRegisteredUser(), is(true));
+        oauthTokenInitCacheUpdateRegister(user_crodrigo).blockingAwait();
+        checkInitTokenCache(tkCacher);
+        assertThat(tkCacher.isRegisteredUser(), is(true));
     }
 }

@@ -8,7 +8,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.incidencia.core.Incidencia_GCM_abs_Test;
+import com.didekindroid.incidencia.core.Incidencia_GCM_test_abs;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -23,9 +23,9 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_EST
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -38,7 +38,7 @@ import static org.junit.Assert.assertThat;
  * Test GCM para el registro de la resolución de una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_abs_Test {
+public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_test_abs {
 
     IncidImportancia incidImportancia;
 

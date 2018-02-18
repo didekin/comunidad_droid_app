@@ -25,15 +25,15 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinn
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -119,7 +119,7 @@ public class ComuSearchAcTest {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
 
-        LOGIN_AC.checkItemRegisterUser(activity);
+        LOGIN_AC.checkItem(activity);
         cleanOneUser(USER_JUAN);
     }
 
@@ -129,7 +129,7 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(false));
 
-        LOGIN_AC.checkItemNoRegisterUser(activity);
+        LOGIN_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
@@ -138,7 +138,7 @@ public class ComuSearchAcTest {
     {
         activity = activityRule.launchActivity(new Intent());
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(false));
-        REG_COMU_USER_USERCOMU_AC.checkItemNoRegisterUser(activity);
+        REG_COMU_USER_USERCOMU_AC.checkItem(activity);
 
         checkUp(comuSearchAcLayout);
     }
@@ -148,7 +148,7 @@ public class ComuSearchAcTest {
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
-        REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
+        REG_COMU_USERCOMU_AC.checkItem(activity);
 
         checkUp(comuSearchAcLayout);
         cleanOneUser(USER_JUAN);

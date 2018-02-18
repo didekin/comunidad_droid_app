@@ -1,8 +1,9 @@
 package com.didekindroid.comunidad;
 
+import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.security.IdentityCacherIf;
-import com.didekinlib.http.HttpHandler;
+import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekinlib.http.comunidad.ComunidadEndPoints;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -16,7 +17,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -27,14 +28,14 @@ import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL
 @SuppressWarnings("WeakerAccess")
 public final class ComunidadDao implements ComunidadEndPoints {
 
-    public static final ComunidadDao comunidadDao = new ComunidadDao(TKhandler, httpInitializer.get().getHttpHandler());
+    public static final ComunidadDao comunidadDao = new ComunidadDao(secInitializer.get(), httpInitializer.get());
     private final ComunidadEndPoints endPoint;
-    private final IdentityCacherIf identityCacher;
+    private final IdentityCacherIf tkCacher;
 
-    private ComunidadDao(IdentityCacherIf identityCacherIn, HttpHandler httpHandlerIn)
+    private ComunidadDao(SecInitializerIf secInitializerIn, HttpInitializerIf httpInitializerIn)
     {
-        identityCacher = identityCacherIn;
-        endPoint = httpHandlerIn.getService(ComunidadEndPoints.class);
+        tkCacher = secInitializerIn.getTkCacher();
+        endPoint = httpInitializerIn.getHttpHandler().getService(ComunidadEndPoints.class);
     }
 
     //  ================================== ComunidadEndPoints implementation ============================
@@ -69,7 +70,7 @@ public final class ComunidadDao implements ComunidadEndPoints {
         Timber.d("getComuData()");
 
         try {
-            Response<Comunidad> response = getComuData(identityCacher.checkBearerTokenInCache(), idComunidad).execute();
+            Response<Comunidad> response = getComuData(tkCacher.checkBearerTokenInCache(), idComunidad).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (EOFException eo) {
             return null;

@@ -9,6 +9,10 @@ import com.didekinlib.http.auth.SpringOauthToken;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+
 /**
  * User: pedro@didekin
  * Date: 21/12/16
@@ -40,11 +44,29 @@ public interface IdentityCacherIf {
 
     void updateIsRegistered(boolean isRegisteredUser);
 
+    boolean isGcmTokenSentServer();
+
+    void updateIsGcmTokenSentServer(boolean isSentToServer);
+
+    //  ======================================================================================
+    //    ............................ ACTIONS AND FUNCTIONS .................................
+    //  ======================================================================================
+
+    Function<Boolean, Boolean> getCleanIdentityFunc();
+
+    BiFunction<Boolean, SpringOauthToken, Boolean> getInitTokenAndRegisterFunc();
+
+    Consumer<SpringOauthToken> getInitTokenUpdateRegisterAction();
+
+    //  ======================================================================================
+    //    ............................ Inner classes .................................
+    //  ======================================================================================
+
     enum SharedPrefFiles {
 
         app_preferences_file,;
 
-        public static final String IS_USER_REG = "IdentityCacher.isRegisteredUser";
+        public static final String is_user_registered = "IdentityCacher.isRegisteredUser";
 
         @Override
         public String toString()

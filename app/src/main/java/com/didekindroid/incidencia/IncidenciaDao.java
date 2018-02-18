@@ -1,8 +1,9 @@
 package com.didekindroid.incidencia;
 
+import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.security.IdentityCacherIf;
-import com.didekinlib.http.HttpHandler;
+import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.http.incidencia.IncidenciaServEndPoints;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
@@ -21,7 +22,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -31,20 +32,20 @@ import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL
  */
 public final class IncidenciaDao implements IncidenciaServEndPoints {
 
-    public static final IncidenciaDao incidenciaDao = new IncidenciaDao(TKhandler, httpInitializer.get().getHttpHandler());
+    public static final IncidenciaDao incidenciaDao = new IncidenciaDao(secInitializer.get(), httpInitializer.get());
     private final IncidenciaServEndPoints endPoint;
-    private final IdentityCacherIf identityCacher;
+    private final IdentityCacherIf tkCacher;
 
-    private IncidenciaDao(IdentityCacherIf identityCacherIn, HttpHandler httpHandlerIn)
+    private IncidenciaDao(SecInitializerIf secInitializerIn, HttpInitializerIf httpInitializerIn)
     {
-        identityCacher = identityCacherIn;
-        endPoint = httpHandlerIn.getService(IncidenciaServEndPoints.class);
+        tkCacher = secInitializerIn.getTkCacher();
+        endPoint = httpInitializerIn.getHttpHandler().getService(IncidenciaServEndPoints.class);
     }
 
-    public IncidenciaDao(IncidenciaServEndPoints endPoint, IdentityCacherIf identityCacher)
+    public IncidenciaDao(IncidenciaServEndPoints endPoint, IdentityCacherIf tkCacher)
     {
         this.endPoint = endPoint;
-        this.identityCacher = identityCacher;
+        this.tkCacher = tkCacher;
     }
 
     /*  ================================== IncidenciaServEndPoints implementation ============================*/
@@ -135,7 +136,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("closeIncidencia()");
         try {
-            Response<Integer> response = closeIncidencia(identityCacher.checkBearerTokenInCache(), resolucion).execute();
+            Response<Integer> response = closeIncidencia(tkCacher.checkBearerTokenInCache(), resolucion).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -146,7 +147,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("deleteIncidencia()");
         try {
-            Response<Integer> response = deleteIncidencia(identityCacher.checkBearerTokenInCache(), incidenciaId).execute();
+            Response<Integer> response = deleteIncidencia(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -157,7 +158,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("modifyIncidImportancia()");
         try {
-            Response<Integer> response = modifyIncidImportancia(identityCacher.checkBearerTokenInCache(), incidImportancia).execute();
+            Response<Integer> response = modifyIncidImportancia(tkCacher.checkBearerTokenInCache(), incidImportancia).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -168,7 +169,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("modifyResolucion()");
         try {
-            Response<Integer> response = modifyResolucion(identityCacher.checkBearerTokenInCache(), resolucion).execute();
+            Response<Integer> response = modifyResolucion(tkCacher.checkBearerTokenInCache(), resolucion).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -179,7 +180,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("regIncidComment()");
         try {
-            Response<Integer> response = endPoint.regIncidComment(identityCacher.checkBearerTokenInCache(), comment).execute();
+            Response<Integer> response = endPoint.regIncidComment(tkCacher.checkBearerTokenInCache(), comment).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -190,7 +191,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("regIncidImportancia()");
         try {
-            Response<Integer> response = regIncidImportancia(identityCacher.checkBearerTokenInCache(), incidImportancia).execute();
+            Response<Integer> response = regIncidImportancia(tkCacher.checkBearerTokenInCache(), incidImportancia).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -201,7 +202,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("regResolucion()");
         try {
-            Response<Integer> response = regResolucion(identityCacher.checkBearerTokenInCache(), resolucion).execute();
+            Response<Integer> response = regResolucion(tkCacher.checkBearerTokenInCache(), resolucion).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -212,7 +213,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("seeCommentsByIncid()");
         try {
-            Response<List<IncidComment>> response = seeCommentsByIncid(identityCacher.checkBearerTokenInCache(), incidenciaId).execute();
+            Response<List<IncidComment>> response = seeCommentsByIncid(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -223,7 +224,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("seeIncidImportancia()");
         try {
-            Response<IncidAndResolBundle> response = seeIncidImportancia(identityCacher.checkBearerTokenInCache(), incidenciaId).execute();
+            Response<IncidAndResolBundle> response = seeIncidImportancia(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (EOFException eo) {
             return null;
@@ -236,7 +237,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("seeIncidsOpenByComu()");
         try {
-            Response<List<IncidenciaUser>> response = seeIncidsOpenByComu(identityCacher.checkBearerTokenInCache(), comunidadId).execute();
+            Response<List<IncidenciaUser>> response = seeIncidsOpenByComu(tkCacher.checkBearerTokenInCache(), comunidadId).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -247,7 +248,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("seeIncidsClosedByComu()");
         try {
-            Response<List<IncidenciaUser>> response = seeIncidsClosedByComu(identityCacher.checkBearerTokenInCache(), comunidadId).execute();
+            Response<List<IncidenciaUser>> response = seeIncidsClosedByComu(tkCacher.checkBearerTokenInCache(), comunidadId).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -258,7 +259,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("checkResolucion()");
         try {
-            Response<Resolucion> response = seeResolucion(identityCacher.checkBearerTokenInCache(), incidenciaId).execute();
+            Response<Resolucion> response = seeResolucion(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (EOFException eo) {
             return null;
@@ -271,7 +272,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     {
         Timber.d("seeUserComusImportancia()");
         try {
-            Response<List<ImportanciaUser>> response = seeUserComusImportancia(identityCacher.checkBearerTokenInCache(), incidenciaId).execute();
+            Response<List<ImportanciaUser>> response = seeUserComusImportancia(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
             return httpInitializer.get().getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));

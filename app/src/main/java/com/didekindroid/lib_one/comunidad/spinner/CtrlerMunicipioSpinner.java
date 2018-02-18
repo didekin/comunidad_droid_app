@@ -10,7 +10,7 @@ import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -29,7 +29,7 @@ public class CtrlerMunicipioSpinner extends CtrlerSelectList<Municipio> {
     {
         Timber.d("municipiosByProvincia()");
         return Single.fromCallable((() -> {
-            ComunidadDbHelper dbHelper = new ComunidadDbHelper(getIdentityCacher().getContext());
+            ComunidadDbHelper dbHelper = new ComunidadDbHelper(getTkCacher().getContext());
             List<Municipio> municipios = dbHelper.getMunicipioByProvincia(provinciaId);
             dbHelper.close();
             return municipios;
@@ -41,7 +41,7 @@ public class CtrlerMunicipioSpinner extends CtrlerSelectList<Municipio> {
     {
         Timber.d("loadItemsByEntitiyId()");
         assertTrue(entityId.length > 0, "length should be greater than zero");
-        return subscriptions.add(municipiosByProvincia(entityId[0].shortValue())
+        return getSubscriptions().add(municipiosByProvincia(entityId[0].shortValue())
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribeWith(observer)

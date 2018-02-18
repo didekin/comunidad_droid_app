@@ -11,14 +11,14 @@ import com.didekindroid.lib_one.api.ObserverSingleSelectList;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 
 /**
  * User: pedro@didekin

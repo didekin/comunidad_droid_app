@@ -3,7 +3,7 @@ package com.didekindroid.incidencia;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.lib_one.usuario.UserTestData;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia.IncidImportanciaBuilder;
@@ -31,20 +31,20 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResoluc
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuMockDaoRemote.userComuMockDao;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUserComuWithComunidadId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.UNAUTHORIZED_TX_TO_USER;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USERCOMU_WRONG_INIT;
 import static com.didekinlib.model.common.dominio.BeanBuilder.error_message_bean_building;
@@ -64,7 +64,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidenciaDaoTest_2 {
 
-    UsuarioDataTestUtils.CleanUserEnum whatClean;
+    UserTestData.CleanUserEnum whatClean;
     Usuario pepe;
     UsuarioComunidad pepeUserComu;
     UsuarioComunidad juanUserComu;
@@ -178,7 +178,7 @@ public class IncidenciaDaoTest_2 {
         UsuarioComunidad userComuJuan = makeUserComuWithComunidadId(COMU_REAL_JUAN, pepeUserComu.getComunidad().getC_Id());
         assertThat(userComuMockDao.regUserAndUserComu(userComuJuan).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        userComuJuan = userComuDaoRemote.getUserComuByUserAndComu(pepeUserComu.getComunidad().getC_Id());
+        userComuJuan = userComuDao.getUserComuByUserAndComu(pepeUserComu.getComunidad().getC_Id());
         IncidImportancia newIncidImportancia = new IncidImportanciaBuilder(incidencia_1)
                 .usuarioComunidad(userComuJuan)
                 .importancia((short) 2)
@@ -195,7 +195,7 @@ public class IncidenciaDaoTest_2 {
         signPepeWithIncidencia();
         // Registramos userComu en otra comunidad.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-        UsuarioComunidad juanUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
+        UsuarioComunidad juanUserComu = userComuDao.seeUserComusByUser().get(0);
         try {
             new IncidImportanciaBuilder(incidencia_1)
                     .usuarioComunidad(juanUserComu)
@@ -272,7 +272,7 @@ public class IncidenciaDaoTest_2 {
         juanUserComu = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, pepeUserComu.getComunidad().getC_Id());
         assertThat(userComuMockDao.regUserAndUserComu(juanUserComu).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        juanUserComu = userComuDaoRemote.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
+        juanUserComu = userComuDao.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
         // Añado registro incidImportancia de Juan.
         insertGetIncidenciaUser(incidencia_1.getIncidenciaId(), juanUserComu, 4);
         assertThat(incidenciaDao.seeUserComusImportancia(incidencia_1.getIncidenciaId()).size(), is(2));
@@ -314,7 +314,7 @@ public class IncidenciaDaoTest_2 {
     private void signPepeWithIncidencia(UsuarioComunidad userComu) throws IOException, UiException
     {
         pepe = signUpAndUpdateTk(userComu);
-        pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
+        pepeUserComu = userComuDao.seeUserComusByUser().get(0);
         // Insertamos incidencia.
         incidencia_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
     }
@@ -333,7 +333,7 @@ public class IncidenciaDaoTest_2 {
         juanUserComu = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, pepeUserComu.getComunidad().getC_Id());
         assertThat(userComuMockDao.regUserAndUserComu(juanUserComu).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        juanUserComu = userComuDaoRemote.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
+        juanUserComu = userComuDao.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
         assertThat(juanUserComu != null && juanUserComu.hasAdministradorAuthority(), is(false));
         return incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
     }

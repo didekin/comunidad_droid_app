@@ -19,5 +19,5 @@ public interface ControllerIf {
 
     void updateIsRegistered(boolean isRegisteredUser);
 
-    IdentityCacherIf getIdentityCacher();
+    IdentityCacherIf getTkCacher();
 }

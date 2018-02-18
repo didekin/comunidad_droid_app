@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerManagerIf;
 import com.didekindroid.router.ViewerDrawerMain;
@@ -17,8 +17,8 @@ import com.didekindroid.router.ViewerDrawerMain;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
 
 /**
@@ -32,7 +32,7 @@ import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
  * -- municipio with codInProvincia and provinciaId.
  */
 @SuppressWarnings("ConstantConditions")
-public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjectorIf,
+public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentViewerIf,
         ViewerManagerIf {
 
     View acView;
@@ -76,12 +76,12 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         return viewerDrawer;
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewerAc;
     }
 
@@ -154,7 +154,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
                 return true;
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

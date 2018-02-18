@@ -7,16 +7,17 @@ import android.view.MenuItem;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
+import com.didekindroid.lib_one.api.router.MnRouterIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incid_listFlag_should_be_initialized;
 import static com.didekindroid.incidencia.list.IncidSeeByComuFr.newInstance;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_listFlag_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 public class IncidSeeByComuAc extends AppCompatActivity implements FragmentInitiatorIf<IncidSeeByComuFr> {
 
@@ -91,11 +92,12 @@ public class IncidSeeByComuAc extends AppCompatActivity implements FragmentIniti
     {
         Timber.d("onOptionsItemSelected()");
 
+        MnRouterIf router = routerInitializer.get().getMnRouter();
         int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.incid_see_open_by_comu_ac_mn:
                 initReplaceFragmentTx(newInstance(comunidadId, false));
@@ -108,7 +110,8 @@ public class IncidSeeByComuAc extends AppCompatActivity implements FragmentIniti
                 getIntent().putExtra(INCID_CLOSED_LIST_FLAG.key, true);
                 return true;
             case R.id.incid_reg_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this, COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0)));
+                router.getActionFromMnItemId(resourceId)
+                        .initActivity(this, COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0)));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

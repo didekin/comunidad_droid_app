@@ -6,9 +6,9 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.comunidad.testutil.ComuTestData;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
+import com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils;
 import com.didekindroid.usuariocomunidad.RolUi;
 
 import org.hamcrest.Matchers;
@@ -32,17 +32,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regSeveralUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regComu_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
@@ -106,7 +106,7 @@ public class SeeUserComuByUserAcTest {
     {
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
-        assertThat(TKhandler.isRegisteredUser(), is(true));
+        assertThat(secInitializer.get().getTkCacher().isRegisteredUser(), is(true));
         assertThat(mFragment.getFrView(), notNullValue());
 
         onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
@@ -151,7 +151,7 @@ public class SeeUserComuByUserAcTest {
                 .onChildView(
                         allOf(
                                 withId(R.id.nombreComunidad_view),
-                                ViewMatchers.withText(ComuDataTestUtil.COMU_LA_FUENTE.getNombreComunidad())
+                                ViewMatchers.withText(ComuTestData.COMU_LA_FUENTE.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
@@ -168,7 +168,7 @@ public class SeeUserComuByUserAcTest {
                 .onChildView(
                         allOf(
                                 withId(R.id.nombreComunidad_view),
-                                ViewMatchers.withText(ComuDataTestUtil.COMU_EL_ESCORIAL.getNombreComunidad())
+                                ViewMatchers.withText(ComuTestData.COMU_EL_ESCORIAL.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
@@ -185,7 +185,7 @@ public class SeeUserComuByUserAcTest {
                 .onChildView(
                         allOf(
                                 withId(R.id.nombreComunidad_view),
-                                ViewMatchers.withText(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
+                                ViewMatchers.withText(ComuTestData.COMU_LA_PLAZUELA_5.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
@@ -229,14 +229,14 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testUserDataMn_withToken() throws InterruptedException
     {
-        UserItemMenuTestUtils.USER_DATA_AC.checkItemRegisterUser(mActivity);
+        UserMenuTestUtils.USER_DATA_AC.checkItem(mActivity);
         checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test
     public void testComuSearchMn_withToken() throws InterruptedException
     {
-        COMU_SEARCH_AC.checkItemRegisterUser(mActivity);
+        COMU_SEARCH_AC.checkItem(mActivity);
         // NO hay opción de navigate-up.
     }
 }

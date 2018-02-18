@@ -8,12 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerIncidRegFr;
 
 /**
@@ -23,7 +23,7 @@ import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerInc
 public class IncidRegFr extends Fragment {
 
     View rootFrgView;
-    ChildViewersInjectorIf viewerInjector;
+    InjectorOfParentViewerIf viewerInjector;
     ViewerIncidRegFr viewer;
 
     @Override
@@ -43,8 +43,8 @@ public class IncidRegFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         /* Initialization of viewers.*/
-        viewerInjector = (ChildViewersInjectorIf) getActivity();
-        viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getParentViewer());
+        viewerInjector = (InjectorOfParentViewerIf) getActivity();
+        viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getInjectedParentViewer());
         long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
         viewer.doViewInViewer(savedInstanceState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
         viewerInjector.setChildInParentViewer(viewer);

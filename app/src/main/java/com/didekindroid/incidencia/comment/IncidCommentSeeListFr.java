@@ -18,11 +18,11 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidContextualName.to_register_new_incid_comment;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
-import static com.didekindroid.router.LeadRouter.writeNewComment;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
 
 /**
  * Preconditions:
@@ -55,7 +55,7 @@ public class IncidCommentSeeListFr extends Fragment {
         mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
         // Floating button.
         FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
-        fab.setOnClickListener(v -> writeNewComment.initActivity(getActivity(), getArguments()));
+        fab.setOnClickListener(v -> routerInitializer.get().getContextRouter().getActionFromContextNm(to_register_new_incid_comment).initActivity(getActivity(), getArguments()));
         return mView;
     }
 
@@ -104,7 +104,8 @@ public class IncidCommentSeeListFr extends Fragment {
 
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity());
+                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
+                        .initActivity(getActivity());
             }
             if (incidComments != null && !incidComments.isEmpty()) {
                 Timber.d("onPostExecute(): incidComments != null");

@@ -17,10 +17,6 @@ import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAcTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditFrTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionRegAcTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFrTest;
-import com.didekindroid.lib_one.incidencia.IncidenciaBeanTest;
-import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelperTest;
-import com.didekindroid.lib_one.incidencia.spinner.CtrlerAmbitoIncidSpinnerTest;
-import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinnerTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -54,12 +50,8 @@ import org.junit.runners.Suite;
         IncidResolucionRegAcTest.class,
         IncidResolucionSeeFrTest.class,
         // core
-        CtrlerAmbitoIncidSpinnerTest.class,
         CtrlerIncidenciaCoreTest.class,
-        IncidenciaBeanTest.class,
-        IncidenciaDataDbHelperTest.class,
         IncidImportanciaBeanTest.class,
-        ViewerAmbitoIncidSpinnerTest.class,
         ViewerImportanciaSpinnerTest.class,
 })
 public class IncidCoreSuite {

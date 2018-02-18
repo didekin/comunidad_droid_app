@@ -9,7 +9,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Single;
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static io.reactivex.Single.fromCallable;
 
 /**
@@ -25,7 +25,7 @@ public class UserComuObservable {
     public static Single<List<Comunidad>> comunidadesByUser()
     {
         Timber.d("comunidadesByUser()");
-        return fromCallable(userComuDaoRemote::getComusByUser);
+        return fromCallable(userComuDao::getComusByUser);
     }
 
     public static Single<Integer> comunidadModificada(final Comunidad comunidad)
@@ -33,13 +33,13 @@ public class UserComuObservable {
         Timber.d("comunidadModificada()");
         return fromCallable(() -> {
             Timber.d("call()");
-            return userComuDaoRemote.modifyComuData(comunidad);
+            return userComuDao.modifyComuData(comunidad);
         });
     }
 
     public static Maybe<UsuarioComunidad> comunidadByUserAndComu(final Comunidad comunidad)
     {
         Timber.d("comunidadByUserAndComu()");
-        return Maybe.fromCallable(() -> userComuDaoRemote.getUserComuByUserAndComu(comunidad.getC_Id()));
+        return Maybe.fromCallable(() -> userComuDao.getUserComuByUserAndComu(comunidad.getC_Id()));
     }
 }

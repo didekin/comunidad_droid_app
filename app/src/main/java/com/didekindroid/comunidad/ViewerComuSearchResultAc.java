@@ -8,11 +8,10 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
@@ -23,16 +22,16 @@ import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 final class ViewerComuSearchResultAc extends Viewer<View, Controller> {
 
-    static ViewerComuSearchResultAc newViewerComuSearchResultAc(ComuSearchResultsAc activity)
-    {
-        ViewerComuSearchResultAc instance = new ViewerComuSearchResultAc(activity.acView, activity);
-        instance.setController(new Controller(TKhandler));
-        return instance;
-    }
-
     private ViewerComuSearchResultAc(View view, AppCompatActivity activity)
     {
         super(view, activity, null);
+    }
+
+    static ViewerComuSearchResultAc newViewerComuSearchResultAc(ComuSearchResultsAc activity)
+    {
+        ViewerComuSearchResultAc instance = new ViewerComuSearchResultAc(activity.acView, activity);
+        instance.setController(new Controller());
+        return instance;
     }
 
     // .............................. ViewerIf ..................................

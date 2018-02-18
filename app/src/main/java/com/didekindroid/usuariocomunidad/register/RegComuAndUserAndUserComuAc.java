@@ -8,15 +8,15 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
-import com.didekindroid.usuario.RegUserFr;
+import com.didekindroid.lib_one.usuario.RegUserFr;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
 
 /**
@@ -25,7 +25,7 @@ import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserCo
  * 2. The comunidad has not been registered either, by other users.
  * 3. There is not extras in the activity intent.
  */
-public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -59,12 +59,12 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements Ch
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -97,7 +97,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements Ch
         switch (resourceId) {
             case android.R.id.home:
             case R.id.login_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -14,8 +14,8 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
@@ -53,7 +53,7 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
     {
         Timber.d("loadItemsByEntitiyId()");
         assertTrue(entityId[0] > 0L, "Comunidad ID should be greater than 0");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 incidOpenList(entityId[0])
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -66,7 +66,7 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
     {
         Timber.d("selectItem()");
         final Incidencia incidencia = item.getIncidencia();
-        return subscriptions.add(
+        return getSubscriptions().add(
                 incidImportancia(incidencia)
                         .subscribeOn(io())
                         .observeOn(mainThread())

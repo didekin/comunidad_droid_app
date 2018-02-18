@@ -6,7 +6,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.incidencia.core.Incidencia_GCM_abs_Test;
+import com.didekindroid.incidencia.core.Incidencia_GCM_test_abs;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Test;
@@ -14,10 +14,10 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.usuario.dao.UsuarioDao.usuarioDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -30,7 +30,7 @@ import static org.junit.Assert.fail;
  * Test de integración GCM para la consulta de incidencias abiertas.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeByComuAc_Open_GCM_Test extends Incidencia_GCM_abs_Test {
+public class IncidSeeByComuAc_Open_GCM_Test extends Incidencia_GCM_test_abs {
 
     Usuario pepe;
 

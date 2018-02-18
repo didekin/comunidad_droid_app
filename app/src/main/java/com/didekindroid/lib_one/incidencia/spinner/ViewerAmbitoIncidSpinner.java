@@ -10,7 +10,7 @@ import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 import com.didekindroid.lib_one.api.ObserverSingleSelectList;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 
 import java.io.Serializable;
 

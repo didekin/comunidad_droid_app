@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -21,16 +21,16 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.comunidadFound_editUserComu;
-import static com.didekindroid.router.LeadRouter.comunidadFound_noRegUser;
-import static com.didekindroid.router.LeadRouter.comunidadFound_regUserComu;
-import static com.didekindroid.router.LeadRouter.noComunidadFound_noRegUser;
-import static com.didekindroid.router.LeadRouter.noComunidadFound_regComuUserComu;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
+import static com.didekindroid.router.ContextualAction.editCurrentUserComu;
+import static com.didekindroid.router.ContextualAction.regNewUser;
+import static com.didekindroid.router.ContextualAction.regNewUserComu;
+import static com.didekindroid.router.ContextualAction.regNewComuAndNewUser;
+import static com.didekindroid.router.ContextualAction.regNewComuAndUserComu;
 import static com.didekindroid.router.UiExceptionRouter.uiException_router;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 
 /**
  * User: pedro@didekin
@@ -87,9 +87,9 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidad);
         if (controller.isRegisteredUser()) {
-            noComunidadFound_regComuUserComu.initActivity(activity, bundle);
+            regNewComuAndUserComu.initActivity(activity, bundle);
         } else {
-            noComunidadFound_noRegUser.initActivity(activity, bundle);
+            regNewComuAndNewUser.initActivity(activity, bundle);
         }
         activity.finish();
     }
@@ -108,7 +108,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             if (!controller.isRegisteredUser()) {
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidadSelect);
-                comunidadFound_noRegUser.initActivity(activity, bundle);
+                regNewUser.initActivity(activity, bundle);
             } else {
                 controller.getUserComu(new UsuarioComunidadObserver(comunidadSelect), comunidadSelect);
             }
@@ -131,7 +131,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onSuccess()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
-            comunidadFound_editUserComu.initActivity(activity, bundle);
+            editCurrentUserComu.initActivity(activity, bundle);
         }
 
         @Override
@@ -147,7 +147,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             Timber.d("onComplete()");
             Bundle bundle = new Bundle(1);
             bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            comunidadFound_regUserComu.initActivity(activity, bundle);
+            regNewUserComu.initActivity(activity, bundle);
         }
     }
 

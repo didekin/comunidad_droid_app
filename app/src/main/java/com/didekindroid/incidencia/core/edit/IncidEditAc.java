@@ -7,8 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
-import com.didekindroid.lib_one.api.ParentViewerInjectedIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -16,13 +16,13 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditAc.newViewerIncidEditAc;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.doToolBar;
-import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * Preconditions:
@@ -35,7 +35,8 @@ import static com.didekindroid.router.MnRouterAction.resourceIdToMnItem;
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf, FragmentInitiatorIf<IncidEditFr> {
+public class IncidEditAc extends AppCompatActivity implements InjectorOfParentViewerIf,
+        FragmentInitiatorIf<IncidEditFr> {
 
     View acView;
     ViewerIncidEditAc viewer;
@@ -86,12 +87,12 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         viewer.saveState(outState);
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -159,11 +160,11 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
 
         switch (resourceId) {
             case android.R.id.home:
-                resourceIdToMnItem.get(resourceId).initActivity(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
-                resourceIdToMnItem.get(resourceId).initActivity(this, INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()));
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this, INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()));
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 viewer.checkResolucion();

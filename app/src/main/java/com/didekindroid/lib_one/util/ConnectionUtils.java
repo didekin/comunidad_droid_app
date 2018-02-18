@@ -18,7 +18,7 @@ public class ConnectionUtils {
     public static boolean checkInternetConnected(Context context)
     {
         if (!isInternetConnected(context)) {
-            UIutils.makeToast(context, R.string.no_internet_conn_toast);  // TODO: mover a strings de librería.
+            UiUtil.makeToast(context, R.string.no_internet_conn_toast);  // TODO: mover a strings de librería.
             return false;
         }
         return true;

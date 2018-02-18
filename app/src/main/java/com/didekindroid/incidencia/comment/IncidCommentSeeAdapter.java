@@ -12,7 +12,7 @@ import com.didekinlib.model.incidencia.dominio.IncidComment;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 
 /**
  * User: pedro@didekin

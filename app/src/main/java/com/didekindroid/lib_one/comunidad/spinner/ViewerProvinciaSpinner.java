@@ -10,7 +10,6 @@ import android.widget.Spinner;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Provincia;
 
@@ -83,14 +82,7 @@ public final class ViewerProvinciaSpinner extends
         return isFound ? position : 0;
     }
 
-    /* ==================================== ViewerIf ====================================*/
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
-    }
+    // ==================================== ViewerIf ====================================
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

@@ -7,7 +7,7 @@ import com.didekindroid.lib_one.api.Viewer;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;

@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 
 import io.reactivex.disposables.Disposable;
 
-import static com.didekindroid.lib_one.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -32,14 +32,14 @@ public class ControllerTest {
     @Before
     public void setUp()
     {
-        controller = new Controller(TKhandler);
+        controller = new Controller();
     }
 
     @Test
     public void testGetSubscriptions() throws Exception
     {
         assertThat(controller.getSubscriptions(), allOf(
-                is(controller.subscriptions),
+                is(controller.getSubscriptions()),
                 notNullValue()
         ));
         assertThat(controller.getSubscriptions().size(), is(0));
@@ -49,7 +49,7 @@ public class ControllerTest {
     public void testClearSubscriptions() throws Exception
     {
         assertThat(controller.getSubscriptions().size(), is(0));
-        controller.subscriptions.add(new Disposable() {
+        controller.getSubscriptions().add(new Disposable() {
             @Override
             public void dispose()
             {
@@ -83,9 +83,9 @@ public class ControllerTest {
     @Test
     public void testGetIdentityCacher()
     {
-        assertThat(controller.getIdentityCacher(), allOf(
+        assertThat(controller.getTkCacher(), allOf(
                 notNullValue(),
-                is(TKhandler)
+                is(secInitializer.get().getTkCacher())
         ));
     }
 }

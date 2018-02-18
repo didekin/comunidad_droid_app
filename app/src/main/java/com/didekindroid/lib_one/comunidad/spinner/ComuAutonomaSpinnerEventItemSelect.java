@@ -6,7 +6,7 @@ import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin

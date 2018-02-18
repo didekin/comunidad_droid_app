@@ -10,8 +10,8 @@ import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.router.RouterActionIf;
-import com.didekindroid.usuario.login.LoginAc;
-import com.didekindroid.usuario.userdata.UserDataAc;
+import com.didekindroid.usuario.LoginAc;
+import com.didekindroid.usuario.UserDataAc;
 import com.didekinlib.http.exception.ExceptionMsgIf;
 
 import java.util.EnumSet;
@@ -23,8 +23,8 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_DUPLICATE;
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
@@ -90,7 +90,15 @@ public enum UiExceptionAction implements RouterActionIf {
         @Override
         public void initActivity(@NonNull Activity activity)
         {
-            initActivity(activity, INCID_CLOSED_LIST_FLAG.getBundleForKey(false));
+            initActivity(activity, new Bundle());
+        }
+
+        @Override
+        public void initActivity(@NonNull Activity activity, @NonNull Bundle bundleIn)
+        {
+            Bundle bundle = bundleIn != null ? bundleIn : new Bundle(1);
+            bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
+            super.initActivity(activity, bundle);
         }
     },
     show_login_noPowers(
@@ -113,7 +121,15 @@ public enum UiExceptionAction implements RouterActionIf {
         @Override
         public void initActivity(@NonNull Activity activity)
         {
-            initActivity(activity, INCID_CLOSED_LIST_FLAG.getBundleForKey(false));
+            initActivity(activity, new Bundle());
+        }
+
+        @Override
+        public void initActivity(@NonNull Activity activity, @NonNull Bundle bundleIn)
+        {
+            Bundle bundle = bundleIn != null ? bundleIn : new Bundle(1);
+            bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
+            super.initActivity(activity, bundle);
         }
     },
     show_userData_wrongMail(of(PASSWORD_NOT_SENT),
@@ -122,21 +138,21 @@ public enum UiExceptionAction implements RouterActionIf {
 
     // ==========================  Static members ============================
 
-    public static final Map<String, UiExceptionAction> exceptionMsgMap = new HashMap<>(values().length * 3);
+    static final Map<String, UiExceptionAction> exceptionMsgMap = new HashMap<>(values().length * 3);
 
     static {
-        for (UiExceptionAction router : values()) {
-            for (ExceptionMsgIf message : router.exceptionMsgSet) {
-                exceptionMsgMap.put(message.getHttpMessage(), router);
+        for (UiExceptionAction action : values()) {
+            for (ExceptionMsgIf message : action.exceptionMsgSet) {
+                exceptionMsgMap.put(message.getHttpMessage(), action);
             }
         }
     }
 
-    // ==========================  Instance members ============================
+    /* ==========================  Instance members ============================*/
 
+    private final int resourceIdForToast;
     private final Class<? extends Activity> acToGo;
     private final Set<? extends ExceptionMsgIf> exceptionMsgSet;
-    private final int resourceIdForToast;
 
     UiExceptionAction(EnumSet<? extends ExceptionMsgIf> httpMessages, int resourceString, Class<? extends Activity> acClassToGo)
     {

@@ -24,21 +24,21 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.testutil.ActivityTestUtils.checkAppBarMnNotExist;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.isStatementTrue;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -127,7 +127,7 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
         assertThat(activity.getIntent().getBooleanExtra(INCID_CLOSED_LIST_FLAG.key, false), is(true));
         // Run
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkItem(activity);
         // Checks.
         assertThat(activity.getTitle(), is(activity.getText(R.string.incid_see_by_user_ac_label)));
         assertThat(activity.getIntent().getBooleanExtra(INCID_CLOSED_LIST_FLAG.key, false), is(false));
@@ -137,7 +137,7 @@ public class IncidSeeByComuAc_Close_Mn_Test {
     @Test
     public void testIncidSeeOpenByComuMn_2() throws InterruptedException
     {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkItem(activity);
         // CheckUp.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(seeUserComuByUserFrRsId);
@@ -147,7 +147,7 @@ public class IncidSeeByComuAc_Close_Mn_Test {
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
-        INCID_REG_AC.checkMenuItem(activity);
+        INCID_REG_AC.checkItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()));
         checkUp(incidSeeByComuAcLayout, incidSeeGenericFrLayout);
     }

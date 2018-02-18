@@ -28,23 +28,23 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.makeComunidad;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.comunidad.testutil.ComuTestData.makeComunidad;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkComuData;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regSeveralUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -178,7 +178,7 @@ public class ComuSearchResultsAcTest {
     public void testRegComuAndUserComu_RegUser_Up() throws InterruptedException, UiException, IOException
     {
         // Usuario registrado.
-        REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
+        REG_COMU_USERCOMU_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
@@ -186,7 +186,7 @@ public class ComuSearchResultsAcTest {
     public void testRegComuAndUserComu_RegUser_Back() throws InterruptedException, UiException, IOException
     {
         // Usuario registrado.
-        REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
+        REG_COMU_USERCOMU_AC.checkItem(activity);
         checkBack(onView(withId(regComu_UserComuAcLayout)), comuSearchResultsListLayout);
     }
 
@@ -195,7 +195,7 @@ public class ComuSearchResultsAcTest {
     {
         // Usuario no registrado.
         activity.viewer.getController().updateIsRegistered(false);
-        REG_COMU_USER_USERCOMU_AC.checkItemNoRegisterUser(activity);
+        REG_COMU_USER_USERCOMU_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
@@ -204,7 +204,7 @@ public class ComuSearchResultsAcTest {
     {
         // Usuario no registrado.
         activity.viewer.getController().updateIsRegistered(false);
-        REG_COMU_USER_USERCOMU_AC.checkItemNoRegisterUser(activity);
+        REG_COMU_USER_USERCOMU_AC.checkItem(activity);
         checkBack(onView(withId(regComu_User_UserComuAcLayout)), comuSearchResultsListLayout);
     }
 
@@ -212,7 +212,7 @@ public class ComuSearchResultsAcTest {
     public void testSeeUserComuByUser_Up() throws InterruptedException, UiException, IOException
     {
         // La consulta muestra las comunidades del usuario.
-        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
@@ -220,7 +220,7 @@ public class ComuSearchResultsAcTest {
     public void testSeeUserComuByUser_Back() throws InterruptedException, UiException, IOException
     {
         // La consulta muestra las comunidades del usuario.
-        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItem(activity);
         checkBack(onView(withId(seeUserComuByUserFrRsId)), comuSearchResultsListLayout);
     }
 

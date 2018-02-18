@@ -9,16 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * Preconditions:
@@ -38,7 +38,7 @@ public class RegComuFr extends Fragment {
 
     View frView;
     ViewerRegComuFr viewer;
-    ChildViewersInjectorIf viewerInjector;
+    InjectorOfParentViewerIf viewerInjector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,8 +67,8 @@ public class RegComuFr extends Fragment {
             comunidad = null;
         }
 
-        viewerInjector = (ChildViewersInjectorIf) getActivity();
-        viewer = newViewerRegComuFr(frView, viewerInjector.getParentViewer());
+        viewerInjector = (InjectorOfParentViewerIf) getActivity();
+        viewer = newViewerRegComuFr(frView, viewerInjector.getInjectedParentViewer());
         viewer.doViewInViewer(savedInstanceState, comunidad);
         viewerInjector.setChildInParentViewer(viewer);
     }

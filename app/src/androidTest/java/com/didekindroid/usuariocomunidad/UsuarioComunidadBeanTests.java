@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

@@ -18,13 +18,13 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
-import static com.didekindroid.router.LeadRouter.userComuItemSelected;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_selected;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_list_should_be_initialized;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 
 /**
  * Preconditions:
@@ -70,9 +70,11 @@ public class SeeUserComuByUserFr extends Fragment {
                 (parent, view, position, id) -> {
                     frView.setItemChecked(position, true);
                     view.setSelected(true);
-                    Bundle bundle = new Bundle(1);
-                    bundle.putSerializable(USERCOMU_LIST_OBJECT.key, (Serializable) frView.getItemAtPosition(position));
-                    userComuItemSelected.initActivity(getActivity(), bundle);
+                    routerInitializer.get().getContextRouter().getActionFromContextNm(usercomu_just_selected)
+                            .initActivity(
+                                    getActivity(),
+                                    USERCOMU_LIST_OBJECT.getBundleForKey((Serializable) frView.getItemAtPosition(position))
+                            );
                 }
         );
     }
@@ -101,7 +103,7 @@ public class SeeUserComuByUserFr extends Fragment {
 
             List<UsuarioComunidad> usuarioComunidades = null;
             try {
-                usuarioComunidades = userComuDaoRemote.seeUserComusByUser();
+                usuarioComunidades = userComuDao.seeUserComusByUser();
             } catch (UiException e) {
                 uiException = e;
             }
@@ -118,7 +120,8 @@ public class SeeUserComuByUserFr extends Fragment {
             if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
                 assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
-                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(activity);
+                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
+                        .initActivity(activity);
             }
             if (usuarioComunidades != null) {
                 Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");

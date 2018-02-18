@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.didekindroid.com.didekindroid.usuario.SeeUserComuByUserAc">
+      tools:context="com.didekindroid.com.didekindroid.lib_one.usuario.SeeUserComuByUserAc">
     <item
             android:id="@+id/user_data_ac_mn"
             android:title="@string/user_data_ac_mn"

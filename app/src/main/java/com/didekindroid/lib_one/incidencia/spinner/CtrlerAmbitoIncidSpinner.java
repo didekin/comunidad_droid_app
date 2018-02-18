@@ -27,7 +27,7 @@ public class CtrlerAmbitoIncidSpinner extends CtrlerSelectList<AmbitoIncidValueO
 
         Timber.d("ambitoIncidList()");
         return Single.fromCallable(() -> {
-            IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(getIdentityCacher().getContext());
+            IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(getTkCacher().getContext());
             List<AmbitoIncidValueObj> list = dbHelper.getAmbitoIncidList();
             dbHelper.close();
             return list;
@@ -40,7 +40,7 @@ public class CtrlerAmbitoIncidSpinner extends CtrlerSelectList<AmbitoIncidValueO
     public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<AmbitoIncidValueObj>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        return subscriptions.add(ambitoIncidList()
+        return getSubscriptions().add(ambitoIncidList()
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribeWith(observer)

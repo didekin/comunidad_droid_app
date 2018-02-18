@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 
 public class RegUserComuFr extends Fragment {
 
@@ -35,8 +35,8 @@ public class RegUserComuFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        ChildViewersInjectorIf viewerInjector = (ChildViewersInjectorIf) getActivity();
-        viewer = ViewerRegUserComuFr.newViewerRegUserComuFr(regUserComuFrView, viewerInjector.getParentViewer());
+        InjectorOfParentViewerIf viewerInjector = (InjectorOfParentViewerIf) getActivity();
+        viewer = ViewerRegUserComuFr.newViewerRegUserComuFr(regUserComuFrView, viewerInjector.getInjectedParentViewer());
         viewer.doViewInViewer(savedInstanceState, getActivity().getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key));
         viewerInjector.setChildInParentViewer(viewer);
     }

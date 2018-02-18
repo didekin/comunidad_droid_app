@@ -28,26 +28,26 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidContextualName.incid_open_just_closed;
+import static com.didekindroid.incidencia.IncidContextualName.incid_resolucion_just_modified;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incidencia_should_be_cancelled;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_initialized;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_modified;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_cancelled;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.checkPostExecute;
-import static com.didekindroid.lib_one.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.lib_one.util.UIutils.getCalendarFromTimeMillis;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.getStringFromInteger;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.closeIncidencia;
-import static com.didekindroid.router.LeadRouter.modifyResolucion;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.getCalendarFromTimeMillis;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
@@ -55,6 +55,12 @@ import static com.didekindroid.router.UiExceptionRouter.uiException_router;
  * Time: 15:52
  */
 public class IncidResolucionEditFr extends Fragment {
+
+    Resolucion resolucion;
+    IncidImportancia incidImportancia;
+    ResolucionBean resolucionBean;
+    TextView fechaViewForPicker;
+    View frView;
 
     static IncidResolucionEditFr newInstance(IncidImportancia incidImportancia, Resolucion resolucion)
     {
@@ -66,12 +72,6 @@ public class IncidResolucionEditFr extends Fragment {
         fr.setArguments(args);
         return fr;
     }
-
-    Resolucion resolucion;
-    IncidImportancia incidImportancia;
-    ResolucionBean resolucionBean;
-    TextView fechaViewForPicker;
-    View frView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -229,12 +229,12 @@ public class IncidResolucionEditFr extends Fragment {
             if (uiException != null) {
                 Bundle bundle = new Bundle(1);
                 bundle.putLong(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
-                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
+                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
                 Bundle bundle = new Bundle(1);
                 bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                modifyResolucion.initActivity(getActivity(), bundle);
+                routerInitializer.get().getContextRouter().getActionFromContextNm(incid_resolucion_just_modified).initActivity(getActivity(), bundle);
             }
         }
     }
@@ -269,10 +269,11 @@ public class IncidResolucionEditFr extends Fragment {
             if (uiException != null) {
                 Bundle bundle = new Bundle(1);
                 bundle.putLong(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
-                uiException_router.getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
+                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
+                        .initActivity(getActivity(), bundle);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
-                closeIncidencia.initActivity(getActivity(), INCID_CLOSED_LIST_FLAG.getBundleForKey(true));
+                routerInitializer.get().getContextRouter().getActionFromContextNm(incid_open_just_closed).initActivity(getActivity(), INCID_CLOSED_LIST_FLAG.getBundleForKey(true));
             }
         }
     }

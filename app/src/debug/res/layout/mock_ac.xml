@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/list_mock_frg"
-        android:name="com.didekindroid.api.ListMockFr"
+        android:name="com.didekindroid.lib_one.api.ListMockFr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

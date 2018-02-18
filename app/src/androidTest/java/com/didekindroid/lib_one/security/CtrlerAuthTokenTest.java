@@ -9,7 +9,7 @@ import com.didekindroid.lib_one.api.ActivityNextMock;
 import com.didekindroid.lib_one.api.ObserverCacheCleaner;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekinlib.http.auth.SpringOauthToken;
 import com.didekinlib.http.exception.ErrorBean;
@@ -25,18 +25,19 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableCompletableObserver;
 
-import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
-import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
-import static com.didekindroid.lib_one.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.checkInitTokenCache;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.checkNoInitCache;
+import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_WITH_EXCEPTION_EXEC;
+import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.lib_one.usuario.UserTestData.comu_real_rodrigo;
+import static com.didekindroid.lib_one.usuario.UserTestData.user_crodrigo;
+import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
 import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static io.reactivex.Completable.error;
 import static io.reactivex.Completable.fromCallable;
@@ -62,7 +63,8 @@ public class CtrlerAuthTokenTest {
         protected void beforeActivityLaunched()
         {
             try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                assertThat(usuarioMockDao.regComuAndUserAndUserComu(comu_real_rodrigo).execute().body(), is(true));
+                updateSecurityData(comu_real_rodrigo.getUsuario().getUserName(), comu_real_rodrigo.getUsuario().getPassword());
             } catch (Exception e) {
                 fail();
             }
@@ -100,7 +102,7 @@ public class CtrlerAuthTokenTest {
     {
         viewer.getController().clearSubscriptions();
         resetAllSchedulers();
-        cleanOptions(CLEAN_PEPE);
+        cleanOneUser(user_crodrigo);
     }
 
     //  =======================================================================================
@@ -114,11 +116,11 @@ public class CtrlerAuthTokenTest {
     @Test
     public void testOauthUpdateTokenCacheObserver_1() throws UiException
     {
-        checkInitTokenCache();
+        checkInitTokenCache(controller.getTkCacher());
         activity.runOnUiThread(() -> {
             DisposableCompletableObserver disposable = error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
                     .subscribeWith(new ObserverCacheCleaner(viewer));
-            checkNoInitCache();
+            checkNoInitCache(controller.getTkCacher());
             assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
             assertThat(disposable.isDisposed(), is(true));
         });
@@ -131,11 +133,11 @@ public class CtrlerAuthTokenTest {
     @Test
     public void testOauthUpdateTokenCacheObserver_2() throws UiException
     {
-        checkInitTokenCache();
+        checkInitTokenCache(controller.getTkCacher());
 
         DisposableCompletableObserver disposable = fromCallable(() -> null).subscribeWith(new ObserverCacheCleaner(viewer));
 
-        checkInitTokenCache();
+        checkInitTokenCache(controller.getTkCacher());
         assertThat(disposable.isDisposed(), is(true));
     }
 
@@ -149,7 +151,7 @@ public class CtrlerAuthTokenTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.updateTkCacheFromRefreshTk(controller.getIdentityCacher().getRefreshTokenValue(), viewer), is(true));
+            assertThat(controller.updateTkCacheFromRefreshTk(controller.getTkCacher().getRefreshTokenValue(), viewer), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -160,12 +162,12 @@ public class CtrlerAuthTokenTest {
     public void testRefreshAccessToken_1() throws IOException, UiException
     {
         // Precondition: a fully initialized cache.
-        assertThat(controller.getIdentityCacher().getTokenCache().get().getValue().isEmpty(), is(false));
+        assertThat(controller.getTkCacher().getTokenCache().get().getValue().isEmpty(), is(false));
         // Initial state.
-        assertThat(controller.getIdentityCacher().isRegisteredUser(), is(true));
-        assertThat(controller.getIdentityCacher().getTokenCache().get(), notNullValue());
-        assertThat(controller.getIdentityCacher().getTokenCache().get().getValue(), notNullValue());
-        assertThat(controller.getIdentityCacher().getRefreshTokenFile().exists(), is(true));
+        assertThat(controller.getTkCacher().isRegisteredUser(), is(true));
+        assertThat(controller.getTkCacher().getTokenCache().get(), notNullValue());
+        assertThat(controller.getTkCacher().getTokenCache().get().getValue(), notNullValue());
+        assertThat(controller.getTkCacher().getRefreshTokenFile().exists(), is(true));
 
         controller = new CtrlerAuthToken() {
             @Override
@@ -184,10 +186,10 @@ public class CtrlerAuthTokenTest {
     {
         // Precondition: a user in DB, cache is null.
         // Borramos cache.
-        controller.getIdentityCacher().cleanIdentityCache();
+        controller.getTkCacher().cleanIdentityCache();
         // Initial state.
-        assertThat(controller.getIdentityCacher().isRegisteredUser(), is(true));
-        assertThat(controller.getIdentityCacher().getTokenCache().get(), nullValue());
+        assertThat(controller.getTkCacher().isRegisteredUser(), is(true));
+        assertThat(controller.getTkCacher().getTokenCache().get(), nullValue());
 
         controller = new CtrlerAuthToken() {
             @Override
@@ -205,14 +207,14 @@ public class CtrlerAuthTokenTest {
     public void testRefreshAccessToken_3() throws IOException, UiException
     {
         // Precondition: a user in DB, refreshToken in cache, accessToken is null.
-        String refreshTkOriginal = controller.getIdentityCacher().getRefreshTokenValue();
+        String refreshTkOriginal = controller.getTkCacher().getRefreshTokenValue();
         // Clean cache and initialize with a refreshToken.
-        controller.getIdentityCacher().cleanIdentityCache();
-        controller.getIdentityCacher().getTokenCache().compareAndSet(null, new SpringOauthToken(refreshTkOriginal));
+        controller.getTkCacher().cleanIdentityCache();
+        controller.getTkCacher().getTokenCache().compareAndSet(null, new SpringOauthToken(refreshTkOriginal));
         // Initial state.
-        assertThat(controller.getIdentityCacher().isRegisteredUser(), is(true));
-        assertThat(controller.getIdentityCacher().getTokenCache().get().getRefreshToken(), notNullValue());
-        assertThat(controller.getIdentityCacher().getTokenCache().get().getValue(), nullValue());
+        assertThat(controller.getTkCacher().isRegisteredUser(), is(true));
+        assertThat(controller.getTkCacher().getTokenCache().get().getRefreshToken(), notNullValue());
+        assertThat(controller.getTkCacher().getTokenCache().get().getValue(), nullValue());
 
         controller = new CtrlerAuthToken() {
             @Override

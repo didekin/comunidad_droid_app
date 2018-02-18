@@ -8,9 +8,9 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.lib_one.api.ParentViewerInjected;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.lib_one.api.ParentViewer;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
+import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -18,16 +18,16 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.lib_one.util.UIutils.assertTrue;
-import static com.didekindroid.lib_one.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.lib_one.util.UIutils.makeToast;
-import static com.didekindroid.router.LeadRouter.afterRegNewIncid;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidContextualName.new_incidencia_just_registered;
+import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
+import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -35,7 +35,14 @@ import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFir
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> {
+public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
+
+    ViewerNotifyTokenIf viewerFirebaseToken;
+
+    public ViewerIncidRegAc(IncidRegAc activity)
+    {
+        super(activity.acView, activity);
+    }
 
     static ViewerIncidRegAc newViewerIncidRegAc(IncidRegAc activity)
     {
@@ -45,12 +52,6 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenci
         instance.setController(new CtrlerIncidenciaCore());
         // We initialize viewerIncidRegFr in its associated fragment.
         return instance;
-    }
-    ViewerFirebaseTokenIf viewerFirebaseToken;
-
-    public ViewerIncidRegAc(IncidRegAc activity)
-    {
-        super(activity.acView, activity);
     }
 
     // .............................. ViewerIf ..................................
@@ -94,7 +95,7 @@ public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidenci
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
         bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
-        afterRegNewIncid.initActivity(activity, bundle);
+        getContextualRouter().getActionFromContextNm(new_incidencia_just_registered).initActivity(activity, bundle);
     }
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)

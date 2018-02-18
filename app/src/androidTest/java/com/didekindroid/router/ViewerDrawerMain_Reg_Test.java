@@ -26,14 +26,14 @@ import static com.didekindroid.router.MnRouterAction.incid_see_closed_by_comu_mn
 import static com.didekindroid.router.MnRouterAction.incid_see_open_by_comu_mn;
 import static com.didekindroid.router.MnRouterAction.see_usercomu_by_user_mn;
 import static com.didekindroid.router.MnRouterAction.user_data_mn;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.testutil.ActivityTestUtil.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_alias;
+import static com.didekindroid.lib_one.usuario.UserTestNavigation.userDataAcRsId;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -48,7 +48,7 @@ import static org.junit.Assert.fail;
  * Time: 13:21
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMain_abs_Test {
+public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMain_Test_abs {
 
     @Rule
     public IntentsTestRule<ComuSearchAc> intentRule = new IntentsTestRule<ComuSearchAc>(ComuSearchAc.class) {

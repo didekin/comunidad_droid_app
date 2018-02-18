@@ -28,7 +28,7 @@ public class CtrlerComAutonomaSpinner extends CtrlerSelectList<ComunidadAutonoma
     {
         Timber.d("comunidadesAutonomasList()");
         return Single.fromCallable(() -> {
-            ComunidadDbHelper dbHelper = new ComunidadDbHelper(getIdentityCacher().getContext());
+            ComunidadDbHelper dbHelper = new ComunidadDbHelper(getTkCacher().getContext());
             List<ComunidadAutonoma> comunidades = dbHelper.getComunidadesAu();
             dbHelper.close();
             return comunidades;
@@ -40,7 +40,7 @@ public class CtrlerComAutonomaSpinner extends CtrlerSelectList<ComunidadAutonoma
     {
         Timber.d("loadItemsByEntitiyId()");
 
-        return subscriptions.add(comunidadesAutonomasList()
+        return getSubscriptions().add(comunidadesAutonomasList()
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribeWith(observer)

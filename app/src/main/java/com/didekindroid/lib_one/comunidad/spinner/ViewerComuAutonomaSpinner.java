@@ -11,7 +11,6 @@ import com.didekindroid.lib_one.api.ObserverSingleSelectList;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerSelectList;
-import com.didekindroid.lib_one.api.exception.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
 import java.io.Serializable;
@@ -64,13 +63,6 @@ public final class ViewerComuAutonomaSpinner extends
     // ==================================== ViewerIf ====================================
 
     @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
-    }
-
-    @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
@@ -94,6 +86,12 @@ public final class ViewerComuAutonomaSpinner extends
 
     //  ===================================== HELPERS ============================================
 
+    public ComuAutonomaSpinnerEventItemSelect getSpinnerEvent()
+    {
+        Timber.d("getSpinnerEvent()");
+        return spinnerEvent;
+    }
+
     @SuppressWarnings("WeakerAccess")
     class ComuAutonomaSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
@@ -112,11 +110,5 @@ public final class ViewerComuAutonomaSpinner extends
         {
             Timber.d("onNothingSelected()");
         }
-    }
-
-    public ComuAutonomaSpinnerEventItemSelect getSpinnerEvent()
-    {
-        Timber.d("getSpinnerEvent()");
-        return spinnerEvent;
     }
 }

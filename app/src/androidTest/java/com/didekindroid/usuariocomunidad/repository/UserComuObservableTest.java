@@ -15,14 +15,14 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadByUserAndComu;
 import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadModificada;
 import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadesByUser;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

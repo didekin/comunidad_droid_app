@@ -30,7 +30,7 @@ class CtrlerComunidad extends Controller {
     boolean loadComunidadData(DisposableSingleObserver<Comunidad> observer, long comunidadId)
     {
         Timber.d("loadComunidadData()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 comunidad(comunidadId)
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -41,7 +41,7 @@ class CtrlerComunidad extends Controller {
     boolean modifyComunidadData(DisposableSingleObserver<Integer> observer, Comunidad comunidad)
     {
         Timber.d("modifyComunidadData()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 comunidadModificada(comunidad)
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -52,7 +52,7 @@ class CtrlerComunidad extends Controller {
     public boolean getUserComu(DisposableMaybeObserver<UsuarioComunidad> observer, Comunidad comunidad)
     {
         Timber.d("getUserComu()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 comunidadByUserAndComu(comunidad)
                         .subscribeOn(io())
                         .observeOn(mainThread())
@@ -63,7 +63,7 @@ class CtrlerComunidad extends Controller {
     boolean loadComunidadesFound(DisposableSingleObserver<List<Comunidad>> observer, Comunidad comunidadToSearch)
     {
         Timber.d("loadComunidadesFound()");
-        return subscriptions.add(
+        return getSubscriptions().add(
                 comunidadesFound(comunidadToSearch)
                         .subscribeOn(io())
                         .observeOn(mainThread())
