@@ -36,12 +36,11 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/login_ac_button_txt"/>
     </LinearLayout>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_help_fab"
         style="@style/floatingButton"
         android:layout_gravity="bottom|end"
         app:fabSize="mini"
-        app:rippleColor="@color/deep_orange_200"
+        app:rippleColor="@color/color_fab_ripple"
         app:srcCompat="@drawable/ic_live_help_black_24dp"/>
 </android.support.design.widget.CoordinatorLayout>

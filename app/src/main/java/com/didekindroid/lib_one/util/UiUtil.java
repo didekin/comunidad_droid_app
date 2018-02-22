@@ -59,7 +59,7 @@ public final class UiUtil {
     public static boolean checkInternet(Activity activity)
     {
         if (!ConnectionUtils.isInternetConnected(activity)) {
-            makeToast(activity, R.string.no_internet_conn_toast);   // TODO: string a librería y cambiar R.
+            makeToast(activity, R.string.no_internet_conn_toast);
             return false;
         }
         return true;

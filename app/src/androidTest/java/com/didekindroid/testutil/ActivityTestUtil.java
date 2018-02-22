@@ -28,9 +28,9 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ControllerIf;
 import com.didekindroid.lib_one.api.CtrlerSelectListIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerMock;
 import com.didekindroid.lib_one.api.ViewerSelectListIf;
@@ -60,21 +60,18 @@ import timber.log.Timber;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.DrawerActions.open;
-import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
-import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.view.Gravity.LEFT;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
@@ -123,7 +120,7 @@ public final class ActivityTestUtil {
         };
     }
 
-    public static Callable<Boolean> isTextIdNonExist(final Integer... stringId)
+    private static Callable<Boolean> isTextIdNonExist(final Integer... stringId)
     {
         return () -> {
             try {
@@ -201,7 +198,7 @@ public final class ActivityTestUtil {
 
     //    ============================= CONTROLLER/Adapters ===================================
 
-    public static CompositeDisposable addSubscription(ControllerIf controller)
+    private static CompositeDisposable addSubscription(ControllerIf controller)
     {
         int oldNumberSubscriptions = controller.getSubscriptions().size();
         controller.getSubscriptions().add(new Disposable() {
@@ -268,6 +265,7 @@ public final class ActivityTestUtil {
 
     //    ============================= IDENTITY ===================================
 
+    @SuppressWarnings("ConstantConditions")
     public static void checkIsRegistered(ViewerIf<?, ?> viewer)
     {
         AtomicBoolean isRegistered = new AtomicBoolean(false);
@@ -277,16 +275,17 @@ public final class ActivityTestUtil {
 
     //    ============================= MENU ===================================
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     @NonNull
     public static Menu doMockMenu(Activity activity, int menuMockRsId)
     {
-        PopupMenu popupMenu = new PopupMenu(InstrumentationRegistry.getTargetContext(), null);
+        PopupMenu popupMenu = new PopupMenu(getTargetContext(), null);
         Menu menu = popupMenu.getMenu();
         activity.getMenuInflater().inflate(menuMockRsId, menu);
         return menu;
     }
 
+    @SuppressWarnings("EmptyCatchBlock")
     public static void checkAppBarMenu(Activity activity, int menuResourceId, int actionResourceId)
     {
         try {
@@ -300,6 +299,7 @@ public final class ActivityTestUtil {
         }
     }
 
+    @SuppressWarnings("EmptyCatchBlock")
     public static void checkAppBarMnNotExist(Activity activity, int menuResourceId)
     {
         onView(withText(menuResourceId)).check(doesNotExist());
@@ -308,13 +308,6 @@ public final class ActivityTestUtil {
         } catch (NoMatchingViewException e) {
         }
         waitAtMost(4, SECONDS).until(isTextIdNonExist(menuResourceId));
-    }
-
-    public static void checkDrawerMenu(int drawerLayoutId, int navigationViewId, int menuResourceId, int actionResourceId)
-    {
-        onView(withId(drawerLayoutId)).check(matches(isClosed(LEFT))).perform(open());
-        onView(withId(navigationViewId)).perform(navigateTo(menuResourceId));
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
     }
 
     /*    ============================= NAVIGATION ===================================*/
@@ -370,6 +363,7 @@ public final class ActivityTestUtil {
         return taskGetActivities.get();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static void cleanTasks(Activity activity)
     {

@@ -1,7 +1,7 @@
 package com.didekindroid.lib_one.comunidad.spinner;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,12 +29,12 @@ public final class ViewerTipoViaSpinner extends
 
     TipoViaValueObj tipoViaValueObj;
 
-    private ViewerTipoViaSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
+    private ViewerTipoViaSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    public static ViewerTipoViaSpinner newViewerTipoViaSpinner(Spinner spinner, AppCompatActivity activity, ViewerIf parentViewer)
+    public static ViewerTipoViaSpinner newViewerTipoViaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerTipoViaSpinner()");
         ViewerTipoViaSpinner instance = new ViewerTipoViaSpinner(spinner, activity, parentViewer);

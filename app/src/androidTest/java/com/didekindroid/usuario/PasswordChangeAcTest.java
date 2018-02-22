@@ -9,7 +9,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.PasswordChangeAc;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -42,8 +41,8 @@ import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typePswdWithPswdValidation;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.pswdChangeAcRsId;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.userDataAcRsId;
+import static com.didekindroid.usuario.UserTestNavigation.pswdChangeAcRsId;
+import static com.didekindroid.usuario.UserTestNavigation.userDataAcRsId;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;

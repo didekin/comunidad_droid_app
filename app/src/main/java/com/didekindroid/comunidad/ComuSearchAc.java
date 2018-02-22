@@ -2,24 +2,26 @@ package com.didekindroid.comunidad;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.DrawerDecoratedIf;
 import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.ViewerManagerIf;
-import com.didekindroid.router.ViewerDrawerMain;
+import com.didekindroid.lib_one.usuario.ViewerUserDrawer;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.DrawerConstant.drawer_decorator_layout;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
-import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
+import static com.didekindroid.lib_one.usuario.ViewerUserDrawer.newViewerDrawerMain;
 
 /**
  * Postconditions:
@@ -33,12 +35,12 @@ import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
  */
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentViewerIf,
-        ViewerManagerIf {
+        ViewerManagerIf, DrawerDecoratedIf {
 
-    View acView;
+    DrawerLayout acView;
     RegComuFr regComuFrg;
     ViewerComuSearchAc viewerAc;
-    ViewerDrawerMain viewerDrawer;
+    ViewerUserDrawer viewerDrawer;
 
     @SuppressLint("InflateParams")
     @Override
@@ -47,7 +49,8 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
         Timber.d("In onCreate()");
         super.onCreate(savedInstanceState);
 
-        acView = getLayoutInflater().inflate(R.layout.comu_search_ac, null, false);
+        acView = (DrawerLayout) getLayoutInflater().inflate(drawer_decorator_layout, null, false);
+        acView.addView(getLayoutInflater().inflate(R.layout.comu_search_include, acView, false), 0);
         setContentView(acView);
         doToolBar(this, true).setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
@@ -69,11 +72,6 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
         savedStateViewers(outState);
-    }
-
-    public ViewerDrawerMain getViewerDrawer()
-    {
-        return viewerDrawer;
     }
 
     // ==================================  InjectorOfParentViewerIf  =================================
@@ -100,7 +98,7 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
         Timber.d("initViewers()");
         viewerAc = newViewerComuSearch(this);
         viewerAc.doViewInViewer(savedInstanceState, null);
-        viewerDrawer = newViewerDrawerMain(this);
+        viewerDrawer = newViewerDrawerMain(DrawerDecoratedIf.class.cast(this));
         viewerDrawer.doViewInViewer(savedInstanceState, null);
     }
 
@@ -118,6 +116,28 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
         Timber.d("savedStateViewers()");
         viewerAc.saveState(outState);
         viewerDrawer.saveState(outState);
+    }
+
+    /* ==================================== DrawerDecoratedIf ====================================*/
+
+    @Override
+    public DrawerLayout getDrawerDecoratedView()
+    {
+        Timber.d("getDrawerDecoratedView()");
+        return acView;
+    }
+
+    @Override
+    public int getDrawerMnRsId()
+    {
+        Timber.d("getDrawerMnRsId()");
+        return R.menu.drawer_user_mn;
+    }
+
+    @Override
+    public ViewerUserDrawer getViewerDrawer()
+    {
+        return viewerDrawer;
     }
 
 //    ============================================================

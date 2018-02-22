@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:checkableBehavior="single"
+        android:enabled="false"
+        android:visible="false">
+        <item
+            android:id="@+id/user_data_ac_mn"
+            android:title="@string/user_data_ac_mn"
+            />
+    </group>
+</menu>

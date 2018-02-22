@@ -1,8 +1,8 @@
-package com.didekindroid.usuario;
+package com.didekindroid.lib_one.usuario;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,10 +10,8 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.AbstractSingleObserver;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.usuario.UsuarioBean;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuarioIf;
-import com.didekindroid.lib_one.usuario.ViewerUserDataIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
@@ -30,6 +28,7 @@ import static com.didekindroid.lib_one.usuario.ViewerUserDataIf.UserChangeToMake
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.checkInternet;
+import static com.didekindroid.lib_one.util.UiUtil.getContetViewInAc;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.getUiExceptionFromThrowable;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
@@ -40,16 +39,17 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
  * Date: 22/03/17
  * Time: 10:27
  */
-final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf {
+public final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf {
 
-    final EditText emailView;
-    final EditText aliasView;
-    final EditText passwordView;
-    final AtomicReference<UsuarioBean> usuarioBean;
-    final AtomicReference<Usuario> oldUser;
+    private final EditText emailView;
+    private final EditText aliasView;
+    private final EditText passwordView;
+    private final AtomicReference<UsuarioBean> usuarioBean;
+    private final AtomicReference<Usuario> oldUser;
+    @SuppressWarnings("WeakerAccess")
     final AtomicReference<Usuario> newUser;
 
-    private ViewerUserData(View view, AppCompatActivity activity)
+    private ViewerUserData(View view, Activity activity)
     {
         super(view, activity, null);
         emailView = view.findViewById(R.id.reg_usuario_email_editT);
@@ -60,10 +60,10 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         usuarioBean = new AtomicReference<>(null);
     }
 
-    static ViewerUserData newViewerUserData(UserDataAc activity)
+    public static ViewerUserData newViewerUserData(Activity activity)
     {
         Timber.d("newViewerUserData()");
-        ViewerUserData instance = new ViewerUserData(activity.acView, activity);
+        ViewerUserData instance = new ViewerUserData(getContetViewInAc(activity), activity);
         instance.setController(new CtrlerUsuario());
         return instance;
     }
@@ -217,5 +217,38 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
         } else {
             super.onErrorInObserver(error);
         }
+    }
+
+    // ================================= Getters ==================================
+
+
+    public EditText getEmailView()
+    {
+        return emailView;
+    }
+
+    public EditText getAliasView()
+    {
+        return aliasView;
+    }
+
+    public EditText getPasswordView()
+    {
+        return passwordView;
+    }
+
+    public AtomicReference<UsuarioBean> getUsuarioBean()
+    {
+        return usuarioBean;
+    }
+
+    public AtomicReference<Usuario> getOldUser()
+    {
+        return oldUser;
+    }
+
+    public AtomicReference<Usuario> getNewUser()
+    {
+        return newUser;
     }
 }

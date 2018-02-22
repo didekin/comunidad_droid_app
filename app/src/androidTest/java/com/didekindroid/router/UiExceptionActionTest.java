@@ -42,8 +42,8 @@ import static com.didekindroid.router.UiExceptionAction.show_userData_wrongMail;
 import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.userDataAcRsId;
+import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.usuario.UserTestNavigation.userDataAcRsId;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
@@ -73,8 +73,8 @@ public class UiExceptionActionTest {
 
     @Rule
     public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<>(ActivityMock.class, true, true);
-    ActivityMock activity;
-    UiExceptionRouterIf router = uiException_router;
+    private ActivityMock activity;
+    private UiExceptionRouterIf router = uiException_router;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -109,7 +109,7 @@ public class UiExceptionActionTest {
     }
 
     @Test
-    public void test_show_comunidad_search() throws Exception
+    public void test_show_comunidad_search() throws Exception       // TODO: fail
     {
         final UiException ue = new UiException(new ErrorBean(COMUNIDAD_NOT_FOUND));
         run(ue, show_comunidad_search, comuSearchAcLayout);
@@ -217,7 +217,7 @@ public class UiExceptionActionTest {
     }
 
     @Test
-    public void test_show_userData_wrongMail() throws Exception
+    public void test_show_userData_wrongMail() throws Exception  // TODO: fail
     {
         // Preconditions.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);

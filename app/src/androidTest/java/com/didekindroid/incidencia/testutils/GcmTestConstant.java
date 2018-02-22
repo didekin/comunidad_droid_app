@@ -5,7 +5,7 @@ package com.didekindroid.incidencia.testutils;
  * Date: 12/01/17
  * Time: 18:08
  */
-public final class GcmConstantForTests {
+public final class GcmTestConstant {
 
     public static final String PACKAGE_TEST = "com.didekindroid";
     // Api key of didekin project.

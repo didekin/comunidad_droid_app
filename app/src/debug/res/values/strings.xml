@@ -2,6 +2,8 @@
     <string name="title_activity_gcm_notification" translatable="false">Activity for GcmTests</string>
     <string name="mockActivity_label" translatable="false">MockActivity</string>
     <string name="mock_next_DefaultActivity_label" translatable="false">MockNextDefaultActivity</string>
+    <string name="mock_activity_drawer_label">Activity Mock with drawer</string>
+    <string name="drawer_mock_ac_label">You are in an activity with drawer</string>
     <!-- To be used in a test in  UiUtilsTest -->
     <string name="incid_resolucion_fecha_default_txt">>> Elige una fecha</string>
     <!-- To be used in a test in ComuEspressoTestUtil -->

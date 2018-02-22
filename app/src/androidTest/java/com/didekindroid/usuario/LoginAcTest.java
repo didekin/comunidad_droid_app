@@ -8,7 +8,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.LoginAc;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -43,7 +42,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeLoginData;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;

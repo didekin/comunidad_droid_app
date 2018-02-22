@@ -1,7 +1,6 @@
 package com.didekindroid.lib_one.incidencia;
 
 import android.content.res.Resources;
-import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
@@ -63,9 +62,9 @@ public class IncidenciaBean implements Serializable {
         return this;
     }
 
-    public Incidencia makeIncidenciaFromView(final View fragmentView, StringBuilder errorMsg, Resources resources)
+    public Incidencia makeIncidenciaFromView(final EditText editTxtDesc, StringBuilder errorMsg, Resources resources)
     {
-        setDescripcion(((EditText) fragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
+        setDescripcion(editTxtDesc.getText().toString());
         if (validateBean(errorMsg, resources)) {
             return new Incidencia.IncidenciaBuilder()
                     .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())

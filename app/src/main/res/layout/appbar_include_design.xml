@@ -1,3 +1,4 @@
+<!--Quitar este layout: en la librería.-->
 <android.support.design.widget.AppBarLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

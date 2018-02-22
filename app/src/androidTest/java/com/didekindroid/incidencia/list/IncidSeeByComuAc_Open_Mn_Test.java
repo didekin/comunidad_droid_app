@@ -42,7 +42,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeByComuAc_Open_Mn_Test {
 
-    Comunidad comunidadInIntent;
+    private Comunidad comunidadInIntent;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class, true, true) {

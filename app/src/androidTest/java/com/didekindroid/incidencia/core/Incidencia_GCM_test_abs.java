@@ -23,7 +23,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.Callable;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
+import static com.didekindroid.incidencia.testutils.GcmTestConstant.PACKAGE_TEST;
 import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;

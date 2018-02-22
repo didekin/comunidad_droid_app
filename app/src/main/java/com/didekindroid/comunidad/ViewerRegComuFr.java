@@ -1,8 +1,8 @@
 package com.didekindroid.comunidad;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
@@ -51,7 +51,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     private EditText editNumero;
     private EditText editSufijoNumero;
 
-    ViewerRegComuFr(View view, AppCompatActivity activity, ParentViewerIf parentViewer)
+    ViewerRegComuFr(View view, Activity activity, ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
@@ -63,7 +63,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
         return instance.initInstanceViewer(parentViewer.getActivity());
     }
 
-    static ViewerRegComuFr newViewerRegComuFr(@NonNull View frView, @NonNull AppCompatActivity activity)
+    static ViewerRegComuFr newViewerRegComuFr(@NonNull View frView, @NonNull Activity activity)
     {
         Timber.d("newViewerRegComuFr()");
         ViewerRegComuFr instance = new ViewerRegComuFr(frView, activity, null);
@@ -71,7 +71,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     }
 
     @NonNull
-    private ViewerRegComuFr initInstanceViewer(@NonNull AppCompatActivity activity)
+    private ViewerRegComuFr initInstanceViewer(@NonNull Activity activity)
     {
         setController(new CtrlerComunidad());
 

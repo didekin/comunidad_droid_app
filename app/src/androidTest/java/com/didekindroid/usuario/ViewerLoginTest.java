@@ -10,8 +10,8 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.UsuarioBean;
+import com.didekindroid.lib_one.usuario.ViewerLogin.PasswordMailDialog;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario;
-import com.didekindroid.usuario.LoginAc;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -32,15 +32,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
-import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
+import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.login_counter_atomic_int;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.lib_one.usuario.ViewerLogin.PasswordMailDialog.newInstance;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeLoginData;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
-import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -246,6 +248,19 @@ public class ViewerLoginTest {
         activity.runOnUiThread(() -> activity.viewerLogin.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND))));
         waitAtMost(3, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activity));
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
+    }
+
+    // ============================================================
+    // ....................... Inner classes ...................
+    // ============================================================
+
+    @Test
+    public void test_NewInstance() throws Exception
+    {
+        UsuarioBean usuarioBean = new UsuarioBean("email@mail.es", "alias", "password", "password");
+        usuarioBean.validateLoginData(activity.getResources(), new StringBuilder(0));
+        PasswordMailDialog dialog = newInstance(usuarioBean, activity.viewerLogin);
+        assertThat(dialog.getArguments().getSerializable(usuario_object.key), notNullValue());
     }
 
     // =========================  HELPERS  =========================

@@ -28,23 +28,20 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkComuData;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuTestData.makeComunidad;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkComuData;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regSeveralUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -53,6 +50,9 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regSeveralUserComuSameUser;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -66,12 +66,12 @@ import static org.junit.Assert.fail;
  * Date: 24/05/15
  * Time: 15:00
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class ComuSearchResultsAcTest {
 
-    ComuSearchResultsAc activity;
-    Intent intent;
-    Comunidad comuRondaDelNorte;
+    private ComuSearchResultsAc activity;
+    private Comunidad comuRondaDelNorte;
 
     @Rule
     public IntentsTestRule<ComuSearchResultsAc> intentRule =
@@ -97,9 +97,7 @@ public class ComuSearchResultsAcTest {
                 {
                     Comunidad comunidadToSearch = makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
                             new Municipio((short) 2, new Provincia((short) 27)));
-                    intent = new Intent();
-                    intent.putExtra(COMUNIDAD_SEARCH.key, comunidadToSearch);
-                    return intent;
+                    return new Intent().putExtra(COMUNIDAD_SEARCH.key, comunidadToSearch);
                 }
             };
 

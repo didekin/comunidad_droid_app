@@ -1,7 +1,7 @@
 package com.didekindroid.lib_one.usuario;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
@@ -9,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
@@ -22,7 +21,7 @@ import timber.log.Timber;
 
 public class ViewerRegUserFr extends Viewer<View, Controller> {
 
-    ViewerRegUserFr(View view, AppCompatActivity activity, @NonNull ParentViewerIf parentViewer)
+    ViewerRegUserFr(View view, Activity activity, @NonNull ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }

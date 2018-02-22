@@ -27,10 +27,10 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
-import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
@@ -51,11 +51,11 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ViewerComuSearchAcTest {
 
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    private final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public IntentsTestRule<ComuSearchAc> activityRule = new IntentsTestRule<>(ComuSearchAc.class, true, true);
-    ComuSearchAc activity;
+    private ComuSearchAc activity;
 
     @Before
     public void setUp()
@@ -94,6 +94,7 @@ public class ViewerComuSearchAcTest {
         waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void test_SetChildViewer() throws Exception
     {

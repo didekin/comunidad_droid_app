@@ -46,7 +46,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.runner.lifecycle.Stage.RESUMED;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
-import static com.didekindroid.lib_one.testutil.MockTestNavigation.nextMockAcLayout;
+import static com.didekindroid.lib_one.testutil.MockTestConstant.nextMockAcLayout;
 import static com.didekindroid.router.MnRouterAction.comu_search_mn;
 import static com.didekindroid.router.MnRouterAction.confidencialidad_mn;
 import static com.didekindroid.router.MnRouterAction.delete_me_mn;

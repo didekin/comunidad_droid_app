@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.usuario.ViewerLogin;
 
 import timber.log.Timber;
 

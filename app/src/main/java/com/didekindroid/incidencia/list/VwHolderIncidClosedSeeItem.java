@@ -20,7 +20,7 @@ class VwHolderIncidClosedSeeItem extends VwHolderIncidSeeItem {
     VwHolderIncidClosedSeeItem(View convertView)
     {
         super(convertView);
-        mFechaCierreView = (TextView) convertView.findViewById(R.id.incid_fecha_cierre_view);
+        mFechaCierreView = convertView.findViewById(R.id.incid_fecha_cierre_view);
     }
 
     public void initializeTextInViews(IncidenciaUser incidenciaUser)

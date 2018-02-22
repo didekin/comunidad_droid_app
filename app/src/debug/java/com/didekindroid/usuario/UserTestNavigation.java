@@ -1,4 +1,4 @@
-package com.didekindroid.lib_one.usuario;
+package com.didekindroid.usuario;
 
 import com.didekindroid.R;
 

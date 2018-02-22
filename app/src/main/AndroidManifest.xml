@@ -37,7 +37,7 @@
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <!-- Do nothing activity for non-null initialization in routers, mainly.-->
-        <activity android:name=".accesorio.MuteActivity"/>
+        <activity android:name=".lib_one.util.MuteActivity"/>
         <!-- **************************************************************** -->
         <!-- USUARIO -->
         <!-- **************************************************************** -->

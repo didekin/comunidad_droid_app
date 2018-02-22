@@ -40,7 +40,7 @@ import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;

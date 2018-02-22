@@ -1,8 +1,8 @@
 package com.didekindroid.lib_one.api;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.lib_one.api.router.ContextualRouterIf;
@@ -24,18 +24,18 @@ import static com.didekindroid.lib_one.util.UiUtil.getUiExceptionFromThrowable;
 public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<T, C> {
 
     protected final T view;
-    protected final AppCompatActivity activity;
+    protected final Activity activity;
     protected final ViewerIf parentViewer;
     private final UiExceptionRouterIf exceptionRouter;
     private final ContextualRouterIf contextualRouter;
     protected C controller;
 
-    protected Viewer(T view, AppCompatActivity activity, ViewerIf parentViewer)
+    protected Viewer(T view, Activity activity, ViewerIf parentViewer)
     {
         this(view, activity, parentViewer, routerInitializer.get());
     }
 
-    protected Viewer(T view, AppCompatActivity activity, ViewerIf parentViewer, RouterInitializerIf routerInitializerIn)
+    protected Viewer(T view, Activity activity, ViewerIf parentViewer, RouterInitializerIf routerInitializerIn)
     {
         this.view = view;
         this.activity = activity;
@@ -45,7 +45,7 @@ public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<
     }
 
     @Override
-    public AppCompatActivity getActivity()
+    public Activity getActivity()
     {
         Timber.d("getActivity()");
         return activity;

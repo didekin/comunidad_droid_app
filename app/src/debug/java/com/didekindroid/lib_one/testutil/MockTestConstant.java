@@ -8,11 +8,12 @@ import com.didekindroid.R;
  * Time: 13:35
  */
 
-public final class MockTestNavigation {
+public final class MockTestConstant {
 
     public static final int nextMockAcLayout = R.id.next_mock_ac_layout;
+    public static final int mockAcLayout = R.id.mock_ac_layout;
 
-    private MockTestNavigation()
+    private MockTestConstant()
     {
     }
 }

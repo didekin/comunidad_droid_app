@@ -2,7 +2,7 @@ package com.didekindroid.lib_one.incidencia;
 
 import android.content.res.Resources;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
+import android.widget.EditText;
 
 import com.didekindroid.R;
 
@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.lib_one.testutil.UiTestUtil.doFragmentTextView;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.doEditTextView;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,8 +28,8 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class IncidenciaBeanTest {
 
-    Resources resources;
-    StringBuilder errors;
+    private Resources resources;
+    private StringBuilder errors;
 
     @Before
     public void doBefore()
@@ -82,18 +82,16 @@ public class IncidenciaBeanTest {
     @Test
     public void testMakeIncidenciaFromView_1() throws Exception
     {
-        final IncidenciaBean incidenciaBean = doIncidenciaBean();
-        final View fragmentView = doFragmentTextView(R.layout.mock_incid_desc_edit_fr, "Description valid");
-        assertThat(incidenciaBean.makeIncidenciaFromView(fragmentView, errors, resources), notNullValue());
+        final EditText editText = doEditTextView(R.layout.mock_incid_desc_edit_fr, "Description valid");
+        assertThat(doIncidenciaBean().makeIncidenciaFromView(editText, errors, resources), notNullValue());
     }
 
     @Test
     public void testMakeIncidenciaFromView_2() throws Exception
     {
-        final IncidenciaBean incidenciaBean = doIncidenciaBean();
-        final View fragmentView = doFragmentTextView(R.layout.mock_incid_desc_edit_fr, "No valid = ** description");
-        // Check.
-        assertThat(incidenciaBean.makeIncidenciaFromView(fragmentView, errors, resources), nullValue());
+        final EditText editText = doEditTextView(R.layout.mock_incid_desc_edit_fr, "No valid = ** description"); // Check.
+        assertThat(doIncidenciaBean().makeIncidenciaFromView(editText, errors, resources), nullValue());
+
         assertThat(errors.toString(), containsString(resources.getText(R.string.incid_reg_descripcion).toString()));
     }
 

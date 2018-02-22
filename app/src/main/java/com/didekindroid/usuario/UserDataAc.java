@@ -8,11 +8,13 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.router.MnRouterIf;
+import com.didekindroid.lib_one.usuario.ViewerUserData;
 
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
+import static com.didekindroid.lib_one.usuario.ViewerUserData.newViewerUserData;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
@@ -36,7 +38,7 @@ public class UserDataAc extends AppCompatActivity {
         acView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
         setContentView(acView);
         doToolBar(this, true);
-        viewer = ViewerUserData.newViewerUserData(this);
+        viewer = newViewerUserData(this);
         viewer.doViewInViewer(savedInstanceState, null);
     }
 
@@ -73,7 +75,7 @@ public class UserDataAc extends AppCompatActivity {
                 return true;
             case R.id.password_change_ac_mn:
                 router.getActionFromMnItemId(resourceId)
-                        .initActivity(this, user_name.getBundleForKey(viewer.oldUser.get().getUserName()));
+                        .initActivity(this, user_name.getBundleForKey(viewer.getOldUser().get().getUserName()));
             case R.id.delete_me_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:

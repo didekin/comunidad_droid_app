@@ -105,7 +105,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation rootProject.ext.firebase_msg
     implementation rootProject.ext.didekinlib_model
     implementation rootProject.ext.didekinlib_http
     implementation rootProject.ext.timber
@@ -119,7 +119,7 @@ dependencies {
     androidTestImplementation rootProject.ext.testRunner
     androidTestUtil rootProject.ext.testOrchestrator
     testImplementation rootProject.ext.junit
-    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation rootProject.ext.junit
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -46,7 +46,7 @@ import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INC
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.RESOLUCION_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.processMsgWithHandler;
-import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
+import static com.didekindroid.incidencia.testutils.GcmTestConstant.PACKAGE_TEST;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtil.clickNavigateUp;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;

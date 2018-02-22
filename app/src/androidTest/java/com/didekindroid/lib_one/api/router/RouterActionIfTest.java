@@ -19,7 +19,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasFlag;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.lib_one.testutil.MockTestNavigation.nextMockAcLayout;
+import static com.didekindroid.lib_one.testutil.MockTestConstant.nextMockAcLayout;
 
 /**
  * User: pedro@didekin
@@ -30,8 +30,8 @@ public class RouterActionIfTest {
 
     @Rule
     public IntentsTestRule<ActivityMock> activityRule = new IntentsTestRule<>(ActivityMock.class);
-    ActivityMock activity;
-    RouterActionIf router;
+    private ActivityMock activity;
+    private RouterActionIf router;
 
     @Before
     public void setUp()

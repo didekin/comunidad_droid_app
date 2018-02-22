@@ -15,8 +15,6 @@
     <string name="borrar_button_rot">Delete</string>
     <string name="continuar_button_rot">Proceed</string>
     <!--Messages-->
-    <string name="no_internet_conn_toast">No network connection available.</string>
-    <string name="error_validation_msg">The following data are not valid:</string>
     <!-- TODO: quitar entrada siguiente. ¿Está en la librería-->
     <string name="exception_generic_app_message">We can not continue. Search your community or sign in.</string>
     <!-- Google Cloud Messages -->
@@ -25,7 +23,7 @@
     <!--                                 ACCESORIOS                                   -->
     <!--******************************************************************************-->
     <!--Menús-->
-    <string name="confidencialiad_mn">Privacy</string>
+    <string name="confidencialidad_mn">Privacy</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="confidencialidad_ac_label">Data Protection</string>
     <string name="proteccion_datos_txt" tools:ignore="Typos">
@@ -151,8 +149,8 @@
     <string name="incid_reg_hint">-- Describe the incident (max. 300 characters) --</string>
     <string name="incid_reg_ac_button_rot">Register incident</string>
     <string name="incid_reg_importancia">Importance</string>
-    <string name="incid_reg_ambitoIncidencia">Scope of incidence</string>
-    <string name="incid_reg_descripcion">Description</string>
+    <string name="incid_reg_ambitoIncidencia">Scope of incidence</string>  <!--TODO: en librería. -->
+    <string name="incid_reg_descripcion">Description</string>  <!--TODO: en librería. -->
     <!-- =============== IncidResolucionRegEditSeeAc =============== -->
     <!-- ======== IncidResolucionEditFr ======== -->
     <string name="incid_resolucion_coste_final_rot">Final cost: EUR:</string>
@@ -192,14 +190,14 @@
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
-    <string name="comunidad_null_in_register">Community</string>
+    <string name="comunidad_null_in_register">Community</string>  <!--TODO: en librería. -->
     <!-- ============================ MESSAGES ============================== -->
     <string name="comunidad_not_found_message">We can not show you this community. Search it again.</string>
     <string name="comunidad_duplicate">This community had already been registered</string>
     <string name="no_result_search_comunidad">We have not found your community.\nYou can register it here.</string>
     <string name="login_wrong_no_mail">"Search your community and sign up.\nIf it does not exist, register it in 'New community'."</string>
     <string name="username_wrong_in_login">Email address is not recorded.</string>
-    <string name="password_wrong">The password does not match with your username.</string>
+    <string name="password_wrong">The password does not match with your username.</string> <!--TODO: en librería.-->
     <string name="password_new_in_login">We have send you your new password. Sign in, again, with it.</string>
     <string name="password_remote_change">Your password is already modified.</string>
     <string name="send_password_by_mail_dialog">Do we send to you a new password to the email address above?</string>
@@ -235,8 +233,8 @@
     <string name="delete_me_ac_unreg_button_txt">Yes. Delete my data.</string>
     <!--================= LoginAc =================== -->
     <string name="login_label">Login</string>
-    <string name="login_ac_rotulo">Login</string>
-    <string name="login_ac_button_txt">Validate your data</string>
+    <string name="login_ac_rotulo">Login</string>     <!--TODO: en librería.-->
+    <string name="login_ac_button_txt">Validate your data</string>       <!--TODO: en librería.-->
     <!-- ================== PasswordChangeAc ============== -->
     <string name="password_ac_label">Your password</string>
     <string name="password_change_ac_rotulo">New password</string>
@@ -281,14 +279,14 @@
     <!-- ================== RegUserComuAc ================= -->
     <string name="regusuario_comu_ac_label">Selected community</string>
     <!-- ........... RegUserFr ......... -->
-    <string name="reg_usuario_rotulo">Your data</string>
-    <string name="alias">Name</string>
-    <string name="password">Password</string>
-    <string name="password_different">(no match)</string>
-    <string name="usuario_password_hint">Password: 6–60 letters, numbers, _</string>
+    <string name="reg_usuario_rotulo">Your data</string>  <!--TODO: en librería. -->
+    <string name="alias">Name</string>     <!--TODO: en librería. -->
+    <string name="password">Password</string>     <!--TODO: en librería. -->
+    <string name="password_different">(no match)</string>  <!--TODO: en librería. -->
+    <string name="usuario_password_hint">Password: 6–60 letters, numbers, _</string>  <!--TODO: en librería.-->
     <string name="usuario_password_confirm_hint">Password confirmation</string>
     <string name="usuario_alias_hint">Name: 6–30 letters, numbers, _</string>
-    <string name="email_hint">Email</string>
+    <string name="email_hint">Email</string>  <!--TODO: en librería.-->
     <!-- ================= SeeUserComuByComuAc ============ -->
     <string name="see_usercomu_by_comu_ac_label">Neighbours</string>
     <string name="usercomu_portal_rot">Block:</string>
@@ -305,9 +303,9 @@
     <string name="comu_list_no_result_txt">We have not found any result for your search.
     </string>
     <!-- ================= UserDataAc ===================== -->
-    <string name="user_data_ac_cambios_text">Rewrite the data to modify</string>
-    <string name="user_data_ac_password_txt">Validate the changes.</string>
-    <string name="user_data_ac_password_hint">Current password</string>
-    <string name="user_data_modif_button_rot">Modify your data</string>
-    <string name="no_user_data_to_be_modified">No data to modify</string>
+    <string name="user_data_ac_cambios_text">Rewrite the data to modify</string>    <!--TODO: en librería.-->
+    <string name="user_data_ac_password_txt">Validate the changes.</string> <!--TODO: en librería.-->
+    <string name="user_data_ac_password_hint">Current password</string>  <!--TODO: en librería.-->
+    <string name="user_data_modif_button_rot">Modify your data</string>  <!--TODO: en librería.-->
+    <string name="no_user_data_to_be_modified">No data to modify</string>    <!--TODO: en librería.-->
 </resources>

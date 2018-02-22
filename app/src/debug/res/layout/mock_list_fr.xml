@@ -13,11 +13,4 @@
         android:layout_width="match_parent">
     </ListView>
 
-   <!-- <TextView
-        android:id="@id/android:empty"
-        style="@style/textBase.no_item_list_message"
-        android:text="@string/no_incidencia_by_user"
-        android:visibility="gone">
-    </TextView>-->
-
 </LinearLayout>

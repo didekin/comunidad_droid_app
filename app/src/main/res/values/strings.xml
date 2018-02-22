@@ -23,17 +23,17 @@
     <string name="continuar_button_rot">Continuar</string>
     <string name="borrar_button_rot">Borrar</string>
     <!--Messages-->
+    <!-- TODO: quitar 3 entradas siguiente. ¿Está en la librería-->
+    <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
     <string name="error_validation_msg">Los siguientes datos no son válidos:</string>
-    <!-- TODO: quitar entrada siguiente. ¿Está en la librería-->
-    <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <!-- Google Cloud Messages -->
     <string name="gcm_message_generic_subtext">Pulsa aquí para ver los detalles.</string>
     <!--******************************************************************************-->
     <!--                                 ACCESORIOS                                   -->
     <!--******************************************************************************-->
     <!--Menús-->
-    <string name="confidencialiad_mn">Privacidad</string>
+    <string name="confidencialidad_mn">Privacidad</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="confidencialidad_ac_label">Protección de datos</string>
     <string name="proteccion_datos_txt" tools:ignore="Typos">
@@ -162,8 +162,8 @@
     <string name="incid_reg_hint">-- Describe la incidencia (max. 300 caracteres) --</string>
     <string name="incid_reg_ac_button_rot">Registrar incidencia</string>
     <string name="incid_reg_importancia">Importancia</string>
-    <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
-    <string name="incid_reg_descripcion">Descripcion</string>
+    <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>  <!--TODO: en librería.-->
+    <string name="incid_reg_descripcion">Descripcion</string>   <!--TODO: en librería.-->
     <!-- =============== IncidResolucionRegEditSeeAc =============== -->
     <!-- ======== IncidResolucionEditFr ======== -->
     <string name="incid_resolucion_coste_final_rot">Coste final EUR:</string>
@@ -201,14 +201,14 @@
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
-    <string name="comunidad_null_in_register">Comunidad</string>
+    <string name="comunidad_null_in_register">Comunidad</string>     <!--TODO: en librería. -->
     <!-- ============================ MESSAGES ============================== -->
     <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
     <string name="comunidad_duplicate">Esta comunidad ya había sido registrada</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí.</string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string>
-    <string name="password_wrong">La contraseña no se corresponde con tu usuario.</string>
+    <string name="password_wrong">La contraseña no se corresponde con tu usuario.</string>   <!--TODO: en librería.-->
     <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
     <string name="password_remote_change">Ya está modificada tu contraseña.</string>
     <string name="send_password_by_mail_dialog">¿Te enviamos una nueva contraseña a la dirección de correo electrónico que has escrito?</string>
@@ -244,8 +244,8 @@
     <string name="delete_me_ac_unreg_button_txt">Sí, borrad todos mis datos</string>
     <!--================= LoginAc =================== -->
     <string name="login_label">Login</string>
-    <string name="login_ac_rotulo">Inicio de sesión</string>
-    <string name="login_ac_button_txt">Valida tus datos</string>
+    <string name="login_ac_rotulo">Inicio de sesión</string>   <!--TODO: en librería.-->
+    <string name="login_ac_button_txt">Valida tus datos</string>   <!--TODO: en librería.-->
     <!-- ================== PasswordChangeAc ============== -->
     <string name="password_ac_label">Tu contraseña</string>
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
@@ -290,14 +290,14 @@
     <!-- ================== RegUserComuAc ================= -->
     <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>
     <!-- ........... RegUserFr ......... -->
-    <string name="reg_usuario_rotulo">Tus datos</string>
-    <string name="alias">Nombre</string>
-    <string name="password">Contraseña</string>
-    <string name="password_different">(no coinciden)</string>
-    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _</string>
+    <string name="reg_usuario_rotulo">Tus datos</string>   <!--TODO: en librería. -->
+    <string name="alias">Nombre</string>    <!--TODO: en librería. -->
+    <string name="password">Contraseña</string>  <!--TODO: en librería. -->
+    <string name="password_different">(no coinciden)</string>   <!--TODO: en librería. -->
+    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _</string>   <!--TODO: en librería.-->
     <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
-    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
-    <string name="email_hint">Correo electrónico</string>
+    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>   <!--TODO: en librería.-->
+    <string name="email_hint">Correo electrónico</string>  <!--TODO: en librería.-->
     <!-- ================= SeeUserComuByComuAc ============ -->
     <string name="see_usercomu_by_comu_ac_label">Vecinos</string>
     <string name="usercomu_portal_rot">Portal:</string>
@@ -314,9 +314,9 @@
     <string name="comu_list_no_result_txt">No hemos encontrado ningún resultado para tu búsqueda
     </string>
     <!-- ================= UserDataAc ===================== -->
-    <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>
-    <string name="user_data_ac_password_txt">Valida los cambios.</string>
-    <string name="user_data_ac_password_hint">Contraseña actual</string>
-    <string name="user_data_modif_button_rot">Modifica tus datos</string>
-    <string name="no_user_data_to_be_modified">No hay datos a modificar</string>
+    <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>  <!--TODO: en librería.-->
+    <string name="user_data_ac_password_txt">Valida los cambios.</string>  <!--TODO: en librería.-->
+    <string name="user_data_ac_password_hint">Contraseña actual</string>  <!--TODO: en librería.-->
+    <string name="user_data_modif_button_rot">Modifica tus datos</string>    <!--TODO: en librería.-->
+    <string name="no_user_data_to_be_modified">No hay datos a modificar</string>    <!--TODO: en librería.-->
 </resources>

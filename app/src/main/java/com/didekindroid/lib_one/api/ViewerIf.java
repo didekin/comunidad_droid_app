@@ -1,5 +1,6 @@
 package com.didekindroid.lib_one.api;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,8 +18,8 @@ import java.io.Serializable;
  */
 public interface ViewerIf<T extends View, C extends ControllerIf> {
 
-    AppCompatActivity getActivity();
 
+    Activity getActivity();
     UiExceptionRouterIf getExceptionRouter();
 
     void onErrorInObserver(Throwable error);

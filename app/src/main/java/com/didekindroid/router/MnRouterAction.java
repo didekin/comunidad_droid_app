@@ -13,7 +13,7 @@ import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.router.RouterActionIf;
+import com.didekindroid.lib_one.api.router.MnRouterActionIf;
 import com.didekindroid.usuario.DeleteMeAc;
 import com.didekindroid.usuario.LoginAc;
 import com.didekindroid.usuario.PasswordChangeAc;
@@ -51,7 +51,7 @@ import static com.didekindroid.router.ContextualAction.searchForComu;
  * Time: 17:02
  */
 
-public enum MnRouterAction implements RouterActionIf {
+public enum MnRouterAction implements MnRouterActionIf {
 
     // UP.
     navigateUp(android.R.id.home, null) {
@@ -81,7 +81,7 @@ public enum MnRouterAction implements RouterActionIf {
         }
     },
     // ACCESORIOS.
-    confidencialidad_mn(R.id.confidencialidad_ac_mn, ConfidencialidadAc.class),
+    confidencialidad_mn(R.id.confidenc_item_mn, ConfidencialidadAc.class),
     // INCIDENCIAS.
     incid_comment_reg_mn(R.id.incid_comment_reg_ac_mn, regNewComment.getAcToGo()),
     incid_comments_see_mn(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class),
@@ -151,9 +151,10 @@ public enum MnRouterAction implements RouterActionIf {
         }
     }
 
-    private final int mnItemRsId;
     // ==========================  Instance members ============================
+
     private final Class<? extends Activity> acToGo;
+    private final int mnItemRsId;
 
     MnRouterAction(int menuItemRsIdIn, Class<? extends Activity> classToGo)
     {
@@ -161,6 +162,7 @@ public enum MnRouterAction implements RouterActionIf {
         acToGo = classToGo;
     }
 
+    @Override
     public int getMnItemRsId()
     {
         return mnItemRsId;

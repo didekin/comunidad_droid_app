@@ -50,12 +50,13 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * Date: 23/10/2017
  * Time: 17:34
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeUserComuImportanciaTest {
 
-    IncidEditAc activity;
-    IncidImportancia incidImportancia;
-    ViewerIncidSeeUserComuImportancia viewer;
+    private IncidEditAc activity;
+    private IncidImportancia incidImportancia;
+    private ViewerIncidSeeUserComuImportancia viewer;
 
     @Before
     public void setUp() throws Exception
@@ -68,9 +69,10 @@ public class ViewerIncidSeeUserComuImportanciaTest {
         intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
 
-        viewer.getController().getTkCacher().updateIsRegistered(true);
         activity = (IncidEditAc) getInstrumentation().startActivitySync(intent);
         viewer = (ViewerIncidSeeUserComuImportancia) activity.getInjectedParentViewer().getChildViewer(ViewerIncidSeeUserComuImportancia.class);
+        // Precondition.
+        viewer.getController().getTkCacher().updateIsRegistered(true);
     }
 
     @After

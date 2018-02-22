@@ -1,8 +1,8 @@
 package com.didekindroid.lib_one.comunidad.spinner;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -34,14 +34,14 @@ public final class ViewerProvinciaSpinner extends
     ProvinciaSpinnerEventItemSelect spinnerEvent;
 
 
-    private ViewerProvinciaSpinner(Spinner view, AppCompatActivity activity, @NonNull ViewerIf parentViewer)
+    private ViewerProvinciaSpinner(Spinner view, Activity activity, @NonNull ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
         spinnerEvent = default_spinnerEvent;
     }
 
-    public static ViewerProvinciaSpinner newViewerProvinciaSpinner(Spinner spinner, AppCompatActivity activity, ViewerIf parentViewer)
+    public static ViewerProvinciaSpinner newViewerProvinciaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerProvinciaSpinner()");
         ViewerProvinciaSpinner instance = new ViewerProvinciaSpinner(spinner, activity, parentViewer);

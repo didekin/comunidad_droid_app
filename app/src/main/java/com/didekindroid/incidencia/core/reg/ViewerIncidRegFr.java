@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.core.reg;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
@@ -44,7 +44,7 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
 
 
     @SuppressWarnings("WeakerAccess")
-    ViewerIncidRegFr(View view, AppCompatActivity activity, @NonNull ParentViewerIf parentViewer)
+    ViewerIncidRegFr(View view, Activity activity, @NonNull ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         atomIncidBean = new AtomicReference<>(null);
@@ -55,7 +55,7 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
     {
         Timber.d("newViewerIncidRegFr()");
 
-        AppCompatActivity activity = parentViewer.getActivity();
+        Activity activity = parentViewer.getActivity();
         ViewerIncidRegFr instance = new ViewerIncidRegFr(view, activity, parentViewer);
         instance.setController(new Controller());
         instance.viewerAmbitoIncidSpinner =

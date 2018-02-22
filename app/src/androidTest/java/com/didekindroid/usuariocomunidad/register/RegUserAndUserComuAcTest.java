@@ -37,7 +37,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnSto
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;

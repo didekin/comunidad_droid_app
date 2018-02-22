@@ -1,37 +1,33 @@
-package com.didekindroid.router;
+package com.didekindroid.lib_one.usuario;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.AbstractSingleObserver;
+import com.didekindroid.lib_one.api.DrawerDecoratedIf;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
 
 import timber.log.Timber;
 
 import static android.view.Gravity.START;
-import static android.view.View.VISIBLE;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.api.DrawerDecoratedIf.getHeaderText;
+import static com.didekindroid.lib_one.util.DrawerConstant.default_header_no_reg_user;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_alias;
-import static com.didekindroid.router.MnRouterAction.incid_see_closed_by_comu_mn;
-import static com.didekindroid.router.MnRouterAction.incid_see_open_by_comu_mn;
-import static com.didekindroid.router.MnRouterAction.see_usercomu_by_user_mn;
-import static com.didekindroid.router.MnRouterAction.user_data_mn;
-import static java.util.EnumSet.of;
+import static com.didekindroid.lib_one.util.DrawerConstant.header_textview_rsId;
+import static com.didekindroid.lib_one.util.DrawerConstant.nav_view_rsId;
 
 /**
  * User: pedro@didekin
@@ -39,25 +35,25 @@ import static java.util.EnumSet.of;
  * Time: 18:58
  */
 
-public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
+public final class ViewerUserDrawer extends Viewer<DrawerLayout, CtrlerUsuario> {
 
-    private EnumSet<MnRouterAction> menuItemsToDraw;
     @SuppressWarnings("WeakerAccess")
     TextView drawerHeaderRot;
     NavigationView navView;
 
-    private ViewerDrawerMain(DrawerLayout view, AppCompatActivity activity)
+    private ViewerUserDrawer(DrawerDecoratedIf drawerDecorated)
     {
-        super(view, activity, null);
-        menuItemsToDraw = of(user_data_mn, see_usercomu_by_user_mn, incid_see_open_by_comu_mn, incid_see_closed_by_comu_mn);
-        navView = view.findViewById(R.id.drawer_main_nav_view);
-        drawerHeaderRot = navView.getHeaderView(0).findViewById(R.id.drawer_main_header_text);
+        super(drawerDecorated.getDrawerDecoratedView(), (Activity) drawerDecorated, null);
+        navView = drawerDecorated.getNavView(nav_view_rsId);
+        // Inflate menu.
+        navView.inflateMenu(drawerDecorated.getDrawerMnRsId());
+        drawerHeaderRot = getHeaderText(navView, header_textview_rsId);
     }
 
-    public static ViewerDrawerMain newViewerDrawerMain(AppCompatActivity activity)
+    public static ViewerUserDrawer newViewerDrawerMain(DrawerDecoratedIf drawerDecorated)
     {
         Timber.d("newViewerDrawerMain()");
-        ViewerDrawerMain instance = new ViewerDrawerMain(activity.findViewById(R.id.drawer_main_layout), activity);
+        ViewerUserDrawer instance = new ViewerUserDrawer(drawerDecorated);
         instance.setController(new CtrlerUsuario());
         return instance;
     }
@@ -72,16 +68,15 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
         if (controller.isRegisteredUser()) {
             doViewForRegUser(savedState);
         } else {
-            drawerHeaderRot.setVisibility(VISIBLE);
-            drawerHeaderRot.setText(R.string.app_name);
+            drawerHeaderRot.setText(default_header_no_reg_user);
         }
-
         navView.setNavigationItemSelectedListener(new DrawerMainMnItemSelListener());
-        buildMenu(navView);
     }
 
     void doViewForRegUser(Bundle savedState)
     {
+        Timber.d("doViewForRegUser()");
+
         if (savedState != null && savedState.containsKey(user_alias.key)) {
             drawerHeaderRot.setText(savedState.getString(user_alias.key));
         } else {
@@ -90,7 +85,6 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
                 public void onSuccess(Usuario usuario)
                 {
                     drawerHeaderRot.setText(usuario.getAlias());
-                    drawerHeaderRot.setVisibility(VISIBLE);
                 }
             });
         }
@@ -99,6 +93,7 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
     @Override
     public void saveState(Bundle savedState)
     {
+        Timber.d("savedState()");
         super.saveState(savedState);
         if (controller.isRegisteredUser()) {
             savedState.putString(user_alias.key, drawerHeaderRot.getText().toString());
@@ -110,23 +105,18 @@ public final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> 
     public void openDrawer()
     {
         Timber.d("openDrawer()");
-        buildMenu(navView);
+        buildMenu(navView, controller.isRegisteredUser());
         view.openDrawer(GravityCompat.START);
     }
 
-    private void buildMenu(NavigationView navView)
+    void buildMenu(NavigationView navView, boolean isRegisteredUser)
     {
         Timber.d("buildMenu()");
         Menu drawerMenu = navView.getMenu();
-        boolean isRegistered = controller.isRegisteredUser();
-        for (MnRouterAction menuItem : menuItemsToDraw) {
-            drawerMenu.findItem(menuItem.getMnItemRsId()).setVisible(isRegistered).setEnabled(isRegistered);
+        for (int i = 0; i < drawerMenu.size(); ++i) {
+            drawerMenu.getItem(i).setVisible(isRegisteredUser).setEnabled(isRegisteredUser);
         }
-    }
-
-    Set<MnRouterAction> getMenuItemsToDraw()
-    {
-        return Collections.unmodifiableSet(menuItemsToDraw);
+        activity.getMenuInflater().inflate(R.menu.confidec_item_mn, drawerMenu);
     }
 
     class DrawerMainMnItemSelListener implements NavigationView.OnNavigationItemSelectedListener {

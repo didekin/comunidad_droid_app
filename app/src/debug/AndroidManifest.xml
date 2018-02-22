@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools" package="com.didekindroid">
 
-    <application tools:ignore="AllowBackup">
+    <application tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <!-- Activity for UIException tests. -->
         <activity
             android:name=".lib_one.api.ActivityMock"
@@ -14,6 +14,14 @@
             android:label="@string/mock_next_DefaultActivity_label"
             android:parentActivityName=".lib_one.api.ActivityMock"
             android:launchMode="standard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".lib_one.api.ActivityMock"/>
+        </activity>
+        <activity android:name=".lib_one.api.ActivityDrawerMock"
+                  android:label="@string/mock_activity_drawer_label"
+                  android:launchMode="standard"
+                  android:parentActivityName=".lib_one.api.ActivityMock">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".lib_one.api.ActivityMock"/>

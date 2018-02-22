@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--................ Action bar .............-->
+    <!--................ Action bar .............-->  <!--TODO: quitar este bloque. En librería.-->
     <style name="appBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">@dimen/appBar_title</item>
     </style>
@@ -28,7 +28,7 @@
         <item name="android:background">@color/white</item>
     </style>
 
-    <!--................. Buttons .............. -->
+    <!--................. Buttons .............. -->  <!--TODO: en librería.-->
     <style name="textBase.acButton1">
         <item name="android:textSize">@dimen/text_decription_widget</item>
         <item name="android:textStyle">normal</item>
@@ -41,7 +41,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <!-- ............... Dialogs ................-->
+    <!-- ............... Dialogs ................-->  <!--TODO: en librería.-->
     <style name="alertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/deep_orange_600</item>
         <item name="android:textColorPrimary">@color/purple_900</item>
@@ -50,7 +50,7 @@
     <!-- ............... Drawers ................-->
     <style name="drawerMainHeaderLayout">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">69dp</item>
+        <item name="android:layout_height">70dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">?attr/colorPrimaryDark</item>
         <item name="android:orientation">vertical</item>
@@ -58,7 +58,7 @@
         <item name="android:paddingStart">@dimen/drawer_padding</item>
     </style>
 
-    <!-- ............... FloatingActionButton ................-->
+    <!-- ............... FloatingActionButton ................-->  <!--TODO: en librería.-->
     <style name="floatingButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -70,7 +70,7 @@
         <item name="android:tint">@color/white</item>
     </style>
 
-    <!-- .............. EditTextFields ......... -->
+    <!-- .............. EditTextFields ......... -->  <!--TODO: en librería.-->
     <style name="textBase.editField">
         <item name="android:textSize">@dimen/text_hint_size</item>
         <item name="android:textStyle">normal</item>
@@ -108,7 +108,7 @@
         <item name="android:gravity">left</item>
     </style>
 
-    <!-- ................... Layouts .......... -->
+    <!-- ................... Layouts .......... -->   <!--TODO: en librería.-->
     <style name="baseLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -142,7 +142,7 @@
         <item name="android:textSize">@dimen/text_rotulo_list</item>
     </style>
 
-    <!-- ................ Spinners ............. -->
+    <!-- ................ Spinners ............. -->  <!--TODO: en librería.-->
     <style name="spinnerBase">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -152,7 +152,7 @@
         <item name="android:inputType">textNoSuggestions</item>
     </style>
 
-    <!-- ............. Text fields ........... -->
+    <!-- ............. Text fields ........... -->   <!--TODO: en librería.-->
     <style name="textBase">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

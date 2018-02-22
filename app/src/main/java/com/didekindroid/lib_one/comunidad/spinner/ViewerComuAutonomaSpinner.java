@@ -1,8 +1,8 @@
 package com.didekindroid.lib_one.comunidad.spinner;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -32,14 +32,14 @@ public final class ViewerComuAutonomaSpinner extends
     final SpinnerEventListener eventListener;
     ComuAutonomaSpinnerEventItemSelect spinnerEvent;
 
-    private ViewerComuAutonomaSpinner(Spinner view, AppCompatActivity activity, @NonNull ViewerIf parentViewer)
+    private ViewerComuAutonomaSpinner(Spinner view, Activity activity, @NonNull ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
         spinnerEvent = spinnerEvent_default;
     }
 
-    public static ViewerComuAutonomaSpinner newViewerComuAutonomaSpinner(Spinner spinner, AppCompatActivity activity, ViewerIf parentViewer)
+    public static ViewerComuAutonomaSpinner newViewerComuAutonomaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerComuAutonomaSpinner()");
         ViewerComuAutonomaSpinner instance = new ViewerComuAutonomaSpinner(spinner, activity, parentViewer);

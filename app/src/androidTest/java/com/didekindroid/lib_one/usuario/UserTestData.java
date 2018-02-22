@@ -30,8 +30,8 @@ public final class UserTestData {
 
     public static final Usuario user_crodrigo = new Usuario.UsuarioBuilder()
             .userName("crodrigo@didekin.es")
-            .alias("alias_juan")
-            .password("psw_juan")
+            .alias("alias_rodrigo")
+            .password("psw_rodrigo")
             .build();
 
     public static final Usuario USER_DROID = new Usuario.UsuarioBuilder()

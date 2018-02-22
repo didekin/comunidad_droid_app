@@ -50,7 +50,7 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
     ViewerNotifyTokenIf viewerFirebaseToken;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)   // TODO: completar documento navegación.
+    protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);

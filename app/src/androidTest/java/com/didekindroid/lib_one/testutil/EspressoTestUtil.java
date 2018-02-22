@@ -2,6 +2,11 @@ package com.didekindroid.lib_one.testutil;
 
 import android.app.Activity;
 import android.support.test.espresso.NoMatchingViewException;
+import android.view.View;
+
+import com.didekindroid.R;
+
+import org.hamcrest.Matcher;
 
 import java.util.concurrent.Callable;
 
@@ -10,11 +15,15 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -22,6 +31,7 @@ import static org.awaitility.Awaitility.waitAtMost;
  * Time: 15:22
  */
 
+@SuppressWarnings({"EmptyCatchBlock", "WeakerAccess"})
 public class EspressoTestUtil {
 
     public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceIds)
@@ -37,6 +47,20 @@ public class EspressoTestUtil {
             }
         };
     }
+
+    public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher)
+    {
+        return () -> {
+            try {
+                onView(viewMatcher).check(matches(isDisplayed()));
+                return true;
+            } catch (NoMatchingViewException ne) {
+                return false;
+            }
+        };
+    }
+
+    // ============================  Menu  ============================
 
     public static void checkItemMnExists(Activity activity, int menuResourceId, int nextLayoutId)
     {
@@ -70,5 +94,27 @@ public class EspressoTestUtil {
                 return false;
             }
         });
+    }
+
+    // ============================  Navigation  ============================
+
+    public static void checkUp(Integer... activityLayoutIds)
+    {
+        clickNavigateUp();
+        for (Integer layout : activityLayoutIds) {
+            try {
+                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
+            } catch (Exception e) {
+                fail();
+            }
+        }
+    }
+
+    public static void clickNavigateUp()
+    {
+        onView(allOf(
+                withContentDescription(R.string.navigate_up_txt),
+                isClickable())
+        ).check(matches(isDisplayed())).perform(click());
     }
 }

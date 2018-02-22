@@ -1,19 +1,19 @@
-package com.didekindroid.usuario;
+package com.didekindroid.lib_one.usuario;
 
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.usuario.UsuarioBean;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario;
-import com.didekindroid.lib_one.util.UiUtil;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
@@ -23,12 +23,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.lib_one.usuario.ViewerLogin.PasswordMailDialog.newInstance;
 import static com.didekindroid.lib_one.usuario.UserContextualName.login_just_done;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.login_counter_atomic_int;
-import static com.didekindroid.lib_one.usuario.PasswordMailDialog.newInstance;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.checkInternet;
+import static com.didekindroid.lib_one.util.UiUtil.getContetViewInAc;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.getUiExceptionFromThrowable;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
@@ -42,17 +44,17 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUN
 
 public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
 
-    final AtomicReference<UsuarioBean> usuarioBean;
+    public final AtomicReference<UsuarioBean> usuarioBean;
     private AtomicInteger counterWrong;
 
     private ViewerLogin(Activity activity)
     {
-        super(UiUtil.getContetViewInAc(activity), (AppCompatActivity) activity, null);
+        super(getContetViewInAc(activity), activity, null);
         counterWrong = new AtomicInteger(0);
         usuarioBean = new AtomicReference<>(null);
     }
 
-    static ViewerLogin newViewerLogin(Activity activity)
+    public static ViewerLogin newViewerLogin(Activity activity)
     {
         Timber.d("newViewerLogin()");
         ViewerLogin instance = new ViewerLogin(activity);
@@ -102,7 +104,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         }
     }
 
-    boolean checkEmailData()
+    public boolean checkEmailData()
     {
         Timber.d("checkEmailData()");
         usuarioBean.set(new UsuarioBean(getLoginDataFromView()[0], null, null, null));
@@ -115,7 +117,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         return checkInternet(activity);
     }
 
-    boolean checkLoginData()
+    public boolean checkLoginData()
     {
         Timber.i("checkLoginData()");
         usuarioBean.set(new UsuarioBean(getLoginDataFromView()[0], null, getLoginDataFromView()[1], null));
@@ -128,7 +130,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         return checkInternet(activity);
     }
 
-    String[] getLoginDataFromView()
+    public String[] getLoginDataFromView()
     {
         Timber.d("getLoginDataFromView()");
         return new String[]{
@@ -137,7 +139,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         };
     }
 
-    void processLoginBackInView(boolean isLoginOk)
+    public void processLoginBackInView(boolean isLoginOk)
     {
         Timber.d("processLoginBackInView()");
 
@@ -156,11 +158,11 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         }
     }
 
-    void showDialogAfterErrors()
+    public void showDialogAfterErrors()
     {
         Timber.d("showDialogAfterErrors()");
         assertTrue(usuarioBean != null && usuarioBean.get().getUsuario() != null, bean_fromView_should_be_initialized);
-        DialogFragment newFragment = newInstance(usuarioBean.get());
+        DialogFragment newFragment = newInstance(usuarioBean.get(), this);
         newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
     }
 
@@ -180,7 +182,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         }, usuario);
     }
 
-    void processBackSendPswdInView(boolean isSendPassword)
+    public void processBackSendPswdInView(boolean isSendPassword)
     {
         Timber.d("processBackSendPswdInView()");
         if (isSendPassword) {
@@ -215,7 +217,7 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
 
     // =========================  HELPERS  =========================
 
-    AtomicInteger getCounterWrong()
+    public AtomicInteger getCounterWrong()
     {
         Timber.d("getCounterWrong()");
         return counterWrong;
@@ -232,6 +234,43 @@ public final class ViewerLogin extends Viewer<View, CtrlerUsuario> {
         {
             Timber.d("onError, message: %s", e.getMessage());
             onErrorInObserver(e);
+        }
+    }
+
+    // ============================================================
+    // ....................... Inner classes ...................
+    // ============================================================
+
+    public static class PasswordMailDialog extends DialogFragment {
+
+        private ViewerLogin viewerLogin;
+
+        public static PasswordMailDialog newInstance(@NonNull UsuarioBean usuarioBean, @NonNull ViewerLogin viewerIn)
+        {
+            Timber.d("newInstance()");
+            PasswordMailDialog dialog = new PasswordMailDialog();
+            dialog.viewerLogin = viewerIn;
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(usuario_object.key, usuarioBean.getUsuario());
+            dialog.setArguments(bundle);
+            return dialog;
+        }
+
+        @Override
+        public AppCompatDialog onCreateDialog(Bundle savedInstanceState)
+        {
+            Timber.d("onCreateDialog()");
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.alertDialogTheme);
+
+            builder.setMessage(R.string.send_password_by_mail_dialog)
+                    .setPositiveButton(
+                            R.string.send_password_by_mail_YES,
+                            (dialog, id) -> {
+                                dialog.dismiss();
+                                viewerLogin.doDialogPositiveClick((Usuario) getArguments().getSerializable(usuario_object.key));
+                            }
+                    );
+            return builder.create();
         }
     }
 }

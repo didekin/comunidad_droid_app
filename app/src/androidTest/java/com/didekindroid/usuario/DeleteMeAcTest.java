@@ -11,8 +11,6 @@ import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekindroid.lib_one.api.router.RouterInitializerMock;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuarioIf;
-import com.didekindroid.usuario.DeleteMeAc;
-import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -32,7 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.testutil.MockTestNavigation.nextMockAcLayout;
+import static com.didekindroid.lib_one.testutil.MockTestConstant.nextMockAcLayout;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_RODRIGO;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real_rodrigo;
@@ -53,7 +51,6 @@ import static org.junit.Assert.fail;
 public class DeleteMeAcTest {
 
     protected DeleteMeAc activity;
-    protected Usuario registeredUser;
 
     @Rule
     public IntentsTestRule<? extends AppCompatActivity> mActivityRule = new IntentsTestRule<DeleteMeAc>(DeleteMeAc.class) {
@@ -62,13 +59,13 @@ public class DeleteMeAcTest {
         {
             // Precondition: the user is registered.
             try {
-                registeredUser = regGetUserComu(comu_real_rodrigo);
+                regGetUserComu(comu_real_rodrigo);
             } catch (Exception e) {
                 fail();
             }
         }
     };
-    CtrlerUsuarioIf controller;
+    private CtrlerUsuarioIf controller;
 
     @Before
     public void setUp() throws Exception

@@ -1,8 +1,8 @@
 package com.didekindroid.usuariocomunidad.register;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -33,7 +33,7 @@ import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
  */
 public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
 
-    private ViewerRegUserComuFr(View view, AppCompatActivity activity, @NonNull ParentViewerIf parentViewer)
+    private ViewerRegUserComuFr(View view, Activity activity, @NonNull ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }

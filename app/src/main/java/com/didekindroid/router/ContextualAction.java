@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.didekindroid.accesorio.MuteActivity;
+import com.didekindroid.lib_one.util.MuteActivity;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
 import com.didekindroid.incidencia.comment.IncidCommentRegAc;
@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
+
 import static com.didekindroid.comunidad.util.ComuContextualName.comu_data_just_modified;
 import static com.didekindroid.comunidad.util.ComuContextualName.found_comu_plural;
 import static com.didekindroid.comunidad.util.ComuContextualName.found_comu_single_for_current_neighbour;
@@ -42,9 +43,9 @@ import static com.didekindroid.comunidad.util.ComuContextualName.new_usercomu_ju
 import static com.didekindroid.comunidad.util.ComuContextualName.no_found_comu_for_current_user;
 import static com.didekindroid.comunidad.util.ComuContextualName.no_found_comu_for_no_reg_user;
 import static com.didekindroid.comunidad.util.ComuContextualName.to_reg_new_comu_usercomu;
+import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_deleted;
 import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_modified;
 import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_selected;
-import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_deleted;
 import static com.didekindroid.incidencia.IncidContextualName.after_incid_resolucion_modif_error;
 import static com.didekindroid.incidencia.IncidContextualName.incid_closed_just_selected;
 import static com.didekindroid.incidencia.IncidContextualName.incid_open_just_closed;
@@ -69,6 +70,9 @@ import static com.didekindroid.lib_one.usuario.UserContextualName.pswd_just_sent
 import static com.didekindroid.lib_one.usuario.UserContextualName.user_alias_just_modified;
 import static com.didekindroid.lib_one.usuario.UserContextualName.user_just_deleted;
 import static com.didekindroid.lib_one.usuario.UserContextualName.user_name_just_modified;
+import static com.didekindroid.lib_one.usuario.UsuarioAssertionMsg.user_name_should_be_initialized;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static java.util.EnumSet.of;
 
 /**
@@ -82,11 +86,11 @@ public enum ContextualAction implements RouterActionIf {
     showComuFound(of(found_comu_plural), ComuSearchResultsAc.class),
     searchForComu(of(
             default_no_reg_user,
-            user_just_deleted), ComuSearchAc.class){
+            user_just_deleted), ComuSearchAc.class) {
         @Override
         public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle, int flags)
         {
-            super.initActivity(activity,bundle,flags);
+            super.initActivity(activity, bundle, flags);
             activity.finish();
         }
     },
@@ -116,11 +120,13 @@ public enum ContextualAction implements RouterActionIf {
     showPswdSentMessage(of(
             new_comu_user_usercomu_just_registered,
             new_user_usercomu_just_registered,
-            user_name_just_modified), MuteActivity.class){
+            user_name_just_modified), MuteActivity.class) {
         @Override
         public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle, int flags)
         {
             Timber.d("initActivity(), three params.");
+            assertTrue(bundle != null
+                    && bundle.getSerializable(usuario_object.key) != null, user_name_should_be_initialized);
             DialogFragment newFragment = PasswordSentDialog.newInstance(bundle);
             newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
         }

@@ -1,0 +1,21 @@
+<android.support.design.widget.CoordinatorLayout
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true">
+
+    <include layout="@layout/appbar_include_design"/>
+
+    <LinearLayout android:id="@+id/drawer_mock_ac_layout"
+                  style="@style/baseLayout.withPadding"
+                  tools:context="com.didekindroid.lib_one.api.ActivityDrawerMock">
+
+        <TextView
+            android:id="@+id/drawer_mock_ac_rot"
+            style="@style/textBase.textFieldLabel1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
+            android:text="@string/drawer_mock_ac_label"/>
+
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

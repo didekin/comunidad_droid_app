@@ -9,8 +9,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.usuario.UserDataAc;
-import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -41,7 +39,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
+import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
+import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
+import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeUserNameAliasPswd;
+import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeUserNamePswd;
+import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.DELETE_ME_AC;
+import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.PASSWORD_CHANGE_AC;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
@@ -49,22 +56,12 @@ import static com.didekindroid.testutil.ActivityTestUtil.focusOnView;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
-import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeUserNameAliasPswd;
-import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeUserNamePswd;
-import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.DELETE_ME_AC;
-import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.PASSWORD_CHANGE_AC;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
-import static com.didekindroid.lib_one.usuario.UserTestNavigation.userDataAcRsId;
-import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
-import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.usuario.UserTestNavigation.userDataAcRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -79,13 +76,13 @@ import static org.junit.Assert.fail;
  * Date: 16/07/15
  * Time: 14:25
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class UserDataAcTest {
 
-    UserDataAc activity;
-    Usuario oldUsuario;
-    Comunidad comunidad;
-    TaskStackBuilder stackBuilder;
+    private UserDataAc activity;
+    private Usuario oldUsuario;
+    private TaskStackBuilder stackBuilder;
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
         @Override
@@ -93,7 +90,6 @@ public class UserDataAcTest {
         {
             try {
                 oldUsuario = signUpAndUpdateTk(COMU_REAL_JUAN);
-                comunidad = userComuDao.getComusByUser().get(0);
                 assertThat(oldUsuario, notNullValue());
             } catch (Exception e) {
                 fail();
@@ -219,7 +215,7 @@ public class UserDataAcTest {
     @Test
     public void testPasswordChangeMn() throws InterruptedException
     {
-        waitAtMost(6, SECONDS).untilAtomic(activity.viewer.oldUser, notNullValue());
+        waitAtMost(6, SECONDS).untilAtomic(activity.viewer.getOldUser(), notNullValue());
         PASSWORD_CHANGE_AC.checkItem(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);

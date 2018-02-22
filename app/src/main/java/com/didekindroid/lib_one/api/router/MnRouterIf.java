@@ -1,7 +1,5 @@
 package com.didekindroid.lib_one.api.router;
 
-import android.support.annotation.NonNull;
-
 /**
  * User: pedro@didekin
  * Date: 12/02/2018
@@ -9,5 +7,5 @@ import android.support.annotation.NonNull;
  */
 @FunctionalInterface
 public interface MnRouterIf {
-    RouterActionIf getActionFromMnItemId(@NonNull int menuItemRsId);
+    RouterActionIf getActionFromMnItemId(int menuItemRsId);
 }

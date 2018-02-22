@@ -3,7 +3,6 @@ package com.didekindroid.lib_one.api;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
@@ -36,7 +35,7 @@ public abstract class ViewerSelectList<T extends AdapterView<? super ArrayAdapte
     @SuppressWarnings("WeakerAccess")
     protected long itemSelectedId;
 
-    protected ViewerSelectList(T view, AppCompatActivity activity, ViewerIf parentViewer)
+    protected ViewerSelectList(T view, Activity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
