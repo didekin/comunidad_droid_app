@@ -69,7 +69,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcMaxTest {
 
-    IncidAndResolBundle resolBundle;
+    private IncidAndResolBundle resolBundle;
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
         @Override
@@ -96,8 +96,8 @@ public class IncidEditAcMaxTest {
             return new Intent().putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         }
     };
-    IncidEditAc activity;
-    IncidenciaDataDbHelper dbHelper;
+    private IncidEditAc activity;
+    private IncidenciaDataDbHelper dbHelper;
 
     public static void checkOnStop(IncidEditAc activity)
     {
@@ -172,7 +172,7 @@ public class IncidEditAcMaxTest {
         // Caso OK. No cambiamos nada. Hacemos BACK.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
 
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
         checkBack(onView(withId(incidSeeByComuAcLayout)));
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
     }
@@ -182,7 +182,7 @@ public class IncidEditAcMaxTest {
     {
         // CASO OK: borramos la incidencia.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class IncidEditAcMaxTest {
         //CASO OK: borramos incidencia y BACK.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
         // Check borrado.
-        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             // BACK: como ya no existe la incidencia, salta a la lista de incidencias nuevamente.
             checkBack(onView(withId(incidSeeByComuAcLayout)), incidSeeByComuAcLayout);
@@ -204,7 +204,7 @@ public class IncidEditAcMaxTest {
         //CASO OK: borramos incidencia y UP.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
         // Check borrado.
-        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(seeUserComuByUserFrRsId);
         }

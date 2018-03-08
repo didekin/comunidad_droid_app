@@ -3,7 +3,7 @@ package com.didekindroid.incidencia;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.usuario.UserTestData;
+import com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
@@ -67,9 +67,9 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidenciaDaoTest_1 {
 
-    UserTestData.CleanUserEnum whatClean;
-    Usuario pepe;
-    UsuarioComunidad pepeUserComu;
+    private CleanUserEnum whatClean;
+    private Usuario pepe;
+    private UsuarioComunidad pepeUserComu;
 
     @Before
     public void setUp() throws Exception

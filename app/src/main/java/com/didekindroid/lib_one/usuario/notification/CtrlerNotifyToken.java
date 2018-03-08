@@ -26,7 +26,7 @@ public class CtrlerNotifyToken extends Controller implements CtrlerNotifyTokenIf
      *
      * @return a Single with an item == 1 if the gcmToken is updated.
      */
-    static Single<Integer> updatedGcmTkSingle()
+    public Single<Integer> updatedGcmTkSingle()
     {
         return Single.fromCallable(() -> {
                     String token = FirebaseInstanceId.getInstance().getToken();

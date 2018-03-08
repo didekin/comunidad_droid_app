@@ -12,7 +12,7 @@ import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.testutil.ViewerTestWrapper;
+import com.didekindroid.lib_one.testutil.ViewerTestWrapper;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
 

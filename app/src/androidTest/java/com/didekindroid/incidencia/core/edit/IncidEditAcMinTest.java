@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.app.TaskStackBuilder.create;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
@@ -31,6 +30,8 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.core.edit.IncidEditAcMaxTest.checkOnStop;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
@@ -38,8 +39,6 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
@@ -49,12 +48,12 @@ import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -73,8 +72,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcMinTest {
 
-    IncidImportancia incidImportancia_0;
-    IncidAndResolBundle resolBundle;
+    private IncidImportancia incidImportancia_0;
+    private IncidAndResolBundle resolBundle;
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
         @Override
@@ -106,8 +105,8 @@ public class IncidEditAcMinTest {
             return new Intent().putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         }
     };
-    IncidEditAc activity;
-    IncidenciaDataDbHelper dbHelper;
+    private IncidEditAc activity;
+    private IncidenciaDataDbHelper dbHelper;
 
     @Before
     public void setUp() throws Exception
@@ -135,11 +134,8 @@ public class IncidEditAcMinTest {
     public void testOnCreate_1() throws Exception
     {
         checkDataEditMinFr(dbHelper, activity, resolBundle.getIncidImportancia());
-        AtomicBoolean isChecked = new AtomicBoolean(false);
-        isChecked.compareAndSet(false,
-                checkImportanciaUser(new ImportanciaUser(USER_PEPE.getAlias(), incidImportancia_0.getImportancia()), activity));
-        waitAtMost(4, SECONDS).untilTrue(isChecked);
-
+        waitAtMost(6, SECONDS)
+                .until(() -> checkImportanciaUser(new ImportanciaUser(USER_PEPE.getAlias(), incidImportancia_0.getImportancia()), activity));
         checkUp(incidSeeByComuAcLayout);
     }
 
@@ -152,8 +148,7 @@ public class IncidEditAcMinTest {
         // Modify.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         // Check.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
-
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(incidSeeByComuAcLayout));
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(seeUserComuByUserFrRsId);
         }

@@ -37,9 +37,9 @@ import static com.didekindroid.lib_one.util.DrawerConstant.nav_view_rsId;
 
 public final class ViewerUserDrawer extends Viewer<DrawerLayout, CtrlerUsuario> {
 
-    @SuppressWarnings("WeakerAccess")
-    TextView drawerHeaderRot;
-    NavigationView navView;
+
+    private TextView drawerHeaderRot;
+    private NavigationView navView;
 
     private ViewerUserDrawer(DrawerDecoratedIf drawerDecorated)
     {
@@ -73,7 +73,7 @@ public final class ViewerUserDrawer extends Viewer<DrawerLayout, CtrlerUsuario> 
         navView.setNavigationItemSelectedListener(new DrawerMainMnItemSelListener());
     }
 
-    void doViewForRegUser(Bundle savedState)
+    public void doViewForRegUser(Bundle savedState)
     {
         Timber.d("doViewForRegUser()");
 
@@ -102,6 +102,16 @@ public final class ViewerUserDrawer extends Viewer<DrawerLayout, CtrlerUsuario> 
 
     /* ==================================== Helpers ====================================*/
 
+    public TextView getDrawerHeaderRot()
+    {
+        return drawerHeaderRot;
+    }
+
+    public NavigationView getNavView()
+    {
+        return navView;
+    }
+
     public void openDrawer()
     {
         Timber.d("openDrawer()");
@@ -109,7 +119,7 @@ public final class ViewerUserDrawer extends Viewer<DrawerLayout, CtrlerUsuario> 
         view.openDrawer(GravityCompat.START);
     }
 
-    void buildMenu(NavigationView navView, boolean isRegisteredUser)
+    public void buildMenu(NavigationView navView, boolean isRegisteredUser)
     {
         Timber.d("buildMenu()");
         Menu drawerMenu = navView.getMenu();

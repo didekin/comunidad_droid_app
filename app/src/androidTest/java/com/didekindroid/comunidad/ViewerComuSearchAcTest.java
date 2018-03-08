@@ -9,7 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.security.CtrlerAuthToken;
 import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
-import com.didekindroid.testutil.ViewerTestWrapper;
+import com.didekindroid.lib_one.testutil.ViewerTestWrapper;
 
 import org.junit.Before;
 import org.junit.Rule;

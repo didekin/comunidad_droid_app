@@ -3,7 +3,8 @@ package com.didekindroid;
 import com.didekindroid.accesorio.ConfidencialidadAcTest;
 import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.incidencia.IncidSuite;
-import com.didekindroid.lib_one.usuario.ViewerUserDrawerTest;
+import com.didekindroid.security.TokenIdentityCacher_app_Test;
+import com.didekindroid.usuario.ViewerUserDrawer_App_Test;
 import com.didekindroid.router.ContextualActionTest;
 import com.didekindroid.router.MnRouterActionTest;
 import com.didekindroid.router.UiExceptionActionTest;
@@ -30,7 +31,9 @@ import org.junit.runners.Suite;
         ContextualActionTest.class,
         MnRouterActionTest.class,
         UiExceptionActionTest.class,
-        ViewerUserDrawerTest.class,
+        ViewerUserDrawer_App_Test.class,
+        // security.
+        TokenIdentityCacher_app_Test.class,
         // usuario
         UsuarioSuite.class,
         // usuariocomunidad

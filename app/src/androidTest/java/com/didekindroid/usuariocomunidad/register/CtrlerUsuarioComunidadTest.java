@@ -70,13 +70,13 @@ import static org.junit.Assert.assertThat;
  */
 public class CtrlerUsuarioComunidadTest {
 
-    final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    private final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     Viewer<?, CtrlerUsuarioComunidad> viewer;
-    CtrlerUsuarioComunidad controller;
+    private CtrlerUsuarioComunidad controller;
     ActivityMock activity;
 
     @Before

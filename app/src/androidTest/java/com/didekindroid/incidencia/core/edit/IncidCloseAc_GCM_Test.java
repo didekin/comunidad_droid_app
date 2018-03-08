@@ -40,7 +40,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidCloseAc_GCM_Test extends Incidencia_GCM_test_abs {
 
-    Resolucion resolucion;
+    private Resolucion resolucion;
 
     @Test  @TargetApi(Build.VERSION_CODES.M)
     public void testReceiveNotification() throws Exception

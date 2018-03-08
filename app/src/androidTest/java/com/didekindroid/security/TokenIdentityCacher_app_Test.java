@@ -1,10 +1,12 @@
-package com.didekindroid.lib_one.security;
+package com.didekindroid.security;
 
 import android.app.Activity;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.ActivityMock;
+import com.didekindroid.lib_one.security.TokenIdentityCacher;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,23 +32,24 @@ import static org.junit.Assert.assertThat;
  * Time: 08:11
  */
 @RunWith(AndroidJUnit4.class)
-public class TokenIdentityCacherTest_2 {
+public class TokenIdentityCacher_app_Test {
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class);
 
-    Activity activity;
-    TokenIdentityCacher tkCacher;
+    private Activity activity;
+    private TokenIdentityCacher tkCacher;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        tkCacher = (TokenIdentityCacher) secInitializer.get().getTkCacher();
+
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp()
+    {
         cleanWithTkhandler();
     }
 
@@ -55,9 +58,15 @@ public class TokenIdentityCacherTest_2 {
     @Test
     public void test_InitClass_1()
     {
-        // Non-empty file.
+        // Preconditions: escribimos fichero.
         File refreshTkFile = new File(getTargetContext().getFilesDir(), refresh_token_filename);
         writeFileFromString("test_refreshToken", refreshTkFile);
+        // Como secInitializer ya ha sido inicializado, al arrancar la aplicación, volvemos a inicializarlo a null.
+        secInitializer.set(null);
+        // Arrancamos la aplicación nuevamente.
+        InstrumentationRegistry.getInstrumentation().callApplicationOnCreate(activity.getApplication());
+        // Check.
+        tkCacher = (TokenIdentityCacher) secInitializer.get().getTkCacher();
         assertThat(tkCacher.getTokenCache().get(), notNullValue());
         assertThat(tkCacher.getTokenCache().get().getRefreshToken().getValue(), is("test_refreshToken"));
     }
@@ -68,13 +77,25 @@ public class TokenIdentityCacherTest_2 {
         // Empty file.
         File refreshTkFile = new File(getTargetContext().getFilesDir(), refresh_token_filename);
         writeFileFromString("", refreshTkFile);
+        // Como secInitializer ya ha sido inicializado, al arrancar la aplicación, volvemos a inicializarlo a null.
+        secInitializer.set(null);
+        // Arrancamos la aplicación nuevamente.
+        InstrumentationRegistry.getInstrumentation().callApplicationOnCreate(activity.getApplication());
+        tkCacher = (TokenIdentityCacher) secInitializer.get().getTkCacher();
+        // Check.
         assertThat(tkCacher.getTokenCache().get(), nullValue());
     }
 
     @Test
     public void test_InitClass_3()
     {
-        // No file.
+        // Preconditions: no file.
+        // Como secInitializer ya ha sido inicializado, al arrancar la aplicación, volvemos a inicializarlo a null.
+        secInitializer.set(null);
+        // Arrancamos la aplicación nuevamente.
+        InstrumentationRegistry.getInstrumentation().callApplicationOnCreate(activity.getApplication());
+        tkCacher = (TokenIdentityCacher) secInitializer.get().getTkCacher();
+        // Check.
         assertThat(tkCacher.getTokenCache().get(), nullValue());
     }
 }

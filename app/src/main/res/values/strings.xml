@@ -10,16 +10,16 @@
     <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
     <!-- Formats-->
-    <string name="dos_puntos" translatable="false">:</string>
-    <string name="no_sabe" translatable="false">....</string>
+    <string name="dos_puntos" translatable="false">:</string>    <!--TODO: en librería.-->
+    <string name="no_sabe" translatable="false">....</string>  <!--TODO: en librería.-->
+    <string name="decimal_separator">,</string>   <!--TODO: en librería.-->
     <!--Input controls-->
     <string name="search_button">Buscar</string>
     <string name="checkbox_si">Sí</string>
     <string name="checkbox_no">No</string>
     <string name="euros_rot">EUR</string>
-    <string name="decimal_separator">,</string>
-    <string name="navigate_up_txt">Desplazarse hacia arriba</string>
-    <string name="modif_button_rot">Modificar</string>
+    <string name="navigate_up_txt">Desplazarse hacia arriba</string>    <!--TODO: en librería.-->
+    <string name="modif_button_rot">Modificar</string>    <!--TODO: en librería.-->
     <string name="continuar_button_rot">Continuar</string>
     <string name="borrar_button_rot">Borrar</string>
     <!--Messages-->
@@ -33,7 +33,7 @@
     <!--                                 ACCESORIOS                                   -->
     <!--******************************************************************************-->
     <!--Menús-->
-    <string name="confidencialidad_mn">Privacidad</string>
+    <string name="confidencialidad_mn">Privacidad</string>   <!--TODO: en librería.-->
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="confidencialidad_ac_label">Protección de datos</string>
     <string name="proteccion_datos_txt" tools:ignore="Typos">
@@ -207,12 +207,12 @@
     <string name="comunidad_duplicate">Esta comunidad ya había sido registrada</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí.</string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
-    <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string>
+    <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string> <!--TODO: en librería.-->
     <string name="password_wrong">La contraseña no se corresponde con tu usuario.</string>   <!--TODO: en librería.-->
-    <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
+    <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string> <!--TODO: en librería.-->
     <string name="password_remote_change">Ya está modificada tu contraseña.</string>
-    <string name="send_password_by_mail_dialog">¿Te enviamos una nueva contraseña a la dirección de correo electrónico que has escrito?</string>
-    <string name="send_password_by_mail_YES">Enviádmela</string>
+    <string name="send_password_by_mail_dialog">¿Te enviamos una nueva contraseña a la dirección de correo electrónico que has escrito?</string> <!--TODO: en librería.-->
+    <string name="send_password_by_mail_YES">Enviádmela</string>   <!--TODO: en librería.-->
     <string name="user_email_wrong">No hemos podido enviar la nueva contraseña. Tu dirección de correo electrónico puede ser errónea.</string>
     <string name="user_without_signedUp">"Haz login. O busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="user_with_token_null">"Haz login para continuar."</string>
@@ -240,17 +240,17 @@
     <string name="rotulo_comunidad">Tu comunidad</string>
     <!-- ================= DeleteMeAc ===================== -->
     <string name="delete_me_ac_label">Borrar tus datos</string>
-    <string name="delete_me_ac_unreg_rot_txt">¿Deseas eliminar tus datos en Didekin?</string>
-    <string name="delete_me_ac_unreg_button_txt">Sí, borrad todos mis datos</string>
+    <string name="delete_me_ac_unreg_rot_txt">¿Deseas eliminar tus datos en Didekin?</string>    <!--TODO: en librería.-->
+    <string name="delete_me_ac_unreg_button_txt">Sí, borrad todos mis datos</string>   <!--TODO: en librería.-->
     <!--================= LoginAc =================== -->
     <string name="login_label">Login</string>
     <string name="login_ac_rotulo">Inicio de sesión</string>   <!--TODO: en librería.-->
     <string name="login_ac_button_txt">Valida tus datos</string>   <!--TODO: en librería.-->
     <!-- ================== PasswordChangeAc ============== -->
     <string name="password_ac_label">Tu contraseña</string>
-    <string name="password_change_ac_rotulo">Nueva contraseña</string>
-    <string name="password_send_txt">Si no recuerdas tu contraseña, podemos enviarte una nueva.</string>
-    <string name="password_send_button_txt">Envío de nueva contraseña</string>
+    <string name="password_change_ac_rotulo">Nueva contraseña</string>    <!--TODO: en librería.-->
+    <string name="password_send_txt">Si no recuerdas tu contraseña, podemos enviarte una nueva.</string>  <!--TODO: en librería.-->
+    <string name="password_send_button_txt">Envío de nueva contraseña</string>  <!--TODO: en librería.-->
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Registro en comunidad</string>
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
@@ -281,10 +281,10 @@
     <string name="municipio">Municipio</string>
     <string name="tipo_via">Tipo vía</string>
     <string name="tipo_via_spinner">tipo de vía </string>
-    <string name="nombre_via_hint">Nombre de la vía, sin número</string>
+    <string name="nombre_via_hint">Nombre de la vía, sin número</string>   <!--TODO: en librería.-->
     <string name="nombre_via">Nombre de la vía</string>
-    <string name="numero_en_via">Número</string>
-    <string name="sufijo_numero_en_via_hint">Sufijo (op.)</string>
+    <string name="sufijo_numero_en_via_hint">Sufijo (op.)</string>    <!--TODO: en librería.-->
+    <string name="numero_en_via">Número</string>      <!--TODO: en librería.-->
     <string name="sufijo_numero">Sufijo</string>
     <!-- ============= RegComuAndUserComuAc =============== -->
     <!-- ================== RegUserComuAc ================= -->
@@ -295,7 +295,7 @@
     <string name="password">Contraseña</string>  <!--TODO: en librería. -->
     <string name="password_different">(no coinciden)</string>   <!--TODO: en librería. -->
     <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _</string>   <!--TODO: en librería.-->
-    <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
+    <string name="usuario_password_confirm_hint">Confirmación contraseña</string>     <!--TODO: en librería.-->
     <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>   <!--TODO: en librería.-->
     <string name="email_hint">Correo electrónico</string>  <!--TODO: en librería.-->
     <!-- ================= SeeUserComuByComuAc ============ -->

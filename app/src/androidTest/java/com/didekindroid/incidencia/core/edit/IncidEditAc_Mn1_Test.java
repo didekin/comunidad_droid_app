@@ -27,6 +27,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
@@ -40,7 +41,6 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
@@ -68,8 +68,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAc_Mn1_Test {
 
-    IncidEditAc activity;
-    IncidenciaDataDbHelper dbHelper;
+    private IncidEditAc activity;
+    private IncidenciaDataDbHelper dbHelper;
 
     @Before
     public void setUp() throws Exception
@@ -203,7 +203,7 @@ public class IncidEditAc_Mn1_Test {
     //    ============================  HELPER  ===================================
 
     @NonNull
-    IncidAndResolBundle initDbData(UsuarioComunidad usuarioComunidad, boolean hasResolucion) throws IOException, UiException
+    private IncidAndResolBundle initDbData(UsuarioComunidad usuarioComunidad, boolean hasResolucion) throws IOException, UiException
     {
         /* Perfil adm, inicidador de la incidencia.*/
         final IncidImportancia incidImportancia = insertGetIncidImportancia(usuarioComunidad);

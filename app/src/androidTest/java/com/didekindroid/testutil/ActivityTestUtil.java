@@ -295,6 +295,10 @@ public final class ActivityTestUtil {
         } catch (Throwable e) {
         } finally {
             onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
+            waitAtMost(2, SECONDS).until(() -> {
+                onView(withId(actionResourceId)).check(matches(isDisplayed()));
+                return true;
+            });
             onView(withId(actionResourceId)).check(matches(isDisplayed()));
         }
     }

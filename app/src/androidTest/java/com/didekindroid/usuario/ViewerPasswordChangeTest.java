@@ -7,7 +7,6 @@ import android.support.test.rule.ActivityTestRule;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario;
-import com.didekinlib.http.auth.SpringOauthToken;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -26,14 +25,14 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.ViewerPasswordChange.newViewerPswdChange;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typePswdConfirmPswd;
 import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typePswdWithPswdValidation;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.usuario.UserTestNavigation.pswdChangeAcRsId;
 import static com.didekindroid.usuario.UserTestNavigation.userDataAcRsId;
-import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.usuario.ViewerPasswordChange.newViewerPswdChange;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
@@ -57,7 +56,7 @@ import static org.junit.Assert.fail;
  */
 public class ViewerPasswordChangeTest {
 
-    Usuario usuario;
+    private Usuario usuario;
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<PasswordChangeAc>(PasswordChangeAc.class) {
 
@@ -73,14 +72,12 @@ public class ViewerPasswordChangeTest {
             return new Intent().putExtra(user_name.key, usuario.getUserName());
         }
     };
-    PasswordChangeAc activity;
-    SpringOauthToken oldToken;
+    private PasswordChangeAc activity;
 
     @Before
     public void setUp()
     {
         activity = (PasswordChangeAc) mActivityRule.getActivity();
-        oldToken = activity.viewer.getController().getTkCacher().getTokenCache().get();
     }
 
     @After

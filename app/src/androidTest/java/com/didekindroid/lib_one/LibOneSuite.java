@@ -28,14 +28,14 @@ import com.didekindroid.lib_one.security.CtrlerAuthTokenTest;
 import com.didekindroid.lib_one.security.JceTests;
 import com.didekindroid.lib_one.security.OauthTokenObservableTest;
 import com.didekindroid.lib_one.security.TokenIdentityCacherTest_1;
-import com.didekindroid.lib_one.security.TokenIdentityCacherTest_2;
+import com.didekindroid.security.TokenIdentityCacher_app_Test;
 import com.didekindroid.lib_one.usuario.UsuarioBeanTests;
 import com.didekindroid.lib_one.usuario.UsuarioMockDaoTest;
 import com.didekindroid.lib_one.usuario.dao.CtrlerUsuario_Test;
 import com.didekindroid.lib_one.usuario.dao.UsuarioDaoTest;
 import com.didekindroid.lib_one.usuario.dao.UsuarioObservableTest;
-import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyTokenTest;
-import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenTest;
+import com.didekindroid.usuario.notification.CtrlerNotifyToken_app_Test;
+import com.didekindroid.usuario.notification.ViewerNotifyToken_app_Test;
 import com.didekindroid.lib_one.util.DeviceTest;
 import com.didekindroid.lib_one.util.IoHelperTest;
 import com.didekindroid.lib_one.util.UiUtilTest;
@@ -84,14 +84,14 @@ import org.junit.runners.Suite;
         JceTests.class,
         OauthTokenObservableTest.class,
         TokenIdentityCacherTest_1.class,
-        TokenIdentityCacherTest_2.class,
+        TokenIdentityCacher_app_Test.class,
         // usuario.dao.
         CtrlerUsuario_Test.class,
         UsuarioObservableTest.class,
         UsuarioDaoTest.class,
         // usuario.notification.
-        CtrlerNotifyTokenTest.class,
-        ViewerNotifyTokenTest.class,
+        CtrlerNotifyToken_app_Test.class,
+        ViewerNotifyToken_app_Test.class,
         // usuario.
         UsuarioMockDaoTest.class,
         UsuarioBeanTests.class,

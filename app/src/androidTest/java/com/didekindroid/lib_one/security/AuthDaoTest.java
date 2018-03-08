@@ -39,10 +39,11 @@ import static org.junit.Assert.fail;
  * Date: 07/09/15
  * Time: 11:07
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class AuthDaoTest {
 
-    HttpHandler httpHandler = httpInitializer.get().getHttpHandler();
+    private HttpHandler httpHandler = httpInitializer.get().getHttpHandler();
 
     @BeforeClass
     public static void slowSeconds()

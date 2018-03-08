@@ -26,11 +26,11 @@ import static io.reactivex.plugins.RxJavaPlugins.setErrorHandler;
  */
 public final class DidekinApp extends Application {
 
-    public static final int webHost = R.string.didekin_web_host;
-    public static final int webHostPort = R.string.didekin_web_port;
-    public static final int timeOut = R.string.timeOut;
-    public static final int bks_pswd = R.string.didekindroid_bks_pswd;
-    public static final int bks_name = R.string.didekindroid_bks_name;
+    private static final int webHost = R.string.didekin_web_host;
+    private static final int webHostPort = R.string.didekin_web_port;
+    private static final int timeOut = R.string.timeOut;
+    private static final int bks_pswd = R.string.didekindroid_bks_pswd;
+    private static final int bks_name = R.string.didekindroid_bks_name;
 
     @Override
     public void onCreate()

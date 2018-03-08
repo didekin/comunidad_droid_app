@@ -1,6 +1,6 @@
 package com.didekindroid.lib_one.usuario.notification;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.view.View;
 
 import com.didekindroid.lib_one.api.Viewer;
@@ -13,16 +13,17 @@ import timber.log.Timber;
  * Date: 09/03/17
  * Time: 21:11
  */
+@SuppressWarnings("WeakerAccess")
 public class ViewerNotifyToken extends Viewer<View, CtrlerNotifyTokenIf> implements
         ViewerNotifyTokenIf<View> {
 
 
-    protected ViewerNotifyToken(AppCompatActivity activity)
+    protected ViewerNotifyToken(Activity activity)
     {
         super(null, activity, null);
     }
 
-    public static ViewerNotifyTokenIf<View> newViewerFirebaseToken(AppCompatActivity activity)
+    public static ViewerNotifyTokenIf<View> newViewerFirebaseToken(Activity activity)
     {
         Timber.d("newViewerFirebaseToken()");
         ViewerNotifyTokenIf<View> viewer = new ViewerNotifyToken(activity);
@@ -41,7 +42,6 @@ public class ViewerNotifyToken extends Viewer<View, CtrlerNotifyTokenIf> impleme
 
     // ............................ SUBSCRIBERS ..................................
 
-    @SuppressWarnings("WeakerAccess")
     public class RegGcmTokenObserver extends DisposableSingleObserver<Integer> {
 
         @Override

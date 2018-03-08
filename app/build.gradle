@@ -13,6 +13,7 @@ android {
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* , "en"  Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -62,7 +63,7 @@ android {
         }
         local {
             applicationIdSuffix ""
-            debuggable true
+            debuggable false
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -101,6 +102,7 @@ android {
 
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+        pickFirst 'protobuf.meta'
     }
 }
 
@@ -114,6 +116,7 @@ dependencies {
     implementation rootProject.ext.android_support
     androidTestImplementation rootProject.ext.testRuler
     androidTestImplementation rootProject.ext.espresso
+    androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:3.0.2-alpha1')
     androidTestImplementation rootProject.ext.didekinlib_gcm
     androidTestImplementation rootProject.ext.awaitility
     androidTestImplementation rootProject.ext.testRunner

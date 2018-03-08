@@ -70,8 +70,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeCloseFrTest {
 
-    IncidImportancia incidImportancia1;
-    Resolucion resolucion;
+    private IncidImportancia incidImportancia1;
+    private Resolucion resolucion;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class, true) {
@@ -102,8 +102,8 @@ public class ViewerIncidSeeCloseFrTest {
         }
     };
 
-    IncidSeeByComuFr fragment;
-    IncidSeeByComuAc activity;
+    private IncidSeeByComuFr fragment;
+    private IncidSeeByComuAc activity;
 
     //    ============================  STATIC UTILITIES  ===================================
 
@@ -217,7 +217,7 @@ public class ViewerIncidSeeCloseFrTest {
     }
 
     @Test
-    public void test_OnSuccessLoadSelectedItem() throws Exception
+    public void test_OnSuccessLoadSelectedItem() throws Exception        // TODO: fail.
     {
         // Preconditions.
         Bundle bundle = new Bundle(1);

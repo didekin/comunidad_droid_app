@@ -72,6 +72,7 @@ import static org.junit.Assert.assertThat;
  * <p>
  * Tests for menu items which require intent initialization are omitted.
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class MnRouterActionTest {
 
@@ -86,7 +87,7 @@ public class MnRouterActionTest {
         }
     };
 
-    ActivityMock activity;
+    private ActivityMock activity;
 
     @Before
     public void setUp()

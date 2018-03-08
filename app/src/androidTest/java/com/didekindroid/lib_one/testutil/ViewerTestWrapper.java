@@ -1,4 +1,4 @@
-package com.didekindroid.testutil;
+package com.didekindroid.lib_one.testutil;
 
 import android.os.Bundle;
 
@@ -19,13 +19,12 @@ import static org.hamcrest.CoreMatchers.is;
  */
 public class ViewerTestWrapper {
 
-    public final String AFTER_ClearSubscriptions = "afterClearSubscriptionsMethod";
-    public final String AFTER_SaveState = "afterSaveStateMethod";
-    final AtomicReference<String> flagMethod = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    private final String AFTER_SaveState = "afterSaveStateMethod";
+    private final AtomicReference<String> flagMethod = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     public int clearSubscriptions()
     {
-        flagMethod.set(AFTER_ClearSubscriptions);
+        flagMethod.set("afterClearSubscriptions");
         return 0;
     }
 

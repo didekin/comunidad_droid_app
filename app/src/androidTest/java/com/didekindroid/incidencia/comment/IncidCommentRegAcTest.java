@@ -59,10 +59,11 @@ import static org.junit.Assert.fail;
  * Date: 04/02/16
  * Time: 11:29
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentRegAcTest {
 
-    IncidImportancia incidJuanReal1;
+    private IncidImportancia incidJuanReal1;
     @Rule
     public IntentsTestRule<IncidCommentRegAc> intentsRule = new IntentsTestRule<IncidCommentRegAc>(IncidCommentRegAc.class) {
 

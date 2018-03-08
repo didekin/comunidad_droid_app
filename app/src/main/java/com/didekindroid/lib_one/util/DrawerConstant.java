@@ -12,7 +12,6 @@ public class DrawerConstant { // TODO: a librería.
     public static final int nav_view_rsId = R.id.drawer_nav_view;
     public static final int header_textview_rsId = R.id.drawer_header_textview;
     public static final int drawer_decorator_layout = R.layout.drawer_decorator;
-    public static final int confidencialidad_mn_item = R.id.confidenc_item_mn;
     // TODO: este string ha de estar en debug/strings de la librería, y en cada aplicación. Verificar que se sobreescribe el valor.
     public static final int default_header_no_reg_user = R.string.app_name;
 }

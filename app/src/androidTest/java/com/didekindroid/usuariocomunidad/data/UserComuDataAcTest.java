@@ -65,7 +65,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class UserComuDataAcTest {
 
-    UsuarioComunidad usuarioComunidad;
+    private UsuarioComunidad usuarioComunidad;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {

@@ -109,7 +109,7 @@ public class UiExceptionActionTest {
     }
 
     @Test
-    public void test_show_comunidad_search() throws Exception       // TODO: fail
+    public void test_show_comunidad_search() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(COMUNIDAD_NOT_FOUND));
         run(ue, show_comunidad_search, comuSearchAcLayout);
@@ -217,7 +217,7 @@ public class UiExceptionActionTest {
     }
 
     @Test
-    public void test_show_userData_wrongMail() throws Exception  // TODO: fail
+    public void test_show_userData_wrongMail() throws Exception
     {
         // Preconditions.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);

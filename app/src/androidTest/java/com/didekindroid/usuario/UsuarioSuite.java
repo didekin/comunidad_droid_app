@@ -18,6 +18,7 @@ import org.junit.runners.Suite;
         ViewerPasswordChangeTest.class,
         ViewerRegUserFrTest.class,
         ViewerUserDataTest.class,
+        ViewerUserDrawer_App_Test.class,
 })
 public class UsuarioSuite {
 }

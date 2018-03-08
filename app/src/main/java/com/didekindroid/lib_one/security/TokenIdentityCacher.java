@@ -33,7 +33,7 @@ import static com.didekinlib.http.usuario.UsuarioExceptionMsg.TOKEN_NULL;
  */
 public final class TokenIdentityCacher implements IdentityCacherIf {
 
-    static final String refresh_token_filename = "tk_file";
+    public static final String refresh_token_filename = "tk_file";
 
     private final AtomicReference<SpringOauthToken> tokenCache;
     private final File refreshTokenFile;
