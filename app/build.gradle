@@ -42,6 +42,8 @@ android {
         }
     }
 
+//    testBuildType "debugProGuard"    -- Activar antes de pasar a PRE.
+
     buildTypes {
         release {
             applicationIdSuffix ""
@@ -53,35 +55,33 @@ android {
             resValue "string", "didekin_web_port", '":443"'
         }
         pre {
-            applicationIdSuffix ""
-            shrinkResources true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            initWith release
             resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
             resValue "string", "didekin_web_port", '":443"'
         }
         local {
-            applicationIdSuffix ""
-            debuggable false
-            shrinkResources true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            initWith release
             resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
             resValue "string", "didekin_web_port", '""'
+        }
+        debugProGuard {
+            initWith debug
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-debug-rules.pro'
+            // AWSPRE url's
+            resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+            resValue "string", "didekin_web_port", '":443"'
+            matchingFallbacks = ['debug']
         }
         debug {
             debuggable true
             versionNameSuffix ''
             // Variables for android_studio default run-debug configuration.
-            if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
-            // LOCAL url's
+            if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null") {
+                // LOCAL url's
                 resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
                 resValue "string", "didekin_web_port", '""'
-            // AWSPRE url's
-//                resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
-//                resValue "string", "didekin_web_port", '":443"'
             } else {
                 // Variables defined in buildtest.sh for local and awspre environments.
                 resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
@@ -116,7 +116,7 @@ dependencies {
     implementation rootProject.ext.android_support
     androidTestImplementation rootProject.ext.testRuler
     androidTestImplementation rootProject.ext.espresso
-    androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:3.0.2-alpha1')
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:3.0.2-alpha1')
     androidTestImplementation rootProject.ext.didekinlib_gcm
     androidTestImplementation rootProject.ext.awaitility
     androidTestImplementation rootProject.ext.testRunner
