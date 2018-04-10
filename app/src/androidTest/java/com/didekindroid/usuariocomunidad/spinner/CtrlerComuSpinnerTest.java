@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekindroid.testutil.ActivityTestUtil.checkSpinnerCtrlerLoadItems;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
@@ -30,10 +30,10 @@ public class CtrlerComuSpinnerTest {
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
-    CtrlerComuSpinner controller;
+    private CtrlerComuSpinner controller;
 
     @Before
-    public void setUp() throws IOException, UiException
+    public void setUp()
     {
         controller = new CtrlerComuSpinner();
     }

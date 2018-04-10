@@ -35,20 +35,20 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
-import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtil.checkChildInViewer;
-import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkChildInViewer;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
-import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -107,7 +107,7 @@ public class UserComuDataAcTest {
 //  ===========================================================================
 
     @Test
-    public void test_OnCreate() throws Exception
+    public void test_OnCreate()
     {
         assertThat(activity.acView, notNullValue());
         assertThat(activity.viewer, notNullValue());
@@ -117,13 +117,13 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void test_SetChildInViewer() throws Exception
+    public void test_SetChildInViewer()
     {
         checkChildInViewer(activity);
     }
 
     @Test
-    public void testModifyUserComu_1() throws InterruptedException
+    public void testModifyUserComu_1()
     {
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(replaceText("??=portalNew"));
         // Data wrong: pro rol is not compatible with inq.
@@ -149,7 +149,7 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testDeleteUserComu_1() throws UiException
+    public void testDeleteUserComu_1()
     {
         toClean = false;
 
@@ -165,6 +165,7 @@ public class UserComuDataAcTest {
 
 //    ======================= MENU =========================
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
@@ -183,6 +184,7 @@ public class UserComuDataAcTest {
         checkUp(userComuDataLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
@@ -191,6 +193,7 @@ public class UserComuDataAcTest {
         checkUp(userComuDataLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeCloseByComuMn() throws InterruptedException
     {
@@ -199,6 +202,7 @@ public class UserComuDataAcTest {
         checkUp(userComuDataLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidRegMn() throws InterruptedException
     {

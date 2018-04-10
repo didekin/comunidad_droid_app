@@ -24,7 +24,7 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_deleted;
 import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_modified;
-import static com.didekindroid.lib_one.usuario.UserContextualName.user_just_deleted;
+import static com.didekindroid.lib_one.usuario.router.UserContextName.user_just_deleted;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
@@ -49,7 +49,7 @@ final class ViewerUserComuDataAc extends ParentViewer<View, CtrlerUsuarioComunid
 
     ViewerUserComuDataAc(View view, AppCompatActivity activity)
     {
-        super(view, activity);
+        super(view, activity, null);
     }
 
     static ViewerUserComuDataAc newViewerUserComuDataAc(UserComuDataAc activity)

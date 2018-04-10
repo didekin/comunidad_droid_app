@@ -23,9 +23,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
@@ -85,13 +85,14 @@ public class IncidSeeByComuAc_Open_Mn_Test {
     // ============================================================
 
     @Test
-    public void testOnCreate() throws InterruptedException
+    public void testOnCreate()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(seeUserComuByUserFrRsId);
         }
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeCloseByComuMn_1() throws InterruptedException
     {
@@ -106,6 +107,7 @@ public class IncidSeeByComuAc_Open_Mn_Test {
         checkAppBarMnNotExist(activity, R.id.incid_see_closed_by_comu_ac_mn);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeCloseByComuMn_2() throws InterruptedException
     {

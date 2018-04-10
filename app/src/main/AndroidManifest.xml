@@ -24,20 +24,17 @@
         android:supportsRtl="false"
         android:theme="@style/themeOne"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-
         <!-- **************************************************************** -->
         <!-- ACCESORIO -->
         <!-- **************************************************************** -->
         <activity
-            android:name=".accesorio.ConfidencialidadAc"
-            android:label="@string/confidencialidad_ac_label"
-            android:parentActivityName=".comunidad.ComuSearchAc">
-            <meta-data
+            android:name="com.didekindroid.lib_one.accesorio.ConfidencialidadAc"
+            android:parentActivityName=".comunidad.ComuSearchAc"
+            tools:replace="android:parentActivityName">
+            <meta-data tools:node="replace"
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
-        <!-- Do nothing activity for non-null initialization in routers, mainly.-->
-        <activity android:name=".lib_one.util.MuteActivity"/>
         <!-- **************************************************************** -->
         <!-- USUARIO -->
         <!-- **************************************************************** -->
@@ -70,29 +67,12 @@
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name=".usuario.DeleteMeAc"
-            android:label="@string/delete_me_ac_label"
-            android:parentActivityName=".usuario.UserDataAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.UserDataAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.LoginAc"
-            android:label="@string/login_label"
-            android:launchMode="singleTop"
-            android:parentActivityName=".comunidad.ComuSearchAc">
-            <meta-data
+            android:name="com.didekindroid.lib_one.usuario.LoginAc"
+            android:parentActivityName=".comunidad.ComuSearchAc"
+            tools:replace="android:parentActivityName">
+            <meta-data tools:node="replace"
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".comunidad.ComuSearchAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.PasswordChangeAc"
-            android:label="@string/password_ac_label"
-            android:parentActivityName=".usuario.UserDataAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.UserDataAc"/>
         </activity>
         <activity
             android:name=".usuariocomunidad.register.RegComuAndUserAndUserComuAc"
@@ -156,10 +136,10 @@
                 android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>
         <activity
-            android:name=".usuario.UserDataAc"
-            android:label="@string/user_data_ac_mn"
-            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
-            <meta-data
+            android:name="com.didekindroid.lib_one.usuario.UserDataAc"
+            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
+            tools:replace="android:parentActivityName">
+            <meta-data tools:node="replace"
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>

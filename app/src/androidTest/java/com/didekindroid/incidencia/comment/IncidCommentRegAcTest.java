@@ -42,9 +42,9 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
@@ -111,7 +111,7 @@ public class IncidCommentRegAcTest {
 //    ============================  TESTS  ===================================
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         assertThat(activity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));

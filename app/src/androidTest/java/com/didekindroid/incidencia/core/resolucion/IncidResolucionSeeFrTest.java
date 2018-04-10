@@ -35,23 +35,23 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
@@ -73,10 +73,10 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionSeeFrTest {
 
-    IncidImportancia incidImportancia;
-    Resolucion resolucion;
-    UsuarioComunidad userJuan;
-    Activity activity;
+    private IncidImportancia incidImportancia;
+    private Resolucion resolucion;
+    private UsuarioComunidad userJuan;
+    private Activity activity;
 
     static Resolucion doResolucionAvances(IncidImportancia incidImportancia) throws InterruptedException, UiException
     {
@@ -176,7 +176,7 @@ public class IncidResolucionSeeFrTest {
 
     /*    ============================  Helpers  ===================================*/
 
-    Intent doPreconditionsWithAvances() throws InterruptedException
+    private Intent doPreconditionsWithAvances() throws InterruptedException
     {
         try {
             doUser();
@@ -188,7 +188,7 @@ public class IncidResolucionSeeFrTest {
         return doIntent(resolucion);
     }
 
-    Intent doPreconditions() throws UiException, InterruptedException
+    private Intent doPreconditions() throws UiException, InterruptedException
     {
         doUser();
         // Registramos resolución.

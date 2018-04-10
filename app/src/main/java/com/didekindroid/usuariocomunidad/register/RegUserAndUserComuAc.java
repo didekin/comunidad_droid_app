@@ -3,7 +3,6 @@ package com.didekindroid.usuariocomunidad.register;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -20,6 +19,7 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJEC
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegUserAndUserComuAc.newViewerRegUserAndUserComuAc;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -39,7 +39,6 @@ import static com.didekindroid.usuariocomunidad.register.ViewerRegUserAndUserCom
  * 1. A long comunidadId is passed as an intent key.
  * 2. The activity SeeUserComuByComuAc is started.
  */
-@SuppressWarnings("ConstantConditions")
 public class RegUserAndUserComuAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     View acView;
@@ -61,7 +60,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements InjectorO
         viewer.doViewInViewer(savedInstanceState,
                 new Comunidad.ComunidadBuilder()
                         .copyComunidadNonNullValues(
-                                (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key)
+                                (Comunidad) requireNonNull(requireNonNull(getIntent().getExtras()).getSerializable(COMUNIDAD_LIST_OBJECT.key))
                         )
                         .build());
 
@@ -102,8 +101,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements InjectorO
     {
         Timber.d("onCreateOptionsMenu()");
 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.reg_user_activities_mn, menu);
+        getMenuInflater().inflate(R.menu.login_item_menu, menu);
         acMenu = menu;
         return super.onCreateOptionsMenu(menu);
     }
@@ -112,7 +110,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements InjectorO
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        boolean isRegistered = viewer.getController().isRegisteredUser();
+        boolean isRegistered = requireNonNull(viewer.getController()).isRegisteredUser();
         menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
         return true;
     }

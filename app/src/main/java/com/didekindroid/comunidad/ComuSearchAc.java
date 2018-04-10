@@ -19,9 +19,10 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.usuario.ViewerUserDrawer.newViewerDrawerMain;
 import static com.didekindroid.lib_one.util.DrawerConstant.drawer_decorator_layout;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
-import static com.didekindroid.lib_one.usuario.ViewerUserDrawer.newViewerDrawerMain;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Postconditions:
@@ -33,7 +34,6 @@ import static com.didekindroid.lib_one.usuario.ViewerUserDrawer.newViewerDrawerM
  * -- sufijoNumero (it can be an empty string).
  * -- municipio with codInProvincia and provinciaId.
  */
-@SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentViewerIf,
         ViewerManagerIf, DrawerDecoratedIf {
 
@@ -149,6 +149,7 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Timber.d("onCreateOptionsMenu()");
+        getMenuInflater().inflate(R.menu.login_item_menu, menu);
         getMenuInflater().inflate(R.menu.comu_search_ac_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -157,7 +158,7 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        boolean isRegistered = viewerAc.getController().isRegisteredUser();
+        boolean isRegistered = requireNonNull(viewerAc.getController()).isRegisteredUser();
         menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
         return true;
     }

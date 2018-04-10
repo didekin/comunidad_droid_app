@@ -61,7 +61,6 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
                 router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
-            case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
                 router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;

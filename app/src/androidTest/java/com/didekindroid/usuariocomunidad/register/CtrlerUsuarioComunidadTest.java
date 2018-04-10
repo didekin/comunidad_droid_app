@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.register;
 
+import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
@@ -8,8 +9,8 @@ import com.didekindroid.lib_one.api.ActivityNextMock;
 import com.didekindroid.lib_one.api.ObserverCacheCleaner;
 import com.didekindroid.lib_one.api.SingleObserverMock;
 import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.router.UiExceptionActionIf;
 import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
-import com.didekindroid.lib_one.api.router.RouterActionIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -24,8 +25,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.functions.Predicate;
 
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
-import static com.didekindroid.testutil.ActivityTestUtil.checkIsRegistered;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.checkNoInitCache;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_B;
@@ -39,6 +38,9 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
+import static com.didekindroid.testutil.ActivityTestUtil.checkIsRegistered;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad.isOldestAdmonUser;
 import static com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad.userAndComuRegistered;
@@ -55,7 +57,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_T
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
-import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
@@ -87,7 +88,19 @@ public class CtrlerUsuarioComunidadTest {
             @Override
             public UiExceptionRouterIf getExceptionRouter()
             {
-                return httpMsg -> (RouterActionIf) () -> ActivityNextMock.class;
+                return httpMsg -> new UiExceptionActionIf() {
+                    @Override
+                    public int getResourceIdForToast()
+                    {
+                        return 0;
+                    }
+
+                    @Override
+                    public Class<? extends Activity> getAcToGo()
+                    {
+                        return ActivityNextMock.class;
+                    }
+                };
             }
         };
         viewer.setController(new CtrlerUsuarioComunidad());

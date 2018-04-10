@@ -18,6 +18,7 @@ import timber.log.Timber;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -83,9 +84,17 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements In
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Timber.d("onCreateOptionsMenu()");
-
-        getMenuInflater().inflate(R.menu.reg_user_activities_mn, menu);
+        getMenuInflater().inflate(R.menu.login_item_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Timber.d("onPrepareOptionsMenu()");
+        boolean isRegistered = requireNonNull(viewer.getController()).isRegisteredUser();
+        menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
+        return true;
     }
 
     @Override

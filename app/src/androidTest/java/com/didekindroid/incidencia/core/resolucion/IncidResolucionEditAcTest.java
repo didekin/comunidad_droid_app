@@ -34,9 +34,9 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
@@ -51,11 +51,12 @@ import static org.junit.Assert.assertThat;
  * Date: 17/12/2017
  * Time: 14:29
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionEditAcTest {
 
-    IncidResolucionEditAc activity;
-    IncidImportancia incidImportancia;
+    private IncidResolucionEditAc activity;
+    private IncidImportancia incidImportancia;
 
     @Before
     public void setUp() throws Exception
@@ -86,7 +87,7 @@ public class IncidResolucionEditAcTest {
     /*  ================================ TESTS ===================================*/
 
     @Test
-    public void test_OnCreate_1() throws Exception
+    public void test_OnCreate_1()
     {
         // Preconditions: only incidImportancia in intent.
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
@@ -180,7 +181,7 @@ public class IncidResolucionEditAcTest {
     }
 
     @Test
-    public void test_OnStop() throws Exception
+    public void test_OnStop()
     {
         // Preconditions: only incidImportancia in intent.
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)

@@ -1,23 +1,30 @@
 package com.didekindroid;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.FragmentManager;
 import android.os.StrictMode;
 
+import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.lib_one.HttpInitializer;
-import com.didekindroid.lib_one.security.SecInitializer;
 import com.didekindroid.lib_one.RouterInitializer;
+import com.didekindroid.lib_one.api.router.ContextualRouter;
+import com.didekindroid.lib_one.api.router.MnRouter;
+import com.didekindroid.lib_one.api.router.UiExceptionRouter;
+import com.didekindroid.lib_one.security.SecInitializer;
 
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.router.ContextualRouter.context_router;
-import static com.didekindroid.router.MnRouter.mn_router;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.router.DidekinContextAction.didekinContextAcMap;
+import static com.didekindroid.router.DidekinMnAction.didekinMnItemMap;
+import static com.didekindroid.router.DidekinUiExceptionAction.didekinExcpMsgMap;
 import static io.reactivex.internal.functions.Functions.emptyConsumer;
 import static io.reactivex.plugins.RxJavaPlugins.setErrorHandler;
+
+//import static com.didekindroid.router.ContextualRouter.context_router;
 
 /**
  * User: pedro@didekin
@@ -31,6 +38,7 @@ public final class DidekinApp extends Application {
     private static final int timeOut = R.string.timeOut;
     private static final int bks_pswd = R.string.didekindroid_bks_pswd;
     private static final int bks_name = R.string.didekindroid_bks_name;
+    public static final Class<? extends Activity> defaultAc = ComuSearchAc.class;
 
     @Override
     public void onCreate()
@@ -47,9 +55,10 @@ public final class DidekinApp extends Application {
                         .build()
         );
         routerInitializer.compareAndSet(null, new RouterInitializer.RouterInitializerBuilder()
-                .contexRouter(context_router)
-                .exceptionRouter(uiException_router)
-                .mnRouter(mn_router)
+                .contexRouter(new ContextualRouter(didekinContextAcMap))
+                .exceptionRouter(new UiExceptionRouter(didekinExcpMsgMap))
+                .mnRouter(new MnRouter(didekinMnItemMap))
+                .defaultAc(defaultAc)
                 .build());
         // To avoid closing the application for the default Android uncaught exception handler.
         setErrorHandler(emptyConsumer());

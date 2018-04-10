@@ -9,23 +9,11 @@
     <string name="checkbox_si">Yes</string>
     <string name="checkbox_no">No</string>
     <string name="euros_rot">EUR</string>
-    <string name="decimal_separator">.</string>   <!--TODO: en librería.-->
-    <string name="navigate_up_txt">Navigate-up</string>    <!--TODO: en librería.-->
-    <string name="modif_button_rot">Modify</string>   <!--TODO: en librería.-->
     <string name="borrar_button_rot">Delete</string>
-    <string name="continuar_button_rot">Proceed</string>
     <!--Messages-->
-    <!-- TODO: quitar entrada siguiente. ¿Está en la librería-->
-    <string name="exception_generic_app_message">We can not continue. Search your community or sign in.</string>
     <!-- Google Cloud Messages -->
-    <string name="gcm_message_generic_subtext">Click here to see datails.</string>
-    <!--******************************************************************************-->
-    <!--                                 ACCESORIOS                                   -->
-    <!--******************************************************************************-->
-    <!--Menús-->
-    <string name="confidencialidad_mn">Privacy</string>   <!--TODO: en librería.-->
+    <string name="gcm_message_generic_subtext">Click here to see details.</string>
     <!-- ============================= ACTIVITIES ============================= -->
-    <string name="confidencialidad_ac_label">Data Protection</string>
     <string name="proteccion_datos_txt" tools:ignore="Typos">
         30 September 2017 version \n\n
 
@@ -149,8 +137,6 @@
     <string name="incid_reg_hint">-- Describe the incident (max. 300 characters) --</string>
     <string name="incid_reg_ac_button_rot">Register incident</string>
     <string name="incid_reg_importancia">Importance</string>
-    <string name="incid_reg_ambitoIncidencia">Scope of incidence</string>  <!--TODO: en librería. -->
-    <string name="incid_reg_descripcion">Description</string>  <!--TODO: en librería. -->
     <!-- =============== IncidResolucionRegEditSeeAc =============== -->
     <!-- ======== IncidResolucionEditFr ======== -->
     <string name="incid_resolucion_coste_final_rot">Final cost: EUR:</string>
@@ -190,32 +176,19 @@
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
-    <string name="comunidad_null_in_register">Community</string>  <!--TODO: en librería. -->
     <!-- ============================ MESSAGES ============================== -->
     <string name="comunidad_not_found_message">We can not show you this community. Search it again.</string>
     <string name="comunidad_duplicate">This community had already been registered</string>
     <string name="no_result_search_comunidad">We have not found your community.\nYou can register it here.</string>
     <string name="login_wrong_no_mail">"Search your community and sign up.\nIf it does not exist, register it in 'New community'."</string>
-    <string name="username_wrong_in_login">Email address is not recorded.</string>  <!--TODO: en librería.-->
-    <string name="password_wrong">The password does not match with your username.</string> <!--TODO: en librería.-->
-    <string name="password_new_in_login">We have send you your new password. Sign in, again, with it.</string>  <!--TODO: en librería.-->
-    <string name="password_remote_change">Your password is already modified.</string>
-    <string name="send_password_by_mail_dialog">Do we send to you a new password to the email address above?</string> <!--TODO: en librería.-->
-    <string name="send_password_by_mail_YES">Send it to me</string>  <!--TODO: en librería.-->
-    <string name="user_email_wrong">We were unable to send the new password. Your mail address may be wrong.</string>
-    <string name="user_without_signedUp">"Sign in. Or search your community and sign up.\nIf it does not exist, register it in 'New community'."</string>
-    <string name="user_with_token_null">"Sign in to continue."</string>
+
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Community data</string>
     <string name="comu_search_ac_mn">Search community</string>
-    <string name="delete_me_ac_mn">Delete your data</string>     <!--TODO: en librería.-->
-    <string name="login_ac_mn">Login</string>        <!--TODO: en librería.-->
-    <string name="password_change_ac_mn">Renew password</string>       <!--TODO: en librería.-->
     <string name="reg_nueva_comunidad_ac_mn">New community</string>
     <!--Válido para reg_comu_usercomu-->
     <string name="see_usercomu_by_comu_ac_mn">Neighbours</string>
     <string name="see_usercomu_by_user_ac_mn">Your communities</string>
-    <string name="user_data_ac_mn">Your user</string>    <!--TODO: en librería.-->
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== ComuDataActivity =============== -->
     <string name="comu_data_ac_label">Community data</string>
@@ -227,26 +200,10 @@
     <string name="comu_search_results_ac_label">Search your community: results</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
     <string name="rotulo_comunidad">Your community</string>
-    <!-- ================= DeleteMeAc ===================== -->
-    <string name="delete_me_ac_label">Delete your data</string>
-    <string name="delete_me_ac_unreg_rot_txt">Do you wish to remove your data in Dídekin?</string>     <!--TODO: en librería.-->
-    <string name="delete_me_ac_unreg_button_txt">Yes. Delete my data.</string>   <!--TODO: en librería.-->
-    <!--================= LoginAc =================== -->
-    <string name="login_label">Login</string>
-    <string name="login_ac_rotulo">Login</string>     <!--TODO: en librería.-->
-    <string name="login_ac_button_txt">Validate your data</string>       <!--TODO: en librería.-->
-    <!-- ================== PasswordChangeAc ============== -->
-    <string name="password_ac_label">Your password</string>
-    <string name="password_change_ac_rotulo">New password</string>   <!--TODO: en librería.-->
-    <string name="password_send_txt">If you do not remember your password, we can send you a new one.</string>    <!--TODO: en librería.-->
-    <string name="password_send_button_txt">Sending a new password</string>         <!--TODO: en librería.-->
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Community registration</string>
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
     <string name="reg_comunidad_ac_label">New community</string>
-    <string name="receive_password_by_mail_dialog">
-        We have sent your new password to your email address.\nLog on in the next screen.
-    </string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Your home</string>
     <string name="reg_usercomu_portal_hint">-- Block --</string>
@@ -270,23 +227,12 @@
     <string name="municipio">Town</string>
     <string name="tipo_via">Street type</string>
     <string name="tipo_via_spinner">street type </string>
-    <string name="nombre_via_hint">Street name</string>    <!--TODO: en librería.-->
     <string name="nombre_via">Street name</string>
-    <string name="numero_en_via">Number</string>    <!--TODO: en librería.-->
-    <string name="sufijo_numero_en_via_hint">Suffix number (op.)</string>    <!--TODO: en librería.-->
     <string name="sufijo_numero">Suffix number</string>
-    <!-- ============= RegComuAndUserComuAc =============== -->
     <!-- ================== RegUserComuAc ================= -->
     <string name="regusuario_comu_ac_label">Selected community</string>
     <!-- ........... RegUserFr ......... -->
-    <string name="reg_usuario_rotulo">Your data</string>  <!--TODO: en librería. -->
-    <string name="alias">Name</string>     <!--TODO: en librería. -->
-    <string name="password">Password</string>     <!--TODO: en librería. -->
-    <string name="password_different">(no match)</string>  <!--TODO: en librería. -->
-    <string name="usuario_password_hint">Password: 6–60 letters, numbers, _</string>  <!--TODO: en librería.-->
-    <string name="usuario_password_confirm_hint">Password confirmation</string>   <!--TODO: en librería.-->
     <string name="usuario_alias_hint">Name: 6–30 letters, numbers, _</string>
-    <string name="email_hint">Email</string>  <!--TODO: en librería.-->
     <!-- ================= SeeUserComuByComuAc ============ -->
     <string name="see_usercomu_by_comu_ac_label">Neighbours</string>
     <string name="usercomu_portal_rot">Block:</string>
@@ -302,10 +248,4 @@
     <string name="usercomu_data_ac_delete_button_txt">Unsubscribe yourself from the community</string>
     <string name="comu_list_no_result_txt">We have not found any result for your search.
     </string>
-    <!-- ================= UserDataAc ===================== -->
-    <string name="user_data_ac_cambios_text">Rewrite the data to modify</string>    <!--TODO: en librería.-->
-    <string name="user_data_ac_password_txt">Validate the changes.</string> <!--TODO: en librería.-->
-    <string name="user_data_ac_password_hint">Current password</string>  <!--TODO: en librería.-->
-    <string name="user_data_modif_button_rot">Modify your data</string>  <!--TODO: en librería.-->
-    <string name="no_user_data_to_be_modified">No data to modify</string>    <!--TODO: en librería.-->
 </resources>

@@ -25,21 +25,21 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
-import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -53,7 +53,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeByComuAc_Close_Mn_Test {
 
-    Comunidad comunidadInIntent;
+    private Comunidad comunidadInIntent;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class, true, true) {
@@ -120,6 +120,7 @@ public class IncidSeeByComuAc_Close_Mn_Test {
     //    ..... ACTION BAR ....
     // ============================================================
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeOpenByComuMn_1() throws InterruptedException
     {
@@ -134,6 +135,7 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         checkAppBarMnNotExist(activity, R.id.incid_see_open_by_comu_ac_mn);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeOpenByComuMn_2() throws InterruptedException
     {
@@ -144,6 +146,7 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         }
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidRegMn() throws InterruptedException
     {

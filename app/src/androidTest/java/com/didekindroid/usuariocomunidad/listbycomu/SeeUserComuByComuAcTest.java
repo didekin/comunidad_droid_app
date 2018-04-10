@@ -31,15 +31,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.USER_DATA_AC;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuRol;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPlantaPuerta;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPortalEscalera;
@@ -47,6 +44,9 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByComuFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.containsString;
@@ -64,10 +64,10 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class SeeUserComuByComuAcTest {
 
-    SeeUserComuByComuAc activity;
-    SeeUserComuByComuFr fragment;
-    UsuarioComunidad usuarioComunidad;
-    long comunidadId;
+    private SeeUserComuByComuAc activity;
+    private SeeUserComuByComuFr fragment;
+    private UsuarioComunidad usuarioComunidad;
+    private long comunidadId;
 
     @Rule
     public IntentsTestRule<SeeUserComuByComuAc> mActivityRule = new IntentsTestRule<SeeUserComuByComuAc>(SeeUserComuByComuAc.class) {
@@ -119,7 +119,7 @@ public class SeeUserComuByComuAcTest {
 //    ==========================================  TESTS  ===========================================
 
     @Test
-    public void testOnCreate() throws Exception
+    public void testOnCreate()
     {
         onView(withId(seeUserComuByComuFrRsId)).check(matches(isDisplayed()));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
@@ -139,28 +139,22 @@ public class SeeUserComuByComuAcTest {
     }
 
     @Test
-    public void testOnStop() throws Exception
+    public void testOnStop()
     {
         activity.runOnUiThread(() -> {
             getInstrumentation().callActivityOnStop(activity);
-            assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
+            assertThat(requireNonNull(fragment.viewer.getController()).getSubscriptions().size(), is(0));
         });
     }
 
     //    =====================================  MENU TESTS  =======================================
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testUserComuByUserMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_USER_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
-    }
-
-    @Test
-    public void testUserDataMn() throws InterruptedException
-    {
-        USER_DATA_AC.checkItem(activity);
-        checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test

@@ -23,13 +23,13 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekindroid.router.ContextualAction.editCurrentUserComu;
-import static com.didekindroid.router.ContextualAction.regNewUser;
-import static com.didekindroid.router.ContextualAction.regNewUserComu;
-import static com.didekindroid.router.ContextualAction.regNewComuAndNewUser;
-import static com.didekindroid.router.ContextualAction.regNewComuAndUserComu;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.router.DidekinContextAction.editCurrentUserComu;
+import static com.didekindroid.router.DidekinContextAction.regNewComuAndNewUser;
+import static com.didekindroid.router.DidekinContextAction.regNewComuAndUserComu;
+import static com.didekindroid.router.DidekinContextAction.regNewUser;
+import static com.didekindroid.router.DidekinContextAction.regNewUserComu;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 
 /**
@@ -39,6 +39,11 @@ import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_
  */
 final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> {
 
+    private ViewerComuSearchResultsFr(@NonNull View frView, @NonNull AppCompatActivity activity)
+    {
+        super(frView.findViewById(android.R.id.list), activity, null);
+    }
+
     static ViewerComuSearchResultsFr newViewerComuSearchResultsFr(View frView, AppCompatActivity activity)
     {
         Timber.d("newViewerComuSearchResultsFr()");
@@ -47,17 +52,12 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         return instance;
     }
 
-    private ViewerComuSearchResultsFr(@NonNull View frView, @NonNull AppCompatActivity activity)
-    {
-        super(frView.findViewById(android.R.id.list), activity, null);
-    }
-
     // ==================================  VIEWER  =================================
 
     @Override
     public UiExceptionRouterIf getExceptionRouter()
     {
-        return uiException_router;
+        return routerInitializer.get().getExceptionRouter();
     }
 
     @Override

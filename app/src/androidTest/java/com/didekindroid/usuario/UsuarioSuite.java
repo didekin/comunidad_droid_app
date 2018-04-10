@@ -10,15 +10,12 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DeleteMeAcTest.class,
-        LoginAcTest.class,
-        PasswordChangeAcTest.class,
-        UserDataAcTest.class,
-        ViewerLoginTest.class,
-        ViewerPasswordChangeTest.class,
-        ViewerRegUserFrTest.class,
-        ViewerUserDataTest.class,
-        ViewerUserDrawer_App_Test.class,
+        // .
+        LoginAc_App_Test.class,
+        PasswordChange_App_Test.class,
+        UserData_App_Test.class,
+        ViewerPswdChange_App_Test.class,
+        ViewerUserData_App_Test.class,
 })
 public class UsuarioSuite {
 }

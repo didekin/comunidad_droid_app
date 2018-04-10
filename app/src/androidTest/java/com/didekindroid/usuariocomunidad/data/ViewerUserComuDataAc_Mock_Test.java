@@ -25,13 +25,13 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
-import static com.didekindroid.testutil.ActivityTestUtil.doMockMenu;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.doMockMenu;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -44,10 +44,10 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ViewerUserComuDataAc_Mock_Test {
 
-    final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-    AppCompatActivity activity;
-    ViewerUserComuDataAc viewer;
-    UsuarioComunidad userComuIntent = new UsuarioComunidad.UserComuBuilder(
+    private final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    private AppCompatActivity activity;
+    private ViewerUserComuDataAc viewer;
+    private UsuarioComunidad userComuIntent = new UsuarioComunidad.UserComuBuilder(
             new Comunidad.ComunidadBuilder()
                     .c_id(233L)
                     .copyComunidadNonNullValues(COMU_TRAV_PLAZUELA_11)
@@ -77,7 +77,7 @@ public class ViewerUserComuDataAc_Mock_Test {
     // .............................. VIEWER ..................................
 
     @Test
-    public void test_SetAcMenu() throws Exception
+    public void test_SetAcMenu()
     {
         // Preconditions.
         Menu mockMenu = doMockMenu(activity, R.menu.menu_mock_one);
@@ -105,7 +105,7 @@ public class ViewerUserComuDataAc_Mock_Test {
 
     //  =========================  HELPERS  ===========================
 
-    void execCheckPower(boolean hasComunidadPower)
+    private void execCheckPower(boolean hasComunidadPower)
     {
         // Exec.
         ViewerUserComuDataAc.AcMenuObserver observer = viewer.new AcMenuObserver();

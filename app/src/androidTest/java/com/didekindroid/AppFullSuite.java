@@ -1,13 +1,10 @@
 package com.didekindroid;
 
-import com.didekindroid.accesorio.ConfidencialidadAcTest;
 import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.incidencia.IncidSuite;
-import com.didekindroid.security.TokenIdentityCacher_app_Test;
-import com.didekindroid.usuario.ViewerUserDrawer_App_Test;
-import com.didekindroid.router.ContextualActionTest;
-import com.didekindroid.router.MnRouterActionTest;
-import com.didekindroid.router.UiExceptionActionTest;
+import com.didekindroid.router.DidekinContextActionTest;
+import com.didekindroid.router.DidekinMnActionTest;
+import com.didekindroid.router.DidekinUiExceptionActionTest;
 import com.didekindroid.usuario.UsuarioSuite;
 import com.didekindroid.usuariocomunidad.UserComuSuite;
 
@@ -21,19 +18,14 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // accesorio.
-        ConfidencialidadAcTest.class,
         // comunidad
         ComunidadSuite.class,
         // incidencia
         IncidSuite.class,
         // router.
-        ContextualActionTest.class,
-        MnRouterActionTest.class,
-        UiExceptionActionTest.class,
-        ViewerUserDrawer_App_Test.class,
-        // security.
-        TokenIdentityCacher_app_Test.class,
+        DidekinContextActionTest.class,
+        DidekinMnActionTest.class,
+        DidekinUiExceptionActionTest.class,
         // usuario
         UsuarioSuite.class,
         // usuariocomunidad

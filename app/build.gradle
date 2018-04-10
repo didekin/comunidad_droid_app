@@ -16,8 +16,8 @@ android {
         multiDexEnabled true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
     }
 
     testOptions {
@@ -42,7 +42,7 @@ android {
         }
     }
 
-//    testBuildType "debugProGuard"    -- Activar antes de pasar a PRE.
+//    testBuildType "debugPre"    -- Activar antes de pasar a PRE.
 
     buildTypes {
         release {
@@ -64,14 +64,21 @@ android {
             resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
             resValue "string", "didekin_web_port", '""'
         }
-        debugProGuard {
+        debugPre {
             initWith debug
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-debug-rules.pro'
-            // AWSPRE url's
-            resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
-            resValue "string", "didekin_web_port", '":443"'
+            // Variables for android_studio default run-debug configuration.
+            if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null") {
+                // AWSPRE url's
+                resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+                resValue "string", "didekin_web_port", '":443"'
+            } else {
+                // Variables defined in buildtest.sh environments.
+                resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
+                resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
+            }
             matchingFallbacks = ['debug']
         }
         debug {
@@ -107,6 +114,10 @@ android {
 }
 
 dependencies {
+//    TODO: cambiar a release y dejar esta dependencia para debug.
+    implementation rootProject.ext.didekindroidlib_one_debug
+/*    debugImplementation rootProject.ext.didekindroidlib_one_debug*/
+
     implementation rootProject.ext.firebase_msg
     implementation rootProject.ext.didekinlib_model
     implementation rootProject.ext.didekinlib_http
@@ -114,15 +125,15 @@ dependencies {
     runtimeOnly rootProject.ext.retrofit2
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
-    androidTestImplementation rootProject.ext.testRuler
-    androidTestImplementation rootProject.ext.espresso
-    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:3.0.2-alpha1')
     androidTestImplementation rootProject.ext.didekinlib_gcm
-    androidTestImplementation rootProject.ext.awaitility
+    androidTestImplementation rootProject.ext.testRuler
     androidTestImplementation rootProject.ext.testRunner
+    androidTestImplementation rootProject.ext.espresso
+    androidTestImplementation rootProject.ext.awaitility
     androidTestUtil rootProject.ext.testOrchestrator
     testImplementation rootProject.ext.junit
     androidTestImplementation rootProject.ext.junit
+
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -65,7 +65,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidEditMinFrTest {
 
-    IncidAndResolBundle resolBundle;
+    private IncidAndResolBundle resolBundle;
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
         @Override
@@ -93,9 +93,9 @@ public class ViewerIncidEditMinFrTest {
             return intent;
         }
     };
-    IncidEditAc activity;
-    IncidenciaDataDbHelper dbHelper;
-    ViewerIncidEditMinFr viewer;
+    private IncidEditAc activity;
+    private IncidenciaDataDbHelper dbHelper;
+    private ViewerIncidEditMinFr viewer;
 
 
     //    ============================  TESTS  ===================================

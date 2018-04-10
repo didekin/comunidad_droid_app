@@ -21,13 +21,13 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidContextualName.new_incidencia_just_registered;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -41,7 +41,7 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
 
     public ViewerIncidRegAc(IncidRegAc activity)
     {
-        super(activity.acView, activity);
+        super(activity.acView, activity, null);
     }
 
     static ViewerIncidRegAc newViewerIncidRegAc(IncidRegAc activity)
@@ -71,7 +71,7 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
     @Override
     public UiExceptionRouterIf getExceptionRouter()
     {
-        return uiException_router;
+        return routerInitializer.get().getExceptionRouter();
     }
 
     @Override

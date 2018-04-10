@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>     <!--TODO: in library.-->
-<resources xmlns:tools="http://schemas.android.com/tools"
-           tools:keep="@raw/didekindroid_pro_bks"
-           tools:shrinkMode="safe"
-
-/>

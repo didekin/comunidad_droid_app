@@ -19,8 +19,8 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.lib_one.usuario.UserContextualName.new_user_usercomu_just_registered;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.lib_one.usuario.router.UserContextName.new_user_usercomu_just_registered;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
@@ -34,7 +34,7 @@ final class ViewerRegUserAndUserComuAc extends ParentViewer<View, CtrlerUsuarioC
 
     private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
     {
-        super(view, activity);
+        super(view, activity, null);
     }
 
     static ViewerRegUserAndUserComuAc newViewerRegUserAndUserComuAc(RegUserAndUserComuAc activity)

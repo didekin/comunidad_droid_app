@@ -72,7 +72,6 @@ public class SeeUserComuByUserAc extends AppCompatActivity {
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-            case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
                 routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;

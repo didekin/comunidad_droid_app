@@ -6,12 +6,12 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.ControllerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
 import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
-import com.didekindroid.incidencia.list.IncidSeeByComuAc;
+import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -33,6 +33,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
@@ -40,20 +42,18 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
-import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -130,7 +130,7 @@ public class IncidEditAcMaxTest {
     /*  ======================================= INTEGRATION TESTS  =====================================*/
 
     @Test
-    public void testOnCreate_UP() throws Exception
+    public void testOnCreate_UP()
     {
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
         checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
@@ -142,7 +142,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testModifyIncidencia_1() throws InterruptedException
+    public void testModifyIncidencia_1()
     {
         // Cason NOT OK: descripción de incidencia no válida.
         onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText("descripcion = not valid"));
@@ -151,7 +151,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testModifyIncidencia_2() throws InterruptedException
+    public void testModifyIncidencia_2()
     {
         // Caso OK. Modificamos: importancia, ámbito y descripción. Hacemos UP.
         // Changes.
@@ -167,7 +167,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testModifyIncidenciaPressBack() throws InterruptedException
+    public void testModifyIncidenciaPressBack()
     {
         // Caso OK. No cambiamos nada. Hacemos BACK.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
@@ -178,7 +178,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testDeleteIncidencia() throws InterruptedException
+    public void testDeleteIncidencia()
     {
         // CASO OK: borramos la incidencia.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
@@ -186,7 +186,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testDeleteAndPressBack() throws InterruptedException
+    public void testDeleteAndPressBack()
     {
         //CASO OK: borramos incidencia y BACK.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
@@ -199,7 +199,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testDeleteAndPressUP() throws InterruptedException
+    public void testDeleteAndPressUP()
     {
         //CASO OK: borramos incidencia y UP.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
@@ -213,7 +213,7 @@ public class IncidEditAcMaxTest {
     //  ======================================== UNIT TESTS  =======================================
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         IncidEditMaxFr fragment = (IncidEditMaxFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMaxFr.class.getName());
         assertThat(fragment.viewerInjector, instanceOf(IncidEditAc.class));

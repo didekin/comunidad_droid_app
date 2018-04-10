@@ -33,7 +33,7 @@ final class ViewerRegComuUserComuAc extends ParentViewer<View, CtrlerUsuarioComu
 
     private ViewerRegComuUserComuAc(View view, AppCompatActivity activity)
     {
-        super(view, activity);
+        super(view, activity, null);
     }
 
     static ViewerRegComuUserComuAc newViewerRegComuUserComuAc(RegComuAndUserComuAc activity)

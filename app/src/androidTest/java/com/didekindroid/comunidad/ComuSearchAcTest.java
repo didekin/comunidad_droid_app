@@ -29,11 +29,11 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
-import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.usuario.testutil.UserMenuTestUtil.LOGIN_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
@@ -89,7 +89,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testWithResultsAndUp() throws InterruptedException, UiException, IOException
+    public void testWithResultsAndUp() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
@@ -105,7 +105,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testWithResultsAndBack() throws InterruptedException, UiException, IOException
+    public void testWithResultsAndBack() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
@@ -122,28 +122,32 @@ public class ComuSearchAcTest {
 
     //    ============================ MENU ==============================
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testLogin_Registered() throws InterruptedException, UiException, IOException
+    public void testLogin_Registered() throws UiException, IOException, InterruptedException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
-
+        // Precondition.
+        assertThat(activity.viewerAc.getController().isRegisteredUser(), is(true));
         LOGIN_AC.checkItem(activity);
         cleanOneUser(USER_JUAN);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testLogin_Unregistered() throws InterruptedException
     {
         activity = activityRule.launchActivity(new Intent());
+        // Precondition.
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(false));
-
         LOGIN_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testMenuNuevaComunidad_NotRegistered() throws InterruptedException
+    public void testMenuNuevaComunidad_NotRegistered()  throws InterruptedException
     {
         activity = activityRule.launchActivity(new Intent());
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(false));
@@ -152,8 +156,9 @@ public class ComuSearchAcTest {
         checkUp(comuSearchAcLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testMenuNuevaComunidad_Registered() throws InterruptedException, UiException, IOException
+    public void testMenuNuevaComunidad_Registered() throws UiException, IOException, InterruptedException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());

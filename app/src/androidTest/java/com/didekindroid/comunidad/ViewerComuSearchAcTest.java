@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
@@ -9,7 +8,6 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.security.CtrlerAuthToken;
 import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
-import com.didekindroid.lib_one.testutil.ViewerTestWrapper;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -67,13 +65,13 @@ public class ViewerComuSearchAcTest {
     }
 
     @Test
-    public void test_NewViewerComuSearch() throws Exception
+    public void test_NewViewerComuSearch()
     {
         assertThat(activity.viewerAc.getController(), isA(CtrlerAuthTokenIf.class));
     }
 
     @Test
-    public void test_DoViewInViewer_1() throws Exception
+    public void test_DoViewInViewer_1()
     {
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.searchComunidad_Bton)).check(matches(isDisplayed()));
@@ -81,7 +79,7 @@ public class ViewerComuSearchAcTest {
     }
 
     @Test
-    public void test_DoViewInViewer_2() throws Exception
+    public void test_DoViewInViewer_2()
     {
         activity.viewerAc.setController(new CtrlerAuthToken() {
             @Override
@@ -96,7 +94,7 @@ public class ViewerComuSearchAcTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    public void test_SetChildViewer() throws Exception
+    public void test_SetChildViewer()
     {
         activity.viewerAc.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), activity.viewerAc));
         assertThat(activity.viewerAc.getChildViewer(ViewerRegComuFr.class), notNullValue());
@@ -122,24 +120,4 @@ public class ViewerComuSearchAcTest {
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnSaveInstanceState()
-    {
-        final ViewerTestWrapper wrapper = new ViewerTestWrapper();
-        activity.viewerAc = new ViewerComuSearchAc(null, activity) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                wrapper.saveState();
-            }
-
-            @Override
-            public int clearSubscriptions()
-            {
-                return wrapper.clearSubscriptions();
-            }
-        };
-        wrapper.checkOnSaveInstanceState(activity.viewerAc);
-    }
 }

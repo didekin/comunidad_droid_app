@@ -8,8 +8,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.usuario.LoginAc;
 import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
-import com.didekindroid.usuario.LoginAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -31,20 +31,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
-import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.checkTextsInDialog;
-import static com.didekindroid.lib_one.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkTextsInDialog;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAcTest.execCheckCleanDialog;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -110,13 +111,13 @@ public class ViewerRegUserAndUserComuAcTest {
     }
 
     @Test
-    public void test_NewViewerRegUserAndUserComuAc() throws Exception
+    public void test_NewViewerRegUserAndUserComuAc()
     {
         assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
     }
 
     @Test
-    public void test_DoViewInViewer() throws Exception
+    public void test_DoViewInViewer()
     {
         onView(allOf(
                 withId(R.id.descripcion_comunidad_text),
@@ -126,10 +127,10 @@ public class ViewerRegUserAndUserComuAcTest {
     }
 
     @Test
-    public void test_OnRegisterSuccess() throws Exception
+    public void test_OnRegisterSuccess()
     {
         /* Precondition: the user is registered and the cache is NOT initialized.*/
-        activity.viewer.getController().updateIsRegistered(true);
+        requireNonNull(activity.viewer.getController()).updateIsRegistered(true);
         // Exec.
         activity.viewer.onRegisterSuccess(COMU_PLAZUELA5_PEPE);
         // Check.
@@ -140,13 +141,13 @@ public class ViewerRegUserAndUserComuAcTest {
     public void test_RegUserAndUserComuButtonListener_1() throws Exception
     {
         // Precondition:
-        assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
+        assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));
         // Data, exec and check.
         execCheckCleanDialog(activity.viewer);
     }
 
     @Test
-    public void test_RegUserAndUserComuButtonListener_2() throws Exception
+    public void test_RegUserAndUserComuButtonListener_2()
     {
         typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5");

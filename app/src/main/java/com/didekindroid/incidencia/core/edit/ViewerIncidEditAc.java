@@ -33,7 +33,7 @@ final class ViewerIncidEditAc extends ParentViewer<View, CtrlerIncidenciaCore> {
 
     private ViewerIncidEditAc(IncidEditAc activity)
     {
-        super(activity.acView, activity);
+        super(activity.acView, activity, null);
     }
 
     static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity)

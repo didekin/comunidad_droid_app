@@ -26,9 +26,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
-import static com.didekindroid.testutil.ActivityTestUtil.checkSavedStateWithItemSelected;
+import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkSavedStateWithItemSelected;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -48,9 +48,9 @@ public class ViewerImportanciaSpinnerTest {
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
-    ViewerImportanciaSpinner viewer;
-    ActivityMock activity;
-    Spinner spinner;
+    private ViewerImportanciaSpinner viewer;
+    private ActivityMock activity;
+    private Spinner spinner;
 
     @Before
     public void setUp()
@@ -70,7 +70,7 @@ public class ViewerImportanciaSpinnerTest {
     }
 
     @Test
-    public void tesNewViewerImportanciaSpinner() throws Exception
+    public void tesNewViewerImportanciaSpinner()
     {
         assertThat(newViewerImportanciaSpinner(spinner, new ViewerMock(activity)).getController(), notNullValue());
     }
@@ -93,7 +93,7 @@ public class ViewerImportanciaSpinnerTest {
     }
 
     @Test
-    public void testInitSelectedItemId() throws Exception
+    public void testInitSelectedItemId()
     {
         viewer.bean = new IncidImportanciaBean();
         Bundle bundle = new Bundle();
@@ -101,9 +101,8 @@ public class ViewerImportanciaSpinnerTest {
         viewer.initSelectedItemId(bundle);
         assertThat(viewer.getSelectedItemId(), is(0L));
 
-        bundle = null;
         viewer.bean.setImportancia((short) 1);
-        viewer.initSelectedItemId(bundle);
+        viewer.initSelectedItemId(null);
         assertThat(viewer.getSelectedItemId(), is(1L));
 
         bundle = new Bundle(1);
@@ -113,13 +112,13 @@ public class ViewerImportanciaSpinnerTest {
     }
 
     @Test
-    public void testSaveState() throws Exception
+    public void testSaveState()
     {
         checkSavedStateWithItemSelected(viewer, INCID_IMPORTANCIA_NUMBER);
     }
 
     @Test
-    public void testDoViewInViewer() throws Exception
+    public void testDoViewInViewer()
     {
         short importanciaArrItem = (short) (activity.getResources().getStringArray(R.array.IncidImportanciaArray).length - 2);
 

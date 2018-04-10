@@ -37,10 +37,10 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtil.checkSavedStateWithItemSelected;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkSavedStateWithItemSelected;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
@@ -64,7 +64,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerComuSpinnerTest {
 
-    final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    private final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<ActivityMock>(ActivityMock.class) {
@@ -79,10 +79,10 @@ public class ViewerComuSpinnerTest {
         }
     };
 
-    ViewerComuSpinner viewer;
-    AtomicReference<ViewerComuSpinner> atomicViewer;
-    ActivityMock activity;
-    Spinner spinner;
+    private ViewerComuSpinner viewer;
+    private AtomicReference<ViewerComuSpinner> atomicViewer;
+    private ActivityMock activity;
+    private Spinner spinner;
 
     @Before
     public void setUp() throws Exception
@@ -110,7 +110,7 @@ public class ViewerComuSpinnerTest {
     // ======================================= TESTS ===============================================
 
     @Test
-    public void testNewViewerComuSpinner() throws Exception
+    public void testNewViewerComuSpinner()
     {
         assertThat(CtrlerComuSpinner.class.cast(viewer.getController()), notNullValue());
     }
@@ -131,7 +131,7 @@ public class ViewerComuSpinnerTest {
     }
 
     @Test
-    public void testInitSelectedItemId() throws Exception
+    public void testInitSelectedItemId()
     {
         // Preconditions: savedState != null  && COMUNIDAD_ID.key == 0 && spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() == 0.
         Bundle savedState = new Bundle();
@@ -153,14 +153,14 @@ public class ViewerComuSpinnerTest {
     }
 
     @Test
-    public void testSavedState() throws Exception
+    public void testSavedState()
     {
         checkSavedStateWithItemSelected(viewer, COMUNIDAD_ID);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testGetSelectedPositionFromItemId() throws Exception
+    public void testGetSelectedPositionFromItemId()
     {
         activity.runOnUiThread(() -> {
             viewer.onSuccessLoadItemList(makeListComu());
@@ -171,7 +171,7 @@ public class ViewerComuSpinnerTest {
     }
 
     @Test
-    public void testDoViewInViewer() throws Exception
+    public void testDoViewInViewer()
     {
         final String keyBundle = COMUNIDAD_ID.key;
         Bundle bundleTest = new Bundle(1);
@@ -225,7 +225,7 @@ public class ViewerComuSpinnerTest {
     // ======================================= HELPERS ===============================================
 
     @NonNull
-    List<Comunidad> makeListComu()
+    private List<Comunidad> makeListComu()
     {
         final List<Comunidad> comunidades = new ArrayList<>(3);
         comunidades.add(new Comunidad.ComunidadBuilder().c_id(11L).build());
@@ -247,13 +247,13 @@ public class ViewerComuSpinnerTest {
     class ViewerForTest extends ViewerMock<View, CtrlerSelectListIf> implements
             SpinnerEventListener {
 
-        public ViewerForTest(AppCompatActivity activity)
+        ViewerForTest(AppCompatActivity activity)
         {
             super(activity);
         }
 
         @Override
-        public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventsItemSelect)
+        public void doOnClickItemId(@NonNull SpinnerEventItemSelectIf spinnerEventsItemSelect)
         {
             Timber.d("==================== doOnClickItemId =====================");
             assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));

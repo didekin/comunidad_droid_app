@@ -7,9 +7,9 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewer;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekindroid.lib_one.security.CtrlerAuthToken;
 import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
-import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -17,11 +17,11 @@ import java.io.Serializable;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekindroid.router.ContextualAction.showComuFound;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.router.DidekinContextAction.showComuFound;
 
 /**
  * User: pedro@didekin
@@ -30,6 +30,11 @@ import static com.didekindroid.router.UiExceptionRouter.uiException_router;
  */
 
 class ViewerComuSearchAc extends ParentViewer<View, CtrlerAuthTokenIf> {
+
+    ViewerComuSearchAc(View view, AppCompatActivity activity)
+    {
+        super(view, activity, null);
+    }
 
     static ViewerComuSearchAc newViewerComuSearch(ComuSearchAc activity)
     {
@@ -40,18 +45,13 @@ class ViewerComuSearchAc extends ParentViewer<View, CtrlerAuthTokenIf> {
         return instance;
     }
 
-    ViewerComuSearchAc(View view, AppCompatActivity activity)
-    {
-        super(view, activity);
-    }
-
     /* ==================================== ViewerIf ====================================*/
 
     @Override
     public UiExceptionRouterIf getExceptionRouter()
     {
         Timber.d("getExceptionRouter()");
-        return uiException_router;
+        return routerInitializer.get().getExceptionRouter();
     }
 
     @Override

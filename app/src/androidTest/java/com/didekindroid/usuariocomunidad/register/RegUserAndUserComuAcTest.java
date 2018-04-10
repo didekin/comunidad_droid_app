@@ -31,22 +31,23 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtil.checkChildInViewer;
-import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
-import static com.didekindroid.lib_one.usuario.testutil.UserMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkChildInViewer;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.usuario.testutil.UserMenuTestUtil.LOGIN_AC;
 import static com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAcTest.execCheckRegisterError;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
+import static java.util.Objects.requireNonNull;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -100,7 +101,7 @@ public class RegUserAndUserComuAcTest {
     {
         activity = intentRule.getActivity();
         // Precondition:
-        assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
+        assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));
     }
 
     @After
@@ -115,7 +116,7 @@ public class RegUserAndUserComuAcTest {
     //    =================================== Tests ===================================
 
     @Test
-    public void testRegisterUserAndUserComu_NotOk() throws UiException
+    public void testRegisterUserAndUserComu_NotOk()
     {
         execCheckRegisterError(activity);
     }
@@ -123,7 +124,7 @@ public class RegUserAndUserComuAcTest {
     //    =================================== Life cycle ===================================
 
     @Test
-    public void test_OnCreate() throws Exception
+    public void test_OnCreate()
     {
         assertThat(activity.regUserComuFr, notNullValue());
         assertThat(activity.regUserFr, notNullValue());
@@ -142,7 +143,7 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void test_OnStop() throws Exception
+    public void test_OnStop()
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
@@ -156,7 +157,7 @@ public class RegUserAndUserComuAcTest {
     //    =================================== MENU ===================================
 
     @Test
-    public void testLoginMn_UnRegUser_Up() throws InterruptedException, UiException
+    public void testLoginMn_Up() throws InterruptedException
     {
         doLoginUnRegUser();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -165,7 +166,7 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void testLoginMn_UnRegUser_Back() throws InterruptedException, UiException
+    public void testLoginMn_Back() throws InterruptedException
     {
         doLoginUnRegUser();
         checkBack(onView(withId(loginAcResourceId)), regUser_UserComuAcLayout);
@@ -176,6 +177,8 @@ public class RegUserAndUserComuAcTest {
     @SuppressWarnings("RedundantThrowsDeclaration")
     private void doLoginUnRegUser() throws InterruptedException
     {
+        // Precondition.
+        assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));
         activity.runOnUiThread(() -> activity.onPrepareOptionsMenu(activity.acMenu));
         LOGIN_AC.checkItem(activity);
     }

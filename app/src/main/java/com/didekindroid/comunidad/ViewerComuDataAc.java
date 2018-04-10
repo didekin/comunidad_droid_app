@@ -20,10 +20,10 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.util.ComuContextualName.comu_data_just_modified;
 import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comuData_should_be_modified;
 import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comunidadId_should_be_initialized;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 
 /**
  * User: pedro@didekin
@@ -34,7 +34,7 @@ class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
 
     ViewerComuDataAc(View view, AppCompatActivity activity)
     {
-        super(view, activity);
+        super(view, activity, null);
     }
 
     static ViewerComuDataAc newViewerComuDataAc(@NonNull ComuDataAc activity)
@@ -52,7 +52,7 @@ class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
     public UiExceptionRouterIf getExceptionRouter()
     {
         Timber.d("getExceptionRouter()");
-        return uiException_router;
+        return routerInitializer.get().getExceptionRouter();
     }
 
     @Override

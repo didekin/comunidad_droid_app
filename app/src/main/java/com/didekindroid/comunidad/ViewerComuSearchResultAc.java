@@ -12,7 +12,7 @@ import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 
 /**
  * User: pedro@didekin
@@ -39,7 +39,7 @@ final class ViewerComuSearchResultAc extends Viewer<View, Controller> {
     @Override
     public UiExceptionRouterIf getExceptionRouter()
     {
-        return uiException_router;
+        return routerInitializer.get().getExceptionRouter();
     }
 
     // .............................. HELPERS ..................................

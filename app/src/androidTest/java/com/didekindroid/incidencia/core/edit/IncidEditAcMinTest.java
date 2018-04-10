@@ -40,13 +40,13 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
@@ -131,7 +131,7 @@ public class IncidEditAcMinTest {
 //  ======================================= INTEGRATION TESTS  =====================================
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         checkDataEditMinFr(dbHelper, activity, resolBundle.getIncidImportancia());
         waitAtMost(6, SECONDS)
@@ -155,7 +155,7 @@ public class IncidEditAcMinTest {
     }
 
     @Test
-    public void testModifyIncidImportanciaPressBack() throws InterruptedException
+    public void testModifyIncidImportanciaPressBack()
     {
         // Modify.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
@@ -171,7 +171,7 @@ public class IncidEditAcMinTest {
     //  ======================================== UNIT TESTS  =======================================
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMinFr.class.getName());
         assertThat(fragment.viewerInjector, instanceOf(IncidEditAc.class));

@@ -164,7 +164,7 @@ public class ViewerIncidSeeCloseFrTest {
     //    ============================  TESTS INTEGRATION  ===================================
 
     @Test
-    public void testDoViewInViewer() throws Exception
+    public void testDoViewInViewer()
     {
         // itemSelectedId with default value.
         assertThat(fragment.viewer.getSelectedItemId(), is(0L));
@@ -176,7 +176,7 @@ public class ViewerIncidSeeCloseFrTest {
     }
 
     @Test
-    public void testListItemOnClickListener() throws InterruptedException
+    public void testListItemOnClickListener()
     {
         onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
@@ -188,7 +188,7 @@ public class ViewerIncidSeeCloseFrTest {
     //    ============================ UNIT TESTS  ===================================
 
     @Test
-    public void testNewViewerIncidSeeClose() throws Exception
+    public void testNewViewerIncidSeeClose()
     {
         assertThat(fragment.viewer.getController(), allOf(notNullValue(), instanceOf(CtrlerIncidSeeCloseByComu.class)));
         assertThat(fragment.viewer.comuSpinnerViewer, notNullValue());
@@ -197,7 +197,7 @@ public class ViewerIncidSeeCloseFrTest {
     }
 
     @Test
-    public void test_InitSelectedItemId() throws Exception
+    public void test_InitSelectedItemId()
     {
         Bundle savedState = new Bundle();
         savedState.putLong(INCIDENCIA_ID_LIST_SELECTED.key, 11L);
@@ -211,13 +211,13 @@ public class ViewerIncidSeeCloseFrTest {
     }
 
     @Test
-    public void test_OnSuccessLoadItems() throws Exception
+    public void test_OnSuccessLoadItems()
     {
         checkOnSuccessLoadItems(incidImportancia1, activity, fragment.viewer);
     }
 
     @Test
-    public void test_OnSuccessLoadSelectedItem() throws Exception        // TODO: fail.
+    public void test_OnSuccessLoadSelectedItem()
     {
         // Preconditions.
         Bundle bundle = new Bundle(1);
@@ -230,7 +230,7 @@ public class ViewerIncidSeeCloseFrTest {
     }
 
     @Test
-    public void test_GetSelectedPositionFromItemId() throws Exception
+    public void test_GetSelectedPositionFromItemId()
     {
         final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia1);
 
@@ -247,14 +247,14 @@ public class ViewerIncidSeeCloseFrTest {
     //    ============================ LIFE CYCLE TESTS  ===================================
 
     @Test
-    public void testClearSubscriptions() throws Exception
+    public void testClearSubscriptions()
     {
         checkSubscriptionsOnStop(activity, fragment.viewer.comuSpinnerViewer.getController(),
                 fragment.viewer.getController());
     }
 
     @Test
-    public void testSaveState() throws Exception
+    public void testSaveState()
     {
         Bundle bundle = new Bundle(2);
         fragment.viewer.comuSpinnerViewer.setSelectedItemId(7L);

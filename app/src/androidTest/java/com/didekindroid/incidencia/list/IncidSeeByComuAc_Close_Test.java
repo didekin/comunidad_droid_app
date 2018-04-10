@@ -37,10 +37,10 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
@@ -64,10 +64,11 @@ import static org.junit.Assert.fail;
  * Time: 11:35
  */
 
+@SuppressWarnings("ConstantConditions")
 public class IncidSeeByComuAc_Close_Test {
 
-    IncidImportancia incidImportancia2;
-    IncidImportancia incidImportancia1;
+    private IncidImportancia incidImportancia2;
+    private IncidImportancia incidImportancia1;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
@@ -116,8 +117,8 @@ public class IncidSeeByComuAc_Close_Test {
         }
     };
 
-    IncidSeeByComuAc activity;
-    IncidSeeByComuFr fragment;
+    private IncidSeeByComuAc activity;
+    private IncidSeeByComuFr fragment;
 
     @Before
     public void setUp() throws Exception
@@ -139,7 +140,7 @@ public class IncidSeeByComuAc_Close_Test {
     //  ==================================== INTEGRATION TESTS  ====================================
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -148,7 +149,7 @@ public class IncidSeeByComuAc_Close_Test {
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         /* CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).*/
         assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(incidImportancia1.getIncidencia().getComunidadId()));
@@ -170,7 +171,7 @@ public class IncidSeeByComuAc_Close_Test {
     }
 
     @Test
-    public void test_newIncidenciaButton_1() throws Exception
+    public void test_newIncidenciaButton_1()
     {
         waitAtMost(6, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
@@ -180,7 +181,7 @@ public class IncidSeeByComuAc_Close_Test {
     }
 
     @Test
-    public void test_newIncidenciaButton_2() throws InterruptedException
+    public void test_newIncidenciaButton_2()
     {
         waitAtMost(6, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
         doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
@@ -191,7 +192,7 @@ public class IncidSeeByComuAc_Close_Test {
     }
 
     @Test
-    public void testOnSelectedWithUp() throws UiException
+    public void testOnSelectedWithUp()
     {
         waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
         // Seleccionamos incidencia.
@@ -206,7 +207,7 @@ public class IncidSeeByComuAc_Close_Test {
     }
 
     @Test
-    public void testOnSelectedWithBack() throws UiException
+    public void testOnSelectedWithBack()
     {
         waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
         // Seleccionamos incidencia.

@@ -9,10 +9,10 @@ import android.widget.DatePicker;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.util.UiUtil;
-import com.didekindroid.router.UiExceptionRouter;
+import com.didekindroid.lib_one.api.router.UiExceptionRouter;
 import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyToken;
 import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyTokenIf;
+import com.didekindroid.lib_one.util.UiUtil;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -44,26 +44,26 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
 import static com.didekindroid.lib_one.util.UiUtil.isCalendarPreviousTimeStamp;
-import static com.didekindroid.router.UiExceptionRouter.uiException_router;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
-import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static java.lang.Thread.sleep;
@@ -82,16 +82,17 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionRegAcTest {
 
-    IncidResolucionRegAc activity;
-    IncidImportancia incidImportancia;
-    TaskStackBuilder taskStackBuilder;
-    UiExceptionRouter uiExceptionRouter = (UiExceptionRouter) uiException_router;
+    private IncidResolucionRegAc activity;
+    private IncidImportancia incidImportancia;
+    private TaskStackBuilder taskStackBuilder;
+    private UiExceptionRouter uiExceptionRouter;
 
     @Rule
     public IntentsTestRule<IncidResolucionRegAc> testRule = new IntentsTestRule<IncidResolucionRegAc>(IncidResolucionRegAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
+            uiExceptionRouter = (UiExceptionRouter) routerInitializer.get().getExceptionRouter();
             try {
                 // A user WITH powers 'adm'.
                 incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
@@ -127,7 +128,7 @@ public class IncidResolucionRegAcTest {
 
     //  ===============================  TESTS ================================
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         checkScreenResolucionRegFr();
         if (SDK_INT >= LOLLIPOP) {
@@ -136,7 +137,7 @@ public class IncidResolucionRegAcTest {
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         // DatePicker tests.
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed())).perform(click());
@@ -160,7 +161,7 @@ public class IncidResolucionRegAcTest {
     }
 
     @Test
-    public void test_registerResolucion_1() throws InterruptedException
+    public void test_registerResolucion_1()
     {
         // NOT OK: Descripción errónea y fecha sin fijar.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
@@ -235,14 +236,14 @@ public class IncidResolucionRegAcTest {
     }
 
     @Test
-    public void test_OnStart() throws Exception
+    public void test_OnStart()
     {
         CtrlerNotifyTokenIf controller = CtrlerNotifyToken.class.cast(activity.viewerFirebaseToken.getController());
         waitAtMost(8, SECONDS).until(() -> controller.getTkCacher().isGcmTokenSentServer());
     }
 
     @Test
-    public void test_OnStop() throws Exception
+    public void test_OnStop()
     {
         checkSubscriptionsOnStop(activity, activity.viewerFirebaseToken.getController());
     }
