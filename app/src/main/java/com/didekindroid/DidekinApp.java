@@ -24,7 +24,6 @@ import static com.didekindroid.router.DidekinUiExceptionAction.didekinExcpMsgMap
 import static io.reactivex.internal.functions.Functions.emptyConsumer;
 import static io.reactivex.plugins.RxJavaPlugins.setErrorHandler;
 
-//import static com.didekindroid.router.ContextualRouter.context_router;
 
 /**
  * User: pedro@didekin

@@ -41,8 +41,8 @@ android {
             }
         }
     }
-
-//    testBuildType "debugPre"    -- Activar antes de pasar a PRE.
+//    TODO: descomentar antes de pasar a PRE.
+//  testBuildType "debugPre"    -- Activar antes de pasar a PRE.
 
     buildTypes {
         release {
