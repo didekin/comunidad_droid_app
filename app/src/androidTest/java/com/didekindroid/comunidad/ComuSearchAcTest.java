@@ -29,6 +29,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
@@ -37,7 +38,6 @@ import static com.didekindroid.usuario.testutil.UserMenuTestUtil.LOGIN_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -89,9 +89,9 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testWithResultsAndUp() throws UiException, IOException
+    public void testWithResultsAndUp()
     {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
+        regUserComuWithTkCache(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
@@ -101,13 +101,13 @@ public class ComuSearchAcTest {
 
         checkUp(comuSearchAcLayout);
 
-        cleanOneUser(USER_JUAN);
+        cleanOneUser(USER_JUAN.getUserName());
     }
 
     @Test
-    public void testWithResultsAndBack() throws UiException, IOException
+    public void testWithResultsAndBack()
     {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
+        regUserComuWithTkCache(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
@@ -117,7 +117,7 @@ public class ComuSearchAcTest {
         // Back.
         checkBack(onView(withId(comuSearchResultsListLayout)), comuSearchAcLayout);
 
-        cleanOneUser(USER_JUAN);
+        cleanOneUser(USER_JUAN.getUserName());
     }
 
     //    ============================ MENU ==============================
@@ -126,12 +126,12 @@ public class ComuSearchAcTest {
     @Test
     public void testLogin_Registered() throws UiException, IOException, InterruptedException
     {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
+        regUserComuWithTkCache(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         // Precondition.
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(true));
         LOGIN_AC.checkItem(activity);
-        cleanOneUser(USER_JUAN);
+        cleanOneUser(USER_JUAN.getUserName());
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -160,12 +160,12 @@ public class ComuSearchAcTest {
     @Test
     public void testMenuNuevaComunidad_Registered() throws UiException, IOException, InterruptedException
     {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
+        regUserComuWithTkCache(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         REG_COMU_USERCOMU_AC.checkItem(activity);
 
         checkUp(comuSearchAcLayout);
-        cleanOneUser(USER_JUAN);
+        cleanOneUser(USER_JUAN.getUserName());
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

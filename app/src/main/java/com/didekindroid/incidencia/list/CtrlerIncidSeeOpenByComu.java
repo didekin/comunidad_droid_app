@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.list;
 
 import android.os.Bundle;
 
+import com.didekindroid.incidencia.IncidenciaDao;
 import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.CtrlerSelectListIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -9,14 +10,11 @@ import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.util.List;
 
-import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
-import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -25,25 +23,14 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 16/02/17
  * Time: 17:56
  */
-@SuppressWarnings({"WeakerAccess", "AnonymousInnerClassMayBeStatic", "TypeMayBeWeakened"})
-class CtrlerIncidSeeOpenByComu extends Controller implements
-        CtrlerSelectListIf<IncidenciaUser> {
+class CtrlerIncidSeeOpenByComu extends Controller implements CtrlerSelectListIf<IncidenciaUser> {
 
-    /* .................................... OBSERVABLES .................................*/
+    private final IncidenciaDao incidDaoRemote;
 
-    static Single<List<IncidenciaUser>> incidOpenList(final long comunidadId)
+    CtrlerIncidSeeOpenByComu()
     {
-        return Single.fromCallable(() -> incidenciaDao.seeIncidsOpenByComu(comunidadId));
-    }
-
-    static Single<Bundle> incidImportancia(final Incidencia incidencia)
-    {
-        return fromCallable(() -> incidenciaDao.seeIncidImportancia(incidencia.getIncidenciaId()))
-                .map(incidResol -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, incidResol);
-                    return bundle;
-                });
+        super();
+        incidDaoRemote = incidenciaDao;
     }
 
     // .................................... INSTANCE METHODS .................................
@@ -53,12 +40,13 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
     {
         Timber.d("loadItemsByEntitiyId()");
         assertTrue(entityId[0] > 0L, "Comunidad ID should be greater than 0");
-        return getSubscriptions().add(
-                incidOpenList(entityId[0])
-                        .subscribeOn(io())
-                        .observeOn(mainThread())
-                        .subscribeWith(observer)
-        );
+        return getSubscriptions()
+                .add(
+                        incidDaoRemote.seeIncidsOpenByComu(entityId[0])
+                                .subscribeOn(io())
+                                .observeOn(mainThread())
+                                .subscribeWith(observer)
+                );
     }
 
     @Override
@@ -66,11 +54,12 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
     {
         Timber.d("selectItem()");
         final Incidencia incidencia = item.getIncidencia();
-        return getSubscriptions().add(
-                incidImportancia(incidencia)
-                        .subscribeOn(io())
-                        .observeOn(mainThread())
-                        .subscribeWith(observer)
-        );
+        return getSubscriptions()
+                .add(
+                        incidDaoRemote.seeIncidImportancia(incidencia.getIncidenciaId())
+                                .subscribeOn(io())
+                                .observeOn(mainThread())
+                                .subscribeWith(observer)
+                );
     }
 }

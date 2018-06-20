@@ -19,7 +19,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static android.R.id.list;
-import static com.didekindroid.incidencia.IncidObservable.incidImportanciaByUsers;
+//import static com.didekindroid.incidencia.IncidObservable.incidImportanciaByUsers;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
@@ -54,10 +54,7 @@ public final class ViewerIncidSeeUserComuImportancia extends Viewer<ListView, Ct
         // Precondition.
         long incidenciaId = Incidencia.class.cast(incidencia).getIncidenciaId();
         assertTrue(incidenciaId > 0L, intent_extra_should_be_initialized);
-        controller.loadItemsByEntitiyId(
-                incidImportanciaByUsers(incidenciaId),
-                new ObserverSingleList<>(this),
-                incidenciaId);
+        controller.loadItemsByEntitiyId(new ObserverSingleList<>(this), incidenciaId);
     }
 
     @Override

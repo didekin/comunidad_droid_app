@@ -14,7 +14,6 @@ import org.junit.runners.Suite;
         ComuDataAcTest.class,
         ComunidadBeanTest.class,
         ComunidadDaoTest.class,
-        ComunidadObservableTest.class,
         ComuSearchAcTest.class,
         ComuSearchResultsAcTest.class,
         CtrlerComunidadTest.class,

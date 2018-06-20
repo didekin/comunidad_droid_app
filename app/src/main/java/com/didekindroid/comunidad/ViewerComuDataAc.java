@@ -87,11 +87,12 @@ class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
-                Comunidad comunidadOut = new Comunidad.ComunidadBuilder()
-                        .c_id(comunidadIn.getC_Id())
-                        .copyComunidadNonNullValues(comunidadFromViewer)
-                        .build();
-                controller.modifyComunidadData(new ComuDataAcObserver(), comunidadOut);
+                controller.modifyComunidadData(new ComuDataAcObserver(),
+                        new Comunidad.ComunidadBuilder()
+                                .c_id(comunidadIn.getC_Id())
+                                .copyComunidadNonNullValues(comunidadFromViewer)
+                                .build()
+                );
             }
         }
     }

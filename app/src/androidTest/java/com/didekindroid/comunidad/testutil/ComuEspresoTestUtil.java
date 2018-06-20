@@ -142,26 +142,6 @@ public final class ComuEspresoTestUtil {
         checkMunicipioSpinner(comunidad);
     }
 
-    public static void checkNumeroEnVia(Comunidad comunidad)
-    {
-        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
-                allOf(
-                        withId(R.id.comunidad_numero_editT),
-                        withText(containsString(String.valueOf(comunidad.getNumero())))
-                )
-        ));
-    }
-
-    public static void checkNumeroSufijo(Comunidad comunidad)
-    {
-        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
-                allOf(
-                        withId(R.id.comunidad_sufijo_numero_editT),
-                        withText(containsString(String.valueOf(comunidad.getSufijoNumero())))
-                )
-        ));
-    }
-
     public static void checkComuData(Comunidad comunidad)
     {
         onView(allOf(
@@ -177,6 +157,26 @@ public final class ComuEspresoTestUtil {
                                 withText(comunidad.getMunicipio().getProvincia().getNombre())
                         ))
                 ))
+        ));
+    }
+
+    private static void checkNumeroEnVia(Comunidad comunidad)
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
+                allOf(
+                        withId(R.id.comunidad_numero_editT),
+                        withText(containsString(String.valueOf(comunidad.getNumero())))
+                )
+        ));
+    }
+
+    private static void checkNumeroSufijo(Comunidad comunidad)
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
+                allOf(
+                        withId(R.id.comunidad_sufijo_numero_editT),
+                        withText(containsString(String.valueOf(comunidad.getSufijoNumero())))
+                )
         ));
     }
 
@@ -248,16 +248,6 @@ public final class ComuEspresoTestUtil {
                 )));
     }
 
-    public static void checkTipoViaSpinner(Comunidad comunidad)
-    {
-        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
-                allOf(
-                        withId(R.id.app_spinner_1_dropdown_item),
-                        withParent(withId(R.id.tipo_via_spinner)),
-                        withText(comunidad.getTipoVia()))
-        ));
-    }
-
     public static void doComunAutonomaSpinner(ComunidadAutonoma comunidadAutonoma)
     {
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
@@ -271,16 +261,6 @@ public final class ComuEspresoTestUtil {
                 withParent(withId(R.id.autonoma_comunidad_spinner)),
                 withText(is(comunidadAutonoma.getNombre()))
         )));
-    }
-
-    public static void checkComuAutonomaSpinner(String nombreComAutonoma)
-    {
-        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
-                allOf(
-                        withId(R.id.app_spinner_1_dropdown_item),
-                        withParent(withId(R.id.autonoma_comunidad_spinner)),
-                        withText(nombreComAutonoma))
-        ));
     }
 
     public static void doProvinciaSpinner(Provincia provincia)
@@ -342,6 +322,26 @@ public final class ComuEspresoTestUtil {
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.municipio_spinner)),
                         withText(municipioNombre))
+        ));
+    }
+
+    private static void checkTipoViaSpinner(Comunidad comunidad)
+    {
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.tipo_via_spinner)),
+                        withText(comunidad.getTipoVia()))
+        ));
+    }
+
+    private static void checkComuAutonomaSpinner(String nombreComAutonoma)
+    {
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.autonoma_comunidad_spinner)),
+                        withText(nombreComAutonoma))
         ));
     }
 }

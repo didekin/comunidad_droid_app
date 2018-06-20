@@ -9,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.ControllerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
@@ -23,7 +22,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.List;
 
 import static android.app.TaskStackBuilder.create;
@@ -35,13 +33,13 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
@@ -59,7 +57,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -75,12 +72,8 @@ public class IncidEditAcMaxTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                // Perfil adm, iniciador de la incidencia.  NO resolución.
-                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
-            } catch (IOException | UiException e) {
-                fail();
-            }
+            // Perfil adm, iniciador de la incidencia.  NO resolución.
+            resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent0 = new Intent(getTargetContext(), UserComuDataAc.class)

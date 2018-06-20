@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -15,8 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -28,8 +25,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
@@ -38,10 +33,11 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionRegFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
-import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
@@ -85,8 +81,9 @@ public class IncidEditAc_Mn1_Test {
 
 //    ============================  TESTS  ===================================
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidCommentReg_Mn() throws Exception
+    public void testIncidCommentReg_Mn() throws InterruptedException
     {
         activity = doIntentStartActivity(initDbData(COMU_ESCORIAL_PEPE, true));
         dbHelper = new IncidenciaDataDbHelper(activity);
@@ -98,8 +95,9 @@ public class IncidEditAc_Mn1_Test {
         checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidCommentsSee_Mn() throws Exception
+    public void testIncidCommentsSee_Mn()  throws InterruptedException
     {
         activity = doIntentStartActivity(initDbData(COMU_ESCORIAL_PEPE, true));
         dbHelper = new IncidenciaDataDbHelper(activity);
@@ -112,7 +110,7 @@ public class IncidEditAc_Mn1_Test {
     }
 
     @Test
-    public void testIncidResolucionReg_Mn_1() throws Exception
+    public void testIncidResolucionReg_Mn_1()
     {
         activity = doIntentStartActivity(initDbData(COMU_ESCORIAL_PEPE, true));
         dbHelper = new IncidenciaDataDbHelper(activity);
@@ -130,8 +128,9 @@ public class IncidEditAc_Mn1_Test {
         checkScreenEditMaxPowerFrNotErase(activity.resolBundle);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidResolucionReg_Mn_2() throws Exception
+    public void testIncidResolucionReg_Mn_2()  throws InterruptedException
     {
         activity = doIntentStartActivity(initDbData(COMU_ESCORIAL_PEPE, false));
         dbHelper = new IncidenciaDataDbHelper(activity);
@@ -150,7 +149,7 @@ public class IncidEditAc_Mn1_Test {
     }
 
     @Test
-    public void testIncidResolucionReg_Mn_3() throws Exception
+    public void testIncidResolucionReg_Mn_3()
     {
         activity = doIntentStartActivity(initDbData(COMU_TRAV_PLAZUELA_PEPE, false));
         dbHelper = new IncidenciaDataDbHelper(activity);
@@ -165,7 +164,7 @@ public class IncidEditAc_Mn1_Test {
     }
 
     @Test
-    public void testIncidResolucionReg_Mn_4() throws Exception
+    public void testIncidResolucionReg_Mn_4()
     {
         // Damos de alta resolución con usuario ADM.
         final IncidImportancia incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
@@ -173,8 +172,7 @@ public class IncidEditAc_Mn1_Test {
         cleanOptions(CLEAN_TK_HANDLER);
         // Damos de alta usuario no ADM en misma comunidad.
         UsuarioComunidad juanEscorial = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidImportancia.getIncidencia().getComunidadId());
-        userComuMockDao.regUserAndUserComu(juanEscorial).execute().body();
-        updateSecurityData(juanEscorial.getUsuario().getUserName(), juanEscorial.getUsuario().getPassword());
+        userComuMockDao.regUserAndUserComu(juanEscorial).blockingGet();  // TODO: revisar que se actualiza authHeader ok.
         // Construimos resolBundle con nuevo usuario para la misma incidencia.
         IncidImportancia noAdmIncidImportancia = new IncidImportancia.IncidImportanciaBuilder(incidImportancia.getIncidencia())
                 .usuarioComunidad(juanEscorial)
@@ -203,7 +201,7 @@ public class IncidEditAc_Mn1_Test {
     //    ============================  HELPER  ===================================
 
     @NonNull
-    private IncidAndResolBundle initDbData(UsuarioComunidad usuarioComunidad, boolean hasResolucion) throws IOException, UiException
+    private IncidAndResolBundle initDbData(UsuarioComunidad usuarioComunidad, boolean hasResolucion)
     {
         /* Perfil adm, inicidador de la incidencia.*/
         final IncidImportancia incidImportancia = insertGetIncidImportancia(usuarioComunidad);

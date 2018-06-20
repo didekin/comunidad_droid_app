@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.core.Incidencia_GCM_test_abs;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -16,14 +15,12 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
-import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_CLOSE;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_CLOSE;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
 import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
@@ -43,7 +40,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_test_abs {
     private Resolucion resolucion;
 
     @Test  @TargetApi(Build.VERSION_CODES.M)
-    public void testReceiveNotification() throws Exception
+    public void testReceiveNotification()
     {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
@@ -72,19 +69,14 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_test_abs {
             @Override
             protected Intent getActivityIntent()
             {
-                IncidImportancia incidImportancia = null;
-                try {
-                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
-                    resolucion = insertGetResolucionNoAdvances(incidImportancia);
-                    // We'll test that the gcmToken has not been updated in server.
-                    assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
-                } catch ( IOException | UiException e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-                intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-                return intent;
+                IncidImportancia incidImportancia;
+                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
+                resolucion = insertGetResolucionNoAdvances(incidImportancia);
+                // We'll test that the gcmToken has not been updated in server.
+                assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
+                return new Intent()
+                        .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia)
+                        .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
             }
         };
     }

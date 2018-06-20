@@ -111,7 +111,7 @@ public class DidekinMnActionTest {
     public void test_reg_nueva_comunidad_mn_2()
     {
         secInitializer.get().getTkCacher().updateIsRegistered(true);
-        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredUser);
+        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredCache);
         reg_nueva_comunidad_mn.initActivity(activity);
         intended(hasComponent(RegComuAndUserComuAc.class.getName()));
     }
@@ -120,7 +120,7 @@ public class DidekinMnActionTest {
     public void test_see_usercomu_by_user_mn()
     {
         secInitializer.get().getTkCacher().updateIsRegistered(true);
-        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredUser);
+        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredCache);
         see_usercomu_by_user_mn.initActivity(activity);
         intended(hasComponent(SeeUserComuByUserAc.class.getName()));
     }

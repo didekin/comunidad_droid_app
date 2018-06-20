@@ -2,245 +2,255 @@ package com.didekindroid.usuariocomunidad.repository;
 
 import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.security.IdentityCacherIf;
+import com.didekindroid.lib_one.security.AuthTkCacherIf;
 import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.http.usuariocomunidad.UsuarioComunidadEndPoints;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import java.io.EOFException;
-import java.io.IOException;
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.api.exception.UiExceptionIf.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.util.Device.getDeviceLanguage;
-import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
+import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
+import static io.reactivex.Completable.complete;
+import static io.reactivex.Completable.error;
+import static io.reactivex.Completable.fromAction;
+import static io.reactivex.Single.just;
 
 /**
  * User: pedro@didekin
  * Date: 21/11/16
  * Time: 19:15
  */
-
-@SuppressWarnings("WeakerAccess")
 public final class UserComuDao implements UsuarioComunidadEndPoints {
 
     public static final UserComuDao userComuDao = new UserComuDao(secInitializer.get(), httpInitializer.get());
     private final UsuarioComunidadEndPoints endPoint;
-    private final IdentityCacherIf tkCacher;
+    private final AuthTkCacherIf tkCacher;
+    private final Function<Boolean, CompletableSource> userDataErrorFunc;
 
     public UserComuDao(SecInitializerIf secInitializerIn, HttpInitializerIf httpInitializerIn)
     {
         endPoint = httpInitializerIn.getHttpHandler().getService(UsuarioComunidadEndPoints.class);
         tkCacher = secInitializerIn.getTkCacher();
+        userDataErrorFunc = isUpdated ->
+                isUpdated ?
+                        fromAction(() -> tkCacher.updateIsRegistered(true)) :
+                        error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
+    }
+
+    public AuthTkCacherIf getTkCacher()
+    {
+        return tkCacher;
     }
 
     //  ================================== UserComuEndPoints implementation ============================
 
     @Override
-    public Call<Integer> deleteUserComu(String accessToken, long comunidadId)
+    public Single<Response<Integer>> deleteUserComu(String authHeader, long comunidadId)
     {
-        return endPoint.deleteUserComu(accessToken, comunidadId);
+        return endPoint.deleteUserComu(authHeader, comunidadId);
     }
 
     @Override
-    public Call<List<Comunidad>> getComusByUser(String accessToken)
+    public Single<Response<List<Comunidad>>> getComusByUser(String authHeader)
     {
-        return endPoint.getComusByUser(accessToken);
+        return endPoint.getComusByUser(authHeader);
     }
 
     @Override
-    public Call<UsuarioComunidad> getUserComuByUserAndComu(String accessToken, long comunidadId)
+    public Maybe<Response<UsuarioComunidad>> getUserComuByUserAndComu(String authHeader, long comunidadId)
     {
-        return endPoint.getUserComuByUserAndComu(accessToken, comunidadId);
+        return endPoint.getUserComuByUserAndComu(authHeader, comunidadId);
     }
 
     @Override
-    public Call<Boolean> isOldestOrAdmonUserComu(String accessToken, long comunidadId)
+    public Single<Response<Boolean>> isOldestOrAdmonUserComu(String authHeader, long comunidadId)
     {
-        return endPoint.isOldestOrAdmonUserComu(accessToken, comunidadId);
+        return endPoint.isOldestOrAdmonUserComu(authHeader, comunidadId);
     }
 
     @Override
-    public Call<Integer> modifyComuData(String currentAccessToken, Comunidad comunidad)
+    public Single<Response<Integer>> modifyComuData(String currentauthHeader, Comunidad comunidad)
     {
-        return endPoint.modifyComuData(currentAccessToken, comunidad);
+        return endPoint.modifyComuData(currentauthHeader, comunidad);
     }
 
     @Override
-    public Call<Integer> modifyUserComu(String accessToken, UsuarioComunidad userComu)
+    public Single<Response<Integer>> modifyUserComu(String authHeader, UsuarioComunidad userComu)
     {
-        return endPoint.modifyUserComu(accessToken, userComu);
+        return endPoint.modifyUserComu(authHeader, userComu);
     }
 
     @Override
-    public Call<Boolean> regComuAndUserAndUserComu(String localeToStr, UsuarioComunidad usuarioCom)
+    public Single<Response<Boolean>> regComuAndUserAndUserComu(String localeToStr, UsuarioComunidad usuarioCom)
     {
         return endPoint.regComuAndUserAndUserComu(localeToStr, usuarioCom);
     }
 
     @Override
-    public Call<Boolean> regComuAndUserComu(String accessToken, UsuarioComunidad usuarioCom)
+    public Single<Response<Boolean>> regComuAndUserComu(String authHeader, UsuarioComunidad usuarioCom)
     {
-        return endPoint.regComuAndUserComu(accessToken, usuarioCom);
+        return endPoint.regComuAndUserComu(authHeader, usuarioCom);
     }
 
     @Override
-    public Call<Boolean> regUserAndUserComu(String localeToStr, UsuarioComunidad userCom)
+    public Single<Response<Boolean>> regUserAndUserComu(String localeToStr, UsuarioComunidad userCom)
     {
         return endPoint.regUserAndUserComu(localeToStr, userCom);
     }
 
     @Override
-    public Call<Integer> regUserComu(String accessToken, UsuarioComunidad usuarioComunidad)
+    public Single<Response<Integer>> regUserComu(String authHeader, UsuarioComunidad usuarioComunidad)
     {
-        return endPoint.regUserComu(accessToken, usuarioComunidad);
+        return endPoint.regUserComu(authHeader, usuarioComunidad);
     }
 
     @Override
-    public Call<List<UsuarioComunidad>> seeUserComusByComu(String accessToken, long comunidadId)
+    public Single<Response<List<UsuarioComunidad>>> seeUserComusByComu(String authHeader, long comunidadId)
     {
-        return endPoint.seeUserComusByComu(accessToken, comunidadId);
+        return endPoint.seeUserComusByComu(authHeader, comunidadId);
     }
 
     @Override
-    public Call<List<UsuarioComunidad>> seeUserComusByUser(String accessToken)
+    public Single<Response<List<UsuarioComunidad>>> seeUserComusByUser(String authHeader)
     {
-        return endPoint.seeUserComusByUser(accessToken);
+        return endPoint.seeUserComusByUser(authHeader);
     }
 
 //  =============================================================================
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
-    public int deleteUserComu(long comunidadId) throws UiException
+    public Single<Integer> deleteUserComu(long comunidadId)
     {
         Timber.d("deleteUserComu()");
-        try {
-            Response<Integer> response = deleteUserComu(tkCacher.checkBearerTokenInCache(), comunidadId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(comunidadId)
+                .flatMap(comunidadIdIn -> deleteUserComu(tkCacher.doAuthHeaderStr(), comunidadIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnSuccess(rowsUpdated -> {
+                    if (rowsUpdated == IS_USER_DELETED) {
+                        tkCacher.updateIsRegistered(false);
+                    }
+                })
+                .doOnError(uiExceptionConsumer);
     }
 
-    public List<Comunidad> getComusByUser() throws UiException
+    public Single<List<Comunidad>> getComusByUser()
     {
         Timber.d("getComusByUser()");
-        try {
-            Response<List<Comunidad>> response = getComusByUser(tkCacher.checkBearerTokenInCache()).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(true)
+                .flatMap(booleanIn -> getComusByUser(tkCacher.doAuthHeaderStr()).map(httpInitializer.get()::getResponseBody))
+                .doOnError(uiExceptionConsumer);
     }
 
-    public UsuarioComunidad getUserComuByUserAndComu(long comunidadId) throws UiException
+    public Maybe<UsuarioComunidad> getUserComuByUserAndComu(long comunidadId)
     {
         Timber.d("getUserComuByUserAndComu()");
-        try {
-            Response<UsuarioComunidad> response = getUserComuByUserAndComu(tkCacher.checkBearerTokenInCache(), comunidadId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (EOFException eo) {
-            return null;
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return Maybe.just(comunidadId)
+                .flatMap(comunidadIdIn ->
+                        getUserComuByUserAndComu(tkCacher.doAuthHeaderStr(), comunidadIdIn).map(httpInitializer.get()::getResponseBody))
+                .doOnError(uiExceptionConsumer);
     }
 
-    public boolean isOldestOrAdmonUserComu(long comunidadId) throws UiException
+    public Single<Boolean> isOldestOrAdmonUserComu(long comunidadId)
     {
         Timber.d("isOldestOrAdmonUserComu()");
-        try {
-            Response<Boolean> response = isOldestOrAdmonUserComu(tkCacher.checkBearerTokenInCache(), comunidadId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(comunidadId)
+                .flatMap(comunidadIdIn ->
+                        isOldestOrAdmonUserComu(tkCacher.doAuthHeaderStr(), comunidadIdIn).map(httpInitializer.get()::getResponseBody))
+                .doOnError(uiExceptionConsumer);
     }
 
-    public int modifyComuData(Comunidad comunidad) throws UiException
+    public Single<Integer> modifyComuData(Comunidad comunidad)
     {
         Timber.d("modifyComuData()");
-        try {
-            Response<Integer> response = modifyComuData(tkCacher.checkBearerTokenInCache(), comunidad).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(comunidad)
+                .flatMap(comunidadIn ->
+                        modifyComuData(tkCacher.doAuthHeaderStr(), comunidadIn).map(httpInitializer.get()::getResponseBody))
+                .doOnError(uiExceptionConsumer);
     }
 
-    public int modifyUserComu(UsuarioComunidad userComu) throws UiException
+    public Single<Integer> modifyUserComu(UsuarioComunidad userComu)
     {
         Timber.d("modifyUserComu()");
-        try {
-            Response<Integer> response = modifyUserComu(tkCacher.checkBearerTokenInCache(), userComu).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(userComu)
+                .flatMap(userComuIn ->
+                        modifyUserComu(tkCacher.doAuthHeaderStr(), userComuIn).map(httpInitializer.get()::getResponseBody))
+                .doOnError(uiExceptionConsumer);
     }
 
-    public Call<Boolean> regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
+    public Completable regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
     {
         Timber.d(("regComuAndUserAndUserComu()"));
-        return endPoint.regComuAndUserAndUserComu(getDeviceLanguage(), usuarioCom);
+        return just(usuarioCom)
+                .flatMap(usuarioComIn -> regComuAndUserAndUserComu(getDeviceLanguage(), usuarioComIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .flatMapCompletable(userDataErrorFunc)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad) throws UiException
+    public Completable regComuAndUserComu(UsuarioComunidad usuarioComunidad)
     {
         Timber.d("regComuAndUserComu()");
-        try {
-            Response<Boolean> response = regComuAndUserComu(tkCacher.checkBearerTokenInCache(), usuarioComunidad).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
-
+        return just(usuarioComunidad)
+                .flatMap(usuarioComunidadIn -> regComuAndUserComu(tkCacher.doAuthHeaderStr(), usuarioComunidadIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .flatMapCompletable(
+                        isUpdated -> isUpdated ? complete() : error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)))
+                )
+                .doOnError(uiExceptionConsumer);
     }
 
-    public Call<Boolean> regUserAndUserComu(UsuarioComunidad userCom)
+    public Completable regUserAndUserComu(UsuarioComunidad userCom)
     {
         Timber.d("regUserAndUserComu()");
-        return endPoint.regUserAndUserComu(getDeviceLanguage(), userCom);
+        return just(userCom)
+                .flatMap(userComIn -> regUserAndUserComu(getDeviceLanguage(), userComIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .flatMapCompletable(userDataErrorFunc)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public int regUserComu(UsuarioComunidad usuarioComunidad) throws UiException
+    public Completable regUserComu(UsuarioComunidad usuarioComunidad)
     {
         Timber.d("regUserComu()");
-        try {
-            Response<Integer> response = regUserComu(tkCacher.checkBearerTokenInCache(), usuarioComunidad).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(usuarioComunidad)
+                .flatMap(usuarioComunidadIn -> regUserComu(tkCacher.doAuthHeaderStr(), usuarioComunidadIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .flatMapCompletable(
+                        rowInserted -> (rowInserted > 0) ? complete() : error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)))
+                )
+                .doOnError(uiExceptionConsumer);
     }
 
-    public List<UsuarioComunidad> seeUserComusByComu(long idComunidad) throws UiException
+    public Single<List<UsuarioComunidad>> seeUserComusByComu(long idComunidad)
     {
         Timber.d("seeUserComusByComu()");
-        try {
-            Response<List<UsuarioComunidad>> response = seeUserComusByComu(tkCacher.checkBearerTokenInCache(), idComunidad).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(idComunidad)
+                .flatMap(idComunidadIn ->
+                        seeUserComusByComu(tkCacher.doAuthHeaderStr(), idComunidad).map(httpInitializer.get()::getResponseBody))
+                .doOnError(uiExceptionConsumer);
     }
 
-    public List<UsuarioComunidad> seeUserComusByUser() throws UiException
+    public Single<List<UsuarioComunidad>> seeUserComusByUser()
     {
         Timber.d("seeUserComusByUser()");
-        try {
-            Response<List<UsuarioComunidad>> response = seeUserComusByUser(tkCacher.checkBearerTokenInCache()).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(true)
+                .flatMap(aBoolean -> seeUserComusByUser(tkCacher.doAuthHeaderStr()).map(httpInitializer.get()::getResponseBody))
+                .doOnError(uiExceptionConsumer);
     }
 }

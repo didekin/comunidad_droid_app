@@ -10,7 +10,6 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
-import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -22,7 +21,6 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidContextualName.new_incidencia_just_registered;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
@@ -37,8 +35,6 @@ import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 @SuppressWarnings("WeakerAccess")
 public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
 
-    ViewerNotifyTokenIf viewerFirebaseToken;
-
     public ViewerIncidRegAc(IncidRegAc activity)
     {
         super(activity.acView, activity, null);
@@ -48,7 +44,6 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
     {
         Timber.d("newViewerIncidRegAc()");
         ViewerIncidRegAc instance = new ViewerIncidRegAc(activity);
-        instance.viewerFirebaseToken = newViewerFirebaseToken(activity);
         instance.setController(new CtrlerIncidenciaCore());
         // We initialize viewerIncidRegFr in its associated fragment.
         return instance;
@@ -63,7 +58,6 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
         // Preconditions.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
 
-        viewerFirebaseToken.checkGcmTokenAsync();
         Button registerButton = activity.findViewById(R.id.incid_reg_ac_button);
         registerButton.setOnClickListener(new RegButtonOnClickListener());
     }
@@ -78,15 +72,7 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
     public int clearSubscriptions()
     {
         Timber.d("clearSubscriptions()");
-        return controller.clearSubscriptions()
-                + viewerFirebaseToken.clearSubscriptions();
-    }
-
-    @Override
-    public void saveState(Bundle savedState)
-    {
-        Timber.d("saveState()");
-        viewerFirebaseToken.saveState(savedState);
+        return controller.clearSubscriptions();
     }
 
     public void onSuccessRegisterIncidImportancia(Comunidad comunidad)
@@ -100,13 +86,13 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)
     {
-        Timber.d("registerIncidImportancia()");
+        Timber.d("regIncidImportancia()");
         if (incidImportancia == null) {
             makeToast(activity, errorMsg);
             return false;
         } else {
             return checkInternetConnected(activity) &&
-                    controller.registerIncidImportancia(
+                    controller.regIncidImportancia(
                             new RegIncidImportanciaObserver<>(this, incidImportancia.getIncidencia().getComunidad()),
                             incidImportancia);
         }

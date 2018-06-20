@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewerIf;
-import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -15,7 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -29,20 +28,20 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static io.reactivex.Single.just;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static io.reactivex.Completable.complete;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -50,7 +49,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,26 +58,19 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegUserComuAcTest {
 
-    Comunidad comunidad;
+    private Comunidad comunidad;
+    private RegUserComuAc activity;
 
     @Rule
     public IntentsTestRule<RegUserComuAc> intentRule = new IntentsTestRule<RegUserComuAc>(RegUserComuAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
-                signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-            } catch (UiException | IOException e) {
-                fail();
-            }
-            Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            return intent;
+            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
+            return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };
-
-    RegUserComuAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -97,13 +88,13 @@ public class ViewerRegUserComuAcTest {
     }
 
     @Test
-    public void test_NewViewerRegUserComuAc() throws Exception
+    public void test_NewViewerRegUserComuAc()
     {
         assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
     }
 
     @Test
-    public void test_DoViewInViewer() throws Exception
+    public void test_DoViewInViewer()
     {
         onView(allOf(
                 withId(R.id.descripcion_comunidad_text),
@@ -113,7 +104,7 @@ public class ViewerRegUserComuAcTest {
     }
 
     @Test
-    public void test_RegUserComuButtonListener() throws Exception
+    public void test_RegUserComuButtonListener()
     {
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         onView(withId(R.id.reg_usercomu_button)).perform(scrollTo(), click());
@@ -124,7 +115,7 @@ public class ViewerRegUserComuAcTest {
     public void test_RegUserComuObserver()
     {
         ViewerRegUserComuAc.RegUserComuObserver observer = activity.viewer.new RegUserComuObserver(comunidad);
-        just(1).subscribeWith(observer);
+        complete().subscribeWith(observer);
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
         intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
         assertThat(observer.isDisposed(), is(true));
@@ -133,7 +124,7 @@ public class ViewerRegUserComuAcTest {
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
 
     @Test
-    public void test_OnCreate() throws Exception
+    public void test_OnCreate()
     {
         // Check for initialization of fragments viewers.
         ParentViewerIf viewerParent = activity.viewer;

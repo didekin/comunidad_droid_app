@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.resolucion;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -47,16 +49,8 @@ public class IncidResolucionSeeFr extends Fragment {
         return fr;
     }
 
-    public static IncidResolucionSeeFr newInstance(Bundle bundle)
-    {
-        Timber.d("newInstance()");
-        IncidResolucionSeeFr fr = new IncidResolucionSeeFr();
-        fr.setArguments(bundle);
-        return fr;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
@@ -70,7 +64,7 @@ public class IncidResolucionSeeFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        resolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
+        resolucion = (Resolucion) requireNonNull(getArguments()).getSerializable(INCID_RESOLUCION_OBJECT.key);
         assertTrue(resolucion != null, resolucion_should_be_initialized);
         // Activamos el menú.
         setHasOptionsMenu(true);
@@ -98,11 +92,14 @@ public class IncidResolucionSeeFr extends Fragment {
 
         switch (resourceId) {
             case android.R.id.home:
-                mnRouter.getActionFromMnItemId(resourceId).initActivity(getActivity());
+                mnRouter.getActionFromMnItemId(resourceId).initActivity(requireNonNull(getActivity()));
                 return true;
             case R.id.incid_comments_see_ac_mn:
                 mnRouter.getActionFromMnItemId(resourceId)
-                        .initActivity(getActivity(), INCIDENCIA_OBJECT.getBundleForKey(getArguments().getSerializable(INCIDENCIA_OBJECT.key)));
+                        .initActivity(
+                                requireNonNull(getActivity()),
+                                INCIDENCIA_OBJECT.getBundleForKey(requireNonNull(getArguments()).getSerializable(INCIDENCIA_OBJECT.key))
+                        );
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

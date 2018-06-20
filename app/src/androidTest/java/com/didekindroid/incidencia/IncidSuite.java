@@ -28,9 +28,7 @@ import org.junit.runners.Suite;
         // list
         IncidListSuite.class,
         // .
-        IncidenciaDaoTest_1.class,
-        IncidenciaDaoTest_2.class,
-        IncidObservableTest.class,
+        IncidenciaDaoTest.class,
 })
 public class IncidSuite {
 }

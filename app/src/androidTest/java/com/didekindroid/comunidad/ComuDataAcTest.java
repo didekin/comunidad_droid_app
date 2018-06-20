@@ -11,7 +11,6 @@ import com.didekindroid.comunidad.util.ComuBundleKey;
 import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.testutil.SavedStateWrapper;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -22,8 +21,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -58,7 +55,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -83,14 +79,8 @@ public class ComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
-            } catch (UiException | IOException e) {
-                fail();
-            }
-            Intent intent = new Intent();
-            intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id());
-            return intent;
+            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            return new Intent().putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };
     private ComuDataAc activity;

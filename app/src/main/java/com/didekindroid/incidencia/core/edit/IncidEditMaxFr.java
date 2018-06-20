@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,9 @@ import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr.newViewerIncidEditMaxFr;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr.newViewerIncidEditMaxFr;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -42,7 +44,7 @@ public class IncidEditMaxFr extends IncidEditFr {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_edit_maxpower_fr, container, false);
@@ -50,13 +52,13 @@ public class IncidEditMaxFr extends IncidEditFr {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
 
         viewerInjector = (InjectorOfParentViewerIf) getActivity();
 
-        viewer = newViewerIncidEditMaxFr(frView, viewerInjector.getInjectedParentViewer());
+        viewer = newViewerIncidEditMaxFr(frView, requireNonNull(viewerInjector).getInjectedParentViewer());
         viewer.doViewInViewer(savedInstanceState, resolBundle);
         viewerInjector.setChildInParentViewer(viewer);
 

@@ -6,10 +6,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
-import com.didekindroid.lib_one.security.CtrlerAuthToken;
-import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -29,9 +28,9 @@ import static com.didekindroid.router.DidekinContextAction.showComuFound;
  * Time: 14:21
  */
 
-class ViewerComuSearchAc extends ParentViewer<View, CtrlerAuthTokenIf> {
+class ViewerComuSearchAc extends ParentViewer<View, Controller> {
 
-    ViewerComuSearchAc(View view, AppCompatActivity activity)
+    private ViewerComuSearchAc(View view, AppCompatActivity activity)
     {
         super(view, activity, null);
     }
@@ -40,7 +39,7 @@ class ViewerComuSearchAc extends ParentViewer<View, CtrlerAuthTokenIf> {
     {
         Timber.d("newViewerComuSearch()");
         ViewerComuSearchAc instance = new ViewerComuSearchAc(activity.acView, activity);
-        instance.setController(new CtrlerAuthToken());
+        instance.setController(new Controller());
         // We initialize viewerRegComuFr in its associated fragment.
         return instance;
     }
@@ -59,8 +58,6 @@ class ViewerComuSearchAc extends ParentViewer<View, CtrlerAuthTokenIf> {
     {
         Timber.d("doViewInViewer()");
 
-        // Check token cache.
-        controller.refreshAccessToken(this);
         Button searchButton = view.findViewById(R.id.searchComunidad_Bton);
         searchButton.setOnClickListener(new ComuSearchButtonListener());
     }

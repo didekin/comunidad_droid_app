@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -34,7 +35,7 @@ public abstract class IncidEditFr extends Fragment {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
@@ -47,7 +48,7 @@ public abstract class IncidEditFr extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
+    public void onSaveInstanceState(@NonNull Bundle outState)
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);

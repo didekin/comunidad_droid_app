@@ -41,8 +41,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper.DB_NAME;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_ESTIM_DEFAULT_String;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidTestData.COSTE_ESTIM_DEFAULT_String;
+import static com.didekindroid.incidencia.testutils.IncidTestData.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.testutil.ActivityTestUtil.isDataDisplayedAndClick;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.lib_one.util.UiUtil.SPAIN_LOCALE;
@@ -61,6 +61,7 @@ import static org.junit.Assert.assertThat;
  * Time: 18:29
  */
 
+@SuppressWarnings("ConstantConditions")
 public final class IncidEspressoTestUtils {
 
     private IncidEspressoTestUtils()

@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.core.Incidencia_GCM_test_abs;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -15,15 +14,13 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.RESOLUCION_OPEN;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_ESTIM_DEFAULT;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidTestData.COSTE_ESTIM_DEFAULT;
+import static com.didekindroid.incidencia.testutils.IncidTestData.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
@@ -40,11 +37,11 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_test_abs {
 
-    IncidImportancia incidImportancia;
+    private IncidImportancia incidImportancia;
 
     @TargetApi(Build.VERSION_CODES.M)
     @Test
-    public void testReceiveNotification() throws Exception
+    public void testReceiveNotification()
     {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
@@ -77,13 +74,9 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_test_abs {
             @Override
             protected Intent getActivityIntent()
             {
-                try {
-                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
-                    // We'll test that the gcmToken is not updated in server.
-                    assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
-                } catch (IOException | UiException e) {
-                    e.printStackTrace();
-                }
+                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
+                // We'll test that the gcmToken is not updated in server.
+                assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
                 return intent;

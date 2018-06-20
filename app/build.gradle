@@ -115,7 +115,7 @@ android {
 
 dependencies {
 //    TODO: cambiar a release y dejar esta dependencia para debug.
-    implementation rootProject.ext.didekindroidlib_one_debug
+    implementation rootProject.didekindroidlib_one_debug
 /*    debugImplementation rootProject.ext.didekindroidlib_one_debug*/
 
     implementation rootProject.ext.firebase_msg

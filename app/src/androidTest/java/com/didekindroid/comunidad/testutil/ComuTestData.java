@@ -41,14 +41,6 @@ public final class ComuTestData {
             .numero((short) 11)
             .municipio(new Municipio((short) 13, new Provincia(new ComunidadAutonoma((short) 10), (short) 3, "Alicante/Alacant")))
             .build();
-    // Municipio: Algueña  Provincia: Alicante/Alacant
-    public static final Comunidad COMU_REAL = new Comunidad.ComunidadBuilder()
-            .tipoVia("Calle")
-            .nombreVia("Real")
-            .numero((short) 5)
-            .sufijoNumero("Bis")
-            .municipio(new Municipio((short) 13, "Algueña", new Provincia(new ComunidadAutonoma((short) 10), (short) 3, "Alicante/Alacant")))
-            .build();
 
     private ComuTestData()
     {

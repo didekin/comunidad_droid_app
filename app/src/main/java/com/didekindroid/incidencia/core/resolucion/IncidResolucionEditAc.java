@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
-import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -19,7 +18,6 @@ import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incidencia_should_be_initialized;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
@@ -47,7 +45,6 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
     IncidImportancia incidImportancia;
     Resolucion resolucion;
     Incidencia incidencia;
-    ViewerNotifyTokenIf viewerFirebaseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,12 +60,14 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
         }
 
         // Preconditions.
-        assertTrue(getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key) || getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key), incidencia_should_be_initialized);
+        assertTrue(getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key)
+                || getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key), incidencia_should_be_initialized);
         incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         resolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
         boolean hasAdmRole = getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key) && incidImportancia.getUserComu().hasAdministradorAuthority();
-        incidencia = getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key) ? ((Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key)).getIncidencia()
-                : incidImportancia.getIncidencia();
+        incidencia = getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key) ?
+                ((Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key)).getIncidencia() :
+                incidImportancia.getIncidencia();
 
         if (resolucion != null) {
             if (hasAdmRole && incidencia.getFechaCierre() == null) {
@@ -79,23 +78,6 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
         } else {
             initFragmentTx(IncidResolucionRegFr.newInstance(incidImportancia));
         }
-    }
-
-    @Override
-    protected void onStart()
-    {
-        Timber.d("onStart()");
-        super.onStart();
-        viewerFirebaseToken = newViewerFirebaseToken(this);
-        viewerFirebaseToken.checkGcmTokenAsync();
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-        viewerFirebaseToken.clearSubscriptions();
     }
 
 //    ============================================================

@@ -1,30 +1,26 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_FUENTE;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_TRAV_PLAZUELA_11;
-import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
-import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.CoreMatchers.is;
@@ -49,41 +45,38 @@ public final class UserComuTestData {
             "portal11", "esc11", "planta11", "door11", PRE.function.concat(",").concat(PRO.function));
     public static final UsuarioComunidad COMU_TRAV_PLAZUELA_PEPE = makeUsuarioComunidad(COMU_TRAV_PLAZUELA_11, USER_PEPE,
             "portalA", null, "planta2", null, INQ.function);
-    public static final UsuarioComunidad COMU_REAL_JUAN = makeUsuarioComunidad(COMU_REAL, USER_JUAN, "portal", "esc",
+    public static final UsuarioComunidad COMU_REAL_JUAN = makeUsuarioComunidad(comu_real, USER_JUAN, "portal", "esc",
             "plantaX", "door12", PROPIETARIO.function);
-    public static final UsuarioComunidad COMU_REAL_PEPE = makeUsuarioComunidad(COMU_REAL, USER_PEPE, "portal",
+    public static final UsuarioComunidad COMU_REAL_PEPE = makeUsuarioComunidad(comu_real, USER_PEPE, "portal",
             "esc", "plantaY", "door21", PRO.function);
-    public static final UsuarioComunidad COMU_REAL_DROID = makeUsuarioComunidad(COMU_REAL, USER_DROID, "portal",
+    public static final UsuarioComunidad COMU_REAL_DROID = makeUsuarioComunidad(comu_real, USER_DROID, "portal",
             "esc", "plantaH", "door11", PRO.function);
 
     private UserComuTestData()
     {
     }
 
-    public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws IOException, UiException
+    public static Comunidad signUpWithTkGetComu(UsuarioComunidad usuarioComunidad)
     {
-        usuarioMockDao.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
-        updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
-        return usuarioDaoRemote.getUserData();
+        regUserComuWithTkCache(usuarioComunidad);
+        return userComuDao.getComusByUser().blockingGet().get(0);
     }
 
-    public static Comunidad signUpWithTkGetComu(UsuarioComunidad usuarioComunidad) throws IOException, UiException
+    public static UsuarioComunidad signUpWithTkGetUserComu(UsuarioComunidad userComuIn)
     {
-        usuarioMockDao.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
-        updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
-        return userComuDao.getComusByUser().get(0);
+        return userComuDao.getUserComuByUserAndComu(signUpWithTkGetComu(userComuIn).getC_Id()).blockingGet();
     }
 
-    public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws IOException, UiException
+    public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList)
     {
-        signUpAndUpdateTk(usuarioComunidadList.get(0));
+        regUserComuWithTkCache(usuarioComunidadList.get(0));
         userComuDao.regComuAndUserComu(usuarioComunidadList.get(1));
     }
 
-    public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws IOException, UiException
+    public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus)
     {
         assertThat(userComus.length > 0, is(true));
-        signUpAndUpdateTk(userComus[0]);
+        regUserComuWithTkCache(userComus[0]);
         for (int i = 1; i < userComus.length; i++) {
             userComuDao.regComuAndUserComu(userComus[i]);
         }

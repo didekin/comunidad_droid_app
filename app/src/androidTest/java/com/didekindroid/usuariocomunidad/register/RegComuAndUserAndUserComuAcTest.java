@@ -67,7 +67,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 }
             };
 
-    RegComuAndUserAndUserComuAc activity;
+    private RegComuAndUserAndUserComuAc activity;
 
     private static void typeComunidad()
     {

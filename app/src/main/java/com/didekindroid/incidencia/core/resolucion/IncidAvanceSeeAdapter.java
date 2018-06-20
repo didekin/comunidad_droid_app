@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.resolucion;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,9 @@ class IncidAvanceSeeAdapter extends ArrayAdapter<Avance> {
         super(context, R.layout.incid_see_avances_list_item, R.id.incid_avance_fecha_view);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         Timber.d("getViewInViewer()");
         AvanceViewHolder viewHolder;

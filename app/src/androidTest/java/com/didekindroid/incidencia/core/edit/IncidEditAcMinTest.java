@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
@@ -22,8 +21,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
 import static android.app.TaskStackBuilder.create;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -34,12 +31,11 @@ import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.core.edit.IncidEditAcMaxTest.checkOnStop;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
@@ -60,7 +56,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -79,17 +74,12 @@ public class IncidEditAcMinTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                incidImportancia_0 = insertGetIncidImportancia(COMU_REAL_PEPE);
-                // Registro userComu en misma comunidad.
-                UsuarioComunidad userComuJuan = makeUsuarioComunidad(incidImportancia_0.getIncidencia().getComunidad(), USER_JUAN,
-                        "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-                userComuMockDao.regUserAndUserComu(userComuJuan).execute();
-                updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                resolBundle = incidenciaDao.seeIncidImportancia(incidImportancia_0.getIncidencia().getIncidenciaId());
-            } catch (IOException | UiException e) {
-                fail();
-            }
+            incidImportancia_0 = insertGetIncidImportancia(COMU_REAL_PEPE);
+            // Registro userComu en misma comunidad.
+            UsuarioComunidad userComuJuan = makeUsuarioComunidad(incidImportancia_0.getIncidencia().getComunidad(), USER_JUAN,
+                    "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
+            userComuMockDao.regUserAndUserComu(userComuJuan).blockingGet(); // TODO: revisar que authHeader se hace con este usuario.
+            resolBundle = incidenciaDao.seeIncidImportanciaRaw(incidImportancia_0.getIncidencia().getIncidenciaId()).blockingGet();
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent0 = new Intent(getTargetContext(), UserComuDataAc.class)

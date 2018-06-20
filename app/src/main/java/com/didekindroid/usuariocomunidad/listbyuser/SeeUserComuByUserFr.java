@@ -3,6 +3,7 @@ package com.didekindroid.usuariocomunidad.listbyuser;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,9 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_selected;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
-import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -52,7 +51,7 @@ public class SeeUserComuByUserFr extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
         frView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
@@ -72,7 +71,7 @@ public class SeeUserComuByUserFr extends Fragment {
                     view.setSelected(true);
                     routerInitializer.get().getContextRouter().getActionFromContextNm(usercomu_just_selected)
                             .initActivity(
-                                    getActivity(),
+                                    requireNonNull(getActivity()),
                                     USERCOMU_LIST_OBJECT.getBundleForKey((Serializable) frView.getItemAtPosition(position))
                             );
                 }
@@ -92,7 +91,7 @@ public class SeeUserComuByUserFr extends Fragment {
 //    ============================================================
 
     @SuppressWarnings("WeakerAccess")
-    class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
+    static class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
 
         UiException uiException;
 
@@ -101,12 +100,8 @@ public class SeeUserComuByUserFr extends Fragment {
         {
             Timber.d("UserComuByUserLoader.doInBackground()");
 
-            List<UsuarioComunidad> usuarioComunidades = null;
-            try {
-                usuarioComunidades = userComuDao.seeUserComusByUser();
-            } catch (UiException e) {
-                uiException = e;
-            }
+            List<UsuarioComunidad> usuarioComunidades;
+            usuarioComunidades = userComuDao.seeUserComusByUser().blockingGet();  // TODO: quitar el blocking.
             return usuarioComunidades;
         }
 
@@ -115,19 +110,19 @@ public class SeeUserComuByUserFr extends Fragment {
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {
             Timber.d("onPostExecute()");
-            if (checkPostExecute(activity)) return;
+//            if (checkPostExecute(activity)) return;    // TODO: descomentar y modificar.
 
-            if (uiException != null) {  // action: LOGIN.
+            /*if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
                 assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
                 routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
                         .initActivity(activity);
-            }
+            }*/
             if (usuarioComunidades != null) {
                 Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
-                mAdapter = new SeeUserComuByUserAdapter(getActivity());
+               /* mAdapter = new SeeUserComuByUserAdapter(getActivity());
                 mAdapter.addAll(usuarioComunidades);
-                frView.setAdapter(mAdapter);
+                frView.setAdapter(mAdapter);*/
             }
         }
     }

@@ -1,10 +1,10 @@
 package com.didekindroid.incidencia;
 
+import android.os.Bundle;
+
 import com.didekindroid.lib_one.api.HttpInitializerIf;
-import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.security.IdentityCacherIf;
+import com.didekindroid.lib_one.security.AuthTkCacherIf;
 import com.didekindroid.lib_one.security.SecInitializerIf;
-import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.http.incidencia.IncidenciaServEndPoints;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -13,17 +13,19 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
-import java.io.EOFException;
-import java.io.IOException;
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.api.exception.UiExceptionIf.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
-import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static io.reactivex.Single.just;
 
 /**
  * User: pedro@didekin
@@ -34,7 +36,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
 
     public static final IncidenciaDao incidenciaDao = new IncidenciaDao(secInitializer.get(), httpInitializer.get());
     private final IncidenciaServEndPoints endPoint;
-    private final IdentityCacherIf tkCacher;
+    private final AuthTkCacherIf tkCacher;
 
     private IncidenciaDao(SecInitializerIf secInitializerIn, HttpInitializerIf httpInitializerIn)
     {
@@ -42,7 +44,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         endPoint = httpInitializerIn.getHttpHandler().getService(IncidenciaServEndPoints.class);
     }
 
-    public IncidenciaDao(IncidenciaServEndPoints endPoint, IdentityCacherIf tkCacher)
+    public IncidenciaDao(IncidenciaServEndPoints endPoint, AuthTkCacherIf tkCacher)
     {
         this.endPoint = endPoint;
         this.tkCacher = tkCacher;
@@ -51,231 +53,227 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     /*  ================================== IncidenciaServEndPoints implementation ============================*/
 
     @Override
-    public Call<Integer> closeIncidencia(String accessToken, Resolucion resolucion)
+    public Single<Response<Integer>> closeIncidencia(String authHeader, Resolucion resolucion)
     {
-        return endPoint.closeIncidencia(accessToken, resolucion);
+        return endPoint.closeIncidencia(authHeader, resolucion);
     }
 
     @Override
-    public Call<Integer> deleteIncidencia(String accessToken, long incidenciaId)
+    public Single<Response<Integer>> deleteIncidencia(String authHeader, long incidenciaId)
     {
-        return endPoint.deleteIncidencia(accessToken, incidenciaId);
+        return endPoint.deleteIncidencia(authHeader, incidenciaId);
     }
 
     @Override
-    public Call<Integer> modifyIncidImportancia(String accessToken, IncidImportancia incidImportancia)
+    public Single<Response<Integer>> modifyIncidImportancia(String authHeader, IncidImportancia incidImportancia)
     {
-        return endPoint.modifyIncidImportancia(accessToken, incidImportancia);
+        return endPoint.modifyIncidImportancia(authHeader, incidImportancia);
     }
 
     @Override
-    public Call<Integer> modifyResolucion(String accessToken, Resolucion resolucion)
+    public Single<Response<Integer>> modifyResolucion(String authHeader, Resolucion resolucion)
     {
-        return endPoint.modifyResolucion(accessToken, resolucion);
+        return endPoint.modifyResolucion(authHeader, resolucion);
     }
 
     @Override
-    public Call<Integer> regIncidComment(String accessToken, IncidComment comment)
+    public Single<Response<Integer>> regIncidComment(String authHeader, IncidComment comment)
     {
-        return endPoint.regIncidComment(accessToken, comment);
+        return endPoint.regIncidComment(authHeader, comment);
     }
 
     @Override
-    public Call<Integer> regIncidImportancia(String accessToken, IncidImportancia incidImportancia)
+    public Single<Response<Integer>> regIncidImportancia(String authHeader, IncidImportancia incidImportancia)
     {
-        return endPoint.regIncidImportancia(accessToken, incidImportancia);
+        return endPoint.regIncidImportancia(authHeader, incidImportancia);
     }
 
     @Override
-    public Call<Integer> regResolucion(String accessToken, Resolucion resolucion)
+    public Single<Response<Integer>> regResolucion(String authHeader, Resolucion resolucion)
     {
-        return endPoint.regResolucion(accessToken, resolucion);
+        return endPoint.regResolucion(authHeader, resolucion);
     }
 
     @Override
-    public Call<List<IncidComment>> seeCommentsByIncid(String accessToken, long incidenciaId)
+    public Single<Response<List<IncidComment>>> seeCommentsByIncid(String authHeader, long incidenciaId)
     {
-        return endPoint.seeCommentsByIncid(accessToken, incidenciaId);
+        return endPoint.seeCommentsByIncid(authHeader, incidenciaId);
     }
 
     @Override
-    public Call<IncidAndResolBundle> seeIncidImportancia(String accessToken, long incidenciaId)
+    public Single<Response<IncidAndResolBundle>> seeIncidImportancia(String authHeader, long incidenciaId)
     {
-        return endPoint.seeIncidImportancia(accessToken, incidenciaId);
+        return endPoint.seeIncidImportancia(authHeader, incidenciaId);
     }
 
     @Override
-    public Call<List<IncidenciaUser>> seeIncidsOpenByComu(String accessToken, long comunidadId)
+    public Single<Response<List<IncidenciaUser>>> seeIncidsOpenByComu(String authHeader, long comunidadId)
     {
-        return endPoint.seeIncidsOpenByComu(accessToken, comunidadId);
+        return endPoint.seeIncidsOpenByComu(authHeader, comunidadId);
     }
 
     @Override
-    public Call<List<IncidenciaUser>> seeIncidsClosedByComu(String accessToken, long comunidadId)
+    public Single<Response<List<IncidenciaUser>>> seeIncidsClosedByComu(String authHeader, long comunidadId)
     {
-        return endPoint.seeIncidsClosedByComu(accessToken, comunidadId);
+        return endPoint.seeIncidsClosedByComu(authHeader, comunidadId);
     }
 
     @Override
-    public Call<Resolucion> seeResolucion(String accessToken, long incidenciaId)
+    public Maybe<Response<Resolucion>> seeResolucion(String authHeader, long incidenciaId)
     {
-        return endPoint.seeResolucion(accessToken, incidenciaId);
+        return endPoint.seeResolucion(authHeader, incidenciaId);
     }
 
     @Override
-    public Call<List<ImportanciaUser>> seeUserComusImportancia(String accessToken, long incidenciaId)
+    public Single<Response<List<ImportanciaUser>>> seeUserComusImportancia(String authHeader, long incidenciaId)
     {
-        return endPoint.seeUserComusImportancia(accessToken, incidenciaId);
+        return endPoint.seeUserComusImportancia(authHeader, incidenciaId);
     }
 
 //  =============================================================================
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
-    public int closeIncidencia(Resolucion resolucion) throws UiException
+    public Single<Integer> closeIncidencia(Resolucion resolucion)
     {
         Timber.d("closeIncidencia()");
-        try {
-            Response<Integer> response = closeIncidencia(tkCacher.checkBearerTokenInCache(), resolucion).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(resolucion)
+                .flatMap(resolucionIn -> closeIncidencia(tkCacher.doAuthHeaderStr(), resolucionIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    int deleteIncidencia(long incidenciaId) throws UiException
+    public Single<Integer> deleteIncidencia(long incidenciaId)
     {
         Timber.d("deleteIncidencia()");
-        try {
-            Response<Integer> response = deleteIncidencia(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(incidenciaId)
+                .flatMap(incidenciaIdIn -> deleteIncidencia(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    int modifyIncidImportancia(IncidImportancia incidImportancia) throws UiException
+    public Single<Integer> modifyIncidImportancia(IncidImportancia incidImportancia)
     {
         Timber.d("modifyIncidImportancia()");
-        try {
-            Response<Integer> response = modifyIncidImportancia(tkCacher.checkBearerTokenInCache(), incidImportancia).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(incidImportancia)
+                .flatMap(incidImportanciaIn -> modifyIncidImportancia(tkCacher.doAuthHeaderStr(), incidImportanciaIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public int modifyResolucion(Resolucion resolucion) throws UiException
+    public Single<Integer> modifyResolucion(Resolucion resolucion)
     {
         Timber.d("modifyResolucion()");
-        try {
-            Response<Integer> response = modifyResolucion(tkCacher.checkBearerTokenInCache(), resolucion).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(resolucion)
+                .flatMap(resolucionIn -> modifyResolucion(tkCacher.doAuthHeaderStr(), resolucionIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public int regIncidComment(IncidComment comment) throws UiException
+    public Single<Integer> regIncidComment(IncidComment comment)
     {
         Timber.d("regIncidComment()");
-        try {
-            Response<Integer> response = endPoint.regIncidComment(tkCacher.checkBearerTokenInCache(), comment).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(comment)
+                .flatMap(commentIn -> regIncidComment(tkCacher.doAuthHeaderStr(), commentIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public int regIncidImportancia(IncidImportancia incidImportancia) throws UiException
+    public Single<Integer> regIncidImportancia(IncidImportancia incidImportancia)
     {
         Timber.d("regIncidImportancia()");
-        try {
-            Response<Integer> response = regIncidImportancia(tkCacher.checkBearerTokenInCache(), incidImportancia).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(incidImportancia)
+                .flatMap(incidImportanciaIn -> regIncidImportancia(tkCacher.doAuthHeaderStr(), incidImportanciaIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public int regResolucion(Resolucion resolucion) throws UiException
+    public Single<Integer> regResolucion(Resolucion resolucion)
     {
         Timber.d("regResolucion()");
-        try {
-            Response<Integer> response = regResolucion(tkCacher.checkBearerTokenInCache(), resolucion).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(resolucion)
+                .flatMap(resolucionIn -> regResolucion(tkCacher.doAuthHeaderStr(), resolucionIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public List<IncidComment> seeCommentsByIncid(long incidenciaId) throws UiException
+    public Single<List<IncidComment>> seeCommentsByIncid(long incidenciaId)
     {
         Timber.d("seeCommentsByIncid()");
-        try {
-            Response<List<IncidComment>> response = seeCommentsByIncid(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(incidenciaId)
+                .flatMap(incidenciaIdIn -> seeCommentsByIncid(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public IncidAndResolBundle seeIncidImportancia(long incidenciaId) throws UiException
+    public Single<IncidAndResolBundle> seeIncidImportanciaRaw(long incidenciaId)
+    {
+        Timber.d("seeIncidImportanciaRaw()");
+        return just(incidenciaId)
+                .flatMap(incidenciaIdIn -> seeIncidImportancia(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
+    }
+
+    public Single<Bundle> seeIncidImportancia(long incidenciaId)
     {
         Timber.d("seeIncidImportancia()");
-        try {
-            Response<IncidAndResolBundle> response = seeIncidImportancia(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (EOFException eo) {
-            return null;
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return seeIncidImportanciaRaw(incidenciaId)
+                .map(incidResol -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, incidResol);
+                    return bundle;
+                });
     }
 
-    public List<IncidenciaUser> seeIncidsOpenByComu(long comunidadId) throws UiException
+    public Single<List<IncidenciaUser>> seeIncidsOpenByComu(long comunidadId)
     {
         Timber.d("seeIncidsOpenByComu()");
-        try {
-            Response<List<IncidenciaUser>> response = seeIncidsOpenByComu(tkCacher.checkBearerTokenInCache(), comunidadId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(comunidadId)
+                .flatMap(comunidadIdIn -> seeIncidsOpenByComu(tkCacher.doAuthHeaderStr(), comunidadIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public List<IncidenciaUser> seeIncidsClosedByComu(long comunidadId) throws UiException
+    public Single<List<IncidenciaUser>> seeIncidsClosedByComu(long comunidadId)
     {
         Timber.d("seeIncidsClosedByComu()");
-        try {
-            Response<List<IncidenciaUser>> response = seeIncidsClosedByComu(tkCacher.checkBearerTokenInCache(), comunidadId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(comunidadId)
+                .flatMap(comunidadIdIn -> seeIncidsClosedByComu(tkCacher.doAuthHeaderStr(), comunidadIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    public Resolucion seeResolucion(long incidenciaId) throws UiException
+    public Maybe<Resolucion> seeResolucionRaw(long incidenciaId)
     {
-        Timber.d("checkResolucion()");
-        try {
-            Response<Resolucion> response = seeResolucion(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (EOFException eo) {
-            return null;
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        Timber.d("seeResolucionRaw()");
+        return Maybe.just(incidenciaId)
+                .flatMap(incidenciaIdIn -> seeResolucion(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 
-    List<ImportanciaUser> seeUserComusImportancia(long incidenciaId) throws UiException
+    /**
+     *  A variant for closed incidencias, which must always had a resolucion.
+     */
+    public Single<Bundle> seeResolucionInBundle(long incidenciaId)
+    {
+        Timber.d("seeResolucionInBundle()");
+        return seeResolucionRaw(incidenciaId)
+                .map(resolucionIn -> {
+                    Bundle bundle = new Bundle(1);
+                    bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucionIn);
+                    return bundle;
+                })
+                .toSingle();
+    }
+
+    public Single<List<ImportanciaUser>> seeUserComusImportancia(long incidenciaId)
     {
         Timber.d("seeUserComusImportancia()");
-        try {
-            Response<List<ImportanciaUser>> response = seeUserComusImportancia(tkCacher.checkBearerTokenInCache(), incidenciaId).execute();
-            return httpInitializer.get().getResponseBody(response);
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+        return just(incidenciaId)
+                .flatMap(incidenciaIdIn -> seeUserComusImportancia(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .doOnError(uiExceptionConsumer);
     }
 }

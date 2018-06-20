@@ -1,7 +1,9 @@
 package com.didekindroid.incidencia.core.resolucion;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +50,7 @@ import static com.didekindroid.lib_one.util.UiUtil.getCalendarFromTimeMillis;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -74,7 +77,7 @@ public class IncidResolucionEditFr extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
@@ -84,7 +87,7 @@ public class IncidResolucionEditFr extends Fragment {
         fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
         fechaViewForPicker.setOnClickListener(clickListener -> {
             FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerResolucion(fechaViewForPicker, resolucionBean));
-            fechaPicker.show(getActivity().getFragmentManager(), "fechaPicker");
+            fechaPicker.show(requireNonNull(getActivity()).getFragmentManager(), "fechaPicker");
         });
 
         Button mModifyButton = frView.findViewById(R.id.incid_resolucion_fr_modif_button);
@@ -133,7 +136,7 @@ public class IncidResolucionEditFr extends Fragment {
     {
         Timber.d("modifyResolucion()");
 
-        StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
+        StringBuilder errorMsg = getErrorMsgBuilder(requireNonNull(getActivity()));
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
 
         if (resolucion == null) {
@@ -197,9 +200,9 @@ public class IncidResolucionEditFr extends Fragment {
 
 //    ============================================================
 //    ..................... INNER CLASSES  .......................
-/*    ============================================================*/
+    /*    ============================================================*/
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressLint("StaticFieldLeak")    // TODO: cambiar.
     class ResolucionModifyer extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;
@@ -208,14 +211,7 @@ public class IncidResolucionEditFr extends Fragment {
         protected Integer doInBackground(Resolucion... params)
         {
             Timber.d("doInBackground()");
-            int rowModified = 0;
-
-            try {
-                rowModified = incidenciaDao.modifyResolucion(params[0]);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return rowModified;
+            return incidenciaDao.modifyResolucion(params[0]).blockingGet();
         }
 
         @SuppressWarnings("ConstantConditions")
@@ -239,7 +235,7 @@ public class IncidResolucionEditFr extends Fragment {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressLint("StaticFieldLeak")  // TODO: cambiar.
     class IncidenciaCloser extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;
@@ -248,14 +244,7 @@ public class IncidResolucionEditFr extends Fragment {
         protected Integer doInBackground(Resolucion... params)
         {
             Timber.d("doInBackground()");
-            int incidenciaCancelled = 0;
-
-            try {
-                incidenciaCancelled = incidenciaDao.closeIncidencia(params[0]);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return incidenciaCancelled;
+            return incidenciaDao.closeIncidencia(params[0]).blockingGet();
         }
 
         @SuppressWarnings("ConstantConditions")

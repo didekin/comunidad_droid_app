@@ -6,7 +6,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
@@ -17,8 +16,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -59,7 +56,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -81,14 +77,10 @@ public class ComuSearchResultsAcTest {
                 {
                     comuRondaDelNorte =
                             makeComunidad("Ronda", "del Norte", (short) 5, "", new Municipio((short) 2, new Provincia((short) 27)));
-                    try {
-                        regSeveralUserComuSameUser(
-                                COMU_PLAZUELA5_JUAN,
-                                makeUsuarioComunidad(comuRondaDelNorte, USER_JUAN, "portal_3", "esc_A", "planta_1", "puerta_2", INQUILINO.function)
-                        );
-                    } catch (IOException | UiException e) {
-                        fail();
-                    }
+                    regSeveralUserComuSameUser(
+                            COMU_PLAZUELA5_JUAN,
+                            makeUsuarioComunidad(comuRondaDelNorte, USER_JUAN, "portal_3", "esc_A", "planta_1", "puerta_2", INQUILINO.function)
+                    );
                     TaskStackBuilder.create(getTargetContext()).addParentStack(ComuSearchResultsAc.class).startActivities();
                 }
 
@@ -108,7 +100,7 @@ public class ComuSearchResultsAcTest {
     }
 
     @After
-    public void cleanData() throws UiException, InterruptedException
+    public void cleanData()
     {
         cleanOptions(CLEAN_JUAN);
     }
@@ -116,20 +108,20 @@ public class ComuSearchResultsAcTest {
     // ======================================= TESTS ===============================================
 
     @Test
-    public void testOnCreate() throws UiException, IOException
+    public void testOnCreate()
     {
         onView(withId(R.id.comu_list_fragment)).check(matches(isDisplayed()));
         assertThat(activity.viewer, notNullValue());
     }
 
     @Test
-    public void testOnStop() throws Exception
+    public void testOnStop()
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
     @Test
-    public void testSearchComunidades_Up() throws UiException, IOException, InterruptedException
+    public void testSearchComunidades_Up()
     {
         // Caso: existen dos comunidades para el criterio de búsqueda.
         checkComuData(COMU_LA_PLAZUELA_5);
@@ -138,14 +130,14 @@ public class ComuSearchResultsAcTest {
     }
 
     @Test
-    public void testSelectComunidad_RegUser_Back() throws UiException, IOException, InterruptedException
+    public void testSelectComunidad_RegUser_Back()
     {
         doSelectComunidadRegUser();
         checkBack(onView(withId(userComuDataLayout)), comuSearchResultsListLayout);
     }
 
     @Test
-    public void testSelectComunidad_RegUser_Up() throws UiException, IOException, InterruptedException
+    public void testSelectComunidad_RegUser_Up()
     {
         TaskStackBuilder.create(getTargetContext()).addParentStack(UserComuDataAc.class).startActivities();
         doSelectComunidadRegUser();
@@ -153,7 +145,7 @@ public class ComuSearchResultsAcTest {
     }
 
     @Test
-    public void testSelectComunidad_UnRegUser_Up() throws UiException, IOException, InterruptedException
+    public void testSelectComunidad_UnRegUser_Up()
     {
         activity.viewer.getController().updateIsRegistered(false);
         doSelectComunidadNotRegUser();
@@ -163,7 +155,7 @@ public class ComuSearchResultsAcTest {
     //    ======================= MENU =========================
 
     @Test
-    public void test_OnPrepareOptionsMenu() throws Exception
+    public void test_OnPrepareOptionsMenu()
     {
         // Preconditions:
         assertThat(activity.viewer.getController().isRegisteredUser(), is(true));
@@ -172,24 +164,27 @@ public class ComuSearchResultsAcTest {
         onView(withText(activity.getString(R.string.see_usercomu_by_user_ac_mn))).check(matches(isDisplayed()));
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_RegUser_Up() throws InterruptedException, UiException, IOException
+    public void testRegComuAndUserComu_RegUser_Up()  throws InterruptedException
     {
         // Usuario registrado.
         REG_COMU_USERCOMU_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_RegUser_Back() throws InterruptedException, UiException, IOException
+    public void testRegComuAndUserComu_RegUser_Back()  throws InterruptedException
     {
         // Usuario registrado.
         REG_COMU_USERCOMU_AC.checkItem(activity);
         checkBack(onView(withId(regComu_UserComuAcLayout)), comuSearchResultsListLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_UnRegUser_Up() throws InterruptedException, UiException, IOException
+    public void testRegComuAndUserComu_UnRegUser_Up()  throws InterruptedException
     {
         // Usuario no registrado.
         activity.viewer.getController().updateIsRegistered(false);
@@ -197,8 +192,9 @@ public class ComuSearchResultsAcTest {
         checkUp(comuSearchAcLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_UnRegUser_Back() throws InterruptedException, UiException, IOException
+    public void testRegComuAndUserComu_UnRegUser_Back() throws InterruptedException
     {
         // Usuario no registrado.
         activity.viewer.getController().updateIsRegistered(false);
@@ -206,16 +202,18 @@ public class ComuSearchResultsAcTest {
         checkBack(onView(withId(regComu_User_UserComuAcLayout)), comuSearchResultsListLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testSeeUserComuByUser_Up() throws InterruptedException, UiException, IOException
+    public void testSeeUserComuByUser_Up()  throws InterruptedException
     {
         // La consulta muestra las comunidades del usuario.
         SEE_USERCOMU_BY_USER_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testSeeUserComuByUser_Back() throws InterruptedException, UiException, IOException
+    public void testSeeUserComuByUser_Back()  throws InterruptedException
     {
         // La consulta muestra las comunidades del usuario.
         SEE_USERCOMU_BY_USER_AC.checkItem(activity);

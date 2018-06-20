@@ -17,7 +17,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
@@ -33,6 +32,7 @@ import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.router.DidekinUiExceptionAction.generic;
 import static com.didekindroid.router.DidekinUiExceptionAction.show_comunidad_duplicate;
@@ -45,7 +45,6 @@ import static com.didekindroid.router.testutil.UserRouterMapUtil.checkUserExcepM
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_DUPLICATE;
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.http.exception.GenericExceptionMsg.NOT_FOUND;
@@ -63,7 +62,6 @@ import static org.junit.Assert.assertThat;
  * Date: 17/11/15
  * Time: 10:07
  */
-@SuppressWarnings({"ThrowableInstanceNeverThrown", "ThrowableResultOfMethodCallIgnored"})
 @RunWith(AndroidJUnit4.class)
 public class DidekinUiExceptionActionTest {
 
@@ -105,9 +103,9 @@ public class DidekinUiExceptionActionTest {
     @Test
     public void test_show_comunidad_duplicate()
     {
-        // Precondition to avoid exception in next Activity. // TODO: entender qué hace.
+        // Precondition to avoid exception in next Activity.
         secInitializer.get().getTkCacher().updateIsRegistered(false);
-        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredUser, is(false));
+        waitAtMost(2, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredCache, is(false));
         final UiException ue = new UiException(new ErrorBean(COMUNIDAD_DUPLICATE));
         run(ue, show_comunidad_duplicate, comuSearchAcLayout);
     }
@@ -120,10 +118,10 @@ public class DidekinUiExceptionActionTest {
     }
 
     @Test
-    public void test_show_incidReg() throws UiException, IOException
+    public void test_show_incidReg()
     {
         // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
         run(ue, show_incidReg, incidRegAcLayout);
 
@@ -131,10 +129,10 @@ public class DidekinUiExceptionActionTest {
     }
 
     @Test
-    public void test_show_incid_open_list_1() throws UiException, IOException
+    public void test_show_incid_open_list_1()
     {
         // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
         run(ue, show_incid_open_list, incidSeeGenericFrLayout);
 
@@ -142,10 +140,10 @@ public class DidekinUiExceptionActionTest {
     }
 
     @Test
-    public void test_show_incid_open_list_2() throws UiException, IOException
+    public void test_show_incid_open_list_2()
     {
         // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
         run(ue, show_incid_open_list, incidSeeGenericFrLayout, null, null);
 
@@ -153,10 +151,10 @@ public class DidekinUiExceptionActionTest {
     }
 
     @Test
-    public void test_show_incid_open_list_3() throws UiException, IOException
+    public void test_show_incid_open_list_3()
     {
         // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
         run(ue, show_incid_open_list, incidSeeGenericFrLayout, () -> "key_test", "key_value");
 
@@ -164,10 +162,10 @@ public class DidekinUiExceptionActionTest {
     }
 
     @Test
-    public void test_show_resolucionDup_1() throws Exception
+    public void test_show_resolucionDup_1()
     {
         // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
         // Run.
         run(ue, show_resolucionDup, incidSeeGenericFrLayout);
@@ -176,10 +174,10 @@ public class DidekinUiExceptionActionTest {
     }
 
     @Test
-    public void test_show_resolucionDup_2() throws Exception
+    public void test_show_resolucionDup_2()
     {
         // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
         // Run.
         run(ue, show_resolucionDup, incidSeeGenericFrLayout, null, null);
@@ -188,10 +186,10 @@ public class DidekinUiExceptionActionTest {
     }
 
     @Test
-    public void test_show_resolucionDup_3() throws Exception
+    public void test_show_resolucionDup_3()
     {
         // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
         // Run.
         run(ue, show_resolucionDup, incidSeeGenericFrLayout, () -> "key_test", "key_value");

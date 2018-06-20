@@ -28,6 +28,7 @@ import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.focusOnView;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
@@ -40,7 +41,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regComu_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
@@ -57,7 +57,7 @@ public class RegComuAndUserComuAcTest {
 
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, false);
-    RegComuAndUserComuAc activity;
+    private RegComuAndUserComuAc activity;
     private int buttonId;
 
     @Before
@@ -67,7 +67,7 @@ public class RegComuAndUserComuAcTest {
             create(getTargetContext()).addParentStack(RegComuAndUserComuAc.class).startActivities();
         }
 
-        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
         activity = mActivityRule.launchActivity(new Intent());
         buttonId = R.id.reg_comu_usuariocomunidad_button;
     }
@@ -75,7 +75,7 @@ public class RegComuAndUserComuAcTest {
     @After
     public void tearDown() throws Exception
     {
-        cleanOneUser(USER_PEPE);
+        cleanOneUser(USER_PEPE.getUserName());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }

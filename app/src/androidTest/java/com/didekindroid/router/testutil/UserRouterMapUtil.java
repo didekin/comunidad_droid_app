@@ -9,7 +9,7 @@ import static com.didekindroid.lib_one.usuario.router.UserContextName.new_comu_u
 import static com.didekindroid.lib_one.usuario.router.UserMnAction.confidencialidad_mn;
 import static com.didekindroid.lib_one.usuario.router.UserMnAction.navigateUp;
 import static com.didekindroid.lib_one.usuario.router.UserUiExceptionAction.show_login_noUser;
-import static com.didekindroid.lib_one.usuario.router.UserUiExceptionAction.show_login_tokenNull;
+import static com.didekindroid.lib_one.usuario.router.UserUiExceptionAction.show_login_no_authHeader;
 import static com.didekindroid.lib_one.usuario.router.UserUiExceptionAction.show_userData_wrongMail;
 import static com.didekindroid.router.DidekinContextAction.didekinContextAcMap;
 import static com.didekindroid.router.DidekinMnAction.didekinMnItemMap;
@@ -34,7 +34,7 @@ public final class UserRouterMapUtil {
     public static void checkUserExcepMsgMap()
     {
         assertThat(didekinExcpMsgMap.get(BAD_REQUEST.getHttpMessage()), is(show_login_noUser));
-        assertThat(didekinExcpMsgMap.get(UNAUTHORIZED.getHttpMessage()), is(show_login_tokenNull));
+        assertThat(didekinExcpMsgMap.get(UNAUTHORIZED.getHttpMessage()), is(show_login_no_authHeader));
         assertThat(didekinExcpMsgMap.get(PASSWORD_NOT_SENT.getHttpMessage()), is(show_userData_wrongMail));
     }
 

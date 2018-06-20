@@ -4,20 +4,17 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.ActivityMock;
-import com.didekindroid.lib_one.api.exception.UiException;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
 import static com.didekindroid.lib_one.testutil.UiTestUtil.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 
 /**
  * User: pedro@didekin
@@ -39,12 +36,12 @@ public class CtrlerComuSpinnerTest {
     }
 
     @Test
-    public void testLoadDataInSpinner() throws IOException, UiException
+    public void testLoadDataInSpinner()
     {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
+        regUserComuWithTkCache(COMU_REAL_JUAN);
 
         checkSpinnerCtrlerLoadItems(controller);
 
-        cleanOneUser(USER_JUAN);
+        cleanOneUser(USER_JUAN.getUserName());
     }
 }

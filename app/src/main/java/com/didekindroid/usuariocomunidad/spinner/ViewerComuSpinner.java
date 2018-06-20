@@ -19,6 +19,7 @@ import java.io.Serializable;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -89,14 +90,14 @@ public class ViewerComuSpinner extends
     public UiExceptionRouterIf getExceptionRouter()
     {
         Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
+        return requireNonNull(getParentViewer()).getExceptionRouter();
     }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        if (viewBean != null){
+        if (viewBean != null) {
             spinnerEvent = new ComuSpinnerEventItemSelect(Comunidad.class.cast(viewBean));
         }
         view.setOnItemSelectedListener(new ComuSelectedListener());

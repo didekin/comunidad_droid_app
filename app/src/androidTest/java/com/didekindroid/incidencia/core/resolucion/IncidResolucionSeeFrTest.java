@@ -8,7 +8,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -18,10 +17,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.TaskStackBuilder.create;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -38,16 +33,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.lib_one.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
@@ -59,7 +52,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUs
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -78,37 +70,17 @@ public class IncidResolucionSeeFrTest {
     private UsuarioComunidad userJuan;
     private Activity activity;
 
-    static Resolucion doResolucionAvances(IncidImportancia incidImportancia) throws InterruptedException, UiException
-    {
-        // Registramos resolución.
-        Thread.sleep(1000);
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
-        // Modificamos con avances.
-        Avance avance = new Avance.AvanceBuilder().avanceDesc("avance1_desc").build();
-        List<Avance> avances = new ArrayList<>(1);
-        avances.add(avance);
-        resolucion = new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia())
-                .copyResolucion(resolucion)
-                .avances(avances)
-                .build();
-        assertThat(incidenciaDao.modifyResolucion(resolucion), is(2));
-        resolucion = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-        return resolucion;
-    }
-
     @Before
     public void setUp()
     {
-        try {
-            incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
-            assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        } catch (IOException | UiException e) {
-            fail();
-        }
+        incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
 
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
-            Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
-            create(getTargetContext()).addNextIntentWithParentStack(intent1).startActivities();
+            create(getTargetContext())
+                    .addNextIntentWithParentStack(
+                            new Intent(getTargetContext(), IncidSeeByComuAc.class)
+                                    .putExtra(INCID_CLOSED_LIST_FLAG.key, false))
+                    .startActivities();
         }
     }
 
@@ -124,11 +96,11 @@ public class IncidResolucionSeeFrTest {
     /*    ============================  TESTS  ===================================*/
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         // Precondition: resolucion with avances; usuario NO adm.
         Intent intent = doPreconditionsWithAvances();
-        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+//        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());       // TODO: esto está mal;
         activity = getInstrumentation().startActivitySync(intent);
         // Check.
         checkScreenResolucionSeeFr(resolucion);
@@ -154,11 +126,11 @@ public class IncidResolucionSeeFrTest {
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         // Precondition: Resolucion without avances; usuario NO adm.
         Intent intent = doPreconditions();
-        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+//        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());  // TODO: esto está mal;
         activity = getInstrumentation().startActivitySync(intent);
         // Check.
         checkScreenResolucionSeeFr(resolucion);
@@ -176,35 +148,25 @@ public class IncidResolucionSeeFrTest {
 
     /*    ============================  Helpers  ===================================*/
 
-    private Intent doPreconditionsWithAvances() throws InterruptedException
-    {
-        try {
-            doUser();
-            resolucion = doResolucionAvances(incidImportancia);
 
-        } catch (UiException e) {
-            fail();
-        }
-        return doIntent(resolucion);
+    private Intent doPreconditionsWithAvances()
+    {
+        doUser();
+        return doIntent(insertGetResolucionAdvances(incidImportancia));
     }
 
-    private Intent doPreconditions() throws UiException, InterruptedException
+    private Intent doPreconditions()
     {
         doUser();
         // Registramos resolución.
-        Thread.sleep(1000);
         return doIntent(insertGetResolucionNoAdvances(incidImportancia));
     }
 
     private void doUser()
     {
-        try {
-            // Usuario del test.
-            userJuan = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidImportancia.getIncidencia().getComunidadId());
-            assertThat(userComuMockDao.regUserAndUserComu(userJuan).execute().body(), is(true));
-        } catch (IOException e) {
-            fail();
-        }
+        // Usuario del test.
+        userJuan = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidImportancia.getIncidencia().getComunidadId());
+        assertThat(userComuMockDao.regUserAndUserComu(userJuan).blockingGet(), is(true));
     }
 
     @NonNull

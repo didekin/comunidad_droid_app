@@ -12,7 +12,6 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.Controller;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.security.CtrlerAuthToken;
 import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -42,7 +41,7 @@ public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
     {
         Timber.d("newViewerRegUserComuFr()");
         ViewerRegUserComuFr instance = new ViewerRegUserComuFr(view, parentViewer.getActivity(), parentViewer);
-        instance.setController(new CtrlerAuthToken());
+        instance.setController(new Controller());
         return instance;
     }
 

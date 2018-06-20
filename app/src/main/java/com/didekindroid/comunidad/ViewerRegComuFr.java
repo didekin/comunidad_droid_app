@@ -108,8 +108,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
         if (viewBean != null) {
             comunidad = Comunidad.class.cast(viewBean);
             if (comunidad.getC_Id() > 0L) {
-                controller.loadComunidadData(new RegComuFrObserver(savedState), comunidad.getC_Id());
-                return;
+                controller.getComunidadData(new RegComuFrObserver(savedState), comunidad.getC_Id());
             } else {
                 setTextFields(comunidad);
             }
@@ -225,29 +224,6 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
 
     /* ===================================  Observers  =================================*/
 
-    public ViewerTipoViaSpinner getTipoViaSpinner()
-    {
-        return tipoViaSpinner;
-    }
-
-    /* ===================================  Getters  =================================*/
-
-    public ViewerComuAutonomaSpinner getComuAutonomaSpinner()
-    {
-        return comuAutonomaSpinner;
-    }
-
-    public ViewerProvinciaSpinner getProvinciaSpinner()
-    {
-        return provinciaSpinner;
-    }
-
-    public ViewerMunicipioSpinner getMunicipioSpinner()
-    {
-        return municipioSpinner;
-    }
-
-    @SuppressWarnings("WeakerAccess")
     class RegComuFrObserver extends DisposableSingleObserver<Comunidad> {
 
         private final Bundle savedState;
@@ -270,5 +246,27 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
             Timber.d("onError()");
             onErrorInObserver(e);
         }
+    }
+
+    /* ===================================  Getters  =================================*/
+
+    public ViewerTipoViaSpinner getTipoViaSpinner()
+    {
+        return tipoViaSpinner;
+    }
+
+    public ViewerComuAutonomaSpinner getComuAutonomaSpinner()
+    {
+        return comuAutonomaSpinner;
+    }
+
+    public ViewerProvinciaSpinner getProvinciaSpinner()
+    {
+        return provinciaSpinner;
+    }
+
+    public ViewerMunicipioSpinner getMunicipioSpinner()
+    {
+        return municipioSpinner;
     }
 }

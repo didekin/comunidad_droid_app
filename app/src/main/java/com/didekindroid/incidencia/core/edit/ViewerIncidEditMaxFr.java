@@ -28,6 +28,7 @@ import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinn
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_should_have_admAuthority;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -66,7 +67,7 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
     public UiExceptionRouterIf getExceptionRouter()
     {
         Timber.d("getExceptionRouter()");
-        return getParentViewer().getExceptionRouter();
+        return requireNonNull(getParentViewer()).getExceptionRouter();
     }
 
     @Override

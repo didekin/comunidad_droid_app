@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.io.Serializable;
@@ -15,7 +14,6 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidContextualName.incid_open_just_selected;
-import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
@@ -34,8 +32,6 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  */
 public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
 
-    ViewerNotifyTokenIf viewerFirebaseToken;
-
     private ViewerIncidSeeOpenFr(View frView, AppCompatActivity activity)
     {
         super(frView, activity);
@@ -46,7 +42,6 @@ public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
         Timber.d("newViewerIncidSeeOpen()");
         ViewerIncidSeeOpenFr parentInstance = new ViewerIncidSeeOpenFr(view, activity);
         parentInstance.setController(new CtrlerIncidSeeOpenByComu());
-        parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
         parentInstance.comuSpinnerViewer = newViewerComuSpinner(view.findViewById(R.id.incid_comunidad_spinner), parentInstance);
         return parentInstance;
     }
@@ -74,14 +69,12 @@ public final class ViewerIncidSeeOpenFr extends ViewerIncidSeeCloseFr {
     {
         Timber.d("doViewInViewer()");
         super.doViewInViewer(savedState, viewBean);
-        viewerFirebaseToken.checkGcmTokenAsync();
     }
 
     @Override
     public int clearSubscriptions()
     {
         Timber.d("clearSubscriptions()");
-        viewerFirebaseToken.clearSubscriptions();
         return super.clearSubscriptions();
     }
 }

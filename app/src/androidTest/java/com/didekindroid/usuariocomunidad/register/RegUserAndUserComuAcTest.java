@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -16,8 +15,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -50,7 +47,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,7 +56,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class RegUserAndUserComuAcTest {
 
-    Comunidad comunidad;
+    private Comunidad comunidad;
+    private RegUserAndUserComuAc activity;
 
     @Rule
     public IntentsTestRule<RegUserAndUserComuAc> intentRule = new IntentsTestRule<RegUserAndUserComuAc>(RegUserAndUserComuAc.class) {
@@ -82,19 +79,11 @@ public class RegUserAndUserComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
-                cleanOptions(CLEAN_TK_HANDLER);
-            } catch (UiException | IOException e) {
-                fail();
-            }
-            Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            return intent;
+            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            cleanOptions(CLEAN_TK_HANDLER);
+            return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };
-
-    RegUserAndUserComuAc activity;
 
     @Before
     public void setUp() throws Exception

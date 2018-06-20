@@ -5,9 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.security.CtrlerAuthToken;
-import com.didekindroid.lib_one.security.CtrlerAuthTokenIf;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,16 +25,13 @@ import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
+import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -46,10 +40,9 @@ import static org.junit.Assert.assertThat;
  * Date: 16/05/17
  * Time: 16:42
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class ViewerComuSearchAcTest {
-
-    private final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public IntentsTestRule<ComuSearchAc> activityRule = new IntentsTestRule<>(ComuSearchAc.class, true, true);
@@ -65,34 +58,13 @@ public class ViewerComuSearchAcTest {
     }
 
     @Test
-    public void test_NewViewerComuSearch()
-    {
-        assertThat(activity.viewerAc.getController(), isA(CtrlerAuthTokenIf.class));
-    }
-
-    @Test
-    public void test_DoViewInViewer_1()
+    public void test_DoViewInViewer()
     {
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.searchComunidad_Bton)).check(matches(isDisplayed()));
         checkRegComuFrViewEmpty();
     }
 
-    @Test
-    public void test_DoViewInViewer_2()
-    {
-        activity.viewerAc.setController(new CtrlerAuthToken() {
-            @Override
-            public void refreshAccessToken(Viewer viewer)
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        });
-        activity.viewerAc.doViewInViewer(null, null);
-        waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
-    }
-
-    @SuppressWarnings("ConstantConditions")
     @Test
     public void test_SetChildViewer()
     {
@@ -108,16 +80,13 @@ public class ViewerComuSearchAcTest {
 
         ViewerRegComuFr viewerRegComuFrOld = activity.viewerAc.getChildViewer(ViewerRegComuFr.class);
         activity.setChildInParentViewer(viewerRegComuFrOld);
-        activity.viewerAc.setController(new CtrlerAuthToken());
 
         Button button = activity.acView.findViewById(R.id.searchComunidad_Bton);
         button.setOnClickListener(activity.viewerAc.new ComuSearchButtonListener());
         button.callOnClick();
         intended(allOf(
-                hasExtras(hasEntry(COMUNIDAD_SEARCH.key, is(COMU_REAL))),
+                hasExtras(hasEntry(COMUNIDAD_SEARCH.key, is(comu_real))),
                 hasComponent(ComuSearchResultsAc.class.getName())
         ));
     }
-
-    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
 }

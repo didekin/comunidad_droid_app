@@ -6,8 +6,8 @@ import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.core.Incidencia_GCM_test_abs;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -15,15 +15,13 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
+import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
 import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -32,17 +30,18 @@ import static org.junit.Assert.assertThat;
  * User: pedro@didekin
  * Date: 27/11/15
  * Time: 16:38
- *
+ * <p>
  * Test de integración GCM para el registro de una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidRegAc_GCM_Test extends Incidencia_GCM_test_abs {
 
-    Usuario pepe;
-    UsuarioComunidad pepeUserComu;
+    private Usuario pepe;
+    private UsuarioComunidad pepeUserComu;
 
-    @Test   @TargetApi(Build.VERSION_CODES.M)
-    public void testReceiveNotification() throws Exception
+    @Test
+    @TargetApi(Build.VERSION_CODES.M)
+    public void testReceiveNotification()
     {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             return;
@@ -72,11 +71,11 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_test_abs {
             protected void beforeActivityLaunched()
             {
                 try {
-                    pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    pepeUserComu = userComuDao.seeUserComusByUser().get(0);
+                    pepe = regGetUserComu(COMU_ESCORIAL_PEPE);
+                    pepeUserComu = userComuDao.seeUserComusByUser().blockingGet().get(0);
                     // We'll test that the gcmToken is not updated in server.
                     assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
-                } catch (IOException | UiException e) {
+                } catch (UiException e) {
                     e.printStackTrace();
                 }
             }

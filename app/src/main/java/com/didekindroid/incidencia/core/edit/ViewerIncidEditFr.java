@@ -70,7 +70,6 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> {
         buttonModify.setOnClickListener(v -> onClickButtonModify());
     }
 
-    @SuppressWarnings("WeakerAccess")
     void onClickButtonModify()
     {
         Timber.d("onClickButtonModify()");
@@ -84,7 +83,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> {
                         newIncidImportancia);
             }
         } catch (IllegalStateException e) {
-            Timber.e(e.getMessage());
+            Timber.e(e);
             makeToast(getActivity(), errorMsg.toString());
         }
     }

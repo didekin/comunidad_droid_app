@@ -110,7 +110,7 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
     }
 
     @Override
-    public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
+    public void doOnClickItemId(@NonNull SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
         if (ComuSpinnerEventItemSelect.class.isInstance(spinnerEventItemSelect)) {

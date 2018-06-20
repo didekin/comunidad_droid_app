@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -17,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -39,15 +37,15 @@ import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFrTest.doResolucionAvances;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionEditFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionEditFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
@@ -63,7 +61,6 @@ import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static junit.framework.Assert.fail;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -89,12 +86,8 @@ public class IncidResolucionEditFrTest {
     @Before
     public void setUp() throws Exception
     {
-        try {
-            incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-            assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        } catch (IOException | UiException e) {
-            fail();
-        }
+        incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
 
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
@@ -114,10 +107,10 @@ public class IncidResolucionEditFrTest {
     /*    ============================  TESTS  ===================================*/
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         // Precondition: with avances.
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Check.
         assertThat(resolucion.getAvances().size(), is(1));
         checkScreenResolucionEditFr(resolucion);
@@ -143,7 +136,7 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         // Precondition: NO avances.
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAdvances(incidImportancia)));
@@ -162,7 +155,7 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnEdit_1() throws UiException
+    public void testOnEdit_1()
     {
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAdvances(incidImportancia)));
         /* Caso OK: añadimos un avance con descripción Ok .*/
@@ -177,13 +170,13 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnEdit_2() throws UiException, InterruptedException
+    public void testOnEdit_2()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Caso OK: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checKIncidAcLayout();
-        assertThat(incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId()), is(resolucion));
+        assertThat(incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()), is(resolucion));
         // BACK.
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkBack(onView(withId(incidEditAcLayout)), incidResolucionEditFrLayout);
@@ -191,9 +184,9 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnEdit_3() throws UiException, InterruptedException
+    public void testOnEdit_3()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         /* Caso OK: cambiamos la fecha prevista, añadimos un avance con descripción Ok y cambiamos coste (admite importes negativos).*/
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
         Calendar newFechaPrev = reSetDatePicker(resolucion.getFechaPrev().getTime(), 1);
@@ -214,9 +207,9 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnEdit_4() throws UiException, InterruptedException
+    public void testOnEdit_4()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Caso NO OK: descripción de avance errónea.
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance * no válido"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("-1234,5"));
@@ -226,9 +219,9 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testCloseIncidenciaAndBack() throws InterruptedException, UiException
+    public void testCloseIncidenciaAndBack()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
         // BACK

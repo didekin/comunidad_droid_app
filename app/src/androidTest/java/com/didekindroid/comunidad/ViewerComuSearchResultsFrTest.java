@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.lib_one.api.ListMockFr;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -17,10 +16,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.Maybe;
 import io.reactivex.observers.DisposableMaybeObserver;
@@ -31,15 +29,13 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
-import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_REAL;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static com.didekindroid.testutil.ActivityTestUtil.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
@@ -71,56 +67,53 @@ import static org.junit.Assert.assertThat;
 @SuppressWarnings("ConstantConditions")
 public class ViewerComuSearchResultsFrTest {
 
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
     @Rule
     public IntentsTestRule<ActivityMock> intentsTestRule = new IntentsTestRule<>(ActivityMock.class, false, true);
 
-    ViewerComuSearchResultsFr viewer;
-    ActivityMock activity;
-    ListMockFr mockFr;
-    boolean isPepeToDelete;
+    private ViewerComuSearchResultsFr viewer;
+    private ActivityMock activity;
+    private boolean isPepeToDelete;
 
     @Before
     public void setUp()
     {
         activity = intentsTestRule.getActivity();
-        mockFr = (ListMockFr) activity.getSupportFragmentManager().findFragmentById(R.id.list_mock_frg);
+        ListMockFr mockFr = (ListMockFr) activity.getSupportFragmentManager().findFragmentById(R.id.list_mock_frg);
         viewer = ViewerComuSearchResultsFr.newViewerComuSearchResultsFr(mockFr.getView(), activity);
 
         isPepeToDelete = false;
     }
 
     @After
-    public void clean() throws UiException
+    public void clean()
     {
         if (isPepeToDelete) {
-            cleanOneUser(USER_PEPE);
+            cleanOneUser(USER_PEPE.getUserName());
         }
         viewer.getController().updateIsRegistered(false);
     }
 
     @Test
-    public void test_NewViewerComuSearchResultsFr() throws Exception
+    public void test_NewViewerComuSearchResultsFr()
     {
         assertThat(viewer.getController(), isA(CtrlerComunidad.class));
     }
 
     @Test  // User NOT registered
-    public void test_DoViewInViewer_Empty() throws Exception
+    public void test_DoViewInViewer_Empty()
     {
         try {
             trampolineReplaceIoScheduler();
-            viewer.doViewInViewer(null, COMU_REAL);
+            viewer.doViewInViewer(null, comu_real);
         } finally {
             resetAllSchedulers();
         }
-        intended(hasExtra(COMUNIDAD_SEARCH.key, COMU_REAL));
+        intended(hasExtra(COMUNIDAD_SEARCH.key, comu_real));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regComu_User_UserComuAcLayout));
     }
 
     @Test
-    public void test_DoViewInViewer() throws Exception
+    public void test_DoViewInViewer()
     {
         Comunidad comunidadToSearch = signUpWithTkGetComu(COMU_REAL_PEPE);
         isPepeToDelete = true;
@@ -138,27 +131,27 @@ public class ViewerComuSearchResultsFrTest {
     }
 
     @Test
-    public void test_OnSuccessLoadList() throws Exception
+    public void test_OnSuccessLoadList()
     {
-        final List<Comunidad> comunidades = asList(COMU_REAL, COMU_EL_ESCORIAL);
+        final List<Comunidad> comunidades = asList(comu_real, COMU_EL_ESCORIAL);
         activity.runOnUiThread(() -> viewer.onSuccessLoadList(comunidades));
 
         waitAtMost(6, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(2));
         onView(withId(android.R.id.list)).check(
-                matches(withAdaptedData(is(COMU_REAL))));
+                matches(withAdaptedData(is(comu_real))));
         onView(withId(android.R.id.list)).check(
                 matches(withAdaptedData(is(COMU_EL_ESCORIAL))));
     }
 
     @Test   // User IS registered.
-    public void test_OnSuccessEmptyList() throws Exception
+    public void test_OnSuccessEmptyList()
     {
         viewer.getController().updateIsRegistered(true);
-        activity.runOnUiThread(() -> viewer.onSuccessEmptyList(COMU_REAL));
+        activity.runOnUiThread(() -> viewer.onSuccessEmptyList(comu_real));
 
         waitAtMost(4, SECONDS).until(isToastInView(R.string.no_result_search_comunidad, activity));
-        intended(hasExtra(COMUNIDAD_SEARCH.key, COMU_REAL));
+        intended(hasExtra(COMUNIDAD_SEARCH.key, comu_real));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regComu_UserComuAcLayout));
         waitAtMost(4, SECONDS).until(isActivityDying(activity));
     }
@@ -169,23 +162,24 @@ public class ViewerComuSearchResultsFrTest {
 
         final ViewerComuSearchResultsFr.ComuSearchResultListener listener = viewer.new ComuSearchResultListener();
         activity.runOnUiThread(() -> {
-            viewer.onSuccessLoadList(singletonList(COMU_REAL));
+            viewer.onSuccessLoadList(singletonList(comu_real));
             listener.onItemClick(viewer.getViewInViewer(), new View(activity), 0, 0L);
         });
 
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regUser_UserComuAcLayout));
-        intended(hasExtra(COMUNIDAD_LIST_OBJECT.key, COMU_REAL));
+        intended(hasExtra(COMUNIDAD_LIST_OBJECT.key, comu_real));
     }
 
     @Test
     public void test_ComuSearchResultListener()
     {
+        AtomicBoolean isDone = new AtomicBoolean(false);
         viewer.setController(new CtrlerComunidad() {
             @Override
             public boolean getUserComu(DisposableMaybeObserver<UsuarioComunidad> observer, Comunidad comunidad)
             {
-                assertThat(comunidad, is(COMU_REAL));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                assertThat(comunidad, is(comu_real));
+                assertThat(isDone.getAndSet(true), is(false));
                 return false;
             }
         });
@@ -193,26 +187,26 @@ public class ViewerComuSearchResultsFrTest {
 
         final ViewerComuSearchResultsFr.ComuSearchResultListener listener = viewer.new ComuSearchResultListener();
         activity.runOnUiThread(() -> {
-            viewer.onSuccessLoadList(singletonList(COMU_REAL));
+            viewer.onSuccessLoadList(singletonList(comu_real));
             listener.onItemClick(viewer.getViewInViewer(), new View(activity), 0, 0L);
         });
 
-        waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
+        waitAtMost(4, SECONDS).untilTrue(isDone);
     }
 
     @Test
-    public void test_UsuarioComunidadObserverOnSuccess() throws IOException, UiException
+    public void test_UsuarioComunidadObserverOnSuccess()
     {
         UsuarioComunidad userComu = new UsuarioComunidad.UserComuBuilder(signUpWithTkGetComu(COMU_REAL_PEPE), USER_PEPE).userComuRest(COMU_REAL_PEPE).build();
         isPepeToDelete = true;
 
-        just(userComu).subscribeWith(viewer.new UsuarioComunidadObserver(COMU_REAL));
+        just(userComu).subscribeWith(viewer.new UsuarioComunidadObserver(comu_real));
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(userComuDataLayout));
         intended(hasExtra(USERCOMU_LIST_OBJECT.key, userComu));
     }
 
     @Test
-    public void test_UsuarioComunidadObserverOnComplete() throws IOException, UiException
+    public void test_UsuarioComunidadObserverOnComplete()
     {
         Comunidad comunidad = signUpWithTkGetComu(COMU_REAL_PEPE);
         isPepeToDelete = true;

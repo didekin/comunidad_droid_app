@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
-import com.didekindroid.lib_one.usuario.notification.ViewerNotifyTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -16,7 +15,6 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.core.resolucion.IncidResolucionRegFr.newInstance;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.usuario.notification.ViewerNotifyToken.newViewerFirebaseToken;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_should_have_admAuthority;
@@ -36,7 +34,6 @@ public class IncidResolucionRegAc extends AppCompatActivity implements FragmentI
 
     IncidImportancia incidImportancia;
     Resolucion resolucion;
-    ViewerNotifyTokenIf viewerFirebaseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,23 +69,6 @@ public class IncidResolucionRegAc extends AppCompatActivity implements FragmentI
         Timber.d("onRestoreInstanceState()");
         incidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onStart()
-    {
-        Timber.d("onStart()");
-        super.onStart();
-        viewerFirebaseToken = newViewerFirebaseToken(this);
-        viewerFirebaseToken.checkGcmTokenAsync();
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-        viewerFirebaseToken.clearSubscriptions();
     }
 
 //    ============================================================

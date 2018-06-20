@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.list;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import com.didekindroid.R;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import timber.log.Timber;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -23,9 +26,9 @@ class AdapterIncidSeeOpenByComu extends ArrayAdapter<IncidenciaUser> {
         super(context, R.layout.incid_see_by_comu_list_item, R.id.incid_see_apertura_block);
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         Timber.d("getViewInViewer()");
         VwHolderIncidSeeItem viewHolder;
@@ -35,7 +38,7 @@ class AdapterIncidSeeOpenByComu extends ArrayAdapter<IncidenciaUser> {
             Timber.d("getViewInViewer(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_comu_list_item, parent, false);
             // Hacemos visible el bloque de la fecha de alta de la resolución.
-            if (incidencia.getFechaAltaResolucion() != null) {
+            if (requireNonNull(incidencia).getFechaAltaResolucion() != null) {
                 convertView.findViewById(R.id.incid_see_resolucion_block).setVisibility(View.VISIBLE);
                 viewHolder = new VwHolderIncidSeeOpenItem(convertView);
             } else {

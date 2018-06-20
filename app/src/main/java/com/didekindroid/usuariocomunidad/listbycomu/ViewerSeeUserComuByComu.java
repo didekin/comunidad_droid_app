@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.lib_one.api.AbstractSingleObserver;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -17,12 +18,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.R.id.list;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
@@ -57,12 +56,11 @@ public final class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserCo
     {
         Timber.d("doViewInViewer()");
         // Precondition.
-        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
         long comunidadId = ComunidadBean.class.cast(comunidadBean).getComunidadId();
         assertTrue(comunidadId > 0L, intent_extra_should_be_initialized);
 
         controller.loadItemsByEntitiyId(
-                new UserComuByComuObserver<List<UsuarioComunidad>>() {
+                new AbstractSingleObserver<List<UsuarioComunidad>>(this) {
                     @Override
                     public void onSuccess(List<UsuarioComunidad> usuariosComunidad)
                     {
@@ -79,7 +77,7 @@ public final class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserCo
                 comunidadId);
 
         controller.comunidadData(
-                new UserComuByComuObserver<Comunidad>() {
+                new AbstractSingleObserver<Comunidad>(this) {
                     @Override
                     public void onSuccess(Comunidad comunidad)
                     {
@@ -104,16 +102,5 @@ public final class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserCo
     {
         Timber.d("onSuccessComunidadData()");
         nombreComuView.setText(text);
-    }
-
-    // =================================== HELPERS ==========================================
-
-    abstract class UserComuByComuObserver<T> extends DisposableSingleObserver<T> {
-        @Override
-        public void onError(Throwable e)
-        {
-            Timber.d("onError()");
-            onErrorInObserver(e);
-        }
     }
 }

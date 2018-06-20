@@ -9,7 +9,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.PasswordChangeAc;
-import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,6 +29,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
 import static com.didekindroid.lib_one.usuario.UserTestNavigation.pswdChangeAcRsId;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
@@ -40,7 +40,6 @@ import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.Assert.fail;
@@ -67,13 +66,12 @@ public class PasswordChange_App_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            Usuario usuario = null;
             try {
-                usuario = signUpAndUpdateTk(COMU_REAL_DROID);
-            } catch (Exception e) {
+                return new Intent().putExtra(user_name.key, regGetUserComu(COMU_REAL_DROID).getUserName());
+            } catch (UiException e) {
                 fail();
             }
-            return new Intent().putExtra(user_name.key, usuario.getUserName());
+            return null;
         }
     };
 
@@ -97,7 +95,7 @@ public class PasswordChange_App_Test {
     //    ============================  TESTS  ===================================
 
     @Test
-    public void testPasswordChange_Up() throws UiException
+    public void testPasswordChange_Up()
     {
         doPswdChange();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -108,7 +106,7 @@ public class PasswordChange_App_Test {
     }
 
     @Test
-    public void testPasswordChange_Back() throws UiException
+    public void testPasswordChange_Back()
     {
         doPswdChange();
         checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);

@@ -8,20 +8,19 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.lib_one.api.ParentViewer;
-import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuContextualName.new_comu_usercomu_just_registered;
-import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 
 /**
  * User: pedro@didekin
@@ -56,7 +55,6 @@ final class ViewerRegComuUserComuAc extends ParentViewer<View, CtrlerUsuarioComu
 
     // ==================================  HELPERS =================================
 
-    @SuppressWarnings("WeakerAccess")
     class RegComuAndUserComuButtonListener implements View.OnClickListener {
 
         @Override
@@ -72,24 +70,21 @@ final class ViewerRegComuUserComuAc extends ParentViewer<View, CtrlerUsuarioComu
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!ConnectionUtils.isInternetConnected(activity)) {
+            } else if (!isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
-                controller.registerUserComuAndComu(new RegComuAndUserComuObserver(), usuarioComunidad);
+                controller.regComuAndUserComu(new RegComuAndUserComuObserver(), usuarioComunidad);
             }
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
-    class RegComuAndUserComuObserver extends DisposableSingleObserver<Boolean> {
+    class RegComuAndUserComuObserver extends DisposableCompletableObserver {
 
         @Override
-        public void onSuccess(Boolean rowInserted)
+        public void onComplete()
         {
-            Timber.d("onSuccess()");
-            assertTrue(rowInserted, user_and_comunidad_should_be_registered);
-            getContextualRouter().getActionFromContextNm(new_comu_usercomu_just_registered)
-                    .initActivity(activity);
+            Timber.d("onComplete()");
+            getContextualRouter().getActionFromContextNm(new_comu_usercomu_just_registered).initActivity(activity);
             dispose();
         }
 

@@ -10,8 +10,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  * Date: 24/11/16
  * Time: 12:21
  */
-
-@SuppressWarnings("unused")
 public final class UserEspressoTestUtil {
 
     private UserEspressoTestUtil()

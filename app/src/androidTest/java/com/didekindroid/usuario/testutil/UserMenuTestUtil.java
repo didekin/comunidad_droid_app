@@ -14,13 +14,12 @@ import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
  * Date: 10/08/15
  * Time: 15:09
  */
-@SuppressWarnings("unused")
 public enum UserMenuTestUtil implements MenuTestUtilIf {
     LOGIN_AC {
         @Override
         public void checkItem(Activity activity)
         {
-            if (secInitializer.get().getTkCacher().isRegisteredUser()) {
+            if (secInitializer.get().getTkCacher().isRegisteredCache()) {
                 checkAppBarMnNotExist(activity, R.string.login_ac_mn);
             } else {
                 checkAppBarMenu(activity, R.string.login_ac_mn, R.id.login_ac_layout);

@@ -9,12 +9,13 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
@@ -23,7 +24,6 @@ import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_re
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 
 /**
  * User: pedro@didekin
@@ -60,7 +60,6 @@ final class ViewerRegUserComuAc extends ParentViewer<View, CtrlerUsuarioComunida
         registroButton.setOnClickListener(new RegUserComuButtonListener(comunidad));
     }
 
-    @SuppressWarnings("WeakerAccess")
     class RegUserComuButtonListener implements View.OnClickListener {
 
         private final Comunidad comunidad;
@@ -82,34 +81,28 @@ final class ViewerRegUserComuAc extends ParentViewer<View, CtrlerUsuarioComunida
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
-                controller.registerUserComu(
-                        new RegUserComuObserver(comunidad),
-                        usuarioComunidad);
+                controller.regUserComu(new RegUserComuObserver(comunidad), usuarioComunidad);
             }
         }
     }
 
     // ==================================== Observer ================================
 
-    @SuppressWarnings("WeakerAccess")
-    class RegUserComuObserver extends DisposableSingleObserver<Integer> {
+    class RegUserComuObserver extends DisposableCompletableObserver {
 
         final Comunidad comunidad;
 
-        public RegUserComuObserver(Comunidad comunidad)
+        RegUserComuObserver(Comunidad comunidad)
         {
             this.comunidad = comunidad;
         }
 
         @Override
-        public void onSuccess(Integer rowInserted)
+        public void onComplete()
         {
-            Timber.d("onSuccess()");
-            assertTrue(rowInserted == 1, user_and_comunidad_should_be_registered);
             Bundle bundle = new Bundle(1);
             bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
-            getContextualRouter().getActionFromContextNm(new_usercomu_just_registered)
-                    .initActivity(activity, bundle);
+            getContextualRouter().getActionFromContextNm(new_usercomu_just_registered).initActivity(activity, bundle);
             dispose();
         }
 

@@ -30,7 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
@@ -82,7 +82,7 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     }
 
     @Test
-    public void testDoViewInViewer() throws Exception
+    public void testDoViewInViewer()
     {
         // Verificamos layout.
         ImportanciaUser importanciaUser = new ImportanciaUser(incidImportancia.getUserComu().getUsuario().getAlias(), incidImportancia.getImportancia());
@@ -95,13 +95,13 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     }
 
     @Test
-    public void test_NewViewerIncidSeeUserComuImportancia() throws Exception
+    public void test_NewViewerIncidSeeUserComuImportancia()
     {
         assertThat(viewer.getController(), isA(CtrlerIncidenciaCore.class));
     }
 
     @Test
-    public void test_OnSuccessLoadItems() throws Exception
+    public void test_OnSuccessLoadItems()
     {
 
         // Preconditions.
@@ -125,7 +125,7 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     //    ============================  LIFE CYCLE TESTS  ===================================
 
     @Test
-    public void testClearSubscriptions() throws Exception
+    public void testClearSubscriptions()
     {
         checkSubscriptionsOnStop(activity, viewer.getController());
     }

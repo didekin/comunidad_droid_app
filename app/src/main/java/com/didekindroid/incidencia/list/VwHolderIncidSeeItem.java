@@ -24,7 +24,7 @@ public class VwHolderIncidSeeItem {
     private final TextView mAmbitoView;
     private final TextView mImportanciaComuView;
 
-    public VwHolderIncidSeeItem(View convertView)
+    VwHolderIncidSeeItem(View convertView)
     {
         mDescripcionView = convertView.findViewById(R.id.incid_descripcion_view);
         mFechaAltaView = convertView.findViewById(R.id.incid_fecha_alta_view);

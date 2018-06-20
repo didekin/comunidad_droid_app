@@ -10,6 +10,7 @@ import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.usuario.LoginAc;
 import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
 import org.junit.After;
@@ -18,7 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.app.TaskStackBuilder.create;
@@ -41,7 +41,6 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.lib_one.usuario.UsuarioMockDao.usuarioMockDao;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkTextsInDialog;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
@@ -50,6 +49,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
+import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static java.util.Objects.requireNonNull;
@@ -68,6 +68,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegComuUserUserComuAcTest {
 
+    private RegComuAndUserAndUserComuAc activity;
+
     @Rule
     public IntentsTestRule<RegComuAndUserAndUserComuAc> activityRule =
             new IntentsTestRule<RegComuAndUserAndUserComuAc>(RegComuAndUserAndUserComuAc.class, true, true) {
@@ -80,9 +82,7 @@ public class ViewerRegComuUserUserComuAcTest {
                 }
             };
 
-    RegComuAndUserAndUserComuAc activity;
-
-    static void execCheckCleanDialog(ViewerIf viewer) throws IOException
+    static void execCheckCleanDialog(ViewerIf viewer)
     {
         typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
@@ -98,7 +98,7 @@ public class ViewerRegComuUserUserComuAcTest {
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
         intended(hasExtra(user_name.key, USER_PEPE.getUserName()));
         // Clean.
-        assertThat(usuarioMockDao.deleteUser(USER_PEPE.getUserName()).execute().body(), is(true));
+        assertThat(userComuMockDao.deleteUser(USER_PEPE.getUserName()).blockingGet(), is(true));
     }
 
     @Before
@@ -145,7 +145,7 @@ public class ViewerRegComuUserUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserUserComuBtonListener_1() throws Exception
+    public void test_RegComuUserUserComuBtonListener_1()
     {
         // Precondition:
         assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));

@@ -1,7 +1,9 @@
 package com.didekindroid.incidencia.comment;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import static com.didekindroid.incidencia.IncidContextualName.to_register_new_in
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -48,14 +51,19 @@ public class IncidCommentSeeListFr extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
         mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
         // Floating button.
         FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
-        fab.setOnClickListener(v -> routerInitializer.get().getContextRouter().getActionFromContextNm(to_register_new_incid_comment).initActivity(getActivity(), getArguments()));
+        fab.setOnClickListener(
+                v -> routerInitializer.get()
+                        .getContextRouter()
+                        .getActionFromContextNm(to_register_new_incid_comment)
+                        .initActivity(requireNonNull(getActivity()), getArguments())
+        );
         return mView;
     }
 
@@ -76,7 +84,7 @@ public class IncidCommentSeeListFr extends Fragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressLint("StaticFieldLeak")
     class IncidCommentLoader extends AsyncTask<Incidencia, Void, List<IncidComment>> {
 
         UiException uiException;
@@ -85,13 +93,7 @@ public class IncidCommentSeeListFr extends Fragment {
         protected List<IncidComment> doInBackground(Incidencia... params)
         {
             Timber.d("doInBackground()");
-            List<IncidComment> comments = null;
-            try {
-                comments = incidenciaDao.seeCommentsByIncid(params[0].getIncidenciaId());
-            } catch (UiException ue) {
-                uiException = ue;
-            }
-            return comments;
+            return incidenciaDao.seeCommentsByIncid(params[0].getIncidenciaId()).blockingGet();
         }
 
         @SuppressWarnings("ConstantConditions")
@@ -102,7 +104,7 @@ public class IncidCommentSeeListFr extends Fragment {
 
             if (checkPostExecute(getActivity())) return;
 
-            if (uiException != null) {
+            if (uiException != null) {  // TODO: darle una vuelta; esto no sirve.
                 Timber.d("onPostExecute(): uiException != null");
                 routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
                         .initActivity(getActivity());

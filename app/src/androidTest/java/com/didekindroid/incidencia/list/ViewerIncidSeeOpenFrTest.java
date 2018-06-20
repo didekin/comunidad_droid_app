@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -17,35 +16,32 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.list.ViewerIncidSeeCloseFrTest.checkOnSuccessLoadItems;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
+import static com.didekindroid.incidencia.list.ViewerIncidSeeCloseFrTest.checkOnSuccessLoadItems;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
-import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -55,33 +51,28 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeOpenFrTest {
 
-    Resolucion resolucion;
-    IncidenciaUser incidenciaUser;
-    IncidImportancia incidImportancia;
+    private Resolucion resolucion;
+    private IncidenciaUser incidenciaUser;
+    private IncidImportancia incidImportancia;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                incidImportancia = makeRegGetIncidImportancia(userComuDao.seeUserComusByUser().get(0),
-                        (short) 2);
-                // Cierre incidencias..
-                resolucion = insertGetResolucionNoAdvances(incidImportancia);
-                incidenciaUser = incidenciaDao
-                        .seeIncidsOpenByComu(incidImportancia.getIncidencia().getComunidadId()).get(0);
-            } catch (IOException | UiException e) {
-                fail();
-            }
+            regUserComuWithTkCache(COMU_ESCORIAL_PEPE);
+            incidImportancia = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0),
+                    (short) 2);
+            // Cierre incidencias..
+            resolucion = insertGetResolucionNoAdvances(incidImportancia);
+            incidenciaUser = incidenciaDao
+                    .seeIncidsOpenByComu(incidImportancia.getIncidencia().getComunidadId()).blockingGet().get(0);
             return new Intent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);
         }
     };
 
-    IncidSeeByComuAc activity;
-    IncidSeeByComuFr fragment;
-    ViewerIncidSeeOpenFr viewer;
+    private IncidSeeByComuAc activity;
+    private IncidSeeByComuFr fragment;
 
     @Before
     public void setUp() throws Exception
@@ -90,8 +81,8 @@ public class ViewerIncidSeeOpenFrTest {
         fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager()
                 .findFragmentByTag(IncidSeeByComuFr.class.getName());
         // Wait until everything is ready.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidOpenListView(incidImportancia, activity, incidenciaUser.getFechaAltaResolucion())));
-        viewer = (ViewerIncidSeeOpenFr) fragment.viewer;
+        waitAtMost(4, SECONDS)
+                .until(isViewDisplayed(checkIncidOpenListView(incidImportancia, activity, incidenciaUser.getFechaAltaResolucion())));
 
     }
 
@@ -101,37 +92,25 @@ public class ViewerIncidSeeOpenFrTest {
         cleanOptions(CLEAN_PEPE);
     }
 
-    //    ============================  TESTS INTEGRATION  ===================================
-
-    @Test
-    public void test_DoViewInViewer() throws Exception
-    {
-        // GcmToken.
-        waitAtMost(8, SECONDS).until(
-                viewer.viewerFirebaseToken.getController().getTkCacher()::isGcmTokenSentServer);
-    }
-
     //    ============================  TESTS  ===================================
 
     @Test
-    public void testNewViewerIncidSeeOpen() throws Exception
+    public void testNewViewerIncidSeeOpen()
     {
         assertThat(fragment.viewer.getController(), allOf(
                 notNullValue(), instanceOf(CtrlerIncidSeeOpenByComu.class)
         ));
         assertThat(fragment.viewer.getComuSpinner(), notNullValue());
-        assertThat(viewer.viewerFirebaseToken, notNullValue());
     }
 
     @Test
-    public void testClearSubscriptions() throws Exception
+    public void testClearSubscriptions()
     {
-        checkSubscriptionsOnStop(activity, viewer.viewerFirebaseToken.getController(),
-                fragment.viewer.getController());
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
     @Test
-    public void test_OnSuccessLoadSelectedItem() throws Exception
+    public void test_OnSuccessLoadSelectedItem()
     {
         // Preconditions.
         Bundle bundle = new Bundle(1);
@@ -143,7 +122,7 @@ public class ViewerIncidSeeOpenFrTest {
     }
 
     @Test
-    public void test_OnSuccessLoadItems() throws Exception
+    public void test_OnSuccessLoadItems()
     {
         checkOnSuccessLoadItems(incidImportancia, activity, fragment.viewer);
     }

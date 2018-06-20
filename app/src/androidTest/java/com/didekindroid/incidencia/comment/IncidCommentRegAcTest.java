@@ -6,7 +6,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -17,8 +16,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.app.TaskStackBuilder.create;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
@@ -36,23 +33,22 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -70,19 +66,19 @@ public class IncidCommentRegAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                signUpAndUpdateTk(COMU_REAL_JUAN);
-                UsuarioComunidad juanReal = userComuDao.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuarioComunidad(juanReal)
-                        .importancia((short) 3).build();
-                incidenciaDao.regIncidImportancia(incidJuanReal1);
-                IncidenciaUser incidenciaUser = incidenciaDao.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0);
-                incidJuanReal1 = incidenciaDao.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (UiException | IOException e) {
-                fail();
-            }
+            regUserComuWithTkCache(COMU_REAL_JUAN);
+            UsuarioComunidad juanReal = userComuDao.seeUserComusByUser().blockingGet().get(0);
+            incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
+                    doIncidencia(juanReal.getUsuario().getUserName(),
+                            "Incidencia Real One",
+                            juanReal.getComunidad().getC_Id(),
+                            (short) 43))
+                    .usuarioComunidad(juanReal)
+                    .importancia((short) 3).build();
+            incidenciaDao.regIncidImportancia(incidJuanReal1);
+            IncidenciaUser incidenciaUser = incidenciaDao.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).blockingGet().get(0);
+            incidJuanReal1 = incidenciaDao.seeIncidImportanciaRaw(incidenciaUser.getIncidencia().getIncidenciaId())
+                    .blockingGet().getIncidImportancia();
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);

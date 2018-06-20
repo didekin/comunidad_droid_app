@@ -17,7 +17,6 @@ import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
 import com.didekindroid.lib_one.api.SpinnerEventListener;
 import com.didekindroid.lib_one.api.SpinnerTextMockFr;
 import com.didekindroid.lib_one.api.ViewerMock;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -26,7 +25,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -54,7 +52,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -71,11 +68,7 @@ public class ViewerComuSpinnerTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            try {
-                regTwoUserComuSameUser(makeListTwoUserComu());
-            } catch (IOException | UiException e) {
-                fail();
-            }
+            regTwoUserComuSameUser(makeListTwoUserComu());
         }
     };
 
@@ -102,9 +95,9 @@ public class ViewerComuSpinnerTest {
     }
 
     @After
-    public void cleanUp() throws UiException
+    public void cleanUp()
     {
-        cleanOneUser(USER_JUAN);
+        cleanOneUser(USER_JUAN.getUserName());
     }
 
     // ======================================= TESTS ===============================================

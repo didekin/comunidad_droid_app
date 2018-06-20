@@ -7,16 +7,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.ObserverCacheCleaner;
 import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
 import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
 
+import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
@@ -66,12 +67,11 @@ final class ViewerRegUserAndUserComuAc extends ParentViewer<View, CtrlerUsuarioC
                 .initActivity(activity, usuario_object.getBundleForKey(userComu.getUsuario()));
     }
 
-    @SuppressWarnings("WeakerAccess")
     class RegUserAndUserComuButtonListener implements View.OnClickListener {
 
         final Comunidad comunidadIntent;
 
-        public RegUserAndUserComuButtonListener(Comunidad comunidadIntent)
+        RegUserAndUserComuButtonListener(Comunidad comunidadIntent)
         {
             this.comunidadIntent = comunidadIntent;
         }
@@ -91,13 +91,18 @@ final class ViewerRegUserAndUserComuAc extends ParentViewer<View, CtrlerUsuarioC
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
-                controller.registerUserAndUserComu(
-                        new ObserverCacheCleaner(ViewerRegUserAndUserComuAc.this) {
+                controller.regUserAndUserComu(
+                        new DisposableCompletableObserver() {
                             @Override
                             public void onComplete()
                             {
-                                super.onComplete();
                                 onRegisterSuccess(usuarioComunidad);
+                            }
+
+                            @Override
+                            public void onError(Throwable e)
+                            {
+                                onErrorInObserver(e);
                             }
                         },
                         usuarioComunidad);

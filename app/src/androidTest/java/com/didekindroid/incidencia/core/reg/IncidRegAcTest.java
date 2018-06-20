@@ -2,13 +2,11 @@ package com.didekindroid.incidencia.core.reg;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -19,13 +17,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.app.TaskStackBuilder.create;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -40,8 +35,6 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImp
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
@@ -64,7 +57,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -75,7 +67,6 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidRegAcTest {
 
-    private final static AtomicReference<String> flagMethodExec_1 = new AtomicReference<>(BEFORE_METHOD_EXEC);
     private List<UsuarioComunidad> usuarioComunidades;
 
     @Rule
@@ -83,12 +74,8 @@ public class IncidRegAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-                usuarioComunidades = userComuDao.seeUserComusByUser();
-            } catch (IOException | UiException e) {
-                fail();
-            }
+            regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
+            usuarioComunidades = userComuDao.seeUserComusByUser().blockingGet();
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent0 = new Intent(getTargetContext(), UserComuDataAc.class)
@@ -196,25 +183,5 @@ public class IncidRegAcTest {
     public void testOnStop()
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
-    }
-
-    @Test
-    public void testOnSaveInstanceState()
-    {
-        activity.viewer = new ViewerIncidRegAc(activity) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                assertThat(flagMethodExec_1.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-
-            @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
-            {
-                return 0;
-            }
-        };
-        activity.runOnUiThread(() -> getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0)));
-        waitAtMost(1, SECONDS).untilAtomic(flagMethodExec_1, is(AFTER_METHOD_EXEC_A));
     }
 }

@@ -3,18 +3,6 @@
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- All of the permissions are non-dangerous permission. No check online. -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- Permissions for GCM services -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-    <!-- .......... -->
-    <supports-screens
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:smallScreens="true"
-        android:xlargeScreens="true"/>
-
     <application
         android:name=".DidekinApp"
         android:allowBackup="false"
@@ -31,9 +19,10 @@
             android:name="com.didekindroid.lib_one.accesorio.ConfidencialidadAc"
             android:parentActivityName=".comunidad.ComuSearchAc"
             tools:replace="android:parentActivityName">
-            <meta-data tools:node="replace"
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchAc"
+                tools:node="replace"/>
         </activity>
         <!-- **************************************************************** -->
         <!-- USUARIO -->
@@ -70,9 +59,10 @@
             android:name="com.didekindroid.lib_one.usuario.LoginAc"
             android:parentActivityName=".comunidad.ComuSearchAc"
             tools:replace="android:parentActivityName">
-            <meta-data tools:node="replace"
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".comunidad.ComuSearchAc"/>
+                android:value=".comunidad.ComuSearchAc"
+                tools:node="replace"/>
         </activity>
         <activity
             android:name=".usuariocomunidad.register.RegComuAndUserAndUserComuAc"
@@ -139,19 +129,11 @@
             android:name="com.didekindroid.lib_one.usuario.UserDataAc"
             android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
             tools:replace="android:parentActivityName">
-            <meta-data tools:node="replace"
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
+                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
+                tools:node="replace"/>
         </activity>
-
-        <!-- .......... GCM services ......... -->
-        <service
-            android:name=".lib_one.usuario.notification.InstanceIdService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
         <!-- **************************************************************** -->
@@ -197,10 +179,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.list.IncidSeeByComuAc"/>
         </activity>
-        <activity android:name=".incidencia.core.resolucion.IncidResolucionRegAc"
-                  android:label="@string/incid_resolution_ac_label"
-                  android:parentActivityName=".incidencia.list.IncidSeeByComuAc"
-                  android:windowSoftInputMode="stateHidden">
+        <activity
+            android:name=".incidencia.core.resolucion.IncidResolucionRegAc"
+            android:label="@string/incid_resolution_ac_label"
+            android:parentActivityName=".incidencia.list.IncidSeeByComuAc"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.list.IncidSeeByComuAc"/>

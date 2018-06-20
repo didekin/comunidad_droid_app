@@ -21,7 +21,6 @@ import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserComuAc
  * Preconditions:
  * 1. The user is registered with a different comunidad.
  */
-@SuppressWarnings("ConstantConditions")
 public class RegComuAndUserComuAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     ViewerRegComuUserComuAc viewer;

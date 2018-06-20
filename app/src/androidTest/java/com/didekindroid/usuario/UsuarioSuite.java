@@ -14,7 +14,6 @@ import org.junit.runners.Suite;
         LoginAc_App_Test.class,
         PasswordChange_App_Test.class,
         UserData_App_Test.class,
-        ViewerPswdChange_App_Test.class,
         ViewerUserData_App_Test.class,
 })
 public class UsuarioSuite {

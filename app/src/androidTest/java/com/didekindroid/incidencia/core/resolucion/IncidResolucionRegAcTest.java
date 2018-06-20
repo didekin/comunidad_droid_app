@@ -10,8 +10,6 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.api.router.UiExceptionRouter;
-import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyToken;
-import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyTokenIf;
 import com.didekindroid.lib_one.util.UiUtil;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -24,7 +22,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -47,18 +44,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
 import static com.didekindroid.lib_one.util.UiUtil.isCalendarPreviousTimeStamp;
-import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
@@ -72,7 +68,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -93,12 +88,8 @@ public class IncidResolucionRegAcTest {
         protected Intent getActivityIntent()
         {
             uiExceptionRouter = (UiExceptionRouter) routerInitializer.get().getExceptionRouter();
-            try {
-                // A user WITH powers 'adm'.
-                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-            } catch (IOException | UiException e) {
-                fail();
-            }
+            // A user WITH powers 'adm'.
+            incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
 
             if (SDK_INT >= LOLLIPOP) {
                 Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
@@ -233,19 +224,6 @@ public class IncidResolucionRegAcTest {
                         activity
                 )
         );
-    }
-
-    @Test
-    public void test_OnStart()
-    {
-        CtrlerNotifyTokenIf controller = CtrlerNotifyToken.class.cast(activity.viewerFirebaseToken.getController());
-        waitAtMost(8, SECONDS).until(() -> controller.getTkCacher().isGcmTokenSentServer());
-    }
-
-    @Test
-    public void test_OnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewerFirebaseToken.getController());
     }
 
 //    ============================= HELPER METHODS ===========================

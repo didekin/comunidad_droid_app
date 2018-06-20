@@ -6,7 +6,6 @@ import android.os.Build;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.LoginAc;
 
 import org.junit.After;
@@ -31,13 +30,13 @@ import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -63,7 +62,7 @@ public class LoginAc_App_Test {
         {
             // Precondition: the user is registered.
             try {
-                signUpAndUpdateTk(COMU_REAL_DROID);
+                regUserComuWithTkCache(COMU_REAL_DROID);
             } catch (Exception e) {
                 fail();
             }
@@ -77,9 +76,7 @@ public class LoginAc_App_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            Intent intent = new Intent();
-            intent.putExtra(user_name.key, USER_DROID.getUserName());
-            return intent;
+            return new Intent().putExtra(user_name.key, USER_DROID.getUserName());
         }
     };
 
@@ -91,7 +88,7 @@ public class LoginAc_App_Test {
     }
 
     @After
-    public void cleanUp() throws UiException
+    public void cleanUp()
     {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);

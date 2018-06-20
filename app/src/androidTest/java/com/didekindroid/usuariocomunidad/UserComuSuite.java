@@ -2,14 +2,13 @@ package com.didekindroid.usuariocomunidad;
 
 import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc_Mock_Test;
 import com.didekindroid.usuariocomunidad.repository.UserComuDaoTest;
-import com.didekindroid.usuariocomunidad.repository.UserComuObservableTest;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.CtrlerUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.ViewerSeeUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAcTest;
-import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidadTest;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidadTest;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAcTest;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAcTest;
 import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAcTest;
@@ -55,7 +54,6 @@ import org.junit.runners.Suite;
         ViewerRegUserComuFrTest.class,
         // repository.
         UserComuDaoTest.class,
-        UserComuObservableTest.class,
         // spinner.
         CtrlerComuSpinnerTest.class,
         ViewerComuSpinnerTest.class,

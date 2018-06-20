@@ -39,15 +39,13 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * 2. The incidencias shown have been registered in the last 24 months and are closed.
  * 3. All the incidencias closed in a comunidad where the user is NOW registered are shown,
  * even is the user was not registered in the comunidad when incidencia was open or closed.
- * 4. All incidencias closed MUST HAVE a bundleWithResolucion.
+ * 4. All incidencias closed MUST HAVE a resolucion.
  * 5. An intent may be passed with a comunidadId, when a notification is sent when the
  * incidencia has been closed or from a comuSpinner instance in a previous activity or fragment.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.
- * 3. If an incidencia is selected, the bundleWithResolucion data are shown.
- * -- Arguments with incidImportancia, bundleWithResolucion and a toShowMenu flag are passed to the bundleWithResolucion
- * fragment.
+ * 3. If an incidencia is selected, the resolucion data are shown.
  */
 public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
@@ -186,7 +184,7 @@ public class ViewerIncidSeeCloseFr extends
      * @param spinnerEventItemSelect: comunidad selected in comunidades spinner.
      */
     @Override
-    public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
+    public void doOnClickItemId(@NonNull SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
         long comunidadIdInSpinner = spinnerEventItemSelect.getSpinnerItemIdSelect();

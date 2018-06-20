@@ -32,9 +32,9 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidImportanciaBeanTest {
 
-    Resources resources;
-    StringBuilder errors;
-    IncidImportanciaBean incidImportanciaBean;
+    private Resources resources;
+    private StringBuilder errors;
+    private IncidImportanciaBean incidImportanciaBean;
 
     @Before
     public void doBefore()
@@ -45,7 +45,7 @@ public class IncidImportanciaBeanTest {
     }
 
     @Test
-    public void testValidateRange() throws Exception
+    public void testValidateRange()
     {
         incidImportanciaBean.setImportancia((short) 4);
         assertThat(incidImportanciaBean.validateRange(errors, resources), is(true));
@@ -55,7 +55,7 @@ public class IncidImportanciaBeanTest {
     }
 
     @Test
-    public void testMakeIncidImportancia_A() throws Exception
+    public void testMakeIncidImportancia_A()
     {
         Incidencia incidencia = new Incidencia.IncidenciaBuilder()
                 .comunidad(new Comunidad.ComunidadBuilder().c_id(11L).build())
@@ -71,12 +71,13 @@ public class IncidImportanciaBeanTest {
         try {
             incidImportanciaBean.makeIncidImportancia(errors, resources, incidImportancia);
             fail();
-        } catch (IllegalStateException ie) {
+        } catch (Exception ie) {
+            assertThat(ie instanceof IllegalStateException, is(true));
         }
     }
 
     @Test
-    public void makeIncidImportancia_B() throws Exception
+    public void makeIncidImportancia_B()
     {
         IncidenciaBean incidenciaBean = new IncidenciaBean()
                 .setCodAmbitoIncid((short) 49)
@@ -92,7 +93,7 @@ public class IncidImportanciaBeanTest {
     }
 
     @Test
-    public void makeIncidImportancia_C() throws Exception
+    public void makeIncidImportancia_C()
     {
         Incidencia incidencia = new Incidencia.IncidenciaBuilder()
                 .comunidad(new Comunidad.ComunidadBuilder().c_id(11L).build())
@@ -114,7 +115,8 @@ public class IncidImportanciaBeanTest {
         try {
             incidImportanciaBean.makeIncidImportancia(errors, resources, fragmentView, incidenciaBean, incidencia);
             fail();
-        } catch (IllegalStateException ie) {
+        } catch (Exception ie) {
+            assertThat(ie instanceof IllegalStateException, is(true));
         }
     }
 }

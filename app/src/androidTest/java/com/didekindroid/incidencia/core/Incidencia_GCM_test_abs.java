@@ -10,10 +10,8 @@ import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyToken;
 import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyTokenIf;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,15 +22,14 @@ import java.util.concurrent.Callable;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.didekindroid.incidencia.testutils.GcmTestConstant.PACKAGE_TEST;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
+import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -44,14 +41,14 @@ import static org.junit.Assert.assertThat;
  * 1. We check that the firebase token is sent to server when the activity is created.
  * 2. We check that after a task which produces a notification, a notification is received in the phone.
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public abstract class Incidencia_GCM_test_abs {
 
     @Rule
     public IntentsTestRule<? extends Activity> intentRule = doIntentsTestRule();
-    Activity mActivity;
-    NotificationManager notificationManager;
-    String firebaseToken;
+    private Activity mActivity;
+    private NotificationManager notificationManager;
 
     /**
      * To be implemented in subclasses.
@@ -76,19 +73,16 @@ public abstract class Incidencia_GCM_test_abs {
 
     //  ===========================================================================
 
-    protected void checkToken() throws InterruptedException, UiException
+    protected void checkToken()
     {
         CtrlerNotifyTokenIf controller = new CtrlerNotifyToken();
-        firebaseToken = FirebaseInstanceId.getInstance().getToken();
-        await().atMost(12, SECONDS).until(getGcmToken(), allOf(
-                notNullValue(),
-                is(firebaseToken)
-        ));
+        await().atMost(12, SECONDS)
+                .until(() -> usuarioDaoRemote.getGcmToken().blockingGet().equals(getInstance().getToken()));
         assertThat(controller.getTkCacher().isGcmTokenSentServer(), is(true));
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    protected void checkNotification(int notificationId) throws InterruptedException
+    protected void checkNotification(int notificationId)
     {
         // Verifico recepción de notificación.
         waitAtMost(14, SECONDS).until(notificationsSize(), is(1));
@@ -108,10 +102,5 @@ public abstract class Incidencia_GCM_test_abs {
             notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
             return notificationManager.getActiveNotifications().length;
         };
-    }
-
-    private Callable<String> getGcmToken()
-    {
-        return usuarioDaoRemote::getGcmToken;
     }
 }

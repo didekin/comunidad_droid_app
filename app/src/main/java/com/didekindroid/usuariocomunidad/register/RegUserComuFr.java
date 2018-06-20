@@ -2,6 +2,7 @@ package com.didekindroid.usuariocomunidad.register;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import timber.log.Timber;
 
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr.newViewerRegUserComuFr;
+import static java.util.Objects.requireNonNull;
 
 public class RegUserComuFr extends Fragment {
 
@@ -21,7 +24,7 @@ public class RegUserComuFr extends Fragment {
     private View regUserComuFrView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
@@ -36,7 +39,7 @@ public class RegUserComuFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         InjectorOfParentViewerIf viewerInjector = (InjectorOfParentViewerIf) getActivity();
-        viewer = ViewerRegUserComuFr.newViewerRegUserComuFr(regUserComuFrView, viewerInjector.getInjectedParentViewer());
+        viewer = newViewerRegUserComuFr(regUserComuFrView, requireNonNull(viewerInjector).getInjectedParentViewer());
         viewer.doViewInViewer(savedInstanceState, getActivity().getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key));
         viewerInjector.setChildInParentViewer(viewer);
     }

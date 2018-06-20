@@ -6,8 +6,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -15,8 +13,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -55,7 +51,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -72,16 +67,11 @@ public class UserComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            Comunidad comunidad = null;
-            try {
-                comunidad = signUpWithTkGetComu(COMU_TRAV_PLAZUELA_PEPE);
-            } catch (IOException | UiException e) {
-                fail();
-            }
-            usuarioComunidad = new UsuarioComunidad.UserComuBuilder(comunidad, USER_PEPE).planta("One").roles(PROPIETARIO.function).build();
-            Intent intent = new Intent();
-            intent.putExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
-            return intent;
+            usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpWithTkGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
+                    .planta("One")
+                    .roles(PROPIETARIO.function)
+                    .build();
+            return new Intent().putExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
         }
     };
 

@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.reg;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerIncidRegFr;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -27,7 +29,7 @@ public class IncidRegFr extends Fragment {
     ViewerIncidRegFr viewer;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedState)
     {
         Timber.d("onCreateView()");
@@ -44,14 +46,14 @@ public class IncidRegFr extends Fragment {
 
         /* Initialization of viewers.*/
         viewerInjector = (InjectorOfParentViewerIf) getActivity();
-        viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getInjectedParentViewer());
-        long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
+        viewer = newViewerIncidRegFr(rootFrgView, requireNonNull(viewerInjector).getInjectedParentViewer());
+        long comunidadId = requireNonNull(getArguments()).getLong(COMUNIDAD_ID.key);
         viewer.doViewInViewer(savedInstanceState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
         viewerInjector.setChildInParentViewer(viewer);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState)
+    public void onSaveInstanceState(@NonNull Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(savedState);

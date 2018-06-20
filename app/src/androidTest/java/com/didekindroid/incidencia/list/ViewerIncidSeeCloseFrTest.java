@@ -8,10 +8,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.didekindroid.incidencia.IncidBundleKey;
 import com.didekindroid.lib_one.api.CtrlerSelectListIf;
 import com.didekindroid.lib_one.api.ViewerSelectListIf;
-import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.incidencia.IncidBundleKey;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -23,7 +22,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,25 +31,25 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidenciaUsers;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidClosedListView;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
-import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
-import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidenciaUsers;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
-import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -60,7 +58,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -79,25 +76,22 @@ public class ViewerIncidSeeCloseFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
-                incidImportancia1 = makeRegGetIncidImportancia(userComuDao.seeUserComusByUser().get(0), (short) 1);
-                // Cierre incidencias..
-                resolucion = insertGetResolucionNoAdvances(incidImportancia1);
-                incidenciaDao.closeIncidencia(resolucion);
-                // Incidencias con fecha de cierre.
-                incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
-                        new Incidencia.IncidenciaBuilder()
-                                .copyIncidencia(incidImportancia1.getIncidencia())
-                                .fechaCierre(
-                                        incidenciaDao.seeIncidsClosedByComu(incidImportancia1.getIncidencia().getComunidadId()).get(0).getIncidencia().getFechaCierre()
-                                )
-                                .build())
-                        .copyIncidImportancia(incidImportancia1)
-                        .build();
-            } catch (UiException | IOException e) {
-                fail();
-            }
+            regUserComuWithTkCache(COMU_PLAZUELA5_PEPE);
+            incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
+            // Cierre incidencias..
+            resolucion = insertGetResolucionNoAdvances(incidImportancia1);
+            incidenciaDao.closeIncidencia(resolucion);
+            // Incidencias con fecha de cierre.
+            incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
+                    new Incidencia.IncidenciaBuilder()
+                            .copyIncidencia(incidImportancia1.getIncidencia())
+                            .fechaCierre(
+                                    incidenciaDao.seeIncidsClosedByComu(incidImportancia1.getIncidencia().getComunidadId())
+                                            .blockingGet().get(0).getIncidencia().getFechaCierre()
+                            )
+                            .build())
+                    .copyIncidImportancia(incidImportancia1)
+                    .build();
             return new Intent().putExtra(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, true);
         }
     };

@@ -2,6 +2,7 @@ package com.didekindroid.comunidad;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -41,7 +43,7 @@ public class RegComuFr extends Fragment {
     InjectorOfParentViewerIf viewerInjector;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
@@ -57,10 +59,10 @@ public class RegComuFr extends Fragment {
 
         Comunidad comunidad;
 
-        long comunidadId = getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
-        if (comunidadId > 0){
+        long comunidadId = requireNonNull(getActivity()).getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
+        if (comunidadId > 0) {
             comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
-        } else if (getActivity().getIntent().hasExtra(COMUNIDAD_SEARCH.key)){
+        } else if (getActivity().getIntent().hasExtra(COMUNIDAD_SEARCH.key)) {
             comunidad = (Comunidad) getActivity().getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
             assertTrue(comunidad.getMunicipio().getProvincia().getComunidadAutonoma() != null, intent_extra_should_be_initialized);
         } else {
@@ -74,7 +76,7 @@ public class RegComuFr extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState)
+    public void onSaveInstanceState(@NonNull Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(savedState);

@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.security.IdentityCacherIf;
+import com.didekindroid.lib_one.security.AuthTkCacherIf;
 
 import timber.log.Timber;
 
@@ -31,7 +31,7 @@ import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 public class SeeUserComuByUserAc extends AppCompatActivity {
 
     SeeUserComuByUserFr mFragment;
-    IdentityCacherIf identityCacher;
+    AuthTkCacherIf identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,7 +41,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity {
         identityCacher = secInitializer.get().getTkCacher();
 
         // Preconditions: the user is registered.
-        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
+        assertTrue(identityCacher.isRegisteredCache(), user_should_be_registered);
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);

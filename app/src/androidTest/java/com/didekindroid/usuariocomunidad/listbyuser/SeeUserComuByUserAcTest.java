@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuTestData;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.RolUi;
 
 import org.hamcrest.Matchers;
@@ -16,8 +15,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -52,7 +49,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -68,11 +64,7 @@ public class SeeUserComuByUserAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            try {
-                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (UiException | IOException e) {
-                fail();
-            }
+            regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(SeeUserComuByUserAc.class).startActivities();
@@ -105,7 +97,7 @@ public class SeeUserComuByUserAcTest {
     {
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
-        assertThat(secInitializer.get().getTkCacher().isRegisteredUser(), is(true));
+        assertThat(secInitializer.get().getTkCacher().isRegisteredCache(), is(true));
         assertThat(mFragment.getFrView(), notNullValue());
 
         onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));

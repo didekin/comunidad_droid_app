@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.UserDataAc;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -61,9 +60,9 @@ public class ViewerUserData_App_Test {
     }
 
     @After
-    public void cleanUp() throws UiException
+    public void cleanUp()
     {
-        cleanOneUser(user_crodrigo);
+        cleanOneUser(user_crodrigo.getUserName());
     }
 
     // ============================================================

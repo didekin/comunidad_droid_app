@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.comment;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.api.exception.UiExceptionIf;
 import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekindroid.lib_one.util.UiUtil;
@@ -105,7 +105,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressLint("StaticFieldLeak")
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
         UiExceptionIf uiException;
@@ -114,14 +114,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
         protected Integer doInBackground(IncidComment... comments)
         {
             Timber.d("doInBackground()");
-            int rowInserted = 0;
-
-            try {
-                rowInserted = incidenciaDao.regIncidComment(comments[0]);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return rowInserted;
+            return incidenciaDao.regIncidComment(comments[0]).blockingGet();
         }
 
         @Override
@@ -131,7 +124,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
             Timber.d("onPostExecute()");
 
-            if (uiException != null) {
+            if (uiException != null) {     // TODO: darle una vuelta. No vale.
                 routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
                         .initActivity(IncidCommentRegAc.this);
             } else if (!(isDestroyed() || isChangingConfigurations())) {

@@ -1,7 +1,9 @@
 package com.didekindroid.incidencia.core.resolucion;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -58,7 +61,7 @@ public class IncidResolucionRegFr extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
@@ -67,7 +70,7 @@ public class IncidResolucionRegFr extends Fragment {
         fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
         fechaViewForPicker.setOnClickListener(clickListener -> {
             FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerResolucion(fechaViewForPicker, resolucionBean));
-            fechaPicker.show(getActivity().getFragmentManager(), "fechaPicker");
+            fechaPicker.show(requireNonNull(getActivity()).getFragmentManager(), "fechaPicker");
         });
 
         Button mConfirmButton = frView.findViewById(R.id.incid_resolucion_reg_ac_button);
@@ -90,7 +93,7 @@ public class IncidResolucionRegFr extends Fragment {
     {
         Timber.d("registerResolucion()");
 
-        StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
+        StringBuilder errorMsg = getErrorMsgBuilder(requireNonNull(getActivity()));
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
 
         if (resolucion == null) {
@@ -139,24 +142,16 @@ public class IncidResolucionRegFr extends Fragment {
 //    .................................... INNER CLASSES .................................
 //    ============================================================================================
 
+    @SuppressLint("StaticFieldLeak")  // TODO: cambiar.
     class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;
-        Resolucion resolucion;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
         {
             Timber.d("doInBackground()");
-            int rowInserted = 0;
-            resolucion = params[0];
-
-            try {
-                rowInserted = incidenciaDao.regResolucion(resolucion);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return rowInserted;
+            return incidenciaDao.regResolucion(params[0]).blockingGet();
         }
 
         @SuppressWarnings("ConstantConditions")

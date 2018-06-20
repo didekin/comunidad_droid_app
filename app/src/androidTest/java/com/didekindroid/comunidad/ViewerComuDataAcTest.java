@@ -5,7 +5,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -15,7 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -32,16 +30,17 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunic
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.lib_one.testutil.ConstantForMethodCtrlExec.BEFORE_METHOD_EXEC;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static io.reactivex.Single.just;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -49,7 +48,6 @@ import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -59,28 +57,19 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerComuDataAcTest {
 
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-    ViewerComuDataAc viewer;
-    Comunidad comunidad;
+    private ViewerComuDataAc viewer;
+    private ComuDataAc activity;
+    private Comunidad comunidad;
 
     @Rule
     public ActivityTestRule<ComuDataAc> activityRule = new ActivityTestRule<ComuDataAc>(ComuDataAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
-            } catch (IOException | UiException e) {
-                fail();
-            }
-            Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
-            return intent;
+            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            return new Intent().putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };
-
-    ComuDataAc activity;
 
     @Before
     public void setUp()
@@ -102,25 +91,25 @@ public class ViewerComuDataAcTest {
     //    ==================================== TESTS =========================================
 
     @Test
-    public void test_NewViewerComuDataAc() throws Exception
+    public void test_NewViewerComuDataAc()
     {
         assertThat(viewer.getController(), isA(CtrlerComunidad.class));
     }
 
     @Test
-    public void test_DoViewInViewer() throws Exception
+    public void test_DoViewInViewer()
     {
         onView(withId(comuDataAcLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void test_SetChildViewer() throws Exception
+    public void test_SetChildViewer()
     {
         viewer = newViewerComuDataAc(activity);
         assertThat(viewer.getChildViewer(ViewerRegComuFr.class), nullValue());
         // After.
-        viewer.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), viewer));
+        viewer.setChildViewer(newViewerRegComuFr(requireNonNull(activity.regComuFrg.getView()), viewer));
         assertThat(viewer.getChildViewer(ViewerRegComuFr.class), notNullValue());
     }
 
@@ -128,9 +117,11 @@ public class ViewerComuDataAcTest {
     public void testComuDataAcButtonListener()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
+
+        AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
         viewer.setController(new CtrlerComunidad() {
             @Override
-            boolean modifyComunidadData(DisposableSingleObserver<Integer> observer, Comunidad comunidad)
+            public boolean modifyComunidadData(DisposableSingleObserver<Integer> observer, Comunidad comunidad)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;

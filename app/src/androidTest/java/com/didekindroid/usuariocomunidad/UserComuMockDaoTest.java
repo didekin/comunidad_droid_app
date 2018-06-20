@@ -1,22 +1,19 @@
 package com.didekindroid.usuariocomunidad;
 
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.Test;
 
-import java.io.IOException;
-
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpAndUpdateTk;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.Matchers.is;
@@ -30,18 +27,18 @@ import static org.junit.Assert.assertThat;
 public class UserComuMockDaoTest {
 
     @Test
-    public void testRegUserAndUserComu_1() throws UiException, IOException
+    public void testRegUserAndUserComu_1()
     {
         // Comunidad is associated to other user.
-        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-        Comunidad comunidad = userComuDao.getComusByUser().get(0);
+        regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad comunidad = userComuDao.getComusByUser().blockingGet().get(0);
         cleanWithTkhandler();
 
         UsuarioComunidad userComu = makeUsuarioComunidad(
                 comunidad, USER_JUAN2,
                 "portalB", null, "planta1", null,
                 PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
-        assertThat(userComuMockDao.regUserAndUserComu(userComu).execute().body(), is(true));
+        assertThat(userComuMockDao.regUserAndUserComu(userComu).blockingGet(), is(true));
 
         cleanOptions(CLEAN_JUAN2_AND_PEPE);
     }

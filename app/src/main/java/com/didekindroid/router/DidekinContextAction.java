@@ -70,10 +70,16 @@ import static java.util.EnumSet.of;
 public enum DidekinContextAction implements RouterActionIf {
 
     // Comunidad.
-    showComuFound(of(found_comu_plural), ComuSearchResultsAc.class),
-    searchForComu(of(
-            default_no_reg_user,
-            user_just_deleted), defaultAc) {
+    showComuFound(
+            of(found_comu_plural),
+            ComuSearchResultsAc.class
+    ),
+    searchForComu(
+            of(
+                    default_no_reg_user,
+                    user_just_deleted
+            ),
+            defaultAc) {
         @Override
         public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle, int flags)
         {
@@ -82,44 +88,77 @@ public enum DidekinContextAction implements RouterActionIf {
         }
     },
     // UsuarioComunidad.
-    editCurrentUserComu(of(
-            found_comu_single_for_current_neighbour,
-            usercomu_just_selected), UserComuDataAc.class),
-    regNewUserComu(of(found_comu_single_for_current_user), RegUserComuAc.class),
-    regNewUser(of(found_comu_single_for_no_reg_user), RegUserAndUserComuAc.class),
-    regNewComuAndUserComu(of(
-            no_found_comu_for_current_user,
-            to_reg_new_comu_usercomu), RegComuAndUserComuAc.class),
-    regNewComuAndNewUser(of(no_found_comu_for_no_reg_user), RegComuAndUserAndUserComuAc.class),
-    seeUserComuByUser_fromComu(of(
-            comu_data_just_modified,
-            new_comu_usercomu_just_registered,
-            new_usercomu_just_registered,
-            usercomu_just_modified,
-            usercomu_just_deleted), SeeUserComuByUserAc.class),
-    seeUserComuByUser_fromUser(of(
-            login_just_done,
-            user_alias_just_modified,
-            pswd_just_modified), SeeUserComuByUserAc.class),
+    editCurrentUserComu(
+            of(
+                    found_comu_single_for_current_neighbour,
+                    usercomu_just_selected
+            ),
+            UserComuDataAc.class),
+    regNewUserComu(
+            of(found_comu_single_for_current_user),
+            RegUserComuAc.class),
+    regNewUser(
+            of(found_comu_single_for_no_reg_user),
+            RegUserAndUserComuAc.class),
+    regNewComuAndUserComu(
+            of(
+                    no_found_comu_for_current_user,
+                    to_reg_new_comu_usercomu
+            ),
+            RegComuAndUserComuAc.class),
+    regNewComuAndNewUser(
+            of(no_found_comu_for_no_reg_user),
+            RegComuAndUserAndUserComuAc.class),
+    seeUserComuByUser_fromComu(
+            of(
+                    comu_data_just_modified,
+                    new_comu_usercomu_just_registered,
+                    new_usercomu_just_registered,
+                    usercomu_just_modified,
+                    usercomu_just_deleted
+            ),
+            SeeUserComuByUserAc.class),
+    seeUserComuByUser_fromUser(
+            of(
+                    login_just_done,
+                    user_alias_just_modified,
+                    pswd_just_modified
+            ),
+            SeeUserComuByUserAc.class),
     // Incidencia.comment
-    regNewComment(of(to_register_new_incid_comment), IncidCommentRegAc.class),
-    seeIncidComment(of(new_incid_comment_just_registered), IncidCommentSeeAc.class),
+    regNewComment(
+            of(to_register_new_incid_comment),
+            IncidCommentRegAc.class),
+    seeIncidComment(
+            of(new_incid_comment_just_registered),
+            IncidCommentSeeAc.class),
     // Incidencia.
-    seeIncidByComu(of(
-            new_incidencia_just_registered,
-            incid_open_just_modified,
-            incidencia_just_erased,
-            incid_open_just_closed,
-            after_incid_resolucion_modif_error), IncidSeeByComuAc.class),
-    regNewIncidencia(of(to_register_new_incidencia), IncidRegAc.class),
-    editIncidenciaOpen(of(
-            incid_open_just_selected,
-            new_incid_resolucion_just_registered,
-            incid_resolucion_just_modified), IncidEditAc.class),
-    regNewIncidResolucion(of(to_register_new_incid_resolucion), IncidResolucionRegAc.class),
-    seeIncidResolucion(of(
-            incid_closed_just_selected,
-            to_edit_incid_resolucion), IncidResolucionEditAc.class),;
+    seeIncidByComu(
+            of(
+                    new_incidencia_just_registered,
+                    incid_open_just_modified,
+                    incidencia_just_erased,
+                    incid_open_just_closed,
+                    after_incid_resolucion_modif_error),
+            IncidSeeByComuAc.class),
+    regNewIncidencia(
+            of(to_register_new_incidencia),
+            IncidRegAc.class),
+    editIncidenciaOpen(
+            of(
+                    incid_open_just_selected,
+                    new_incid_resolucion_just_registered,
+                    incid_resolucion_just_modified
+            ),
+            IncidEditAc.class),
+    regNewIncidResolucion(
+            of(to_register_new_incid_resolucion), IncidResolucionRegAc.class),
+    seeIncidResolucion(
+            of(
+                    incid_closed_just_selected,
+                    to_edit_incid_resolucion
+            ),
+            IncidResolucionEditAc.class),;
 
     // ==========================  Static members ============================
 

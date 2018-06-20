@@ -7,9 +7,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewerIf;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.LoginAc;
 import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -18,7 +18,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.app.TaskStackBuilder.create;
@@ -53,7 +52,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -63,7 +61,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegUserAndUserComuAcTest {
 
-    Comunidad comunidad;
+    private Comunidad comunidad;
+    private RegUserAndUserComuAc activity;
 
     @Rule
     public IntentsTestRule<RegUserAndUserComuAc> intentRule = new IntentsTestRule<RegUserAndUserComuAc>(RegUserAndUserComuAc.class) {
@@ -78,19 +77,11 @@ public class ViewerRegUserAndUserComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
-                cleanOptions(CLEAN_TK_HANDLER);
-            } catch (UiException | IOException e) {
-                fail();
-            }
-            Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            return intent;
+            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            cleanOptions(CLEAN_TK_HANDLER);
+            return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };
-
-    RegUserAndUserComuAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -138,7 +129,7 @@ public class ViewerRegUserAndUserComuAcTest {
     }
 
     @Test
-    public void test_RegUserAndUserComuButtonListener_1() throws Exception
+    public void test_RegUserAndUserComuButtonListener_1()
     {
         // Precondition:
         assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));

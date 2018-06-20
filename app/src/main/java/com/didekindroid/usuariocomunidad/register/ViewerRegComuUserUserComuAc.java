@@ -7,16 +7,17 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.lib_one.api.ObserverCacheCleaner;
 import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
 import com.didekindroid.lib_one.util.ConnectionUtils;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
 
+import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
@@ -84,13 +85,18 @@ public final class ViewerRegComuUserUserComuAc extends ParentViewer<View, Ctrler
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
-                controller.registerUserAndComu(
-                        new ObserverCacheCleaner(ViewerRegComuUserUserComuAc.this) {
+                controller.regComuAndUserAndUserComu(
+                        new DisposableCompletableObserver() {
                             @Override
                             public void onComplete()
                             {
-                                super.onComplete();
                                 onRegisterSuccess(usuarioComunidad);
+                            }
+
+                            @Override
+                            public void onError(Throwable e)
+                            {
+                                onErrorInObserver(e);
                             }
                         },
                         usuarioComunidad);

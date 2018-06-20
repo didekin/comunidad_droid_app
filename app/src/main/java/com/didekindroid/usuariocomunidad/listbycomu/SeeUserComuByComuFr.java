@@ -1,6 +1,7 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +35,7 @@ public class SeeUserComuByComuFr extends Fragment {
     View frView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.see_usercomu_by_comu_list_fr, container, false);
@@ -43,7 +44,7 @@ public class SeeUserComuByComuFr extends Fragment {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedInstanceState);

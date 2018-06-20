@@ -6,7 +6,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -15,7 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static android.app.TaskStackBuilder.create;
@@ -43,7 +41,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUp
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -61,20 +58,16 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidadInIntent = signUpWithTkGetComu(COMU_REAL_DROID);
-            } catch (IOException | UiException e) {
-                fail();
-            }
+            comunidadInIntent = signUpWithTkGetComu(COMU_REAL_DROID);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();
             }
 
-            Intent intent = new Intent();
             // Precondition: closed incidencias.
-            intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()).putExtra(INCID_CLOSED_LIST_FLAG.key, true);
-            return intent;
+            return new Intent()
+                    .putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id())
+                    .putExtra(INCID_CLOSED_LIST_FLAG.key, true);
         }
     };
 
