@@ -43,7 +43,7 @@ import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserCo
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -77,7 +77,7 @@ public class ViewerRegUserAndUserComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
             cleanOptions(CLEAN_TK_HANDLER);
             return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }

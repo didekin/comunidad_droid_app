@@ -2,6 +2,7 @@ package com.didekindroid.usuariocomunidad.repository;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -36,13 +37,14 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_T
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeListTwoUserComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regTwoUserComuSameUser;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithGcmTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 
@@ -66,7 +68,7 @@ public class UserComuDaoTest {
     public void testDeleteUserComu()
     {
         assertThat(userComuDao
-                .deleteUserComu(signUpWithTkGetComu(COMU_PLAZUELA5_JUAN).getC_Id()).blockingGet(), is(IS_USER_DELETED));
+                .deleteUserComu(signUpGetComu(COMU_PLAZUELA5_JUAN).getC_Id()).blockingGet(), is(IS_USER_DELETED));
         assertThat(userComuDao.getTkCacher().isRegisteredCache(), is(false));
         cleanWithTkhandler();
     }
@@ -84,7 +86,7 @@ public class UserComuDaoTest {
     {
         whatClean = CLEAN_JUAN;
         assertThat(userComuDao.
-                getUserComuByUserAndComu(signUpWithTkGetComu(COMU_REAL_JUAN).getC_Id()).blockingGet(), is(COMU_REAL_JUAN));
+                getUserComuByUserAndComu(signUpGetComu(COMU_REAL_JUAN).getC_Id()).blockingGet(), is(COMU_REAL_JUAN));
     }
 
     @Test
@@ -93,7 +95,9 @@ public class UserComuDaoTest {
         whatClean = CLEAN_JUAN;
         regUserComuWithTkCache(COMU_REAL_JUAN);
         // La comunidad no existe en BD.
-        assertThat(userComuDao.getUserComuByUserAndComu(999L).blockingGet(), nullValue());
+        userComuDao.getUserComuByUserAndComu(999L).test().assertError(
+                exception -> UiException.class.cast(exception).getErrorHtppMsg().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())
+        );
     }
 
     @Test
@@ -101,7 +105,7 @@ public class UserComuDaoTest {
     {
         whatClean = CLEAN_PEPE;
         assertThat(userComuDao
-                .isOldestOrAdmonUserComu(signUpWithTkGetComu(COMU_TRAV_PLAZUELA_PEPE).getC_Id()).blockingGet(), is(true));
+                .isOldestOrAdmonUserComu(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE).getC_Id()).blockingGet(), is(true));
     }
 
     @Test
@@ -109,7 +113,7 @@ public class UserComuDaoTest {
     {
         whatClean = CLEAN_PEPE;
         Comunidad cNew = new Comunidad.ComunidadBuilder()
-                .copyComunidadNonNullValues(signUpWithTkGetComu(COMU_TRAV_PLAZUELA_PEPE))
+                .copyComunidadNonNullValues(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE))
                 .nombreVia("new_nombreVia")
                 .build();
         assertThat(userComuDao.modifyComuData(cNew).blockingGet(), is(1));
@@ -124,7 +128,7 @@ public class UserComuDaoTest {
         UsuarioComunidad userComuOld = userComuDao.seeUserComusByUser().blockingGet().get(0);
         UsuarioComunidad userComuNew = new UsuarioComunidad.UserComuBuilder(userComuOld.getComunidad(), userComuOld.getUsuario())
                 .userComuRest(COMU_REAL_PEPE)
-                .escalera("new_escaler")
+                .escalera("new_esc")
                 .build();
         assertThat(userComuDao.modifyUserComu(userComuNew).blockingGet(), is(1));
     }
@@ -137,7 +141,7 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_regComuAndUserComu() throws Exception
+    public void test_regComuAndUserComu()
     {
         whatClean = CLEAN_JUAN;
         userComuDao.regComuAndUserComu(
@@ -154,7 +158,7 @@ public class UserComuDaoTest {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
         // Comunidad is associated to other user.
-        Comunidad comunidad = signUpWithTkGetComu(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad comunidad = signUpGetComu(COMU_TRAV_PLAZUELA_PEPE);
         cleanWithTkhandler();
 
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
@@ -163,12 +167,13 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void testRegUserComu()
+    public void testRegUserComu() throws UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
         // Comunidad1 and user1 in DB.
-        Comunidad comunidad1 = signUpWithTkGetComu(COMU_REAL_JUAN);
-        // Comunidad2 and user2 in DB.
+        Comunidad comunidad1 = signUpWithGcmTkGetComu(COMU_REAL_JUAN, "juan_mock_gcmTk");
+        userComuDao.getTkCacher().updateIsRegistered(false);
+        /* Comunidad2 and user2 in DB.*/
         regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
         // Add comunidad1 and user2 (her data are in cache now and they can be null).
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad1, null, "portal",
@@ -180,7 +185,7 @@ public class UserComuDaoTest {
     public void test_seeUserComuByComu()
     {
         whatClean = CLEAN_JUAN;
-        Comunidad comunidad = signUpWithTkGetComu(COMU_ESCORIAL_JUAN);
+        Comunidad comunidad = signUpGetComu(COMU_ESCORIAL_JUAN);
         List<UsuarioComunidad> userComus = userComuDao.seeUserComusByComu(comunidad.getC_Id()).blockingGet();
         assertThat(userComus.get(0).getComunidad(), is(comunidad));
     }

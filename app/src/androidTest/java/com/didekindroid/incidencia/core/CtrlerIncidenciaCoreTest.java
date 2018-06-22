@@ -24,8 +24,8 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetUserComu;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -76,7 +76,7 @@ public class CtrlerIncidenciaCoreTest {
     {
         // No hay registros de incidImportancia; lista vacía.
         execCheckSchedulersTest(
-                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpWithTkGetComu(COMU_ESCORIAL_PEPE).getC_Id()),
+                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpGetComu(COMU_ESCORIAL_PEPE).getC_Id()),
                 controller
         );
     }
@@ -93,7 +93,7 @@ public class CtrlerIncidenciaCoreTest {
     @Test
     public void test_regIncidImportancia() throws Exception
     {
-        UsuarioComunidad userComu = signUpWithTkGetUserComu(COMU_REAL_PEPE);
+        UsuarioComunidad userComu = signUpGetUserComu(COMU_REAL_PEPE);
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComu)
@@ -113,7 +113,7 @@ public class CtrlerIncidenciaCoreTest {
         execCheckSchedulersTest(
                 ctrler -> ctrler.seeResolucion(
                         new MaybeObserverMock<>(),
-                        insertGetDefaultResolucion(signUpWithTkGetUserComu(COMU_REAL_PEPE)).getIncidencia().getIncidenciaId()),
+                        insertGetDefaultResolucion(signUpGetUserComu(COMU_REAL_PEPE)).getIncidencia().getIncidenciaId()),
                 controller
         );
     }

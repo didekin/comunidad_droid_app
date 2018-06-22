@@ -26,7 +26,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static org.hamcrest.CoreMatchers.is;
 
 /**
@@ -48,7 +48,7 @@ public class IncidSeeByComuAc_Open_Mn_Test {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();
             }
             return new Intent()
-                    .putExtra(COMUNIDAD_ID.key, signUpWithTkGetComu(COMU_REAL_DROID).getC_Id())
+                    .putExtra(COMUNIDAD_ID.key, signUpGetComu(COMU_REAL_DROID).getC_Id())
                     .putExtra(INCID_CLOSED_LIST_FLAG.key, false);
         }
     };

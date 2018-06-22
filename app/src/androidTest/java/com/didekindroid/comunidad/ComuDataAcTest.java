@@ -48,7 +48,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -79,7 +79,7 @@ public class ComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
             return new Intent().putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };

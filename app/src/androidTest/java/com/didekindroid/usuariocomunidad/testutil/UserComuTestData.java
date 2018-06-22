@@ -1,5 +1,7 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.lib_one.security.AuthTkCacher;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -11,10 +13,13 @@ import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_FUENTE;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_TRAV_PLAZUELA_11;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithGcmTk;
 import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -56,21 +61,30 @@ public final class UserComuTestData {
     {
     }
 
-    public static Comunidad signUpWithTkGetComu(UsuarioComunidad usuarioComunidad)
+    public static Comunidad signUpGetComu(UsuarioComunidad usuarioComunidad)
     {
         regUserComuWithTkCache(usuarioComunidad);
         return userComuDao.getComusByUser().blockingGet().get(0);
     }
 
-    public static UsuarioComunidad signUpWithTkGetUserComu(UsuarioComunidad userComuIn)
+    public static Comunidad signUpWithGcmTkGetComu(UsuarioComunidad usuarioComunidad, String gcmTokenIn) throws UiException
     {
-        return userComuDao.getUserComuByUserAndComu(signUpWithTkGetComu(userComuIn).getC_Id()).blockingGet();
+        regUserComuWithGcmTk(usuarioComunidad, gcmTokenIn);
+        return userComuDao.getComusByUser(((AuthTkCacher) secInitializer.get().getTkCacher()).doAuthHeaderStrMock(gcmTokenIn))
+                .map(httpInitializer.get()::getResponseBody)
+                .blockingGet()
+                .get(0);
+    }
+
+    public static UsuarioComunidad signUpGetUserComu(UsuarioComunidad userComuIn)
+    {
+        return userComuDao.getUserComuByUserAndComu(signUpGetComu(userComuIn).getC_Id()).blockingGet();
     }
 
     public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList)
     {
         regUserComuWithTkCache(usuarioComunidadList.get(0));
-        userComuDao.regComuAndUserComu(usuarioComunidadList.get(1));
+        userComuDao.regComuAndUserComu(usuarioComunidadList.get(1)).blockingAwait();
     }
 
     public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus)
@@ -78,7 +92,7 @@ public final class UserComuTestData {
         assertThat(userComus.length > 0, is(true));
         regUserComuWithTkCache(userComus[0]);
         for (int i = 1; i < userComus.length; i++) {
-            userComuDao.regComuAndUserComu(userComus[i]);
+            userComuDao.regComuAndUserComu(userComus[i]).blockingAwait();
         }
     }
 

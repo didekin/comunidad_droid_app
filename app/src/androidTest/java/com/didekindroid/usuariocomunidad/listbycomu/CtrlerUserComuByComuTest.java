@@ -16,7 +16,7 @@ import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedu
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 
 /**
  * User: pedro@didekin
@@ -49,7 +49,7 @@ public class CtrlerUserComuByComuTest {
     public void testLoadItemsByEntitiyId() throws Exception
     {
         execCheckSchedulersTest(
-                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpWithTkGetComu(COMU_REAL_JUAN).getC_Id()),
+                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpGetComu(COMU_REAL_JUAN).getC_Id()),
                 controller
         );
     }
@@ -58,7 +58,7 @@ public class CtrlerUserComuByComuTest {
     public void testComunidadData() throws Exception
     {
         execCheckSchedulersTest(
-                ctrler -> ctrler.comunidadData(new SingleObserverMock<>(), signUpWithTkGetComu(COMU_REAL_JUAN).getC_Id()),
+                ctrler -> ctrler.comunidadData(new SingleObserverMock<>(), signUpGetComu(COMU_REAL_JUAN).getC_Id()),
                 controller
         );
     }

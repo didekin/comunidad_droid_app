@@ -51,7 +51,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     private EditText editNumero;
     private EditText editSufijoNumero;
 
-    ViewerRegComuFr(View view, Activity activity, ParentViewerIf parentViewer)
+    private ViewerRegComuFr(View view, Activity activity, ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }

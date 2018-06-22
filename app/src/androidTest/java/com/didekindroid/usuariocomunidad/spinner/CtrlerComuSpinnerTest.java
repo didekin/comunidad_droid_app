@@ -36,10 +36,9 @@ public class CtrlerComuSpinnerTest {
     }
 
     @Test
-    public void testLoadDataInSpinner()
+    public void testLoadDataInSpinner() throws Exception
     {
         regUserComuWithTkCache(COMU_REAL_JUAN);
-
         checkSpinnerCtrlerLoadItems(controller);
 
         cleanOneUser(USER_JUAN.getUserName());

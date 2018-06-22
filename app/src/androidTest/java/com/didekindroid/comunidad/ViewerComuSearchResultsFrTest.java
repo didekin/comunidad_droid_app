@@ -46,7 +46,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static external.LongListMatchers.withAdaptedData;
 import static io.reactivex.Maybe.just;
 import static java.util.Arrays.asList;
@@ -115,7 +115,7 @@ public class ViewerComuSearchResultsFrTest {
     @Test
     public void test_DoViewInViewer()
     {
-        Comunidad comunidadToSearch = signUpWithTkGetComu(COMU_REAL_PEPE);
+        Comunidad comunidadToSearch = signUpGetComu(COMU_REAL_PEPE);
         isPepeToDelete = true;
 
         try {
@@ -197,7 +197,7 @@ public class ViewerComuSearchResultsFrTest {
     @Test
     public void test_UsuarioComunidadObserverOnSuccess()
     {
-        UsuarioComunidad userComu = new UsuarioComunidad.UserComuBuilder(signUpWithTkGetComu(COMU_REAL_PEPE), USER_PEPE).userComuRest(COMU_REAL_PEPE).build();
+        UsuarioComunidad userComu = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_REAL_PEPE), USER_PEPE).userComuRest(COMU_REAL_PEPE).build();
         isPepeToDelete = true;
 
         just(userComu).subscribeWith(viewer.new UsuarioComunidadObserver(comu_real));
@@ -208,7 +208,7 @@ public class ViewerComuSearchResultsFrTest {
     @Test
     public void test_UsuarioComunidadObserverOnComplete()
     {
-        Comunidad comunidad = signUpWithTkGetComu(COMU_REAL_PEPE);
+        Comunidad comunidad = signUpGetComu(COMU_REAL_PEPE);
         isPepeToDelete = true;
         Maybe.<UsuarioComunidad>empty().subscribeWith(viewer.new UsuarioComunidadObserver(comunidad));
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(regUserComuAcLayout));

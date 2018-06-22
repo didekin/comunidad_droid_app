@@ -37,7 +37,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -58,7 +58,7 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidadInIntent = signUpWithTkGetComu(COMU_REAL_DROID);
+            comunidadInIntent = signUpGetComu(COMU_REAL_DROID);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();

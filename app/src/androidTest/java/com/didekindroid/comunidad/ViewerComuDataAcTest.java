@@ -38,7 +38,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static io.reactivex.Single.just;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -66,7 +66,7 @@ public class ViewerComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
             return new Intent().putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };

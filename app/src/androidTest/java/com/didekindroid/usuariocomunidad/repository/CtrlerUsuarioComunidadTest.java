@@ -23,7 +23,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_E
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 
@@ -58,7 +58,7 @@ public class CtrlerUsuarioComunidadTest {
     public void test_DeleteUserComu() throws Exception
     {
         execCheckSchedulersTest(
-                ctrler -> ctrler.deleteUserComu(new SingleObserverMock<>(), signUpWithTkGetComu(COMU_REAL_PEPE)),
+                ctrler -> ctrler.deleteUserComu(new SingleObserverMock<>(), signUpGetComu(COMU_REAL_PEPE)),
                 controller);
     }
 
@@ -66,7 +66,7 @@ public class CtrlerUsuarioComunidadTest {
     public void test_getUserComuByUserAndComu() throws Exception
     {
         execCheckSchedulersTest(
-                ctrler -> ctrler.getUserComuByUserAndComu(new MaybeObserverMock<>(), signUpWithTkGetComu(COMU_REAL_PEPE)),
+                ctrler -> ctrler.getUserComuByUserAndComu(new MaybeObserverMock<>(), signUpGetComu(COMU_REAL_PEPE)),
                 controller);
         cleanOptions(CLEAN_PEPE);
     }
@@ -75,7 +75,7 @@ public class CtrlerUsuarioComunidadTest {
     public void test_isOldestOrAdmonUserComu() throws Exception
     {
         execCheckSchedulersTest(
-                ctrler -> ctrler.isOldestOrAdmonUserComu(new SingleObserverMock<>(), signUpWithTkGetComu(COMU_REAL_PEPE)),
+                ctrler -> ctrler.isOldestOrAdmonUserComu(new SingleObserverMock<>(), signUpGetComu(COMU_REAL_PEPE)),
                 controller);
         cleanOptions(CLEAN_PEPE);
     }
@@ -87,7 +87,7 @@ public class CtrlerUsuarioComunidadTest {
                 ctrler -> ctrler.modifyUserComu(
                         new SingleObserverMock<>(),
                         new UsuarioComunidad.UserComuBuilder(
-                                signUpWithTkGetComu(COMU_ESCORIAL_PEPE),
+                                signUpGetComu(COMU_ESCORIAL_PEPE),
                                 null)
                                 .userComuRest(COMU_ESCORIAL_PEPE).escalera("new_esc").build()
                 ),
@@ -127,7 +127,7 @@ public class CtrlerUsuarioComunidadTest {
         execCheckSchedulersTest(
                 ctrler -> ctrler.regUserAndUserComu(
                         new CompletableObserverMock(),
-                        new UsuarioComunidad.UserComuBuilder(signUpWithTkGetComu(COMU_REAL_JUAN), USER_PEPE)
+                        new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_REAL_JUAN), USER_PEPE)
                                 .roles(PRESIDENTE.function)
                                 .build()),
                 controller
@@ -142,7 +142,7 @@ public class CtrlerUsuarioComunidadTest {
                 ctrler -> ctrler.regUserComu(
                         new CompletableObserverMock(),
                         new UsuarioComunidad.UserComuBuilder(
-                                signUpWithTkGetComu(COMU_REAL_JUAN), regGetUserComu(COMU_LA_FUENTE_PEPE)
+                                signUpGetComu(COMU_REAL_JUAN), regGetUserComu(COMU_LA_FUENTE_PEPE)
                         ).planta("uno").roles(PROPIETARIO.function).build()),
                 controller
         );

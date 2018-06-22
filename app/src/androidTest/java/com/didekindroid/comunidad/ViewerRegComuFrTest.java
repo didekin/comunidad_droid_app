@@ -45,7 +45,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -71,7 +71,7 @@ public class ViewerRegComuFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
             return new Intent().putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };

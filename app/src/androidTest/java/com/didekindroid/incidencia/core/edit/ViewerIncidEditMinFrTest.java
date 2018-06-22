@@ -41,7 +41,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerfo
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -68,7 +68,7 @@ public class ViewerIncidEditMinFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            signUpWithTkGetComu(COMU_REAL_PEPE);
+            signUpGetComu(COMU_REAL_PEPE);
             IncidImportancia incidImportancia = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 2);
             // Premisa: usuario no iniciador y usuario no ADM.
             assertThat(COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));

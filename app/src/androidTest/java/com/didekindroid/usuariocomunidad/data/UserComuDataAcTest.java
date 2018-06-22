@@ -44,7 +44,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SE
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -67,7 +67,7 @@ public class UserComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpWithTkGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
+            usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
                     .planta("One")
                     .roles(PROPIETARIO.function)
                     .build();

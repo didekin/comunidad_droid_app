@@ -125,7 +125,6 @@ public class ViewerComuSpinner extends
         {
             Timber.d("comunidadSpinner.onItemSelected()");
 
-
             Comunidad comunidadIn = ((Comunidad) parent.getItemAtPosition(position));
             spinnerEvent = new ComuSpinnerEventItemSelect(comunidadIn);
             itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();

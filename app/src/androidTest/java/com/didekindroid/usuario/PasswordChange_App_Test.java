@@ -7,7 +7,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.PasswordChangeAc;
 
 import org.junit.After;
@@ -42,7 +41,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -66,12 +64,7 @@ public class PasswordChange_App_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                return new Intent().putExtra(user_name.key, regGetUserComu(COMU_REAL_DROID).getUserName());
-            } catch (UiException e) {
-                fail();
-            }
-            return null;
+            return new Intent().putExtra(user_name.key, regGetUserComu(COMU_REAL_DROID).getUserName());
         }
     };
 

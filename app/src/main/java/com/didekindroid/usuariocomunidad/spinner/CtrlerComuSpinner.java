@@ -19,12 +19,11 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 15:11
  */
 
-@SuppressWarnings("WeakerAccess")
 public class CtrlerComuSpinner extends CtrlerSelectList<Comunidad> {
 
     private final UserComuDao userComuDaoRemote;
 
-    public CtrlerComuSpinner()
+    CtrlerComuSpinner()
     {
         super();
         userComuDaoRemote = userComuDao;

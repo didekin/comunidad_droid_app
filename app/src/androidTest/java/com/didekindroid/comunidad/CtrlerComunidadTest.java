@@ -19,7 +19,7 @@ import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedu
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -38,7 +38,7 @@ public class CtrlerComunidadTest {
     public void setUp()
     {
         initSec_Http(getTargetContext());
-        comunidad = signUpWithTkGetComu(COMU_ESCORIAL_PEPE);
+        comunidad = signUpGetComu(COMU_ESCORIAL_PEPE);
         controller = new CtrlerComunidad();
     }
 

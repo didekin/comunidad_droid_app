@@ -41,7 +41,7 @@ import static com.didekindroid.usuario.testutil.UserMenuTestUtil.LOGIN_AC;
 import static com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAcTest.execCheckRegisterError;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.Objects.requireNonNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
@@ -79,7 +79,7 @@ public class RegUserAndUserComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
+            comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
             cleanOptions(CLEAN_TK_HANDLER);
             return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }

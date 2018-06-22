@@ -34,7 +34,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
@@ -55,7 +55,7 @@ public class RegUserComuAcTest {
         protected Intent getActivityIntent()
         {
             regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
-            return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, signUpWithTkGetComu(COMU_PLAZUELA5_JUAN));
+            return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, signUpGetComu(COMU_PLAZUELA5_JUAN));
         }
     };
     private RegUserComuAc activity;

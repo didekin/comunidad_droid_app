@@ -7,7 +7,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.incidencia.core.Incidencia_GCM_test_abs;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -70,14 +69,10 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_test_abs {
             @Override
             protected void beforeActivityLaunched()
             {
-                try {
-                    pepe = regGetUserComu(COMU_ESCORIAL_PEPE);
-                    pepeUserComu = userComuDao.seeUserComusByUser().blockingGet().get(0);
-                    // We'll test that the gcmToken is not updated in server.
-                    assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
-                } catch (UiException e) {
-                    e.printStackTrace();
-                }
+                pepe = regGetUserComu(COMU_ESCORIAL_PEPE);
+                pepeUserComu = userComuDao.seeUserComusByUser().blockingGet().get(0);
+                // We'll test that the gcmToken is not updated in server.
+                assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
             }
         };
     }

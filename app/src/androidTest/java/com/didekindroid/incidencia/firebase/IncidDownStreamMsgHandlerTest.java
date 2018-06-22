@@ -50,7 +50,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.clickNavigateUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
@@ -82,7 +82,7 @@ public class IncidDownStreamMsgHandlerTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            comunidadId = signUpWithTkGetComu(COMU_REAL_JUAN).getC_Id();
+            comunidadId = signUpGetComu(COMU_REAL_JUAN).getC_Id();
             data = new ArrayMap<>(1);
             data.put(comunidadId_key, String.valueOf(comunidadId));
         }

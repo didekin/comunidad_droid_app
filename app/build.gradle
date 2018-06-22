@@ -21,7 +21,9 @@ android {
     }
 
     testOptions {
-        execution 'ANDROID_TEST_ORCHESTRATOR'
+        if (rootProject.orchestrator) {
+            execution "ANDROID_TEST_ORCHESTRATOR"
+        }
     }
 
     //noinspection GroovyAssignabilityCheck
@@ -137,3 +139,5 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+

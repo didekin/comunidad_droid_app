@@ -17,8 +17,8 @@ import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedu
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetComu;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithTkGetUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetUserComu;
 
 /**
  * User: pedro@didekin
@@ -52,7 +52,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     {
         // No hay incidencias.
         execCheckSchedulersTest(
-                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpWithTkGetComu(COMU_ESCORIAL_PEPE).getC_Id()),
+                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpGetComu(COMU_ESCORIAL_PEPE).getC_Id()),
                 controller
         );
     }
@@ -63,7 +63,7 @@ public class CtrlerIncidSeeCloseByComuTest {
         execCheckSchedulersTest(
                 ctrler -> ctrler.selectItem(
                         new SingleObserverMock<>(),
-                        insertGetIncidenciaUser(signUpWithTkGetUserComu(COMU_ESCORIAL_PEPE), (short) 3)),
+                        insertGetIncidenciaUser(signUpGetUserComu(COMU_ESCORIAL_PEPE), (short) 3)),
                 controller
         );
     }
