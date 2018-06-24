@@ -21,6 +21,8 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import retrofit2.Response;
+
 import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -81,25 +83,6 @@ public class ViewerRegComuUserUserComuAcTest {
                     }
                 }
             };
-
-    static void execCheckCleanDialog(ViewerIf viewer)
-    {
-        typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
-        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        // Exec.
-        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
-        // Check.
-        waitAtMost(8, SECONDS)
-                .until(isViewDisplayed(onView(withText(R.string.receive_password_by_mail_dialog)).inRoot(isDialog())));
-        assertThat(requireNonNull(viewer.getController()).isRegisteredUser(), is(true));
-        // Exec.
-        onView(withText(R.string.continuar_button_rot)).inRoot(isDialog()).perform(click());
-        // Check.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
-        intended(hasExtra(user_name.key, USER_PEPE.getUserName()));
-        // Clean.
-        assertThat(userComuMockDao.deleteUser(USER_PEPE.getUserName()).blockingGet(), is(true));
-    }
 
     @Before
     public void setUp()
@@ -195,11 +178,30 @@ public class ViewerRegComuUserUserComuAcTest {
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
     }
 
-    //  =========================  Helpers  ===========================
-
     @Test
     public void test_OnStop()
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
+    }
+
+    /*  =========================  Helpers  ===========================*/
+
+    static void execCheckCleanDialog(ViewerIf viewer)
+    {
+        typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        // Exec.
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
+        // Check.
+        waitAtMost(8, SECONDS)
+                .until(isViewDisplayed(onView(withText(R.string.receive_password_by_mail_dialog)).inRoot(isDialog())));
+        assertThat(requireNonNull(viewer.getController()).isRegisteredUser(), is(true));
+        // Exec.
+        onView(withText(R.string.continuar_button_rot)).inRoot(isDialog()).perform(click());
+        // Check.
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
+        intended(hasExtra(user_name.key, USER_PEPE.getUserName()));
+        // Clean.
+        assertThat(userComuMockDao.deleteUser(USER_PEPE.getUserName()).map(Response::body).blockingGet(), is(true));
     }
 }

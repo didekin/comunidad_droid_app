@@ -28,7 +28,7 @@ import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.focusOnView;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
@@ -67,7 +67,7 @@ public class RegComuAndUserComuAcTest {
             create(getTargetContext()).addParentStack(RegComuAndUserComuAc.class).startActivities();
         }
 
-        regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
+        regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         activity = mActivityRule.launchActivity(new Intent());
         buttonId = R.id.reg_comu_usuariocomunidad_button;
     }

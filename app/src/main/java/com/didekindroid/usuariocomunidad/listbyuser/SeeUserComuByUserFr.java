@@ -21,6 +21,9 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_selected;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static java.util.Objects.requireNonNull;
@@ -90,7 +93,6 @@ public class SeeUserComuByUserFr extends Fragment {
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    @SuppressWarnings("WeakerAccess")
     static class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
 
         UiException uiException;
@@ -101,7 +103,7 @@ public class SeeUserComuByUserFr extends Fragment {
             Timber.d("UserComuByUserLoader.doInBackground()");
 
             List<UsuarioComunidad> usuarioComunidades;
-            usuarioComunidades = userComuDao.seeUserComusByUser().blockingGet();  // TODO: quitar el blocking.
+            usuarioComunidades = userComuDao.seeUserComusByUser().blockingGet();
             return usuarioComunidades;
         }
 
@@ -110,19 +112,19 @@ public class SeeUserComuByUserFr extends Fragment {
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {
             Timber.d("onPostExecute()");
-//            if (checkPostExecute(activity)) return;    // TODO: descomentar y modificar.
+            if (checkPostExecute(activity)) return;    // TODO: descomentar y modificar.
 
-            /*if (uiException != null) {  // action: LOGIN.
+            if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
                 assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
                 routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
                         .initActivity(activity);
-            }*/
+            }
             if (usuarioComunidades != null) {
                 Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
-               /* mAdapter = new SeeUserComuByUserAdapter(getActivity());
+                mAdapter = new SeeUserComuByUserAdapter(getActivity());
                 mAdapter.addAll(usuarioComunidades);
-                frView.setAdapter(mAdapter);*/
+                frView.setAdapter(mAdapter);
             }
         }
     }

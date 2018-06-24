@@ -30,7 +30,7 @@ import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isActivityDying;
@@ -62,7 +62,7 @@ public class LoginAc_App_Test {
         {
             // Precondition: the user is registered.
             try {
-                regUserComuWithTkCache(COMU_REAL_DROID);
+                regUserComuGetAuthTk(COMU_REAL_DROID);
             } catch (Exception e) {
                 fail();
             }

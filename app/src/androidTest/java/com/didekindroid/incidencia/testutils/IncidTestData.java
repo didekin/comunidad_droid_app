@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static java.time.Instant.now;
@@ -43,7 +43,7 @@ public final class IncidTestData {
 
     public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu)
     {
-        regUserComuWithTkCache(userComu);
+        regUserComuGetAuthTk(userComu);
         UsuarioComunidad userComuDb = userComuDao.seeUserComusByUser().blockingGet().get(0);
         return insertGetIncidImportancia(userComuDb, (short) 3);
     }

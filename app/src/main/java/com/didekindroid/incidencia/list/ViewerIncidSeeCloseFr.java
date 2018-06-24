@@ -21,12 +21,11 @@ import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import java.io.Serializable;
 import java.util.List;
 
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
 import static com.didekindroid.incidencia.IncidContextualName.incid_closed_just_selected;
-import static com.didekindroid.lib_one.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
-import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
@@ -110,7 +109,7 @@ public class ViewerIncidSeeCloseFr extends
         comuSpinnerViewer.saveState(savedState);
     }
 
-    /* ==================================  ViewerSelectionIf  =================================*/
+    /* ==================================  ViewerSelectedListIf  =================================*/
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -122,26 +121,9 @@ public class ViewerIncidSeeCloseFr extends
     }
 
     @Override
-    public int getSelectedPositionFromItemId(long itemSelectedId)
+    public Function<IncidenciaUser, Long> getBeanIdFunction()
     {
-        Timber.d("getSelectedItemId()");
-        assertTrue(itemSelectedId > 0, item_selected_in_list_should_not_be_zero);
-
-        // Position set to take account header view in position 0, ...
-        int position = view.getHeaderViewsCount();
-        boolean isFound = false;
-        if (itemSelectedId > 0L) {
-            long incidenciaIdIn;
-            do {
-                incidenciaIdIn = ((IncidenciaUser) view.getItemAtPosition(position)).getIncidencia().getIncidenciaId();
-                if (incidenciaIdIn == itemSelectedId) {
-                    isFound = true;
-                    break;
-                }
-            } while (++position < view.getCount());
-        }
-        // Si no encontramos la incidencia, index = 0.
-        return isFound ? position : 0;
+        return incidenciaUser -> incidenciaUser.getIncidencia().getIncidenciaId();
     }
 
     /**
@@ -171,7 +153,7 @@ public class ViewerIncidSeeCloseFr extends
         view.setAdapter(adapter);
         view.setEmptyView(emptyListView);
         if (view.getCount() > view.getHeaderViewsCount() && itemSelectedId > 0L) {
-            view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
+            view.setItemChecked(getSelectedPositionFromItemId(getBeanIdFunction()), true);
         }
     }
 

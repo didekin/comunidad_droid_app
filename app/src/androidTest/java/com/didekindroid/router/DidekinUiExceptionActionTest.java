@@ -32,7 +32,7 @@ import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.lib_one.usuario.UserTestNavigation.loginAcResourceId;
 import static com.didekindroid.router.DidekinUiExceptionAction.generic;
 import static com.didekindroid.router.DidekinUiExceptionAction.show_comunidad_duplicate;
@@ -121,7 +121,7 @@ public class DidekinUiExceptionActionTest {
     public void test_show_incidReg()
     {
         // Preconditions.
-        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
+        regUserComuGetAuthTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
         run(ue, show_incidReg, incidRegAcLayout);
 
@@ -132,7 +132,7 @@ public class DidekinUiExceptionActionTest {
     public void test_show_incid_open_list_1()
     {
         // Preconditions.
-        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
+        regUserComuGetAuthTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
         run(ue, show_incid_open_list, incidSeeGenericFrLayout);
 
@@ -143,7 +143,7 @@ public class DidekinUiExceptionActionTest {
     public void test_show_incid_open_list_2()
     {
         // Preconditions.
-        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
+        regUserComuGetAuthTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
         run(ue, show_incid_open_list, incidSeeGenericFrLayout, null, null);
 
@@ -154,7 +154,7 @@ public class DidekinUiExceptionActionTest {
     public void test_show_incid_open_list_3()
     {
         // Preconditions.
-        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
+        regUserComuGetAuthTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
         run(ue, show_incid_open_list, incidSeeGenericFrLayout, () -> "key_test", "key_value");
 
@@ -165,7 +165,7 @@ public class DidekinUiExceptionActionTest {
     public void test_show_resolucionDup_1()
     {
         // Preconditions.
-        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
+        regUserComuGetAuthTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
         // Run.
         run(ue, show_resolucionDup, incidSeeGenericFrLayout);
@@ -177,7 +177,7 @@ public class DidekinUiExceptionActionTest {
     public void test_show_resolucionDup_2()
     {
         // Preconditions.
-        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
+        regUserComuGetAuthTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
         // Run.
         run(ue, show_resolucionDup, incidSeeGenericFrLayout, null, null);
@@ -189,7 +189,7 @@ public class DidekinUiExceptionActionTest {
     public void test_show_resolucionDup_3()
     {
         // Preconditions.
-        regUserComuWithTkCache(COMU_PLAZUELA5_JUAN);
+        regUserComuGetAuthTk(COMU_PLAZUELA5_JUAN);
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
         // Run.
         run(ue, show_resolucionDup, incidSeeGenericFrLayout, () -> "key_test", "key_value");

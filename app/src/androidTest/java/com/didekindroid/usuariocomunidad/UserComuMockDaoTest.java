@@ -11,7 +11,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
@@ -33,7 +33,7 @@ public class UserComuMockDaoTest {
     public void testRegUserAndUserComu_1()
     {
         // Comunidad is associated to other user.
-        regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
+        regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad comunidad = userComuDao.getComusByUser().blockingGet().get(0);
         cleanWithTkhandler();
 

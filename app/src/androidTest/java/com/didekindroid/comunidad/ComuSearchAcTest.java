@@ -29,7 +29,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
@@ -91,7 +91,7 @@ public class ComuSearchAcTest {
     @Test
     public void testWithResultsAndUp()
     {
-        regUserComuWithTkCache(COMU_REAL_JUAN);
+        regUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
@@ -107,7 +107,7 @@ public class ComuSearchAcTest {
     @Test
     public void testWithResultsAndBack()
     {
-        regUserComuWithTkCache(COMU_REAL_JUAN);
+        regUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
@@ -126,7 +126,7 @@ public class ComuSearchAcTest {
     @Test
     public void testLogin_Registered() throws UiException, IOException, InterruptedException
     {
-        regUserComuWithTkCache(COMU_REAL_JUAN);
+        regUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         // Precondition.
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(true));
@@ -160,7 +160,7 @@ public class ComuSearchAcTest {
     @Test
     public void testMenuNuevaComunidad_Registered() throws UiException, IOException, InterruptedException
     {
-        regUserComuWithTkCache(COMU_REAL_JUAN);
+        regUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         REG_COMU_USERCOMU_AC.checkItem(activity);
 

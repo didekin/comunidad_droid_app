@@ -24,7 +24,7 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
@@ -51,7 +51,7 @@ public class UserData_App_Test {
         protected void beforeActivityLaunched()
         {
             try {
-                regUserComuWithTkCache(COMU_REAL_JUAN);
+                regUserComuGetAuthTk(COMU_REAL_JUAN);
             } catch (Exception e) {
                 fail();
             }

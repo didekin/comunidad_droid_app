@@ -5,6 +5,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +24,7 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJEC
 import static com.didekindroid.lib_one.testutil.UiTestUtil.checkChildInViewer;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
@@ -34,12 +36,13 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpMockGcmGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -54,8 +57,14 @@ public class RegUserComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
-            return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, signUpGetComu(COMU_PLAZUELA5_JUAN));
+            Comunidad comunidad = null;
+            try {
+                comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_gcm_mock");
+            } catch (UiException e) {
+                fail();
+            }
+            regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+            return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };
     private RegUserComuAc activity;

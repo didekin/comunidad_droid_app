@@ -31,7 +31,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -69,7 +69,7 @@ public class ViewerSeeUserComuByComuTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuWithTkCache(COMU_REAL_PEPE);
+            regUserComuGetAuthTk(COMU_REAL_PEPE);
             usuarioComunidad = userComuDao.seeUserComusByUser().blockingGet().get(0);
             return new Intent().putExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id());
         }

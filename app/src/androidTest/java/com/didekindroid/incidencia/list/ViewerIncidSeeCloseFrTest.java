@@ -43,7 +43,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncid
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
@@ -76,7 +76,7 @@ public class ViewerIncidSeeCloseFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuWithTkCache(COMU_PLAZUELA5_PEPE);
+            regUserComuGetAuthTk(COMU_PLAZUELA5_PEPE);
             incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
             // Cierre incidencias..
             resolucion = insertGetResolucionNoAdvances(incidImportancia1);

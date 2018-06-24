@@ -65,8 +65,8 @@ public class RegUserAndUserComuAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            Intent intent = new Intent(getInstrumentation().getTargetContext(), ComuSearchResultsAc.class);
-            intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
+            Intent intent = new Intent(getInstrumentation().getTargetContext(), ComuSearchResultsAc.class)
+                    .putExtra(COMUNIDAD_SEARCH.key, comunidad);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext())

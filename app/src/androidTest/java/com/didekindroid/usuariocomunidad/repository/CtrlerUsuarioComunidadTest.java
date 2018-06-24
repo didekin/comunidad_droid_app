@@ -24,6 +24,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_L
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpMockGcmGetComu;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 
@@ -142,7 +143,7 @@ public class CtrlerUsuarioComunidadTest {
                 ctrler -> ctrler.regUserComu(
                         new CompletableObserverMock(),
                         new UsuarioComunidad.UserComuBuilder(
-                                signUpGetComu(COMU_REAL_JUAN), regGetUserComu(COMU_LA_FUENTE_PEPE)
+                                signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_mock_gcm"), regGetUserComu(COMU_LA_FUENTE_PEPE)
                         ).planta("uno").roles(PROPIETARIO.function).build()),
                 controller
         );

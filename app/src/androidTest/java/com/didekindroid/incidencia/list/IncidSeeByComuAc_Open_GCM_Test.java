@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -44,7 +44,7 @@ public class IncidSeeByComuAc_Open_GCM_Test extends Incidencia_GCM_test_abs {
             @Override
             protected Intent getActivityIntent()
             {
-                regUserComuWithTkCache(COMU_ESCORIAL_PEPE);
+                regUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
                 // We'll test that the gcmToken is not updated in server.
                 assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
                 return new Intent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);

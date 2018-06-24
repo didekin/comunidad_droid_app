@@ -16,6 +16,7 @@ import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
 
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
@@ -64,24 +65,9 @@ public class ViewerComuSpinner extends
     }
 
     @Override
-    public int getSelectedPositionFromItemId(long itemId)
+    public Function<Comunidad, Long> getBeanIdFunction()
     {
-        Timber.d("getSelectedPositionFromItemId()");
-
-        int position = 0;
-        boolean isFound = false;
-        if (itemId > 0L) {
-            long comunidadIdIn;
-            do {
-                comunidadIdIn = ((Comunidad) view.getItemAtPosition(position)).getC_Id();
-                if (comunidadIdIn == itemId) {
-                    isFound = true;
-                    break;
-                }
-            } while (++position < view.getCount());
-        }
-        // Si no encontramos la comuidad, index = 0.
-        return isFound ? position : 0;
+        return Comunidad::getC_Id;
     }
 
     // ==================================== ViewerIf ====================================

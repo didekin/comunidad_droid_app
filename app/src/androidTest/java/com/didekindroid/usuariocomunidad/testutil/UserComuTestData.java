@@ -19,8 +19,8 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithGcmTk;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithMockGcm;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
@@ -63,13 +63,13 @@ public final class UserComuTestData {
 
     public static Comunidad signUpGetComu(UsuarioComunidad usuarioComunidad)
     {
-        regUserComuWithTkCache(usuarioComunidad);
+        regUserComuGetAuthTk(usuarioComunidad);
         return userComuDao.getComusByUser().blockingGet().get(0);
     }
 
-    public static Comunidad signUpWithGcmTkGetComu(UsuarioComunidad usuarioComunidad, String gcmTokenIn) throws UiException
+    public static Comunidad signUpMockGcmGetComu(UsuarioComunidad usuarioComunidad, String gcmTokenIn) throws UiException
     {
-        regUserComuWithGcmTk(usuarioComunidad, gcmTokenIn);
+        regUserComuWithMockGcm(usuarioComunidad, gcmTokenIn);
         return userComuDao.getComusByUser(((AuthTkCacher) secInitializer.get().getTkCacher()).doAuthHeaderStrMock(gcmTokenIn))
                 .map(httpInitializer.get()::getResponseBody)
                 .blockingGet()
@@ -83,14 +83,14 @@ public final class UserComuTestData {
 
     public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList)
     {
-        regUserComuWithTkCache(usuarioComunidadList.get(0));
+        regUserComuGetAuthTk(usuarioComunidadList.get(0));
         userComuDao.regComuAndUserComu(usuarioComunidadList.get(1)).blockingAwait();
     }
 
     public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus)
     {
         assertThat(userComus.length > 0, is(true));
-        regUserComuWithTkCache(userComus[0]);
+        regUserComuGetAuthTk(userComus[0]);
         for (int i = 1; i < userComus.length; i++) {
             userComuDao.regComuAndUserComu(userComus[i]).blockingAwait();
         }

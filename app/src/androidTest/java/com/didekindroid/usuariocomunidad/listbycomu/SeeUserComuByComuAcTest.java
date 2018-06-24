@@ -32,7 +32,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
@@ -79,7 +79,7 @@ public class SeeUserComuByComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuWithTkCache(COMU_ESCORIAL_PEPE);
+            regUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
             usuarioComunidad = userComuDao.seeUserComusByUser().blockingGet().get(0);
             return new Intent().putExtra(ComuBundleKey.COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id());
         }

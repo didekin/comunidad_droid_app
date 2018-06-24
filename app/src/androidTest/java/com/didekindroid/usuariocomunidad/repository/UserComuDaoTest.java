@@ -25,7 +25,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
@@ -37,8 +37,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_T
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeListTwoUserComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regTwoUserComuSameUser;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpWithGcmTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpMockGcmGetComu;
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
@@ -93,7 +93,7 @@ public class UserComuDaoTest {
     public void test_getUserComuByUserAndComu_2()
     {
         whatClean = CLEAN_JUAN;
-        regUserComuWithTkCache(COMU_REAL_JUAN);
+        regUserComuGetAuthTk(COMU_REAL_JUAN);
         // La comunidad no existe en BD.
         userComuDao.getUserComuByUserAndComu(999L).test().assertError(
                 exception -> UiException.class.cast(exception).getErrorHtppMsg().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())
@@ -124,7 +124,7 @@ public class UserComuDaoTest {
     {
         whatClean = CLEAN_PEPE;
 
-        regUserComuWithTkCache(COMU_REAL_PEPE);
+        regUserComuGetAuthTk(COMU_REAL_PEPE);
         UsuarioComunidad userComuOld = userComuDao.seeUserComusByUser().blockingGet().get(0);
         UsuarioComunidad userComuNew = new UsuarioComunidad.UserComuBuilder(userComuOld.getComunidad(), userComuOld.getUsuario())
                 .userComuRest(COMU_REAL_PEPE)
@@ -171,10 +171,10 @@ public class UserComuDaoTest {
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
         // Comunidad1 and user1 in DB.
-        Comunidad comunidad1 = signUpWithGcmTkGetComu(COMU_REAL_JUAN, "juan_mock_gcmTk");
+        Comunidad comunidad1 = signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_mock_gcmTk");
         userComuDao.getTkCacher().updateIsRegistered(false);
         /* Comunidad2 and user2 in DB.*/
-        regUserComuWithTkCache(COMU_TRAV_PLAZUELA_PEPE);
+        regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         // Add comunidad1 and user2 (her data are in cache now and they can be null).
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad1, null, "portal",
                 "esc", "planta2", "doorJ", PRO.function);
@@ -195,7 +195,7 @@ public class UserComuDaoTest {
     {
         whatClean = CLEAN_JUAN;
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
-        regUserComuWithTkCache(COMU_REAL_JUAN);
+        regUserComuGetAuthTk(COMU_REAL_JUAN);
         assertThat(userComuDao.seeUserComusByUser().blockingGet(), hasItem(COMU_REAL_JUAN));
     }
 }

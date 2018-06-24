@@ -42,7 +42,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuWithTkCache;
+import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
@@ -66,7 +66,7 @@ public class IncidCommentRegAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuWithTkCache(COMU_REAL_JUAN);
+            regUserComuGetAuthTk(COMU_REAL_JUAN);
             UsuarioComunidad juanReal = userComuDao.seeUserComusByUser().blockingGet().get(0);
             incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
                     doIncidencia(juanReal.getUsuario().getUserName(),
