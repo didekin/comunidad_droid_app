@@ -31,24 +31,21 @@ import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 public class SeeUserComuByUserAc extends AppCompatActivity {
 
     SeeUserComuByUserFr mFragment;
-    AuthTkCacherIf identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
-        identityCacher = secInitializer.get().getTkCacher();
-
-        // Preconditions: the user is registered.
-        assertTrue(identityCacher.isRegisteredCache(), user_should_be_registered);
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
+
         FloatingActionButton fab = findViewById(R.id.new_comunidad_fab);
         fab.setOnClickListener(
                 v -> routerInitializer.get().getContextRouter()
                         .getActionFromContextNm(to_reg_new_comu_usercomu).initActivity(this));
+
         mFragment = (SeeUserComuByUserFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
     }
 

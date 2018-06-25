@@ -89,7 +89,6 @@ public class ViewerImportanciaSpinnerTest {
         waitAtMost(2, SECONDS).untilTrue(isExec);
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(4));
         assertThat(ViewerImportanciaSpinner.class.cast(viewer).getViewInViewer().getSelectedItemId(), is(2L));
-        assertThat(ViewerImportanciaSpinner.class.cast(viewer).getViewInViewer().getSelectedItemPosition(), is(2));
     }
 
     @Test

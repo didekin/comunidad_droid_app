@@ -9,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuTestData;
 import com.didekindroid.usuariocomunidad.RolUi;
 
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,7 +41,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_E
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regSeveralUserComuSameUser;
-import static external.LongListMatchers.withAdaptedData;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.is;
@@ -95,14 +93,10 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testOnCreateAndNavigateUp()
     {
-        assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
         assertThat(secInitializer.get().getTkCacher().isRegisteredCache(), is(true));
-        assertThat(mFragment.getFrView(), notNullValue());
 
         onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-
         // Verificamos navegación en ambas direcciones.
         onData(is(COMU_LA_FUENTE_PEPE)).check(matches(isDisplayed())).perform(click());
         onView(withId(userComuDataLayout)).check(matches(isDisplayed()));
@@ -120,23 +114,7 @@ public class SeeUserComuByUserAcTest {
     }
 
     @Test
-    public void testViewData_1() throws InterruptedException
-    {
-        Thread.sleep(3000);
-        SeeUserComuByUserAdapter adapter = mFragment.mAdapter;
-        assertThat(adapter.getCount(), is(3));
-        // Orden es provinciaId, municipioCd.
-        assertThat(adapter.getItem(0), is(COMU_LA_FUENTE_PEPE));
-        assertThat(adapter.getItem(1), is(COMU_ESCORIAL_PEPE));
-        assertThat(adapter.getItem(2), is(COMU_PLAZUELA5_PEPE));
-
-        for (int i = 0; i < adapter.getCount(); ++i) {
-            onView(withAdaptedData(Matchers.is(adapter.getItem(i)))).check(matches(isDisplayed()));
-        }
-    }
-
-    @Test
-    public void testViewData_2()
+    public void testViewData()
     {
         onData(is(COMU_LA_FUENTE_PEPE))
                 .onChildView(

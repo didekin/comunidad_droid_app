@@ -109,19 +109,20 @@ public class ViewerComuSpinnerTest {
         assertThat(viewer.getSelectedItemId(), is(0L)); // Default initialization.
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testGetSelectedPositionFromItemId()
     {
+        List<Comunidad> comunidades = Arrays.asList(
+                new Comunidad.ComunidadBuilder().c_id(11L).build(),
+                new Comunidad.ComunidadBuilder().c_id(33L).build(),
+                new Comunidad.ComunidadBuilder().c_id(22L).build()
+        );
+
+        viewer.setSelectedItemId(22L);
         activity.runOnUiThread(() -> {
-            viewer.onSuccessLoadItemList(Arrays.asList(
-                    new Comunidad.ComunidadBuilder().c_id(11L).build(),
-                    new Comunidad.ComunidadBuilder().c_id(33L).build(),
-                    new Comunidad.ComunidadBuilder().c_id(22L).build()
-            ));
-            assertThat(viewer.getSelectedPositionFromItemId(33L), is(1));
-            assertThat(viewer.getSelectedPositionFromItemId(22L), is(2));
-            assertThat(viewer.getSelectedPositionFromItemId(122L), is(0));
+            viewer.onSuccessLoadItemList(comunidades);
+            // Exec and check.
+            assertThat(viewer.getSelectedPositionFromItemId(viewer.getBeanIdFunction()), is(2));   // id 22
         });
     }
 
@@ -140,7 +141,7 @@ public class ViewerComuSpinnerTest {
         assertThat(viewer.getViewInViewer().getCount(), is(2));
         // Initialize itemId.
         waitAtMost(8, SECONDS).until(() -> viewer.getSelectedItemId() > 1);
-        assertThat(viewer.getSelectedPositionFromItemId(viewer.getSelectedItemId()), is(0));
+        assertThat(viewer.getSelectedPositionFromItemId(viewer.getBeanIdFunction()), is(0));
         // Initialize comunidadId in spinnerEvent.
         assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(viewer.getSelectedItemId()));
         // Call to SpinnerEventListener.doOnClickItemId()

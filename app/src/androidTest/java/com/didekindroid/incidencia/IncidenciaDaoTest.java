@@ -40,7 +40,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static java.time.Instant.now;
+import static java.util.Calendar.getInstance;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -227,7 +227,7 @@ public class IncidenciaDaoTest {
     {
         // Caso OK.
         Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu); // Implicitly tested calling this utilities method.
-        assertThat(resolucion.getFechaPrev().getTime() > now().toEpochMilli(), is(true));
+        assertThat(resolucion.getFechaPrev().getTime() > getInstance().getTimeInMillis(), is(true));
     }
 
     @Test

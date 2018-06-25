@@ -32,6 +32,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -63,6 +64,7 @@ import static org.junit.Assert.assertThat;
 public class ViewerSeeUserComuByComuTest {
 
     private UsuarioComunidad usuarioComunidad;
+
     @Rule
     public IntentsTestRule<SeeUserComuByComuAc> activityRule = new IntentsTestRule<SeeUserComuByComuAc>(SeeUserComuByComuAc.class, true) {
 
@@ -208,7 +210,7 @@ public class ViewerSeeUserComuByComuTest {
 
         assertThat(adapter.getCount(), is(count));
         waitAtMost(6, SECONDS)
-                .until(isViewDisplayedAndPerform(
+                .until(isViewDisplayed(
                         allOf(
                                 withId(R.id.see_usercomu_by_comu_list_header),
                                 withText(containsString(comu_real.getNombreComunidad())))

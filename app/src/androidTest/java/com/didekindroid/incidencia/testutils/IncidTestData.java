@@ -17,10 +17,10 @@ import java.util.List;
 
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.util.UiUtil.getMilliSecondsFromCalendarAdd;
 import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
-import static java.time.Instant.now;
-import static java.time.temporal.ChronoUnit.SECONDS;
+import static java.util.Calendar.SECOND;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -57,7 +57,7 @@ public final class IncidTestData {
                 .importancia(importancia)
                 .build();
 
-        incidenciaDao.regIncidImportancia(incidImportancia);
+        incidenciaDao.regIncidImportancia(incidImportancia).blockingGet();
         Incidencia incidenciaDb = incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).blockingGet().get(0).getIncidencia();
         return incidenciaDao.seeIncidImportanciaRaw(incidenciaDb.getIncidenciaId()).blockingGet().getIncidImportancia();
     }
@@ -102,8 +102,8 @@ public final class IncidTestData {
                 incidImportancia.getIncidencia(),
                 RESOLUCION_DEFAULT_DESC,
                 COSTE_ESTIM_DEFAULT,
-                new Timestamp(now().plus(30, SECONDS).toEpochMilli()));
-        incidenciaDao.regResolucion(resolucion);
+                new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 30)));
+        incidenciaDao.regResolucion(resolucion).blockingGet();
         return incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet();
     }
 
@@ -133,7 +133,7 @@ public final class IncidTestData {
                 incidencia,
                 RESOLUCION_DEFAULT_DESC,
                 1122,
-                new Timestamp(now().plus(2L, SECONDS).toEpochMilli()));
+                new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 2)));
         assertThat(incidenciaDao.regResolucion(resolucion), is(1));
         return incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet();
     }

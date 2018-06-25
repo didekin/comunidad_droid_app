@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
@@ -67,6 +68,13 @@ public final class ViewerImportanciaSpinner extends
         }
     }
 
+    @Override
+    public Function<String, Long> getBeanIdFunction()
+    {
+        Timber.d("getBeanIdFunction()");
+        throw new UnsupportedOperationException();
+    }
+
     // ==================================== ViewerIf ====================================
 
     @Override
@@ -94,7 +102,6 @@ public final class ViewerImportanciaSpinner extends
 
     //  ===================================== HELPERS ============================================
 
-    @SuppressWarnings("WeakerAccess")
     public class ImportanciaSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)

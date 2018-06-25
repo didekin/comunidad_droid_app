@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.sql.Timestamp;
-import java.time.Instant;
+import java.util.Calendar;
 
 import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -23,7 +23,8 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.INCID_DEFAULT_
 import static com.didekindroid.incidencia.testutils.IncidTestData.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doResolucion;
-import static java.time.temporal.ChronoUnit.SECONDS;
+import static com.didekindroid.lib_one.util.UiUtil.getMilliSecondsFromCalendarAdd;
+import static java.util.Calendar.SECOND;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -40,8 +41,7 @@ public class IncidResolucionSeeFr_Test {
             incidencia,
             RESOLUCION_DEFAULT_DESC,
             1000,
-            new Timestamp(Instant.now().plus(100, SECONDS).toEpochMilli())
-    );
+            new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 100)));
 
     @Before
     public void setUp()

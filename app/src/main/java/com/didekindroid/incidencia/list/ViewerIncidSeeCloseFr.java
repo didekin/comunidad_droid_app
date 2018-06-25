@@ -186,7 +186,11 @@ public class ViewerIncidSeeCloseFr extends
             view.setItemChecked(position, true);
             viewClick.setSelected(true);
             IncidenciaUser incidenciaUser = (IncidenciaUser) view.getItemAtPosition(position);
-            itemSelectedId = incidenciaUser.getIncidencia().getIncidenciaId();
+            try {
+                itemSelectedId = getBeanIdFunction().apply(incidenciaUser);
+            } catch (Exception e) {
+                Timber.e(e);
+            }
             controller.selectItem(new ObserverSingleSelectItem<>(ViewerIncidSeeCloseFr.this), incidenciaUser);
         }
     }

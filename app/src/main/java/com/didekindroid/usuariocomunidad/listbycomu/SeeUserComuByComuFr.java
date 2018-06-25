@@ -17,6 +17,7 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.usuariocomunidad.listbycomu.ViewerSeeUserComuByComu.newViewerUserComuByComu;
 
 
 /**
@@ -52,7 +53,7 @@ public class SeeUserComuByComuFr extends Fragment {
         assertTrue(getActivity().getIntent().hasExtra(COMUNIDAD_ID.key), intent_extra_should_be_initialized);
         ComunidadBean comunidadBean = new ComunidadBean();
         comunidadBean.setComunidadId(getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
-        viewer = ViewerSeeUserComuByComu.newViewerUserComuByComu(frView, (AppCompatActivity) getActivity());
+        viewer = newViewerUserComuByComu(frView, (AppCompatActivity) getActivity());
         viewer.doViewInViewer(savedInstanceState, comunidadBean);
     }
 
