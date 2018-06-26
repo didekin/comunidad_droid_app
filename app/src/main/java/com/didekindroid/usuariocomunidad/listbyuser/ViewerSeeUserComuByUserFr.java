@@ -15,6 +15,7 @@ import java.util.List;
 import io.reactivex.functions.Function;
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_ID;
 import static com.didekindroid.comunidad.util.ComuContextualName.usercomu_just_selected;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.Collections.unmodifiableList;
@@ -81,7 +82,8 @@ public class ViewerSeeUserComuByUserFr extends
         if (savedState == null) {
             savedState = new Bundle();
         }
-        savedState.putLong(USERCOMU_LIST_OBJECT.key, itemSelectedId);
+        savedState.putLong(COMUNIDAD_LIST_ID.key, itemSelectedId);
+        Timber.d("Comunidad key = %d", savedState.getLong(COMUNIDAD_LIST_ID.key));
     }
 
     /* ==================================  ViewerSelectedListIf  =================================*/
@@ -91,7 +93,7 @@ public class ViewerSeeUserComuByUserFr extends
     {
         Timber.d("initSelectedItemId()");
         if (savedState != null) {
-            itemSelectedId = savedState.getLong(USERCOMU_LIST_OBJECT.key, 0L);
+            itemSelectedId = savedState.getLong(COMUNIDAD_LIST_ID.key, 0L);
         }
     }
 

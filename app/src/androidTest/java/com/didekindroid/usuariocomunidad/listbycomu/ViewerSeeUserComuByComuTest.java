@@ -33,7 +33,6 @@ import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;

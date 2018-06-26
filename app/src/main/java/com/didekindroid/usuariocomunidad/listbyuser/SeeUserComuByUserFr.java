@@ -49,6 +49,14 @@ public class SeeUserComuByUserFr extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        Timber.d("onSaveInstanceState()");
+        viewer.saveState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onStop()
     {
         Timber.d("onStop()");

@@ -39,6 +39,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -59,6 +60,7 @@ public class ViewerUserComuDataAcTest {
 
     private UsuarioComunidad userComu;
     private UserComuDataAc activity;
+    private boolean hasToClean = true;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
@@ -83,7 +85,9 @@ public class ViewerUserComuDataAcTest {
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(CLEAN_PEPE);
+        if (hasToClean){
+            cleanOptions(CLEAN_PEPE);
+        }
     }
 
     // .............................. VIEWER ..................................
@@ -101,6 +105,7 @@ public class ViewerUserComuDataAcTest {
         checkUserComuData(activity.viewer.userComuIntent);
         onView(withId(R.id.usercomu_data_ac_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.usercomu_data_ac_delete_button)).check(matches(isDisplayed()));
+        waitAtMost(4, SECONDS).until(() -> activity.viewer.showMnOldestAdmonUser.get());
     }
 
     // .............................. LISTENERS ..................................
@@ -115,25 +120,33 @@ public class ViewerUserComuDataAcTest {
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
         // Verificación.
         waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
-
     }
 
     @Test
     public void test_DeleteButtonListener()
     {
+        hasToClean = false;
         // Before.
         assertThat(activity.viewer.getController().getTkCacher().isRegisteredCache(), is(true));
         // Exec.
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
-        onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
+        // Check.
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
         intended(hasFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     @Test
-    public void test_actionAfterDeleteUser() throws Exception
+    public void test_actionAfterDeleteUser_1() throws Exception
     {
         activity.viewer.actionAfterDeleteUser.accept(1);
         onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void test_actionAfterDeleteUser_2() throws Exception
+    {
+        activity.viewer.actionAfterDeleteUser.accept(IS_USER_DELETED);
+        onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
     }
 
     // .............................. SUBSCRIBERS ..................................
@@ -144,18 +157,26 @@ public class ViewerUserComuDataAcTest {
         // Exec and check.
         just(1).subscribeWith(activity.viewer.new ModifyUserComuObserver(true));
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
-        waitAtMost(4, SECONDS).untilTrue(activity.viewer.showComuDataMn);
+        waitAtMost(4, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
     }
 
     @Test
-    public void test_ModifyComuObserver_2() throws InterruptedException
+    public void test_ModifyComuObserver_2()
     {
-
-        SECONDS.sleep(4);// Exec and check.
         just(1).subscribeWith(activity.viewer.new ModifyUserComuObserver(false));
-        waitAtMost(10, SECONDS).untilFalse(activity.viewer.showComuDataMn);
+        waitAtMost(10, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
 
+    }
+
+    @Test
+    public void test_OldestObserver()
+    {
+        just(true).subscribeWith(activity.viewer.new OldestObserver());
+        waitAtMost(6, SECONDS).until(() -> activity.viewer.showMnOldestAdmonUser.get());
+
+        just(false).subscribeWith(activity.viewer.new OldestObserver());
+        waitAtMost(6, SECONDS).until(() -> !activity.viewer.showMnOldestAdmonUser.get());
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

@@ -59,9 +59,7 @@ public class UserComuDataAc extends AppCompatActivity implements InjectorOfParen
 
         oldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key);
         viewer = newViewerUserComuDataAc(this);
-        viewer.doViewInViewer(
-                savedInstanceState,
-                oldUserComu);
+        viewer.doViewInViewer(savedInstanceState, oldUserComu);
 
         regUserComuFr = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
     }
@@ -99,8 +97,6 @@ public class UserComuDataAc extends AppCompatActivity implements InjectorOfParen
     {
         Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
-        // comu_data_ac_mn is shown only to adm/pre rol and to oldest user.
-        viewer.setAcMenu(menu);
         return true;
     }
 
@@ -114,8 +110,8 @@ public class UserComuDataAc extends AppCompatActivity implements InjectorOfParen
     {
         Timber.d("onPrepareOptionsMenu()");
         MenuItem comuDataItem = menu.findItem(R.id.comu_data_ac_mn);
-        comuDataItem.setVisible(viewer.showComuDataMn.get());
-        comuDataItem.setEnabled(viewer.showComuDataMn.get());
+        comuDataItem.setVisible(viewer.showMnOldestAdmonUser.get());
+        comuDataItem.setEnabled(viewer.showMnOldestAdmonUser.get());
         return super.onPrepareOptionsMenu(menu);
     }
 

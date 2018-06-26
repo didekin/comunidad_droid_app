@@ -3,7 +3,6 @@ package com.didekindroid.testutil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
@@ -18,6 +17,7 @@ import android.widget.DatePicker;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ControllerIf;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.api.ViewerIf;
 
 import org.hamcrest.CoreMatchers;
@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -147,7 +148,7 @@ public final class ActivityTestUtil {
     {
         return () -> {
             try {
-                Espresso.onData(objectMatcher)
+                onData(objectMatcher)
                         .check(matches(isDisplayed()))
                         .perform(click());
                 return true;
@@ -176,6 +177,11 @@ public final class ActivityTestUtil {
         });
 
         waitAtMost(6, SECONDS).untilAtomic(atomicInteger, is(0));
+    }
+
+    public static void checkSubscriptionsOnStop(final Viewer viewer)
+    {
+        checkSubscriptionsOnStop(viewer.getActivity(), viewer.getController());
     }
 
     //    ============================= DATE PICKERS ===================================

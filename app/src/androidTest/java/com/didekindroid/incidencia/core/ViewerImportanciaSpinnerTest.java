@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.core;
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ActivityMock;
@@ -17,8 +16,6 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -34,7 +31,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -50,45 +47,36 @@ public class ViewerImportanciaSpinnerTest {
 
     private ViewerImportanciaSpinner viewer;
     private ActivityMock activity;
-    private Spinner spinner;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
 
-        final AtomicReference<ViewerImportanciaSpinner> atomicViewer = new AtomicReference<>(null);
         activity.runOnUiThread(() -> {
             activity.getSupportFragmentManager().beginTransaction()
                     .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                     .commitNow();
-            spinner = activity.findViewById(R.id.importancia_spinner);
-            atomicViewer.compareAndSet(null, newViewerImportanciaSpinner(spinner, new ViewerMock(activity)));
+            viewer = newViewerImportanciaSpinner(activity.findViewById(R.id.importancia_spinner), new ViewerMock(activity));
         });
-        waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
-        viewer = atomicViewer.get();
+        waitAtMost(2, SECONDS).until(() -> viewer != null);
     }
 
     @Test
     public void tesNewViewerImportanciaSpinner()
     {
-        assertThat(newViewerImportanciaSpinner(spinner, new ViewerMock(activity)).getController(), notNullValue());
+        assertThat(viewer.getController(), nullValue());
     }
 
     @Test
     public void testOnSuccessLoadItems()
     {
-        final List<String> importancias = Arrays.asList("baja", "alta", "muy alta", "urgente");
+        final List<String> importancias = Arrays.asList("imp1", "imp2", "imp3", "imp4");
         viewer.setSelectedItemId(2);
 
-        final AtomicBoolean isExec = new AtomicBoolean(false);
-        activity.runOnUiThread(() -> {
-            viewer.onSuccessLoadItemList(importancias);
-            isExec.compareAndSet(false, true);
-        });
-        waitAtMost(2, SECONDS).untilTrue(isExec);
-        assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(4));
-        assertThat(ViewerImportanciaSpinner.class.cast(viewer).getViewInViewer().getSelectedItemId(), is(2L));
+        activity.runOnUiThread(() -> viewer.onSuccessLoadItemList(importancias));
+        waitAtMost(4, SECONDS).until(() -> viewer.getViewInViewer().getCount() == 4);
+        assertThat(ViewerImportanciaSpinner.class.cast(viewer).getViewInViewer().getSelectedItemPosition(), is(2));
     }
 
     @Test
@@ -126,12 +114,8 @@ public class ViewerImportanciaSpinnerTest {
         final Bundle bundle = new Bundle();
         bundle.putLong(keyBundle, importanciaArrItem);
 
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(() -> {
-            viewer.doViewInViewer(bundle, incidImportanciaBean);
-            isRun.compareAndSet(false, true);
-        });
-        waitAtMost(4, SECONDS).untilTrue(isRun);
+        activity.runOnUiThread(() -> viewer.doViewInViewer(bundle, incidImportanciaBean));
+        waitAtMost(4, SECONDS).until(() -> viewer.bean.equals(incidImportanciaBean));
 
         // Check call to initSelectedItemId().
         assertThat(viewer.getSelectedItemId(), allOf(

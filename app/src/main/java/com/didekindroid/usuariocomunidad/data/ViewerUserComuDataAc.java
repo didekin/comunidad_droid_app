@@ -3,7 +3,6 @@ package com.didekindroid.usuariocomunidad.data;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
@@ -41,8 +40,7 @@ import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 final class ViewerUserComuDataAc extends ParentViewer<View, CtrlerUsuarioComunidad> {
 
     UsuarioComunidad userComuIntent;
-    Menu acMenu;
-    AtomicBoolean showComuDataMn = new AtomicBoolean(false);
+    AtomicBoolean showMnOldestAdmonUser = new AtomicBoolean(false);
     final Consumer<Integer> actionAfterDeleteUser = (Integer rowsUpdated) ->
     {
         if ((rowsUpdated == IS_USER_DELETED)) {
@@ -56,7 +54,7 @@ final class ViewerUserComuDataAc extends ParentViewer<View, CtrlerUsuarioComunid
         }
     };
 
-    ViewerUserComuDataAc(View view, Activity activity)
+    private ViewerUserComuDataAc(View view, Activity activity)
     {
         super(view, activity, null);
     }
@@ -83,26 +81,8 @@ final class ViewerUserComuDataAc extends ParentViewer<View, CtrlerUsuarioComunid
 
         Button mDeleteButton = view.findViewById(R.id.usercomu_data_ac_delete_button);
         mDeleteButton.setOnClickListener(new DeleteButtonListener());
-    }
 
-    // .............................. HELPERS ..................................
-
-    /**
-     * This method is called from the activity.
-     */
-    void setAcMenu(Menu menu)
-    {
-        Timber.d("setAcMenu()");
-        acMenu = menu;
-        controller.isOldestOrAdmonUserComu(new AbstractSingleObserver<Boolean>(this) {
-            // Flag for showing the ComunidadDataAc menu option is initialized.
-            @Override
-            public void onSuccess(Boolean hasComuDataModPower)
-            {
-                Timber.d("onSuccess()");
-                showComuDataMn.set(hasComuDataModPower);
-            }
-        }, userComuIntent.getComunidad());
+        controller.isOldestOrAdmonUserComu(new OldestObserver(), userComuIntent.getComunidad());
     }
 
     // .............................. LISTENERS ..................................
@@ -151,12 +131,12 @@ final class ViewerUserComuDataAc extends ParentViewer<View, CtrlerUsuarioComunid
         /**
          * This variable flags the adm powers of the user.
          */
-        private final boolean upDateMenu;
+        private final boolean newHasAdmPowers;
 
-        ModifyUserComuObserver(boolean upDateMenu)
+        ModifyUserComuObserver(boolean newHasAdmPowers)
         {
             super(ViewerUserComuDataAc.this);
-            this.upDateMenu = upDateMenu;
+            this.newHasAdmPowers = newHasAdmPowers;
         }
 
         /**
@@ -168,9 +148,24 @@ final class ViewerUserComuDataAc extends ParentViewer<View, CtrlerUsuarioComunid
         public void onSuccess(Integer rowsUpdated)
         {
             Timber.d("onSuccess()");
-            showComuDataMn.set(rowsUpdated == 1 && upDateMenu);
-            Timber.d("Update menu = %b", showComuDataMn.get());
+            showMnOldestAdmonUser.set(rowsUpdated == 1 && newHasAdmPowers);
+            Timber.d("Update menu = %b", showMnOldestAdmonUser.get());
             getContextualRouter().getActionFromContextNm(usercomu_just_modified).initActivity(activity);
+        }
+    }
+
+    class OldestObserver extends AbstractSingleObserver<Boolean> {
+
+        OldestObserver()
+        {
+            super(ViewerUserComuDataAc.this);
+        }
+
+        @Override
+        public void onSuccess(Boolean hasComuDataModPower)
+        {
+            Timber.d("onSuccess()");
+            showMnOldestAdmonUser.set(hasComuDataModPower);
         }
     }
 }

@@ -165,10 +165,10 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testComuDataMn() throws InterruptedException
+    public void testComuDataMn() throws InterruptedException     // TODO: fail
     {
         // Only one user associated to the comunidad: the menu shows the item.
-        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showComuDataMn);
+        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
         COMU_DATA_AC.checkItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
@@ -194,7 +194,7 @@ public class UserComuDataAcTest {
 
     @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidRegMn() throws InterruptedException
+    public void testIncidRegMn() throws InterruptedException   // TODO: fail
     {
         INCID_REG_AC.checkItem(activity);
         checkUp(userComuDataLayout);

@@ -7,15 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.security.AuthTkCacherIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuContextualName.to_reg_new_comu_usercomu;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
-import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
-import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 

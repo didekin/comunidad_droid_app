@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad;
 
-import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc_Mock_Test;
 import com.didekindroid.usuariocomunidad.repository.UserComuDaoTest;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAcTest;
@@ -33,7 +32,6 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         // data.
         UserComuDataAcTest.class,
-        ViewerUserComuDataAc_Mock_Test.class,
         ViewerUserComuDataAcTest.class,
         // listbycomu
         CtrlerUserComuByComuTest.class,
