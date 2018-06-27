@@ -12,8 +12,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkComunidadTextsOffView;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersOffView;
@@ -45,16 +43,14 @@ public class ViewerRegComuFr_Mock_Test {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        spinnerTextMockFr = new SpinnerTextMockFr();
-        final AtomicBoolean isRun = new AtomicBoolean(false);
         activity.runOnUiThread(() -> {
+            spinnerTextMockFr = new SpinnerTextMockFr();
             activity.getSupportFragmentManager().beginTransaction()
                     .add(R.id.mock_ac_layout, spinnerTextMockFr, "spinnerTextMockFr")
                     .commitNow();
             spinnerTextMockFr = (SpinnerTextMockFr) activity.getSupportFragmentManager().findFragmentByTag("spinnerTextMockFr");
-            isRun.compareAndSet(false, true);
         });
-        waitAtMost(4, SECONDS).untilTrue(isRun);
+        waitAtMost(4, SECONDS).until(() -> spinnerTextMockFr != null);
     }
 
     //    =============================================================================================

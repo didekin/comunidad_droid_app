@@ -198,11 +198,11 @@ public class IncidenciaDaoTest {
     }
 
     @Test
-    public void testSeeIncidsClosedByComu()
+    public void testSeeIncidsClosedByComu()    // TODO: fail.
     {
         // CASO OK: usuario 'adm'.
         Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu);
-        assertThat(incidenciaDao.closeIncidencia(resolucion), is(2));
+        assertThat(incidenciaDao.closeIncidencia(resolucion).blockingGet(), is(2));
         List<IncidenciaUser> incidenciaUsers =
                 incidenciaDao.seeIncidsClosedByComu(pepeUserComu.getComunidad().getC_Id()).blockingGet();
         assertThat(incidenciaUsers.size(), is(1));
@@ -217,7 +217,7 @@ public class IncidenciaDaoTest {
                 .usuarioComunidad(pepeUserComu)
                 .importancia((short) 3)
                 .build();
-        assertThat(incidenciaDao.regIncidImportancia(incidPepe), is(2));
+        assertThat(incidenciaDao.regIncidImportancia(incidPepe).blockingGet(), is(2));
 
         assertThat(incidenciaDao.seeIncidsOpenByComu(pepeUserComu.getComunidad().getC_Id()).blockingGet().size(), is(1));
     }

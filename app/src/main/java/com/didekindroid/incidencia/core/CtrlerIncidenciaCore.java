@@ -58,6 +58,7 @@ public class CtrlerIncidenciaCore extends Controller implements CtrlerListIf<Imp
     @Override
     public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<ImportanciaUser>> observer, long entityId)
     {
+        Timber.d("loadItemsByEntitiyId()");
         return getSubscriptions().add(
                 incidDaoRemote.seeUserComusImportancia(entityId)
                         .subscribeOn(io())

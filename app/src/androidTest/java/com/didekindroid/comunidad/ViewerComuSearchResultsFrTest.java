@@ -150,7 +150,7 @@ public class ViewerComuSearchResultsFrTest {
         viewer.getController().updateIsRegistered(true);
         activity.runOnUiThread(() -> viewer.onSuccessEmptyList(comu_real));
 
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.no_result_search_comunidad, activity));
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.no_result_search_comunidad, activity));
         intended(hasExtra(COMUNIDAD_SEARCH.key, comu_real));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regComu_UserComuAcLayout));
         waitAtMost(4, SECONDS).until(isActivityDying(activity));

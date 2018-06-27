@@ -75,7 +75,7 @@ public final class ComunidadDao implements ComunidadEndPoints {
                 .doOnError(uiExceptionConsumer);
     }
 
-    public Single<List<Comunidad>> searchInComunidades(Comunidad comunidad)    // TODO: test cuando devuelve lista vacía.
+    public Single<List<Comunidad>> searchInComunidades(Comunidad comunidad)
     {
         Timber.d("getComuData()");
         return searchComunidades(comunidad).map(httpInitializer.get()::getResponseBody)

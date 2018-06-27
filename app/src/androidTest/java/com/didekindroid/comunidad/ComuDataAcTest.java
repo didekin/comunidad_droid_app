@@ -2,7 +2,6 @@ package com.didekindroid.comunidad;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,7 +10,6 @@ import com.didekindroid.comunidad.util.ComuBundleKey;
 import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
-import com.didekindroid.lib_one.testutil.SavedStateWrapper;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -23,7 +21,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.app.TaskStackBuilder.create;
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -36,7 +33,6 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCa
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
-import static com.didekindroid.lib_one.testutil.SavedStateWrapper.AFTER_SaveState;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
@@ -95,10 +91,10 @@ public class ComuDataAcTest {
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(CLEAN_JUAN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
+        cleanOptions(CLEAN_JUAN);
     }
 
 //    =============================================================================================
@@ -148,21 +144,6 @@ public class ComuDataAcTest {
         assertThat(activity.viewer, isA(ParentViewerIf.class));
         assertThat(activity.regComuFrg.viewerInjector, is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), is(activity.viewer));
-    }
-
-    @Test
-    public void test_OnSaveInstanceState()
-    {
-        final SavedStateWrapper wrapper = new SavedStateWrapper();
-        activity.viewer = new ViewerComuDataAc(null, activity) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                wrapper.saveState();
-            }
-        };
-        activity.viewer.getActivity().runOnUiThread(() -> getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0)));
-        waitAtMost(6, SECONDS).until(() -> wrapper.getFlagMethod().equals(AFTER_SaveState));
     }
 
     @Test

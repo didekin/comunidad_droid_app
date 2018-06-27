@@ -57,14 +57,15 @@ public class IncidCommentSeeAcTest_2 {
 
     @Rule
     public IntentsTestRule<IncidCommentSeeAc> activityRule = new IntentsTestRule<IncidCommentSeeAc>(IncidCommentSeeAc.class) {
-
         @Override
         protected Intent getActivityIntent()
         {
             IncidImportancia incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
             // Insertamos comentarios.
-            incidenciaDao.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()));
-            incidenciaDao.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()));
+            incidenciaDao.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()))
+                    .blockingGet();
+            incidenciaDao.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()))
+                    .blockingGet();
             return new Intent().putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
         }
     };
@@ -72,8 +73,9 @@ public class IncidCommentSeeAcTest_2 {
     @Before
     public void setUp() throws Exception
     {
-        IncidCommentSeeListFr fr = (IncidCommentSeeListFr) activityRule.getActivity().getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName());
-        mAdapter = fr.mAdapter;
+        mAdapter =
+                ((IncidCommentSeeListFr) activityRule.getActivity().getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName()))
+                .adapter;
         waitAtMost(4, SECONDS).until(() -> mAdapter != null && mAdapter.getCount() == 2);
     }
 

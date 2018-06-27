@@ -6,7 +6,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.comunidad.spinner.MunicipioSpinnerEventItemSelect;
 import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -19,8 +18,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -81,10 +78,7 @@ public class ViewerRegComuFrTest {
     {
         activity = activityRule.getActivity();
         fragment = (RegComuFr) activity.getSupportFragmentManager().findFragmentById(regComuFrLayout);
-
-        AtomicReference<ViewerRegComuFr> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, fragment.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
+        waitAtMost(4, SECONDS).until(() -> fragment.viewer != null);
     }
 
     @After
@@ -208,12 +202,7 @@ public class ViewerRegComuFrTest {
     @Test
     public void test_OnActivityCreated()
     {
-        AtomicReference<ViewerRegComuFr> viewerFrAtomic = new AtomicReference<>(null);
-        viewerFrAtomic.compareAndSet(null, fragment.viewer);
-        AtomicReference<InjectorOfParentViewerIf> viewerParentAtomic = new AtomicReference<>(null);
-        viewerParentAtomic.compareAndSet(null, fragment.viewerInjector);
-        waitAtMost(4, SECONDS).untilAtomic(viewerFrAtomic, notNullValue());
-        waitAtMost(2, SECONDS).untilAtomic(viewerParentAtomic, notNullValue());
+        waitAtMost(2, SECONDS).until(() -> fragment.viewerInjector != null);
         assertThat(fragment.viewerInjector.getInjectedParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
     }
 

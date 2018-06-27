@@ -103,7 +103,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        Comunidad comunidad = null;
+        Comunidad comunidad;
 
         if (viewBean != null) {
             comunidad = Comunidad.class.cast(viewBean);
@@ -111,9 +111,12 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
                 controller.getComunidadData(new RegComuFrObserver(savedState), comunidad.getC_Id());
             } else {
                 setTextFields(comunidad);
+                initializeSpinnersFromComunidad(comunidad, savedState);
             }
+        } else {
+            initializeSpinnersFromComunidad(null, savedState);
         }
-        initializeSpinnersFromComunidad(comunidad, savedState);
+
     }
 
     @Override

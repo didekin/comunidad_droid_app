@@ -99,15 +99,6 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> {
 
     //    ============================  LIFE CYCLE   ===================================
 
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public int clearSubscriptions()
-    {
-        Timber.d("clearSubscriptions()");
-        return controller.clearSubscriptions()
-                + viewerImportanciaSpinner.clearSubscriptions();
-    }
-
     @Override
     public void saveState(Bundle savedState)
     {

@@ -1,7 +1,5 @@
 package com.didekindroid.incidencia.comment;
 
-import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -10,21 +8,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiExceptionIf;
-import com.didekindroid.lib_one.util.ConnectionUtils;
-import com.didekindroid.lib_one.util.UiUtil;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidContextualName.new_incid_comment_just_registered;
-import static com.didekindroid.incidencia.IncidenciaAssertionMsg.comment_should_be_registered;
-import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
+import static com.didekindroid.incidencia.comment.CtrlerIncidComment.doErrorInCtrler;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
-import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
@@ -39,9 +33,10 @@ import static com.didekindroid.lib_one.util.UiUtil.makeToast;
  */
 public class IncidCommentRegAc extends AppCompatActivity {
 
-    Incidencia mIncidencia;
-    Button mComentarButton;
-    View mAcView;
+    Incidencia incidencia;
+    Button button;
+    View acView;
+    CtrlerIncidComment controller;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -50,14 +45,25 @@ public class IncidCommentRegAc extends AppCompatActivity {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
-        mAcView = getLayoutInflater().inflate(R.layout.incid_comment_reg_ac, null);
-        setContentView(mAcView);
+        acView = getLayoutInflater().inflate(R.layout.incid_comment_reg_ac, null);
+        setContentView(acView);
         doToolBar(this, true);
 
-        mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
-        ((TextView) findViewById(R.id.incid_reg_desc_txt)).setText(mIncidencia.getDescripcion());
-        mComentarButton = findViewById(R.id.incid_comment_reg_button);
-        mComentarButton.setOnClickListener(v -> registerComment());
+        incidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
+        ((TextView) findViewById(R.id.incid_reg_desc_txt)).setText(incidencia.getDescripcion());
+
+        button = findViewById(R.id.incid_comment_reg_button);
+        button.setOnClickListener(v -> registerComment());
+    }
+
+    @Override
+    public void onStop()
+    {
+        Timber.d("onStop()");
+        super.onStop();
+        if (controller != null) {
+            controller.clearSubscriptions();
+        }
     }
 
 // ============================================================
@@ -88,54 +94,34 @@ public class IncidCommentRegAc extends AppCompatActivity {
     {
         Timber.d("registerComment()");
         StringBuilder errorMsg = getErrorMsgBuilder(this);
-        IncidCommentBean commentBean = new IncidCommentBean(mIncidencia);
-        IncidComment comment = commentBean.makeComment(mAcView, errorMsg, getResources());
+        IncidCommentBean commentBean = new IncidCommentBean(incidencia);
+        IncidComment comment = commentBean.makeComment(acView, errorMsg, getResources());
 
         if (comment == null) {
             Timber.d("registerComment(); comment == null");
             makeToast(this, errorMsg.toString());
-        } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UiUtil.makeToast(this, R.string.no_internet_conn_toast);
+        } else if (!isInternetConnected(this)) {
+            makeToast(this, R.string.no_internet_conn_toast);
         } else {
-            new IncidCommentRegister().execute(comment);
-        }
-    }
+            controller = new CtrlerIncidComment();
+            controller.regIncidComment(new DisposableSingleObserver<Integer>() {
+                @Override
+                public void onSuccess(Integer integer)
+                {
+                    Timber.d("onSuccess()");
+                    routerInitializer.get()
+                            .getContextRouter()
+                            .getActionFromContextNm(new_incid_comment_just_registered)
+                            .initActivity(IncidCommentRegAc.this, INCIDENCIA_OBJECT.getBundleForKey(incidencia));
+                }
 
-//    ============================================================
-//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-//    ============================================================
-
-    @SuppressLint("StaticFieldLeak")
-    class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
-
-        UiExceptionIf uiException;
-
-        @Override
-        protected Integer doInBackground(IncidComment... comments)
-        {
-            Timber.d("doInBackground()");
-            return incidenciaDao.regIncidComment(comments[0]).blockingGet();
-        }
-
-        @Override
-        protected void onPostExecute(Integer rowInserted)
-        {
-            if (checkPostExecute(IncidCommentRegAc.this)) return;
-
-            Timber.d("onPostExecute()");
-
-            if (uiException != null) {     // TODO: darle una vuelta. No vale.
-                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
-                        .initActivity(IncidCommentRegAc.this);
-            } else if (!(isDestroyed() || isChangingConfigurations())) {
-                assertTrue(rowInserted == 1, comment_should_be_registered);
-                Bundle bundle = new Bundle(1);
-                bundle.putSerializable(INCIDENCIA_OBJECT.key, mIncidencia);
-                routerInitializer.get().getContextRouter().getActionFromContextNm(new_incid_comment_just_registered)
-                        .initActivity(IncidCommentRegAc.this, bundle);
-            } else {
-                Timber.i("onPostExcecute(): activity destroyed");
-            }
+                @Override
+                public void onError(Throwable e)
+                {
+                    Timber.d("onError()");
+                    doErrorInCtrler(e, IncidCommentRegAc.this);
+                }
+            }, comment);
         }
     }
 }

@@ -135,14 +135,14 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         }
 
         @Override
-        public void onError(@NonNull Throwable e)         // TODO: test COMUNIDAD_NOT_FOUND.
+        public void onError(@NonNull Throwable e)
         {
             Timber.d("onError()");
             onErrorInObserver(e);
         }
 
         @Override
-        public void onComplete()       // TODO: test .
+        public void onComplete()
         {
             Timber.d("onComplete()");
             Bundle bundle = new Bundle(1);

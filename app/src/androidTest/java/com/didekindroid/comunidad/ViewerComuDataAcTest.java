@@ -75,11 +75,8 @@ public class ViewerComuDataAcTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-
-        AtomicReference<ViewerComuDataAc> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
-        viewer = viewerAtomic.get();
+        waitAtMost(6, SECONDS).until(() -> activity.viewer != null);
+        viewer = activity.viewer;
     }
 
     @After

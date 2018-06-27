@@ -2,6 +2,7 @@ package com.didekindroid.comunidad;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.lib_one.api.MaybeObserverMock;
 import com.didekindroid.lib_one.api.SingleObserverMock;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -70,5 +71,11 @@ public class CtrlerComunidadTest {
         Comunidad newComunidad = new Comunidad.ComunidadBuilder()
                 .copyComunidadNonNullValues(comunidad).nombreVia("nuevo_nombre_via").build();
         execCheckSchedulersTest(ctrler -> ctrler.modifyComunidadData(new SingleObserverMock<Integer>(), newComunidad), controller);
+    }
+
+    @Test
+    public void test_GetUserComu() throws Exception
+    {
+        execCheckSchedulersTest(ctrler -> ctrler.getUserComu(new MaybeObserverMock<>(), comunidad), controller);
     }
 }

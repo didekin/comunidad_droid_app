@@ -8,8 +8,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
-import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,18 +33,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -60,25 +59,15 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 public class IncidCommentRegAcTest {
 
     private IncidImportancia incidJuanReal1;
+    private IncidCommentRegAc activity;
+
     @Rule
     public IntentsTestRule<IncidCommentRegAc> intentsRule = new IntentsTestRule<IncidCommentRegAc>(IncidCommentRegAc.class) {
 
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuGetAuthTk(COMU_REAL_JUAN);
-            UsuarioComunidad juanReal = userComuDao.seeUserComusByUser().blockingGet().get(0);
-            incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
-                    doIncidencia(juanReal.getUsuario().getUserName(),
-                            "Incidencia Real One",
-                            juanReal.getComunidad().getC_Id(),
-                            (short) 43))
-                    .usuarioComunidad(juanReal)
-                    .importancia((short) 3).build();
-            incidenciaDao.regIncidImportancia(incidJuanReal1);
-            IncidenciaUser incidenciaUser = incidenciaDao.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).blockingGet().get(0);
-            incidJuanReal1 = incidenciaDao.seeIncidImportanciaRaw(incidenciaUser.getIncidencia().getIncidenciaId())
-                    .blockingGet().getIncidImportancia();
+            incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
@@ -87,7 +76,6 @@ public class IncidCommentRegAcTest {
             return new Intent().putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
         }
     };
-    private IncidCommentRegAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -144,11 +132,20 @@ public class IncidCommentRegAcTest {
         Thread.sleep(1000);
         onView(withId(R.id.incid_comment_reg_button)).perform(scrollTo(), click());
         // Verificación.
-        onView(withId(R.id.incid_comments_see_ac)).check(matches(isDisplayed()));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_comments_see_ac)));
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
         // CheckUp.
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }
+    }
+
+    @Test
+    public void test_OnStop()
+    {
+        // Check OnStop.
+        activity.controller = new CtrlerIncidComment();
+        checkSubscriptionsOnStop(activity, activity.controller);
+
     }
 }

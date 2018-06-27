@@ -224,8 +224,8 @@ public class ComuSearchResultsAcTest {
 
     private void doSelectComunidadRegUser()
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userComuDataLayout));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(userComuDataLayout));
     }
 
     private void doSelectComunidadNotRegUser()

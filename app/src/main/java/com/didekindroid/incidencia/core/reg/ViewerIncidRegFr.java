@@ -86,7 +86,6 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
         Timber.d("clearSubscriptions()");
         return controller.clearSubscriptions() +
                 viewerComuSpinner.clearSubscriptions()
-                + viewerImportanciaSpinner.clearSubscriptions()
                 + viewerAmbitoIncidSpinner.clearSubscriptions();
     }
 

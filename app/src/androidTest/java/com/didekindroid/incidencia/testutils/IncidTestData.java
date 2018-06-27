@@ -36,6 +36,7 @@ public final class IncidTestData {
     public static final String AVANCE_DEFAULT_DES = "Avance_1";
     public static final int COSTE_ESTIM_DEFAULT = 1122;
     static final String COSTE_ESTIM_DEFAULT_String = getStringFromInteger(COSTE_ESTIM_DEFAULT);
+    private static final short importancia_default = (short) 3;
 
     private IncidTestData()
     {
@@ -45,7 +46,7 @@ public final class IncidTestData {
     {
         regUserComuGetAuthTk(userComu);
         UsuarioComunidad userComuDb = userComuDao.seeUserComusByUser().blockingGet().get(0);
-        return insertGetIncidImportancia(userComuDb, (short) 3);
+        return insertGetIncidImportancia(userComuDb, importancia_default);
     }
 
     public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu, short importancia)
@@ -76,7 +77,7 @@ public final class IncidTestData {
                         .importancia((short) importancia)
                         .build();
 
-        incidenciaDao.regIncidImportancia(incidImportancia);
+        incidenciaDao.regIncidImportancia(incidImportancia).blockingGet();
         return incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).blockingGet().get(0);
     }
 
@@ -90,7 +91,7 @@ public final class IncidTestData {
                         .importancia((short) importancia)
                         .build();
 
-        incidenciaDao.regIncidImportancia(incidImportancia);
+        incidenciaDao.regIncidImportancia(incidImportancia).blockingGet();
         return incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).blockingGet().get(0);
     }
 
@@ -134,7 +135,7 @@ public final class IncidTestData {
                 RESOLUCION_DEFAULT_DESC,
                 1122,
                 new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 2)));
-        assertThat(incidenciaDao.regResolucion(resolucion), is(1));
+        assertThat(incidenciaDao.regResolucion(resolucion).blockingGet(), is(1));
         return incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet();
     }
 
@@ -200,7 +201,7 @@ public final class IncidTestData {
 
     // ================================  Private methods ===================================
 
-    private static IncidenciaUser doSimpleIncidenciaUser(long incidenciaId, Timestamp incidAltaDate, long usuarioId, Timestamp resolucionDate)
+    public static IncidenciaUser doSimpleIncidenciaUser(long incidenciaId, Timestamp incidAltaDate, long usuarioId, Timestamp resolucionDate)
     {
         final Incidencia incidencia = doSimpleIncidenciaWithId(incidenciaId, incidAltaDate, resolucionDate);
         return new IncidenciaUser.IncidenciaUserBuilder(incidencia)

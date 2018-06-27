@@ -26,12 +26,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
-import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
 import static com.didekindroid.lib_one.usuario.UserTestNavigation.pswdChangeAcRsId;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
@@ -83,6 +83,7 @@ public class PasswordChange_App_Test {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
+        cleanOptions(CLEAN_DROID);
     }
 
     //    ============================  TESTS  ===================================
@@ -94,8 +95,6 @@ public class PasswordChange_App_Test {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
-        usuarioDaoRemote.deleteUser();
-        cleanWithTkhandler();
     }
 
     @Test
@@ -103,9 +102,6 @@ public class PasswordChange_App_Test {
     {
         doPswdChange();
         checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);
-
-        usuarioDaoRemote.deleteUser();
-        cleanWithTkhandler();
     }
 
     //    ============================  HELPERS  ===================================

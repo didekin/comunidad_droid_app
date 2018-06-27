@@ -11,8 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -52,9 +50,8 @@ public class ViewerComuSearchAcTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        AtomicReference<ViewerComuSearchAc> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.viewerAc);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
+        waitAtMost(4, SECONDS).until(() -> activity.viewerAc != null);
+        assertThat(activity.viewerAc, notNullValue());
     }
 
     @Test

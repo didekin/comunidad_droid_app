@@ -73,7 +73,7 @@ class CtrlerComunidad extends Controller {
 
     public boolean getUserComu(DisposableMaybeObserver<UsuarioComunidad> observer, Comunidad comunidad)
     {
-        Timber.d("getUserComu()");      // TODO: test.
+        Timber.d("getUserComu()");
         return getSubscriptions().add(
                 userComuDaoRemote
                         .getUserComuByUserAndComu(comunidad.getC_Id())

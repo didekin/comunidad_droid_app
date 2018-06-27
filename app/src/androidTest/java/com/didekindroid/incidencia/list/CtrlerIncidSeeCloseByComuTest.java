@@ -3,6 +3,8 @@ package com.didekindroid.incidencia.list;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.lib_one.api.SingleObserverMock;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,7 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidenciaUser;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doSimpleIncidenciaUser;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetDefaultResolucion;
 import static com.didekindroid.lib_one.testutil.InitializerTestUtil.initSec_Http;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.execCheckSchedulersTest;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
@@ -60,10 +63,16 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testSelectItem() throws Exception
     {
+        UsuarioComunidad userComu = signUpGetUserComu(COMU_ESCORIAL_PEPE);
+        Resolucion resolucion = insertGetDefaultResolucion(userComu);
         execCheckSchedulersTest(
                 ctrler -> ctrler.selectItem(
                         new SingleObserverMock<>(),
-                        insertGetIncidenciaUser(signUpGetUserComu(COMU_ESCORIAL_PEPE), (short) 3)),
+                        doSimpleIncidenciaUser(
+                                resolucion.getIncidencia().getIncidenciaId(),
+                                resolucion.getIncidencia().getFechaAlta(),
+                                userComu.getUsuario().getuId(),
+                                resolucion.getFechaPrev())),
                 controller
         );
     }
