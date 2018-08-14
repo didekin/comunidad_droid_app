@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.lib_one.api.MaybeObserverMock;
 import com.didekindroid.lib_one.api.SingleObserverMock;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -116,6 +117,13 @@ public class CtrlerIncidenciaCoreTest {
                         insertGetDefaultResolucion(signUpGetUserComu(COMU_REAL_PEPE)).getIncidencia().getIncidenciaId()),
                 controller
         );
+    }
+
+    @Test
+    public void test_RegResolucion() throws Exception
+    {
+        Resolucion resolucion = insertGetDefaultResolucion(signUpGetUserComu(COMU_ESCORIAL_PEPE));
+        execCheckSchedulersTest(ctrler -> ctrler.regResolucion(new SingleObserverMock<>(), resolucion),controller);
     }
 
     //    .................................... HELPER METHODS .................................

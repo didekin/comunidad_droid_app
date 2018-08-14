@@ -89,6 +89,17 @@ public class CtrlerIncidenciaCore extends Controller implements CtrlerListIf<Imp
         );
     }
 
+    public boolean regResolucion(DisposableSingleObserver<Integer> observer, Resolucion resolucion)
+    {
+        Timber.d("regResolucion()");
+        return getSubscriptions().add(
+                incidDaoRemote.regResolucion(resolucion)
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribeWith(observer)
+        );
+    }
+
     public boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, final long incidenciaId)
     {
         Timber.d("seeResolucionInBundle()");

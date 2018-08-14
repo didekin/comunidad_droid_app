@@ -51,7 +51,7 @@ public class ViewerIncidSeeCloseFr extends
         implements SpinnerEventListener {
 
     ViewerComuSpinner comuSpinnerViewer;
-    View emptyListView;
+    private View emptyListView;
 
     ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
     {

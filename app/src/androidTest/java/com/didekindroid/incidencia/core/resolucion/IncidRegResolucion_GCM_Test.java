@@ -21,10 +21,8 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.COSTE_ESTIM_DE
 import static com.didekindroid.incidencia.testutils.IncidTestData.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -46,8 +44,6 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_test_abs {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
-        // We check that the activity has sent the Firebase token to BD.
-        checkToken();
 
         Resolucion resolucion = doResolucion(incidImportancia.getIncidencia(),
                 RESOLUCION_DEFAULT_DESC,
@@ -75,8 +71,6 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_test_abs {
             protected Intent getActivityIntent()
             {
                 incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
-                // We'll test that the gcmToken is not updated in server.
-                assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
                 return intent;

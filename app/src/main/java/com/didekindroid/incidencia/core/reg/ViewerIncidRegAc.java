@@ -32,10 +32,9 @@ import static com.didekindroid.lib_one.util.UiUtil.makeToast;
  * Date: 31/03/17
  * Time: 11:59
  */
-@SuppressWarnings("WeakerAccess")
 public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
 
-    public ViewerIncidRegAc(IncidRegAc activity)
+    private ViewerIncidRegAc(IncidRegAc activity)
     {
         super(activity.acView, activity, null);
     }
@@ -100,7 +99,6 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
 
 //  ................................... HELPERS ......................................
 
-    @SuppressWarnings("WeakerAccess")
     class RegButtonOnClickListener implements View.OnClickListener {
 
         @Override

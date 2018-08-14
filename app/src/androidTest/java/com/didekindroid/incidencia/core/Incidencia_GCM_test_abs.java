@@ -10,9 +10,6 @@ import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyToken;
-import com.didekindroid.lib_one.usuario.notification.CtrlerNotifyTokenIf;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,10 +21,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.didekindroid.incidencia.testutils.GcmTestConstant.PACKAGE_TEST;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
-import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -72,14 +66,6 @@ public abstract class Incidencia_GCM_test_abs {
     }
 
     //  ===========================================================================
-
-    protected void checkToken()
-    {
-        CtrlerNotifyTokenIf controller = new CtrlerNotifyToken();
-        await().atMost(12, SECONDS)
-                .until(() -> usuarioDaoRemote.getGcmToken().blockingGet().equals(getInstance().getToken()));
-        assertThat(controller.getTkCacher().isGcmTokenSentServer(), is(true));
-    }
 
     @TargetApi(Build.VERSION_CODES.M)
     protected void checkNotification(int notificationId)

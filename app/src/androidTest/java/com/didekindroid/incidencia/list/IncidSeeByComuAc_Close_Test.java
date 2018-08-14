@@ -76,8 +76,8 @@ public class IncidSeeByComuAc_Close_Test {
             incidImportancia2 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(1), (short) 4);
 
             // Cierre incidencias..
-            incidenciaDao.closeIncidencia(insertGetResolucionNoAdvances(incidImportancia1));
-            incidenciaDao.closeIncidencia(insertGetResolucionNoAdvances(incidImportancia2));
+            incidenciaDao.closeIncidencia(insertGetResolucionNoAdvances(incidImportancia1)).blockingGet();
+            incidenciaDao.closeIncidencia(insertGetResolucionNoAdvances(incidImportancia2)).blockingGet();
 
             // Incidencias con fecha de cierre.
             incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
@@ -147,38 +147,22 @@ public class IncidSeeByComuAc_Close_Test {
         assertThat(fragment.getArguments().getBoolean(INCID_CLOSED_LIST_FLAG.key), is(true));
 
         assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
         onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_spinner)).check(matches(isDisplayed()));
 
-        // Data
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
-        waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
-
         // Cambiamos la comunidad en el spinner y revisamos los datos.
         doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia2, activity)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia2, activity)));
     }
 
     @Test
-    public void test_newIncidenciaButton_1()
+    public void test_newIncidenciaButton()
     {
         waitAtMost(6, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
         waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
-        checkUp(incidSeeByComuAcLayout);
-    }
-
-    @Test
-    public void test_newIncidenciaButton_2()
-    {
-        waitAtMost(6, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
-        doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
-        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_incid_fab), click()));
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidRegAcLayout));
-        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidImportancia2.getIncidencia().getComunidad().getNombreComunidad()));
         checkUp(incidSeeByComuAcLayout);
     }
 

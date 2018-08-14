@@ -18,11 +18,9 @@ import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
 import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -45,8 +43,6 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_test_abs {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             return;
         }
-        // We check that the activity has sent the Firebase token to BD.
-        checkToken();
 
         IncidImportancia incidPepe =
                 new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
@@ -71,8 +67,6 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_test_abs {
             {
                 pepe = regGetUserComu(COMU_ESCORIAL_PEPE);
                 pepeUserComu = userComuDao.seeUserComusByUser().blockingGet().get(0);
-                // We'll test that the gcmToken is not updated in server.
-                assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
             }
         };
     }

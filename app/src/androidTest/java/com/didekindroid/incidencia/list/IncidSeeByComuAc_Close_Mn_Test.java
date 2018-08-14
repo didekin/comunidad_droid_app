@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -13,8 +14,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.concurrent.TimeUnit;
 
 import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -33,7 +32,6 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMnNotExist;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
@@ -93,16 +91,13 @@ public class IncidSeeByComuAc_Close_Mn_Test {
     // ============================================================
 
     @Test
-    public void testOnCreateEmptyList() throws Exception
+    public void testOnCreateEmptyList()
     {
         IncidSeeByComuFr fr = (IncidSeeByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeByComuFr.class.getName());
-        waitAtMost(6, SECONDS).until(isStatementTrue(
-                fr != null
-                        && fr.viewer != null
-                        && fr.viewer.emptyListView != null)
+        waitAtMost(6, SECONDS).until(() -> fr != null && fr.viewer != null && (fr.viewer.getViewInViewer().getEmptyView() != null));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withText(
+                ((TextView) activity.findViewById(android.R.id.empty)).getText().toString()))
         );
-        TimeUnit.SECONDS.sleep(2);
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withText(R.string.no_incidencia_to_show)));
         // CheckUp.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(seeUserComuByUserFrRsId);

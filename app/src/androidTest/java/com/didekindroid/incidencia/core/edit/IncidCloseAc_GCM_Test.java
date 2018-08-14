@@ -21,10 +21,8 @@ import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
-import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -39,14 +37,13 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_test_abs {
 
     private Resolucion resolucion;
 
-    @Test  @TargetApi(Build.VERSION_CODES.M)
+    @Test
+    @TargetApi(Build.VERSION_CODES.M)
     public void testReceiveNotification()
     {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
-        // We checkMenu that the activity has sent Firebase token to BD.
-        checkToken();
 
         assertThat(incidenciaDao.closeIncidencia(resolucion), is(2));
         // We checkMenu that the notification is received.
@@ -72,8 +69,6 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_test_abs {
                 IncidImportancia incidImportancia;
                 incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
                 resolucion = insertGetResolucionNoAdvances(incidImportancia);
-                // We'll test that the gcmToken has not been updated in server.
-                assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
                 return new Intent()
                         .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia)
                         .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);

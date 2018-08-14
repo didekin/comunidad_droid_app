@@ -14,7 +14,6 @@ import org.junit.runners.Suite;
         CtrlerIncidSeeOpenByComuTest.class,
         IncidSeeByComuAc_Close_Mn_Test.class,
         IncidSeeByComuAc_Close_Test.class,
-        IncidSeeByComuAc_Open_GCM_Test.class,
         IncidSeeByComuAc_Open_Mn_Test.class,
         IncidSeeByComuAc_Open_Test.class,
         ViewerIncidSeeCloseFrTest.class,

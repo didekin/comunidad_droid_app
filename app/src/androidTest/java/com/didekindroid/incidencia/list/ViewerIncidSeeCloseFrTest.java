@@ -105,8 +105,8 @@ public class ViewerIncidSeeCloseFrTest {
     {
         activity = activityRule.getActivity();
         fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeByComuFr.class.getName());
-        // Wait until list is made.
-        waitAtMost(3, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        // Wait until list is made. ***** Here is tested the visual display of the data *****.
+        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
     @After
@@ -134,7 +134,7 @@ public class ViewerIncidSeeCloseFrTest {
         // When itemSelectedId == 0, no checkedItem.
         assertThat(fragment.viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
         assertThat(fragment.viewer.getViewInViewer().getOnItemClickListener(), instanceOf(ViewerIncidSeeCloseFr.ListItemOnClickListener.class));
-        // Comunidad spinner.
+        // Comunidad spinner. ***** Here is tested the visual display of the data *****.
         waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
     }
 
