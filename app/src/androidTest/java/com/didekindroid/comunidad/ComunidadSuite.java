@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         // .
         ComuDataAcTest.class,
-        ComunidadBeanTest.class,
+        /*ComunidadBeanTest.class,
         ComunidadDaoTest.class,
         ComuSearchAcTest.class,
         ComuSearchResultsAcTest.class,
@@ -22,7 +22,7 @@ import org.junit.runners.Suite;
         ViewerComuSearchResultAcTest.class,
         ViewerComuSearchResultsFrTest.class,
         ViewerRegComuFr_Mock_Test.class,
-        ViewerRegComuFrTest.class,
+        ViewerRegComuFrTest.class,*/
 })
 public class ComunidadSuite {
 }
