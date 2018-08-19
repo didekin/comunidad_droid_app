@@ -56,6 +56,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -77,10 +78,14 @@ public class ComuSearchResultsAcTest {
                 {
                     comuRondaDelNorte =
                             makeComunidad("Ronda", "del Norte", (short) 5, "", new Municipio((short) 2, new Provincia((short) 27)));
-                    regSeveralUserComuSameUser(
-                            COMU_PLAZUELA5_JUAN,
-                            makeUsuarioComunidad(comuRondaDelNorte, USER_JUAN, "portal_3", "esc_A", "planta_1", "puerta_2", INQUILINO.function)
-                    );
+                    try {
+                        regSeveralUserComuSameUser(
+                                COMU_PLAZUELA5_JUAN,
+                                makeUsuarioComunidad(comuRondaDelNorte, USER_JUAN, "portal_3", "esc_A", "planta_1", "puerta_2", INQUILINO.function)
+                        );
+                    } catch (Exception e) {
+                        fail();
+                    }
                     TaskStackBuilder.create(getTargetContext()).addParentStack(ComuSearchResultsAc.class).startActivities();
                 }
 

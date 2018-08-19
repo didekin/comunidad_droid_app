@@ -37,6 +37,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -55,7 +56,11 @@ public class ViewerIncidEditAcTest {
         protected Intent getActivityIntent()
         {
             // Perfil adm.
-            resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
+            try {
+                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
+            } catch (Exception e) {
+                fail();
+            }
             return new Intent().putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         }
     };

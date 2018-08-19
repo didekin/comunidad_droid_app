@@ -37,7 +37,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetDefau
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidenciaUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static java.util.Calendar.getInstance;
@@ -61,7 +61,7 @@ public class IncidenciaDaoTest {
     @Before
     public void setUp() throws Exception
     {
-        pepe = regGetUserComu(COMU_ESCORIAL_PEPE);
+        pepe = regComuUserUserComuGetUser(COMU_ESCORIAL_PEPE);
         pepeUserComu = userComuDao.seeUserComusByUser().blockingGet().get(0);
     }
 
@@ -198,7 +198,7 @@ public class IncidenciaDaoTest {
     }
 
     @Test
-    public void testSeeIncidsClosedByComu()    // TODO: fail.
+    public void testSeeIncidsClosedByComu()
     {
         // CASO OK: usuario 'adm'.
         Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu);

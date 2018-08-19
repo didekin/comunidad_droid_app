@@ -58,6 +58,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -89,7 +90,11 @@ public class IncidSeeByComuAc_Open_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+            try {
+                regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+            } catch (Exception e) {
+                fail();
+            }
             incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
             incidImportancia2 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(1), (short) 4);
             // Resolución para incidencia1.

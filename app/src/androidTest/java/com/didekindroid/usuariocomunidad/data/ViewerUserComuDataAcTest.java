@@ -48,6 +48,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -67,10 +68,14 @@ public class ViewerUserComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            userComu = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
-                    .planta("One")
-                    .roles(PROPIETARIO.function)
-                    .build();
+            try {
+                userComu = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
+                        .planta("One")
+                        .roles(PROPIETARIO.function)
+                        .build();
+            } catch (Exception e) {
+                fail();
+            }
             return new Intent().putExtra(USERCOMU_LIST_OBJECT.key, userComu);
         }
     };

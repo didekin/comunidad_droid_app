@@ -39,6 +39,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUp
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -56,7 +57,11 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidadInIntent = signUpGetComu(COMU_REAL_DROID);
+            try {
+                comunidadInIntent = signUpGetComu(COMU_REAL_DROID);
+            } catch (Exception e) {
+                fail();
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();

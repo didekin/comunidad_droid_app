@@ -57,6 +57,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -74,7 +75,11 @@ public class IncidRegAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
+            try {
+                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
+            } catch (Exception e) {
+                fail();
+            }
             usuarioComunidades = userComuDao.seeUserComusByUser().blockingGet();
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {

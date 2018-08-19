@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doFragmentTextView;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.inflateTextView;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -83,7 +83,7 @@ public class IncidImportanciaBeanTest {
                 .setCodAmbitoIncid((short) 49)
                 .setComunidadId(2L);
 
-        final View fragmentView = doFragmentTextView(R.layout.mock_incid_desc_edit_fr, "Description valid");
+        final View fragmentView = inflateTextView(R.layout.mock_incid_desc_edit_fr, "Description valid");
 
         incidImportanciaBean.setImportancia((short) 2);
         assertThat(incidImportanciaBean.makeIncidImportancia(errors, resources, fragmentView, incidenciaBean), notNullValue());
@@ -106,7 +106,7 @@ public class IncidImportanciaBeanTest {
                 .setCodAmbitoIncid((short) 49)
                 .setComunidadId(2L);
 
-        final View fragmentView = doFragmentTextView(R.layout.mock_incid_desc_edit_fr, "Description valid");
+        final View fragmentView = inflateTextView(R.layout.mock_incid_desc_edit_fr, "Description valid");
 
         assertThat(incidImportanciaBean.makeIncidImportancia(errors, resources, fragmentView, incidenciaBean, incidencia), notNullValue());
         assertThat(incidImportanciaBean.makeIncidImportancia(errors, resources, fragmentView, incidenciaBean, incidencia).getIncidencia().getDescripcion(), is("Description valid"));

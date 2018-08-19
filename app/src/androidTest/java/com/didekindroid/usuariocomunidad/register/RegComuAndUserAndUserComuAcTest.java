@@ -69,25 +69,6 @@ public class RegComuAndUserAndUserComuAcTest {
 
     private RegComuAndUserAndUserComuAc activity;
 
-    private static void typeComunidad()
-    {
-        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
-        typeComunidadDefault(comunidadAutonoma);
-    }
-
-    static void execCheckRegisterError(Activity activity)
-    {
-        typeUserComuData("WRONG**", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        typeUserNameAlias(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
-        // Exec.
-        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
-        // Check
-        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
-                R.string.reg_usercomu_portal_rot));
-    }
-
-    //    ================================================================================
-
     @Before
     public void setUp() throws Exception
     {
@@ -162,5 +143,24 @@ public class RegComuAndUserAndUserComuAcTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
+    }
+
+    //    ================================================================================
+
+    private static void typeComunidad()
+    {
+        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
+        typeComunidadDefault(comunidadAutonoma);
+    }
+
+    static void execCheckRegisterError(Activity activity)
+    {
+        typeUserComuData("WRONG**", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        typeUserNameAlias(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
+        // Exec.
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
+        // Check
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.reg_usercomu_portal_rot));
     }
 }

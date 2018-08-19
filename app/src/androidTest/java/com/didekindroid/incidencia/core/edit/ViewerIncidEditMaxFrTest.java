@@ -58,6 +58,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -81,7 +82,11 @@ public class ViewerIncidEditMaxFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regTwoUserComuSameUser(makeListTwoUserComu());
+            try {
+                regTwoUserComuSameUser(makeListTwoUserComu());
+            } catch (Exception e) {
+                fail();
+            }
             List<UsuarioComunidad> userComus = userComuDao.seeUserComusByUser().blockingGet();
             comuRealJuan = userComus.get(0);
             comuPlazuelaJuan = userComus.get(1);

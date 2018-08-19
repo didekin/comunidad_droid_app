@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 
 /**
@@ -38,7 +38,7 @@ public class CtrlerComuSpinnerTest {
     @Test
     public void testLoadDataInSpinner() throws Exception
     {
-        regUserComuGetAuthTk(COMU_REAL_JUAN);
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         checkSpinnerCtrlerLoadItems(controller);
 
         cleanOneUser(USER_JUAN.getUserName());

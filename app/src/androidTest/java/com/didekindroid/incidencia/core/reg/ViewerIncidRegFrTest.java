@@ -51,6 +51,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -72,7 +73,11 @@ public class ViewerIncidRegFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regTwoUserComuSameUser(asList(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE));
+            try {
+                regTwoUserComuSameUser(asList(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE));
+            } catch (Exception e) {
+                fail();
+            }
             userComuIntent = userComuDao.seeUserComusByUser().blockingGet().get(1);
             return new Intent().putExtra(COMUNIDAD_ID.key, userComuIntent.getComunidad().getC_Id());
         }

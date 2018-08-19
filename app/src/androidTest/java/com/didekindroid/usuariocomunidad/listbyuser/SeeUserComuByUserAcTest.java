@@ -45,6 +45,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -59,7 +60,11 @@ public class SeeUserComuByUserAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE);   // Almería, Alicante.
+            try {
+                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE);   // Almería, Alicante.
+            } catch (Exception e) {
+                fail();
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(SeeUserComuByUserAc.class).startActivities();

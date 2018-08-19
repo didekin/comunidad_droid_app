@@ -43,7 +43,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncid
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
@@ -57,6 +57,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -75,7 +76,11 @@ public class ViewerIncidSeeCloseFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuGetAuthTk(COMU_PLAZUELA5_PEPE);
+            try {
+                regComuUserUserComuGetAuthTk(COMU_PLAZUELA5_PEPE);
+            } catch (Exception e) {
+                fail();
+            }
             incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
             // Cierre incidencias..
             resolucion = insertGetResolucionNoAdvances(incidImportancia1);

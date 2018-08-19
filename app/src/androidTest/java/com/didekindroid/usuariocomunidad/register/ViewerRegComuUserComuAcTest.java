@@ -25,7 +25,7 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuni
 import static com.didekindroid.lib_one.testutil.UiTestUtil.focusOnView;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
@@ -76,10 +76,10 @@ public class ViewerRegComuUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserComuButtonListener_1()
+    public void test_RegComuUserComuButtonListener_1() throws Exception
     {
         // Precondition: user is registered.
-        regUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         int buttonId = R.id.reg_comu_usuariocomunidad_button;
@@ -92,10 +92,10 @@ public class ViewerRegComuUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserComuButtonListener_2()
+    public void test_RegComuUserComuButtonListener_2() throws Exception
     {
         // Precondition: user is registered.
-        regUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         int buttonId = R.id.reg_comu_usuariocomunidad_button;
@@ -111,10 +111,10 @@ public class ViewerRegComuUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuAndUserComuObserver()
+    public void test_RegComuAndUserComuObserver() throws Exception
     {
         // Precondition: user is registered.
-        regUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
 
         ViewerRegComuUserComuAc.RegComuAndUserComuObserver observer = activity.viewer.new RegComuAndUserComuObserver();
         complete().subscribeWith(observer);

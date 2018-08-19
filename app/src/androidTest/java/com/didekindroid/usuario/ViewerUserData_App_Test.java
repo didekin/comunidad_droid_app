@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real_rodrigo;
-import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.user_crodrigo;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.lib_one.usuario.ViewerUserDataIf.UserChangeToMake.alias_only;
@@ -42,7 +42,7 @@ public class ViewerUserData_App_Test {
         protected Intent getActivityIntent()
         {
             try {
-                usuario = regGetUserComu(comu_real_rodrigo);
+                usuario = regComuUserUserComuGetUser(comu_real_rodrigo);
             } catch (Exception e) {
                 fail();
             }

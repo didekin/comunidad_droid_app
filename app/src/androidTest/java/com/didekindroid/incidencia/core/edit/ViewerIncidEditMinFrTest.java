@@ -19,8 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -37,7 +35,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
@@ -48,7 +46,9 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -68,7 +68,11 @@ public class ViewerIncidEditMinFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            signUpGetComu(COMU_REAL_PEPE);
+            try {
+                signUpGetComu(COMU_REAL_PEPE);
+            } catch (Exception e) {
+                fail();
+            }
             IncidImportancia incidImportancia = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 2);
             // Premisa: usuario no iniciador y usuario no ADM.
             assertThat(COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
@@ -81,9 +85,7 @@ public class ViewerIncidEditMinFrTest {
                     .build();
             assertThat(incidImportancia.isIniciadorIncidencia(), is(false));
             resolBundle = new IncidAndResolBundle(incidImportancia, false);
-            Intent intent = new Intent();
-            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
-            return intent;
+            return new Intent().putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         }
     };
     private IncidEditAc activity;
@@ -99,11 +101,8 @@ public class ViewerIncidEditMinFrTest {
         activity = activityRule.getActivity();
         dbHelper = new IncidenciaDataDbHelper(activity);
         IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(IncidEditMinFr.class.getName());
-
-        AtomicReference<ViewerIncidEditMinFr> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, fragment.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
-        viewer = viewerAtomic.get();
+        waitAtMost(4, SECONDS).until(() -> fragment.viewer != null);
+        viewer = fragment.viewer;
     }
 
     @After
@@ -140,8 +139,8 @@ public class ViewerIncidEditMinFrTest {
     }
 
     /*
-    *  Case: importancia == 0. Importancia is modified to 1.
-    */
+     *  Case: importancia == 0. Importancia is modified to 1.
+     */
     @Test
     public void testOnClickButtonModify_1()
     {
@@ -155,7 +154,7 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testOnSuccessModifyIncidImportancia()
     {
-        Comunidad incidComu = resolBundle.getIncidImportancia().getIncidencia().getComunidad();
+        Comunidad incidComu = viewer.resolBundle.getIncidImportancia().getIncidencia().getComunidad();
         // Precondition: incidComu name is shown in screen.
         waitAtMost(4, SECONDS).until(() -> {
             onView(allOf(
@@ -165,7 +164,7 @@ public class ViewerIncidEditMinFrTest {
             return true;
         });
         viewer.onSuccessModifyIncidImportancia(incidComu);
-        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
+        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidSeeByComuAcLayout)));
         // Check comuSpinner initialization: the same initial comunidad is shown.
         waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidComu.getNombreComunidad()));
     }
@@ -187,6 +186,8 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testClearSubscriptions()
     {
-        checkSubscriptionsOnStop(activity, viewer.viewerImportanciaSpinner.getController(), viewer.getController());
+        // Preconditions: viewerImportanciaSpinner hasn't a controller instance.
+        assertThat(viewer.viewerImportanciaSpinner.getController(), nullValue());
+        checkSubscriptionsOnStop(activity, viewer.getController());
     }
 }

@@ -48,6 +48,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -67,7 +68,11 @@ public class IncidCommentRegAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
+            try {
+                incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
+            } catch (Exception e) {
+                fail();
+            }
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);

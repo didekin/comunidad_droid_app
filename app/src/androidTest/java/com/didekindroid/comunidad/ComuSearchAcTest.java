@@ -5,14 +5,11 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -29,7 +26,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
@@ -89,9 +86,9 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testWithResultsAndUp()
+    public void testWithResultsAndUp() throws Exception
     {
-        regUserComuGetAuthTk(COMU_REAL_JUAN);
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
@@ -105,9 +102,9 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testWithResultsAndBack()
+    public void testWithResultsAndBack() throws Exception
     {
-        regUserComuGetAuthTk(COMU_REAL_JUAN);
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
@@ -124,9 +121,9 @@ public class ComuSearchAcTest {
 
     @SuppressWarnings("RedundantThrows")
     @Test
-    public void testLogin_Registered() throws UiException, IOException, InterruptedException
+    public void testLogin_Registered() throws Exception
     {
-        regUserComuGetAuthTk(COMU_REAL_JUAN);
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         // Precondition.
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(true));
@@ -158,9 +155,9 @@ public class ComuSearchAcTest {
 
     @SuppressWarnings("RedundantThrows")
     @Test
-    public void testMenuNuevaComunidad_Registered() throws UiException, IOException, InterruptedException
+    public void testMenuNuevaComunidad_Registered() throws Exception
     {
-        regUserComuGetAuthTk(COMU_REAL_JUAN);
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
         REG_COMU_USERCOMU_AC.checkItem(activity);
 

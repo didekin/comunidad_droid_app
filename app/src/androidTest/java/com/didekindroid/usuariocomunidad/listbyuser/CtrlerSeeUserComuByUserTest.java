@@ -10,10 +10,9 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.lib_one.testutil.InitializerTestUtil.initSec_Http;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.execCheckSchedulersTest;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real_rodrigo;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.lib_one.usuario.UserTestData.user_crodrigo;
 
 public class CtrlerSeeUserComuByUserTest {
@@ -38,7 +37,7 @@ public class CtrlerSeeUserComuByUserTest {
     @Test
     public void test_LoadItemsByEntitiyId() throws Exception
     {
-        regUserComuGetAuthTk(comu_real_rodrigo);
+        regComuUserUserComuGetAuthTk(comu_real_rodrigo);
         execCheckSchedulersTest(ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>()), controller);
     }
 }

@@ -19,8 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import retrofit2.Response;
 
 import static android.app.TaskStackBuilder.create;
@@ -88,9 +86,7 @@ public class ViewerRegComuUserUserComuAcTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        AtomicReference<ViewerRegComuUserUserComuAc> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
+        waitAtMost(4, SECONDS).until(() -> activity.viewer != null);
     }
 
     @After

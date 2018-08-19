@@ -3,6 +3,7 @@ package com.didekindroid.incidencia;
 import android.os.Bundle;
 
 import com.didekindroid.lib_one.util.BundleKey;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import java.io.Serializable;
@@ -17,7 +18,15 @@ public enum IncidBundleKey implements BundleKey {
     INCID_ACTIVITY_VIEW_ID,
     INCID_IMPORTANCIA_NUMBER,
     INCID_IMPORTANCIA_OBJECT,
-    INCID_RESOLUCION_BUNDLE,
+    INCID_RESOLUCION_BUNDLE{
+        @Override
+        public Bundle getBundleForKey(Serializable resolBundle)
+        {
+            Bundle bundle = new Bundle(1);
+            bundle.putSerializable(key, IncidAndResolBundle.class.cast(resolBundle));
+            return bundle;
+        }
+    },
     INCIDENCIA_ID_LIST_SELECTED,
     INCID_CLOSED_LIST_FLAG {
         @Override

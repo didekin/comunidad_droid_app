@@ -218,12 +218,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Bundle> seeIncidImportancia(long incidenciaId)
     {
         Timber.d("seeIncidImportancia()");
-        return seeIncidImportanciaRaw(incidenciaId)
-                .map(incidResol -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, incidResol);
-                    return bundle;
-                });
+        return seeIncidImportanciaRaw(incidenciaId).map(INCID_RESOLUCION_BUNDLE::getBundleForKey);
     }
 
     public Single<List<IncidenciaUser>> seeIncidsOpenByComu(long comunidadId)

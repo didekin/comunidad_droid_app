@@ -113,7 +113,7 @@ public class IncidResolucionEditFrTest {
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Check.
         assertThat(resolucion.getAvances().size(), is(1));
-        checkScreenResolucionEditFr(resolucion);
+        checkScreenResolucionEditFr();
         checkDataResolucionEditFr(resolucion);
         // Avances.
         Avance avance = resolucion.getAvances().get(0);
@@ -141,7 +141,7 @@ public class IncidResolucionEditFrTest {
         // Precondition: NO avances.
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAdvances(incidImportancia)));
         // Check.
-        checkScreenResolucionEditFr(resolucion);
+        checkScreenResolucionEditFr();
         checkDataResolucionEditFr(resolucion);
         // Avances.
         onView(allOf(

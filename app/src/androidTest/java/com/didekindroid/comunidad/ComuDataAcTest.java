@@ -51,6 +51,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -75,7 +76,11 @@ public class ComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+            try {
+                comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+            } catch (Exception e) {
+                fail();
+            }
             return new Intent().putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };

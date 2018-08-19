@@ -36,7 +36,7 @@ public class CtrlerComunidadTest {
     Comunidad comunidad;
 
     @Before
-    public void setUp()
+    public void setUp() throws Exception
     {
         initSec_Http(getTargetContext());
         comunidad = signUpGetComu(COMU_ESCORIAL_PEPE);

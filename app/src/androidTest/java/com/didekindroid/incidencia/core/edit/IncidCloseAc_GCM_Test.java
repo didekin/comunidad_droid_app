@@ -24,6 +24,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResol
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -66,9 +67,13 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_test_abs {
             @Override
             protected Intent getActivityIntent()
             {
-                IncidImportancia incidImportancia;
-                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
-                resolucion = insertGetResolucionNoAdvances(incidImportancia);
+                IncidImportancia incidImportancia = null;
+                try {
+                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
+                    resolucion = insertGetResolucionNoAdvances(incidImportancia);
+                } catch (Exception e) {
+                    fail();
+                }
                 return new Intent()
                         .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia)
                         .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);

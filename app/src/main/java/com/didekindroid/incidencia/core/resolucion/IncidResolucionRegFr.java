@@ -1,7 +1,5 @@
 package com.didekindroid.incidencia.core.resolucion;
 
-import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.api.exception.UiException;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.lib_one.util.FechaPickerFr;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -23,18 +21,17 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.sql.Timestamp;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.IncidContextualName.new_incid_resolucion_just_registered;
-import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_registered;
-import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
-import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
+import static com.didekindroid.lib_one.util.FechaPickerFr.fecha_picker_fr_tag;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.getUiExceptionFromThrowable;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 import static java.util.Objects.requireNonNull;
 
@@ -49,6 +46,7 @@ public class IncidResolucionRegFr extends Fragment {
     ResolucionBean resolucionBean;
     TextView fechaViewForPicker;
     View frView;
+    CtrlerIncidenciaCore controller;
 
     static IncidResolucionRegFr newInstance(IncidImportancia incidImportancia)
     {
@@ -70,7 +68,7 @@ public class IncidResolucionRegFr extends Fragment {
         fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
         fechaViewForPicker.setOnClickListener(clickListener -> {
             FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerResolucion(fechaViewForPicker, resolucionBean));
-            fechaPicker.show(requireNonNull(getActivity()).getFragmentManager(), "fechaPicker");
+            fechaPicker.show(requireNonNull(getActivity()).getFragmentManager(), fecha_picker_fr_tag);
         });
 
         Button mConfirmButton = frView.findViewById(R.id.incid_resolucion_reg_ac_button);
@@ -85,6 +83,15 @@ public class IncidResolucionRegFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        controller = new CtrlerIncidenciaCore();
+    }
+
+    @Override
+    public void onStop()
+    {
+        Timber.d("onStop()");
+        super.onStop();
+        controller.clearSubscriptions();
     }
 
     //  ================================ HELPER METHODS =======================================
@@ -100,7 +107,29 @@ public class IncidResolucionRegFr extends Fragment {
             makeToast(getActivity(), errorMsg.toString());
         } else {
             if (checkInternetConnected(getActivity())) {
-                new ResolucionRegister().execute(resolucion);
+                controller.regResolucion(
+                        new DisposableSingleObserver<Integer>() {
+                            @Override
+                            public void onSuccess(Integer integer)
+                            {
+                                routerInitializer.get().getContextRouter()
+                                        .getActionFromContextNm(new_incid_resolucion_just_registered)
+                                        .initActivity(
+                                                getActivity(),
+                                                INCID_RESOLUCION_BUNDLE.getBundleForKey(
+                                                        new IncidAndResolBundle(incidImportancia, true))
+                                        );
+                            }
+
+                            @Override
+                            public void onError(Throwable e)
+                            {
+                                routerInitializer.get().getExceptionRouter()
+                                        .getActionFromMsg(getUiExceptionFromThrowable(e).getErrorHtppMsg())
+                                        .initActivity(getActivity());
+                            }
+                        },
+                        resolucion);
             }
         }
     }
@@ -136,42 +165,5 @@ public class IncidResolucionRegFr extends Fragment {
         // La fecha se inicializa en FechaPickerFr.onDateSet().
 
         return resolucionBean.validateBeanPlan(errorMsg, getResources(), incidImportancia);
-    }
-
-//    ============================================================================================
-//    .................................... INNER CLASSES .................................
-//    ============================================================================================
-
-    @SuppressLint("StaticFieldLeak")  // TODO: cambiar.
-    class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
-
-        UiException uiException;
-
-        @Override
-        protected Integer doInBackground(Resolucion... params)
-        {
-            Timber.d("doInBackground()");
-            return incidenciaDao.regResolucion(params[0]).blockingGet();
-        }
-
-        @SuppressWarnings("ConstantConditions")
-        @Override
-        protected void onPostExecute(Integer rowInserted)
-        {
-            if (checkPostExecute(getActivity())) return;
-
-            Timber.d("onPostExecute()");
-
-            if (uiException != null) {
-                routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg())
-                        .initActivity(getActivity());
-            } else {
-                assertTrue(rowInserted == 1, resolucion_should_be_registered);
-                Bundle bundle = new Bundle(1);
-                bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                routerInitializer.get().getContextRouter().getActionFromContextNm(new_incid_resolucion_just_registered)
-                        .initActivity(getActivity(), bundle);
-            }
-        }
     }
 }

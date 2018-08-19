@@ -82,7 +82,11 @@ public class IncidDownStreamMsgHandlerTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            comunidadId = signUpGetComu(COMU_REAL_JUAN).getC_Id();
+            try {
+                comunidadId = signUpGetComu(COMU_REAL_JUAN).getC_Id();
+            } catch (Exception e) {
+                fail();
+            }
             data = new ArrayMap<>(1);
             data.put(comunidadId_key, String.valueOf(comunidadId));
         }

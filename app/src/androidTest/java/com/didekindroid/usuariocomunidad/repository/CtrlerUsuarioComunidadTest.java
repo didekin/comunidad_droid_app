@@ -18,7 +18,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
@@ -113,7 +113,7 @@ public class CtrlerUsuarioComunidadTest {
         execCheckSchedulersTest(
                 ctrler -> ctrler.regComuAndUserComu(
                         new CompletableObserverMock(),
-                        new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, regGetUserComu(COMU_LA_FUENTE_PEPE))
+                        new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, regComuUserUserComuGetUser(COMU_LA_FUENTE_PEPE))
                                 .planta("uno")
                                 .roles(PROPIETARIO.function)
                                 .build()),
@@ -143,7 +143,7 @@ public class CtrlerUsuarioComunidadTest {
                 ctrler -> ctrler.regUserComu(
                         new CompletableObserverMock(),
                         new UsuarioComunidad.UserComuBuilder(
-                                signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_mock_gcm"), regGetUserComu(COMU_LA_FUENTE_PEPE)
+                                signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_mock_gcm"), regComuUserUserComuGetUser(COMU_LA_FUENTE_PEPE)
                         ).planta("uno").roles(PROPIETARIO.function).build()),
                 controller
         );

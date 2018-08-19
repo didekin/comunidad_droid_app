@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewerIf;
-import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -31,7 +30,7 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
@@ -70,10 +69,10 @@ public class ViewerRegUserComuAcTest {
         {
             try {
                 comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_mock_gcm");
-            } catch (UiException e) {
+                regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+            } catch (Exception e) {
                 fail();
             }
-            regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
             return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };

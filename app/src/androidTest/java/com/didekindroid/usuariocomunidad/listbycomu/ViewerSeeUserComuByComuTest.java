@@ -31,7 +31,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -53,6 +53,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -70,7 +71,11 @@ public class ViewerSeeUserComuByComuTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuGetAuthTk(COMU_REAL_PEPE);
+            try {
+                regComuUserUserComuGetAuthTk(COMU_REAL_PEPE);
+            } catch (Exception e) {
+                fail();
+            }
             usuarioComunidad = userComuDao.seeUserComusByUser().blockingGet().get(0);
             return new Intent().putExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id());
         }

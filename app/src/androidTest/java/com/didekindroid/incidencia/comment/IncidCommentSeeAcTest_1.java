@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -70,7 +72,7 @@ public class IncidCommentSeeAcTest_1 {
     }
 
     @Test
-    public void testOnCreate_1()
+    public void testOnCreate_1() throws InterruptedException
     {
         // Precondition: incidencia is open.
         assertThat(incidPepeEscorial.getIncidencia().getFechaCierre(), nullValue());
@@ -83,11 +85,11 @@ public class IncidCommentSeeAcTest_1 {
         onView(withId(R.id.incid_new_comment_fab)).check(matches(isDisplayed()));
 
         // No hay comentarios registrados.
+        SECONDS.sleep(1L);
         waitAtMost(4, SECONDS).until(() -> {
-            onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
+            onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
             return true;
         });
-        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
     }
 
     @Test

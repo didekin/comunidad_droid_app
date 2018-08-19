@@ -28,6 +28,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -47,9 +48,14 @@ public class IncidSeeByComuAc_Open_Mn_Test {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();
             }
-            return new Intent()
-                    .putExtra(COMUNIDAD_ID.key, signUpGetComu(COMU_REAL_DROID).getC_Id())
-                    .putExtra(INCID_CLOSED_LIST_FLAG.key, false);
+            try {
+                return new Intent()
+                        .putExtra(COMUNIDAD_ID.key, signUpGetComu(COMU_REAL_DROID).getC_Id())
+                        .putExtra(INCID_CLOSED_LIST_FLAG.key, false);
+            } catch (Exception e) {
+                fail();
+            }
+            return null;
         }
     };
 

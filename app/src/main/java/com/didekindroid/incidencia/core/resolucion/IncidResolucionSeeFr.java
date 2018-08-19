@@ -110,19 +110,22 @@ public class IncidResolucionSeeFr extends Fragment {
 
     protected void paintViewData()
     {
-        IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
-        mAdapter.clear();
-        mAdapter.addAll(resolucion.getAvances());
-
         // Fecha estimada.
         ((TextView) frView.findViewById(R.id.incid_resolucion_fecha_view)).setText(formatTimeStampToString(resolucion.getFechaPrev()));
         // Coste estimado.
         ((TextView) frView.findViewById(R.id.incid_resolucion_coste_prev_view)).setText(getStringFromInteger(resolucion.getCosteEstimado()));
         // Plan.
         ((TextView) frView.findViewById(R.id.incid_resolucion_txt)).setText(resolucion.getDescripcion());
+
         // Lista de avances.
-        ListView mListView = frView.findViewById(android.R.id.list);
-        mListView.setEmptyView(frView.findViewById(android.R.id.empty));
-        mListView.setAdapter(mAdapter);
+        ListView listView = frView.findViewById(android.R.id.list);
+        if (resolucion.getAvances() != null && resolucion.getAvances().size() > 0) {
+            IncidAvanceSeeAdapter adapter = new IncidAvanceSeeAdapter(getActivity());
+            adapter.clear();
+            adapter.addAll(resolucion.getAvances());
+            listView.setAdapter(adapter);
+        } else {
+            listView.setEmptyView(frView.findViewById(android.R.id.empty));
+        }
     }
 }

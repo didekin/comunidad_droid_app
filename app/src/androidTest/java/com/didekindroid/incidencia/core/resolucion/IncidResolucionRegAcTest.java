@@ -8,13 +8,9 @@ import android.widget.DatePicker;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.lib_one.api.exception.UiException;
-import com.didekindroid.lib_one.api.router.UiExceptionRouter;
 import com.didekindroid.lib_one.util.UiUtil;
-import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
-import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,7 +45,6 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
@@ -58,16 +53,13 @@ import static com.didekindroid.lib_one.util.UiUtil.isCalendarPreviousTimeStamp;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
-import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static java.lang.Thread.sleep;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -80,16 +72,18 @@ public class IncidResolucionRegAcTest {
     private IncidResolucionRegAc activity;
     private IncidImportancia incidImportancia;
     private TaskStackBuilder taskStackBuilder;
-    private UiExceptionRouter uiExceptionRouter;
 
     @Rule
     public IntentsTestRule<IncidResolucionRegAc> testRule = new IntentsTestRule<IncidResolucionRegAc>(IncidResolucionRegAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            uiExceptionRouter = (UiExceptionRouter) routerInitializer.get().getExceptionRouter();
             // A user WITH powers 'adm'.
-            incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+            try {
+                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+            } catch (Exception e) {
+                fail();
+            }
 
             if (SDK_INT >= LOLLIPOP) {
                 Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
@@ -201,29 +195,6 @@ public class IncidResolucionRegAcTest {
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         // Check.
         checkRegResolucionOk();
-    }
-
-    @Test
-    public void test_registerResolucion_4()
-    {
-        // Test of RESOLUCION_DUPLICATE excepction.
-        IncidResolucionRegFr fr = (IncidResolucionRegFr) activity.getSupportFragmentManager().findFragmentByTag(IncidResolucionRegFr.class.getName());
-        IncidResolucionRegFr.ResolucionRegister resolucionRegister = fr.new ResolucionRegister() {
-            @Override
-            protected Integer doInBackground(Resolucion... params)
-            {
-                uiException = new UiException(new ErrorBean(RESOLUCION_DUPLICATE.getHttpMessage(), RESOLUCION_DUPLICATE.getHttpStatus()));
-                return 0;
-            }
-        };
-        resolucionRegister.doInBackground(new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia()).buildAsFk());
-        activity.runOnUiThread(() -> resolucionRegister.onPostExecute(0));
-        waitAtMost(2, SECONDS).until(
-                isToastInView(
-                        uiExceptionRouter.getActionFromMsg(resolucionRegister.uiException.getErrorHtppMsg()).getResourceIdForToast(),
-                        activity
-                )
-        );
     }
 
 //    ============================= HELPER METHODS ===========================

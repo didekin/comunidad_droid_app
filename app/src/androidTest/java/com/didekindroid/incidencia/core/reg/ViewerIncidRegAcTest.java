@@ -40,6 +40,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -58,7 +59,11 @@ public class ViewerIncidRegAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            regTwoUserComuSameUser(makeListTwoUserComu());
+            try {
+                regTwoUserComuSameUser(makeListTwoUserComu());
+            } catch (Exception e) {
+                fail();
+            }
             List<Comunidad> comunidades = userComuDao.getComusByUser().blockingGet();
             comuReal = comunidades.get(0);
             comuPlazuela5 = comunidades.get(1);

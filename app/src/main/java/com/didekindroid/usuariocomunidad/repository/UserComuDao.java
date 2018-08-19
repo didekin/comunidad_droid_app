@@ -7,6 +7,7 @@ import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.http.usuariocomunidad.UsuarioComunidadEndPoints;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import timber.log.Timber;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static com.didekindroid.lib_one.api.exception.UiExceptionIf.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.usuario.dao.AppIdHelper.appIdSingle;
 import static com.didekindroid.lib_one.util.Device.getDeviceLanguage;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
@@ -196,7 +198,7 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Completable regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
     {
         Timber.d(("regComuAndUserAndUserComu()"));
-        return just(usuarioCom)
+        return just(getUserWithAppTk(usuarioCom))
                 .flatMap(usuarioComIn -> regComuAndUserAndUserComu(getDeviceLanguage(), usuarioComIn))
                 .map(httpInitializer.get()::getResponseBody)
                 .flatMapCompletable(userDataErrorFunc)
@@ -218,7 +220,7 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Completable regUserAndUserComu(UsuarioComunidad userCom)
     {
         Timber.d("regUserAndUserComu()");
-        return just(userCom)
+        return just(getUserWithAppTk(userCom))
                 .flatMap(userComIn -> regUserAndUserComu(getDeviceLanguage(), userComIn))
                 .map(httpInitializer.get()::getResponseBody)
                 .flatMapCompletable(userDataErrorFunc)
@@ -252,5 +254,15 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
         return just(true)
                 .flatMap(aBoolean -> seeUserComusByUser(tkCacher.doAuthHeaderStr()).map(httpInitializer.get()::getResponseBody))
                 .doOnError(uiExceptionConsumer);
+    }
+
+    // ============================  Helpers =============================
+
+    UsuarioComunidad getUserWithAppTk(UsuarioComunidad usuarioCom)
+    {
+        return new UsuarioComunidad.UserComuBuilder(
+                usuarioCom.getComunidad(),
+                new Usuario.UsuarioBuilder().copyUsuario(usuarioCom.getUsuario()).gcmToken(appIdSingle.getTokenSingle().blockingGet()).build()
+        ).userComuRest(usuarioCom).build();
     }
 }

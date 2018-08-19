@@ -97,7 +97,7 @@ public class IncidResolucionEditAcTest {
                 .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
         // Check screen of IncidResolucionSeeFr.
-        checkScreenResolucionSeeFr(resolucion);
+        checkScreenResolucionSeeFr();
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }
@@ -113,7 +113,7 @@ public class IncidResolucionEditAcTest {
                 .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
         // Check screen of IncidResolucionEditFr.
-        checkScreenResolucionEditFr(resolucion);
+        checkScreenResolucionEditFr();
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }
@@ -132,7 +132,7 @@ public class IncidResolucionEditAcTest {
                 .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
         // Check screen of IncidResolucionSeeFr.
-        checkScreenResolucionSeeFr(resolucion);
+        checkScreenResolucionSeeFr();
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }
@@ -148,7 +148,7 @@ public class IncidResolucionEditAcTest {
                 .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
         // Check screen of IncidResolucionSeeFr.
-        checkScreenResolucionSeeFr(resolucion);
+        checkScreenResolucionSeeFr();
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }

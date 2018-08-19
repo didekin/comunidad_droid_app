@@ -15,6 +15,7 @@ import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -30,7 +31,7 @@ public class CtrlerIncidenciaCore extends Controller implements CtrlerListIf<Imp
     public CtrlerIncidenciaCore()
     {
         super();
-        incidDaoRemote = IncidenciaDao.incidenciaDao;
+        incidDaoRemote = incidenciaDao;
     }
 
     // .................................... INSTANCE METHODS .................................

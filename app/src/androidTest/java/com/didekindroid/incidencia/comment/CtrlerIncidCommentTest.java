@@ -29,7 +29,7 @@ public class CtrlerIncidCommentTest {
     private Incidencia incidencia;
 
     @Before
-    public void setUp()
+    public void setUp() throws Exception
     {
         initSec_Http(getTargetContext());
         controller = new CtrlerIncidComment();

@@ -18,7 +18,7 @@ import java.util.List;
 import static com.didekindroid.comunidad.ComunidadDao.comunidadDao;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static org.hamcrest.Matchers.is;
@@ -41,18 +41,18 @@ public class ComunidadDaoTest {
     }
 
     @Test
-    public void testGetComuData()
+    public void testGetComuData() throws Exception
     {
-        regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad cDB = userComuDao.getComusByUser().blockingGet().get(0);
         Comunidad c1 = comunidadDao.getComuData(cDB.getC_Id()).blockingGet();
         assertThat(c1, is(cDB));
     }
 
     @Test
-    public void testSearchComunidades()
+    public void testSearchComunidades() throws Exception
     {
-        regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad comunidadSearch = ComuTestData.makeComunidad("Calle", "de la Plazuela", (short) 11, "",
                 new Municipio((short) 13, new Provincia((short) 3)));
 

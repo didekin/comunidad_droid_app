@@ -113,7 +113,7 @@ public class ViewerComuSearchResultsFrTest {
     }
 
     @Test
-    public void test_DoViewInViewer()
+    public void test_DoViewInViewer() throws Exception
     {
         Comunidad comunidadToSearch = signUpGetComu(COMU_REAL_PEPE);
         isPepeToDelete = true;
@@ -195,7 +195,7 @@ public class ViewerComuSearchResultsFrTest {
     }
 
     @Test
-    public void test_UsuarioComunidadObserverOnSuccess()
+    public void test_UsuarioComunidadObserverOnSuccess() throws Exception
     {
         UsuarioComunidad userComu = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_REAL_PEPE), USER_PEPE).userComuRest(COMU_REAL_PEPE).build();
         isPepeToDelete = true;
@@ -206,7 +206,7 @@ public class ViewerComuSearchResultsFrTest {
     }
 
     @Test
-    public void test_UsuarioComunidadObserverOnComplete()
+    public void test_UsuarioComunidadObserverOnComplete() throws Exception
     {
         Comunidad comunidad = signUpGetComu(COMU_REAL_PEPE);
         isPepeToDelete = true;

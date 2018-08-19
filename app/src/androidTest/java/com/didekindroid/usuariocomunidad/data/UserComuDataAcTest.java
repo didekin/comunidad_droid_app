@@ -51,6 +51,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -67,10 +68,14 @@ public class UserComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
-                    .planta("One")
-                    .roles(PROPIETARIO.function)
-                    .build();
+            try {
+                usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
+                        .planta("One")
+                        .roles(PROPIETARIO.function)
+                        .build();
+            } catch (Exception e) {
+                fail();
+            }
             return new Intent().putExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
         }
     };

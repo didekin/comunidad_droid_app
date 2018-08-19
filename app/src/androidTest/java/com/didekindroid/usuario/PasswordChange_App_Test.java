@@ -29,7 +29,7 @@ import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_DROID;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
 import static com.didekindroid.lib_one.usuario.UserTestNavigation.pswdChangeAcRsId;
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
@@ -41,6 +41,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -64,7 +65,12 @@ public class PasswordChange_App_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            return new Intent().putExtra(user_name.key, regGetUserComu(COMU_REAL_DROID).getUserName());
+            try {
+                return new Intent().putExtra(user_name.key, regComuUserUserComuGetUser(COMU_REAL_DROID).getUserName());
+            } catch (Exception e) {
+                fail();
+            }
+            return null;
         }
     };
 

@@ -57,6 +57,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -73,7 +74,11 @@ public class IncidEditAcMaxTest {
         protected Intent getActivityIntent()
         {
             // Perfil adm, iniciador de la incidencia.  NO resolución.
-            resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
+            try {
+                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
+            } catch (Exception e) {
+                fail();
+            }
 
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent0 = new Intent(getTargetContext(), UserComuDataAc.class)

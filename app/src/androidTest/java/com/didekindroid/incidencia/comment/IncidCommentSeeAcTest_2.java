@@ -41,6 +41,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,7 +61,12 @@ public class IncidCommentSeeAcTest_2 {
         @Override
         protected Intent getActivityIntent()
         {
-            IncidImportancia incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
+            IncidImportancia incidJuanReal1 = null;
+            try {
+                incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
+            } catch (Exception e) {
+                fail();
+            }
             // Insertamos comentarios.
             incidenciaDao.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()))
                     .blockingGet();

@@ -17,11 +17,12 @@ import org.junit.runner.RunWith;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
-import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -65,7 +66,11 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_test_abs {
             @Override
             protected void beforeActivityLaunched()
             {
-                pepe = regGetUserComu(COMU_ESCORIAL_PEPE);
+                try {
+                    pepe = regComuUserUserComuGetUser(COMU_ESCORIAL_PEPE);
+                } catch (Exception e) {
+                    fail();
+                }
                 pepeUserComu = userComuDao.seeUserComusByUser().blockingGet().get(0);
             }
         };

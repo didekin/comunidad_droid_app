@@ -164,7 +164,8 @@ public class IncidEditAc extends AppCompatActivity implements InjectorOfParentVi
                 return true;
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
-                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this, INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()));
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId)
+                        .initActivity(this, INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()));
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 viewer.checkResolucion();

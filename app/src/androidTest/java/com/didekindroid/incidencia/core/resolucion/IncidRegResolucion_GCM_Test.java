@@ -24,6 +24,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncid
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -70,7 +71,11 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_test_abs {
             @Override
             protected Intent getActivityIntent()
             {
-                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
+                try {
+                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
+                } catch (Exception e) {
+                    fail();
+                }
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
                 return intent;

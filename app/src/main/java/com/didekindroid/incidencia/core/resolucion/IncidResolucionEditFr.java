@@ -43,6 +43,7 @@ import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_shou
 import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_modified;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.FechaPickerFr.fecha_picker_fr_tag;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.checkPostExecute;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
@@ -87,7 +88,7 @@ public class IncidResolucionEditFr extends Fragment {
         fechaViewForPicker = frView.findViewById(R.id.incid_resolucion_fecha_view);
         fechaViewForPicker.setOnClickListener(clickListener -> {
             FechaPickerFr fechaPicker = FechaPickerFr.newInstance(new FechaPickerResolucion(fechaViewForPicker, resolucionBean));
-            fechaPicker.show(requireNonNull(getActivity()).getFragmentManager(), "fechaPicker");
+            fechaPicker.show(requireNonNull(getActivity()).getFragmentManager(), fecha_picker_fr_tag);
         });
 
         Button mModifyButton = frView.findViewById(R.id.incid_resolucion_fr_modif_button);
@@ -202,7 +203,8 @@ public class IncidResolucionEditFr extends Fragment {
 //    ..................... INNER CLASSES  .......................
     /*    ============================================================*/
 
-    @SuppressLint("StaticFieldLeak")    // TODO: cambiar.
+    @SuppressLint("StaticFieldLeak")
+            // TODO: cambiar.
     class ResolucionModifyer extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;
@@ -228,14 +230,18 @@ public class IncidResolucionEditFr extends Fragment {
                 routerInitializer.get().getExceptionRouter().getActionFromMsg(uiException.getErrorHtppMsg()).initActivity(getActivity(), bundle);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
-                Bundle bundle = new Bundle(1);
-                bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
-                routerInitializer.get().getContextRouter().getActionFromContextNm(incid_resolucion_just_modified).initActivity(getActivity(), bundle);
+                routerInitializer.get().getContextRouter()
+                        .getActionFromContextNm(incid_resolucion_just_modified)
+                        .initActivity(
+                                getActivity(),
+                                INCID_RESOLUCION_BUNDLE.getBundleForKey(new IncidAndResolBundle(incidImportancia, true))
+                        );
             }
         }
     }
 
-    @SuppressLint("StaticFieldLeak")  // TODO: cambiar.
+    @SuppressLint("StaticFieldLeak")
+            // TODO: cambiar.
     class IncidenciaCloser extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;

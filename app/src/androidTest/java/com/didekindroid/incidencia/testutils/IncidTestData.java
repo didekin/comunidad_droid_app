@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.lib_one.util.UiUtil.getMilliSecondsFromCalendarAdd;
 import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
@@ -42,9 +42,9 @@ public final class IncidTestData {
     {
     }
 
-    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu)
+    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws Exception
     {
-        regUserComuGetAuthTk(userComu);
+        regComuUserUserComuGetAuthTk(userComu);
         UsuarioComunidad userComuDb = userComuDao.seeUserComusByUser().blockingGet().get(0);
         return insertGetIncidImportancia(userComuDb, importancia_default);
     }
@@ -145,6 +145,18 @@ public final class IncidTestData {
         return new Incidencia.IncidenciaBuilder()
                 .userName(userName)
                 .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
+                .descripcion(descripcion)
+                .ambitoIncid(new AmbitoIncidencia(ambitoId))
+                .build();
+    }
+
+    public static Incidencia doIncidencia(String userName, String descripcion, long comunidadId, long indidenciaId,short ambitoId)
+    {
+        // Precondition: incidencia in DB.
+        return new Incidencia.IncidenciaBuilder()
+                .userName(userName)
+                .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
+                .incidenciaId(indidenciaId)
                 .descripcion(descripcion)
                 .ambitoIncid(new AmbitoIncidencia(ambitoId))
                 .build();

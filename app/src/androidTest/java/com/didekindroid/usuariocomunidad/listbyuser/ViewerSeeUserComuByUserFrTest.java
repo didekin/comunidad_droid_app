@@ -50,7 +50,7 @@ public class ViewerSeeUserComuByUserFrTest {
     private Comunidad comuEscorial = null;
 
     @Before
-    public void setUp()
+    public void setUp() throws Exception
     {
         comuEscorial = signUpGetComu(COMU_ESCORIAL_PEPE);  // Almería.
         userComuDao.regComuAndUserComu(COMU_REAL_PEPE).blockingAwait();  // Alicante.  Position 0.

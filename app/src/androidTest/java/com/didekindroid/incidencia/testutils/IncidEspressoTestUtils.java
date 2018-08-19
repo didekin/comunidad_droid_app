@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
-import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
+import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
+import com.didekindroid.lib_one.incidencia.spinner.AmbitoIncidValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -40,13 +40,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper.DB_NAME;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.resolucion_coste_prev_id;
 import static com.didekindroid.incidencia.testutils.IncidTestData.COSTE_ESTIM_DEFAULT_String;
 import static com.didekindroid.incidencia.testutils.IncidTestData.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.testutil.ActivityTestUtil.isDataDisplayedAndClick;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper.DB_NAME;
 import static com.didekindroid.lib_one.util.UiUtil.SPAIN_LOCALE;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
+import static com.didekindroid.testutil.ActivityTestUtil.isDataDisplayedAndClick;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -68,7 +69,7 @@ public final class IncidEspressoTestUtils {
     {
     }
 
-    public static View doFragmentTextView(int resourdeIdLayout, String description)
+    public static View inflateTextView(int resourdeIdLayout, String description)
     {
         LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View frView = inflater.inflate(resourdeIdLayout, null);
@@ -143,7 +144,7 @@ public final class IncidEspressoTestUtils {
         )).check(matches(isDisplayed()));
     }
 
-    public static void checkScreenEditMinFr()
+    private static void checkScreenEditMinFr()
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_nopower_fr_layout)).check(matches(isDisplayed()));
@@ -314,7 +315,7 @@ public final class IncidEspressoTestUtils {
 
     // ====================================== RESOLUCION =========================================
 
-    public static void checkScreenResolucionEditFr(Resolucion resolucionIntent)
+    public static void checkScreenResolucionEditFr()
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
@@ -326,8 +327,6 @@ public final class IncidEspressoTestUtils {
         onView(withId(R.id.incid_resolucion_fr_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
-
-        checkAvancesList(resolucionIntent);
     }
 
     public static void checkDataResolucionEditFr(Resolucion resolucion)
@@ -348,33 +347,23 @@ public final class IncidEspressoTestUtils {
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
     }
 
-    public static void checkScreenResolucionSeeFr(Resolucion resolucionIntent)
+    public static void checkScreenResolucionSeeFr()
     {
         onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
+        checkResolucionSeeViews();
+    }
+
+    public static void checkResolucionSeeViews()
+    {
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_coste_prev_view)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
-
-        checkAvancesList(resolucionIntent);
     }
 
     public static void checkDataResolucionSeeFr(Resolucion resolucion)
     {
-        checkDataResolucion(resolucion, R.id.incid_resolucion_coste_prev_view);
-    }
-
-    private static void checkAvancesList(Resolucion resolucionIntent)
-    {
-        if (resolucionIntent != null && !resolucionIntent.getAvances().isEmpty()) {
-            // Lista NO vacía.
-            onView(withId(android.R.id.list)).check(matches(isDisplayed()));
-            onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));
-        } else {
-            // Lista de avances vacía.
-            onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
-            onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
-        }
+        checkDataResolucion(resolucion, resolucion_coste_prev_id);
     }
 
     private static void checkDataResolucion(Resolucion resolucion, int costePrevRsId)

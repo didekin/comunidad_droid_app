@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.list;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -30,7 +29,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncid
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
@@ -42,6 +41,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,7 +60,11 @@ public class ViewerIncidSeeOpenFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            regUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
+            try {
+                regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
+            } catch (Exception e) {
+                fail();
+            }
             incidImportancia = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0),
                     (short) 2);
             // Cierre incidencias..
@@ -112,12 +116,11 @@ public class ViewerIncidSeeOpenFrTest {
     @Test
     public void test_OnSuccessLoadSelectedItem()
     {
-        // Preconditions.
-        Bundle bundle = new Bundle(1);
-        bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null));
         // Exec and check.
         waitAtMost(4, SECONDS).until(isStatementTrue(fragment.viewer != null));
-        fragment.viewer.onSuccessLoadSelectedItem(bundle);
+        fragment.viewer.onSuccessLoadSelectedItem(
+                INCID_RESOLUCION_BUNDLE.getBundleForKey(new IncidAndResolBundle(incidImportancia, resolucion != null))
+        );
         onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
     }
 

@@ -24,8 +24,9 @@ import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
-import static com.didekindroid.lib_one.usuario.UserTestData.regGetUserComu;
-import static com.didekindroid.lib_one.usuario.UserTestData.regUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
+import static com.didekindroid.lib_one.usuario.dao.UsuarioDao.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
@@ -42,8 +43,12 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUp
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
+import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -65,7 +70,7 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void testDeleteUserComu()
+    public void testDeleteUserComu() throws Exception
     {
         assertThat(userComuDao
                 .deleteUserComu(signUpGetComu(COMU_PLAZUELA5_JUAN).getC_Id()).blockingGet(), is(IS_USER_DELETED));
@@ -74,7 +79,7 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_getComusByUser()
+    public void test_getComusByUser() throws Exception
     {
         whatClean = CLEAN_JUAN;
         regTwoUserComuSameUser(makeListTwoUserComu());
@@ -82,7 +87,7 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_getUserComuByUserAndComu_1()
+    public void test_getUserComuByUserAndComu_1() throws Exception
     {
         whatClean = CLEAN_JUAN;
         assertThat(userComuDao.
@@ -90,10 +95,10 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_getUserComuByUserAndComu_2()
+    public void test_getUserComuByUserAndComu_2() throws Exception
     {
         whatClean = CLEAN_JUAN;
-        regUserComuGetAuthTk(COMU_REAL_JUAN);
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         // La comunidad no existe en BD.
         userComuDao.getUserComuByUserAndComu(999L).test().assertError(
                 exception -> UiException.class.cast(exception).getErrorHtppMsg().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())
@@ -101,7 +106,7 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_isOldestOrAdmonUserComu()
+    public void test_isOldestOrAdmonUserComu() throws Exception
     {
         whatClean = CLEAN_PEPE;
         assertThat(userComuDao
@@ -109,7 +114,7 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_modifyComuData()
+    public void test_modifyComuData() throws Exception
     {
         whatClean = CLEAN_PEPE;
         Comunidad cNew = new Comunidad.ComunidadBuilder()
@@ -120,11 +125,11 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_modifyUserComu()
+    public void test_modifyUserComu() throws Exception
     {
         whatClean = CLEAN_PEPE;
 
-        regUserComuGetAuthTk(COMU_REAL_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_REAL_PEPE);
         UsuarioComunidad userComuOld = userComuDao.seeUserComusByUser().blockingGet().get(0);
         UsuarioComunidad userComuNew = new UsuarioComunidad.UserComuBuilder(userComuOld.getComunidad(), userComuOld.getUsuario())
                 .userComuRest(COMU_REAL_PEPE)
@@ -138,14 +143,15 @@ public class UserComuDaoTest {
     {
         whatClean = CLEAN_JUAN;
         userComuDao.regComuAndUserAndUserComu(COMU_REAL_JUAN).test().assertComplete();
+        waitAtMost(6, SECONDS).until(() -> usuarioDaoRemote.getGcmToken() != null);
     }
 
     @Test
-    public void test_regComuAndUserComu()
+    public void test_regComuAndUserComu() throws Exception
     {
         whatClean = CLEAN_JUAN;
         userComuDao.regComuAndUserComu(
-                new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, regGetUserComu(COMU_REAL_JUAN))
+                new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, regComuUserUserComuGetUser(COMU_REAL_JUAN))
                         .planta("uno")
                         .roles(INQUILINO.function)
                         .build())
@@ -153,28 +159,30 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_regUserAndUserComu()
+    public void test_regUserAndUserComu() throws Exception
     {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
         // Comunidad is associated to other user.
         Comunidad comunidad = signUpGetComu(COMU_TRAV_PLAZUELA_PEPE);
         cleanWithTkhandler();
+        getInstance().deleteInstanceId();
 
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
         userComuDao.regUserAndUserComu(userComu).test().assertComplete();
+        waitAtMost(6, SECONDS).until(() -> usuarioDaoRemote.getGcmToken() != null);
     }
 
     @Test
-    public void testRegUserComu() throws UiException
+    public void testRegUserComu() throws Exception
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
         // Comunidad1 and user1 in DB.
         Comunidad comunidad1 = signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_mock_gcmTk");
         userComuDao.getTkCacher().updateIsRegistered(false);
         /* Comunidad2 and user2 in DB.*/
-        regUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         // Add comunidad1 and user2 (her data are in cache now and they can be null).
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad1, null, "portal",
                 "esc", "planta2", "doorJ", PRO.function);
@@ -182,7 +190,7 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void test_seeUserComuByComu()
+    public void test_seeUserComuByComu() throws Exception
     {
         whatClean = CLEAN_JUAN;
         Comunidad comunidad = signUpGetComu(COMU_ESCORIAL_JUAN);
@@ -191,11 +199,24 @@ public class UserComuDaoTest {
     }
 
     @Test
-    public void testSeeUserComusByUser_4()
+    public void testSeeUserComusByUser_4() throws Exception
     {
         whatClean = CLEAN_JUAN;
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
-        regUserComuGetAuthTk(COMU_REAL_JUAN);
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         assertThat(userComuDao.seeUserComusByUser().blockingGet(), hasItem(COMU_REAL_JUAN));
+    }
+
+    @Test
+    public void test_GetUserWithAppTk()
+    {
+        // Precondition
+        assertThat(COMU_PLAZUELA5_JUAN.getUsuario().getGcmToken(), nullValue());
+        // Check.
+        UsuarioComunidad userComuAfter = userComuDao.getUserWithAppTk(COMU_PLAZUELA5_JUAN);
+        assertThat(userComuAfter.getUsuario().getGcmToken().length() > 2, is(true));
+        assertThat(COMU_PLAZUELA5_JUAN.getUsuario(), is(userComuAfter.getUsuario()));
+        assertThat(COMU_PLAZUELA5_JUAN.getComunidad(), is(userComuAfter.getComunidad()));
+        assertThat(COMU_PLAZUELA5_JUAN.getRoles(), is(userComuAfter.getRoles()));
     }
 }
