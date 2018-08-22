@@ -134,6 +134,7 @@ public class IncidEditAc_Mn1_Test {
         assertThat(activity.resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(true));
 
         INCID_RESOLUCION_REG_EDIT_AC.checkItem(activity);
+//        onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidResolucionRegFrLayout));
 
         checkBack(onView(withId(incidResolucionRegFrLayout)));

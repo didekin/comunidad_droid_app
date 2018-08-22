@@ -21,7 +21,6 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionEditFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
@@ -34,8 +33,6 @@ import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -77,7 +74,7 @@ public class IncidResolucionEditAcTest {
     @Test
     public void test_OnCreate_1()
     {
-        // Preconditions: only incidImportancia in intent.
+        // Preconditions: resolucion == null (only incidImportancia in intent).
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
@@ -91,7 +88,7 @@ public class IncidResolucionEditAcTest {
     @Test
     public void test_OnCreate_2()
     {
-        // Preconditions: resolucion in intent != null; incidencia.getFechaCierre() == null.
+        // Preconditions: resolucion in intent != null;  NO hasAdmRole (because no INCID_IMPORTANCIA_OBJECT in intent).
         Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
@@ -106,7 +103,7 @@ public class IncidResolucionEditAcTest {
     @Test
     public void test_OnCreate_3()
     {
-        // Preconditions: resolucion in intent != null; incidencia.getFechaCierre() == null; incidImportancia in intent.
+        // Preconditions: resolucion in intent != null; hasAdmRole.
         Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia)
@@ -114,41 +111,6 @@ public class IncidResolucionEditAcTest {
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
         // Check screen of IncidResolucionEditFr.
         checkScreenResolucionEditFr();
-        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
-            checkUp(incidSeeByComuAcLayout);
-        }
-    }
-
-    @Test
-    public void test_OnCreate_4()
-    {
-        // Preconditions: resolucion in intent != null; incidencia.getFechaCierre() != null; incidImportancia in intent (usuario ADM).
-        // Cierre incidencias..
-        incidenciaDao.closeIncidencia(insertGetResolucionNoAdvances(incidImportancia));
-        Resolucion resolucion = incidenciaDao.seeResolucionRaw(incidImportancia.getIncidencia().getIncidenciaId()).blockingGet();
-        assertThat(resolucion.getIncidencia().getFechaCierre(), notNullValue());
-        Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia)
-                .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
-        // Check screen of IncidResolucionSeeFr.
-        checkScreenResolucionSeeFr();
-        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
-            checkUp(incidSeeByComuAcLayout);
-        }
-    }
-
-    @Test
-    public void test_OnCreate_5()
-    {
-        // Preconditions: resolucion in intent != null; incidencia.getFechaCierre() == null; NO incidImportancia in intent (no powers ADM).
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
-        assertThat(resolucion.getIncidencia().getFechaCierre(), nullValue());
-        Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
-        // Check screen of IncidResolucionSeeFr.
-        checkScreenResolucionSeeFr();
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }

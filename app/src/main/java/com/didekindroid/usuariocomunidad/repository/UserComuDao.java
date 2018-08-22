@@ -25,6 +25,7 @@ import static com.didekindroid.lib_one.api.exception.UiExceptionIf.uiExceptionCo
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
 import static com.didekindroid.lib_one.usuario.dao.AppIdHelper.appIdSingle;
 import static com.didekindroid.lib_one.util.Device.getDeviceLanguage;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseMaybeFunction;
 import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
 import static io.reactivex.Completable.complete;
@@ -163,9 +164,8 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     {
         Timber.d("getUserComuByUserAndComu()");
         return Maybe.just(comunidadId)
-                .flatMap(comunidadIdIn ->
-                        getUserComuByUserAndComu(tkCacher.doAuthHeaderStr(), comunidadIdIn).map(httpInitializer.get()::getResponseBody))
-                .doOnError(uiExceptionConsumer);
+                .flatMap(comunidadIdIn -> getUserComuByUserAndComu(tkCacher.doAuthHeaderStr(), comunidadIdIn))
+                .flatMap(getResponseMaybeFunction());
     }
 
     public Single<Boolean> isOldestOrAdmonUserComu(long comunidadId)

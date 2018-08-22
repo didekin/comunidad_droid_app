@@ -83,15 +83,16 @@ public class IncidResolucionRegFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
-        controller = new CtrlerIncidenciaCore();
     }
 
     @Override
     public void onStop()
     {
-        Timber.d("onStop()");
+        Timber.d("onDestroy()");
+        if (controller != null) {
+            controller.clearSubscriptions();
+        }
         super.onStop();
-        controller.clearSubscriptions();
     }
 
     //  ================================ HELPER METHODS =======================================
@@ -107,11 +108,13 @@ public class IncidResolucionRegFr extends Fragment {
             makeToast(getActivity(), errorMsg.toString());
         } else {
             if (checkInternetConnected(getActivity())) {
+                controller = new CtrlerIncidenciaCore();
                 controller.regResolucion(
                         new DisposableSingleObserver<Integer>() {
                             @Override
-                            public void onSuccess(Integer integer)
+                            public void onSuccess(Integer updatedRows)
                             {
+                                Timber.d("onSuccess(), updatedRows: %d", updatedRows);
                                 routerInitializer.get().getContextRouter()
                                         .getActionFromContextNm(new_incid_resolucion_just_registered)
                                         .initActivity(
@@ -124,6 +127,7 @@ public class IncidResolucionRegFr extends Fragment {
                             @Override
                             public void onError(Throwable e)
                             {
+                                Timber.d(e);
                                 routerInitializer.get().getExceptionRouter()
                                         .getActionFromMsg(getUiExceptionFromThrowable(e).getErrorHtppMsg())
                                         .initActivity(getActivity());

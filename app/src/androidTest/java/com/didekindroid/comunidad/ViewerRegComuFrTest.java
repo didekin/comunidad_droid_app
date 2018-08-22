@@ -95,26 +95,23 @@ public class ViewerRegComuFrTest {
     //    =============================================================================================
 
     @Test
-    public void test_NewViewerRegComuFr()
+    public void test_DoViewInViewer()
     {
+        // test_NewViewerRegComuFr
         assertThat(CtrlerComunidad.class.cast(fragment.viewer.getController()), notNullValue());
         assertThat(fragment.viewer.tipoViaSpinner, notNullValue());
         assertThat(fragment.viewer.comuAutonomaSpinner, notNullValue());
         assertThat(fragment.viewer.provinciaSpinner, notNullValue());
         assertThat(fragment.viewer.municipioSpinner, notNullValue());
-    }
 
-    @Test
-    public void test_DoViewInViewer()
-    {
         // Case: ComuDataAc instance; viewBean != null.
         onView(withId(regComuFrLayout)).check(matches(isDisplayed()));
         checkRegComuFrView(comunidad, "Galicia");
-    }
 
-    @Test
-    public void test_ClearSubscriptions()
-    {
+        // test_OnActivityCreated
+        assertThat(fragment.viewerInjector.getInjectedParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
+
+        // test_ClearSubscriptions()
         checkSubscriptionsOnStop(activity, fragment.viewer.tipoViaSpinner.getController(),
                 fragment.viewer.comuAutonomaSpinner.getController(),
                 fragment.viewer.provinciaSpinner.getController(),
@@ -140,6 +137,9 @@ public class ViewerRegComuFrTest {
         final MunicipioSpinnerEventItemSelect spinnerEventItem = MunicipioSpinnerEventItemSelect.class.cast(bundle.getSerializable(MUNICIPIO_SPINNER_EVENT.key));
         assertThat(spinnerEventItem.getSpinnerItemIdSelect(), is(23L));
         assertThat(spinnerEventItem.getMunicipio().getProvincia().getProvinciaId(), is((short) 34));
+
+        // test_OnStop
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
     @Test
@@ -200,20 +200,5 @@ public class ViewerRegComuFrTest {
         final StringBuilder errors = new StringBuilder(activity.getText(R.string.error_validation_msg));
         assertThat(fragment.viewer.getComunidadFromViewer(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getText(R.string.tipo_via).toString()));
-    }
-
-    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnActivityCreated()
-    {
-        waitAtMost(2, SECONDS).until(() -> fragment.viewerInjector != null);
-        assertThat(fragment.viewerInjector.getInjectedParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
-    }
-
-    @Test
-    public void test_OnStop()
-    {
-        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 }

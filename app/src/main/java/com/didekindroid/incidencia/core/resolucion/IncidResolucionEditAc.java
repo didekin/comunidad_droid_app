@@ -16,6 +16,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incidencia_fecha_cierre_null;
 import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incidencia_should_be_initialized;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
@@ -68,9 +69,10 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
         incidencia = getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key) ?
                 ((Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key)).getIncidencia() :
                 incidImportancia.getIncidencia();
+        assertTrue(incidencia.getFechaCierre() == null, incidencia_fecha_cierre_null);
 
         if (resolucion != null) {
-            if (hasAdmRole && incidencia.getFechaCierre() == null) {
+            if (hasAdmRole) {
                 initFragmentTx(IncidResolucionEditFr.newInstance(incidImportancia, resolucion));
             } else {
                 initFragmentTx(IncidResolucionSeeFr.newInstance(incidencia, resolucion));

@@ -36,6 +36,17 @@ public class CtrlerIncidenciaCore extends Controller implements CtrlerListIf<Imp
 
     // .................................... INSTANCE METHODS .................................
 
+    public boolean closeIncidencia(DisposableSingleObserver<Integer> observer, Resolucion resolucion)
+    {
+        Timber.d("closeIncidencia()");
+        return getSubscriptions().add(
+                incidDaoRemote.closeIncidencia(resolucion)
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribeWith(observer)
+        );
+    }
+
     public boolean eraseIncidencia(DisposableSingleObserver<Integer> observer, Incidencia incidencia)
     {
         Timber.d("eraseIncidencia()");
@@ -73,6 +84,17 @@ public class CtrlerIncidenciaCore extends Controller implements CtrlerListIf<Imp
         Timber.d("modifyIncidImportancia()");
         return getSubscriptions().add(
                 incidDaoRemote.modifyIncidImportancia(newIncidImportancia)
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribeWith(observer)
+        );
+    }
+
+    public boolean modifyResolucion(DisposableSingleObserver<Integer> observer, Resolucion resolucion)
+    {
+        Timber.d("modifyResolucion()");
+        return getSubscriptions().add(
+                incidDaoRemote.modifyResolucion(resolucion)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)

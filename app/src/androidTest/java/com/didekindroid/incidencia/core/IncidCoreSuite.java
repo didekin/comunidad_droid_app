@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.core;
 
-import com.didekindroid.incidencia.core.edit.IncidCloseAc_GCM_Test;
 import com.didekindroid.incidencia.core.edit.IncidEditAcMaxTest;
 import com.didekindroid.incidencia.core.edit.IncidEditAc_Mn1_Test;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditAcTest;
@@ -8,10 +7,8 @@ import com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFrTest;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFrTest;
 import com.didekindroid.incidencia.core.edit.importancia.ViewerIncidSeeUserComuImportanciaTest;
 import com.didekindroid.incidencia.core.reg.IncidRegAcTest;
-import com.didekindroid.incidencia.core.reg.IncidRegAc_GCM_Test;
 import com.didekindroid.incidencia.core.reg.ViewerIncidRegAcTest;
 import com.didekindroid.incidencia.core.reg.ViewerIncidRegFrTest;
-import com.didekindroid.incidencia.core.resolucion.IncidRegResolucion_GCM_Test;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditAcTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionEditFrTest;
 import com.didekindroid.incidencia.core.resolucion.IncidResolucionRegAcTest;
@@ -27,8 +24,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // core.edit
-        IncidCloseAc_GCM_Test.class,
+        /* core.edit*/
         IncidEditAc_Mn1_Test.class,
         IncidEditAcMaxTest.class,
         ViewerIncidEditAcTest.class,
@@ -37,18 +33,17 @@ import org.junit.runners.Suite;
         // core.edit.importancia
         ViewerIncidSeeUserComuImportanciaTest.class,
         // core.reg
-        IncidRegAc_GCM_Test.class,
         IncidRegAcTest.class,
         ViewerIncidRegAcTest.class,
         ViewerIncidRegFrTest.class,
         // core.resolucion
-        IncidRegResolucion_GCM_Test.class,
         IncidResolucionEditAcTest.class,
         IncidResolucionEditFrTest.class,
         IncidResolucionRegAcTest.class,
         IncidResolucionSeeFr_Test.class,
-        // core
+        /* core*/
         CtrlerIncidenciaCoreTest.class,
+        Incid_Firebase_Notif_Test.class,
         IncidImportanciaBeanTest.class,
         ViewerImportanciaSpinnerTest.class,
 })

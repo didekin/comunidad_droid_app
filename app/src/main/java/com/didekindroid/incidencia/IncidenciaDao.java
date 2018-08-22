@@ -25,6 +25,7 @@ import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static com.didekindroid.lib_one.api.exception.UiExceptionIf.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseMaybeFunction;
 import static io.reactivex.Single.just;
 
 /**
@@ -121,6 +122,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     @Override
     public Maybe<Response<Resolucion>> seeResolucion(String authHeader, long incidenciaId)
     {
+        Timber.d("seeResolucion(), authHeader = %s, incidenciaId = %d", authHeader, incidenciaId);
         return endPoint.seeResolucion(authHeader, incidenciaId);
     }
 
@@ -244,22 +246,17 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeResolucionRaw()");
         return Maybe.just(incidenciaId)
                 .flatMap(incidenciaIdIn -> seeResolucion(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
-                .map(httpInitializer.get()::getResponseBody)
-                .doOnError(uiExceptionConsumer);
+                .flatMap(getResponseMaybeFunction());
     }
 
     /**
-     *  A variant for closed incidencias, which must always had a resolucion.
+     * A variant for closed incidencias, which must always had a resolucion.
      */
     public Single<Bundle> seeResolucionInBundle(long incidenciaId)
     {
         Timber.d("seeResolucionInBundle()");
         return seeResolucionRaw(incidenciaId)
-                .map(resolucionIn -> {
-                    Bundle bundle = new Bundle(1);
-                    bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucionIn);
-                    return bundle;
-                })
+                .map(INCID_RESOLUCION_OBJECT::getBundleForKey)
                 .toSingle();
     }
 

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -43,6 +44,7 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidTestData.AVANCE_DEFAULT_DES;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionAdvances;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
@@ -55,9 +57,11 @@ import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
 import static com.didekindroid.router.DidekinUiExceptionAction.show_incid_open_list;
 import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -119,7 +123,7 @@ public class IncidResolucionEditFrTest {
         Avance avance = resolucion.getAvances().get(0);
         onData(is(avance)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
         onView(allOf(
-                withText("avance1_desc"),
+                withText(AVANCE_DEFAULT_DES),
                 withId(R.id.incid_avance_desc_view)
         )).check(matches(isDisplayed()));
         onView(allOf(
@@ -149,34 +153,20 @@ public class IncidResolucionEditFrTest {
                 withText(R.string.incid_resolucion_no_avances_message)
         )).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
-            checkUp(incidSeeByComuAcLayout);
-        }
+        // Check OnStop.
+        IncidResolucionEditFr fr = (IncidResolucionEditFr) activity.getSupportFragmentManager().findFragmentByTag(IncidResolucionEditFr.class.getName());
+        fr.controller = new CtrlerIncidenciaCore();
+        checkSubscriptionsOnStop(activity, fr.controller);
     }
 
     @Test
     public void testOnEdit_1()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAdvances(incidImportancia)));
-        /* Caso OK: añadimos un avance con descripción Ok .*/
-        onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance2_desc_válida"));
-        onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-        // Verificamos pantalla de llegada.
-        checKIncidAcLayout();
-
-        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
-            checkUp(incidSeeByComuAcLayout);
-        }
-    }
-
-    @Test
-    public void testOnEdit_2()
-    {
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Caso OK: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checKIncidAcLayout();
-        assertThat(incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()), is(resolucion));
+        assertThat(incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet(), is(resolucion));
         // BACK.
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkBack(onView(withId(incidEditAcLayout)), incidResolucionEditFrLayout);
@@ -184,7 +174,7 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnEdit_3()
+    public void testOnEdit_2()
     {
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         /* Caso OK: cambiamos la fecha prevista, añadimos un avance con descripción Ok y cambiamos coste (admite importes negativos).*/
@@ -204,10 +194,14 @@ public class IncidResolucionEditFrTest {
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         // Check.
         checKIncidAcLayout();
+
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
+        }
     }
 
     @Test
-    public void testOnEdit_4()
+    public void testOnEdit_3()
     {
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Caso NO OK: descripción de avance errónea.
@@ -236,8 +230,8 @@ public class IncidResolucionEditFrTest {
 
     private void checKIncidAcLayout()
     {
-        onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
-        onView(withId(incideEditMaxPowerFrLayout)).check(matches(isDisplayed()));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incideEditMaxPowerFrLayout)));
     }
 
     @NonNull

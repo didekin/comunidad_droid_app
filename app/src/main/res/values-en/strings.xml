@@ -103,11 +103,12 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_to_show">No incidents to show</string>
     <string name="incidencia_not_registered">Try again to record the incident.</string>
-    <string name="incidencia_wrong_init">Verify that the incident is still open.
-    </string>
+    <string name="incidencia_wrong_init">Verify that the incident is still open.</string>
     <string name="resolucion_duplicada">Resolution for this incident already exists.</string>
     <string name="user_without_powers">Sign in and access again to the incident.</string>
     <!-- ====================== Google Cloud Messages ====================== -->
+    <string name="incid_id_notification_channel">INCIDENTS</string>
+    <string name="incid_desc_notification_channel">Dídekin: community incidents.</string>
     <string name="incid_gcm_nueva_incidencia_body">New incident in your community.</string>
     <string name="incid_gcm_incidencia_closed_body">Incident resolved in your community.</string>
     <string name="incid_gcm_resolucion_open_body">Incident in your community in process of resolution.</string>

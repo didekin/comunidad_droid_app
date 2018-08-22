@@ -117,6 +117,10 @@ public class IncidCommentRegAcTest {
                 withId(R.id.incid_reg_desc_txt),
                 withText(incidJuanReal1.getIncidencia().getDescripcion())
         )).check(matches(isDisplayed()));
+
+        // Check OnStop.
+        activity.controller = new CtrlerIncidComment();
+        checkSubscriptionsOnStop(activity, activity.controller);
     }
 
     @Test
@@ -143,14 +147,5 @@ public class IncidCommentRegAcTest {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }
-    }
-
-    @Test
-    public void test_OnStop()
-    {
-        // Check OnStop.
-        activity.controller = new CtrlerIncidComment();
-        checkSubscriptionsOnStop(activity, activity.controller);
-
     }
 }

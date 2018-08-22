@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
@@ -38,10 +37,13 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncid
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
+import static com.didekindroid.lib_one.util.UiUtil.getMilliSecondsFromCalendarAdd;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static java.util.Calendar.SECOND;
 import static java.util.Calendar.getInstance;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -82,6 +84,8 @@ public class IncidenciaDaoTest {
                 .build();
 
         assertThat(incidenciaDao.closeIncidencia(resolucion).blockingGet(), is(2)); // Accede a 2 tablas.
+        int returned =  incidenciaDao.closeIncidencia(resolucion).blockingGet();
+        assertThat(returned, is(0));
     }
 
     @Test
@@ -153,12 +157,14 @@ public class IncidenciaDaoTest {
     }
 
     @Test
-    public void testRegResolucion() throws InterruptedException
+    public void testRegResolucion()
     {
         // Caso OK.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 2).getIncidencia();
-        Thread.sleep(1000);
-        Resolucion resolucion = doResolucion(incidencia, "resol_desc", 1000, new Timestamp(new Date().getTime()));
+        Resolucion resolucion = doResolucion(
+                incidencia, "resol_desc", 1000,
+                new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 30))
+        );
         assertThat(incidenciaDao.regResolucion(resolucion).blockingGet(), is(1));
     }
 
@@ -228,6 +234,14 @@ public class IncidenciaDaoTest {
         // Caso OK.
         Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu); // Implicitly tested calling this utilities method.
         assertThat(resolucion.getFechaPrev().getTime() > getInstance().getTimeInMillis(), is(true));
+    }
+
+    @Test
+    public void testSeeResolucionRaw_empty()
+    {
+        // Caso OK.
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
+        assertThat(incidenciaDao.seeResolucionRaw(incidencia.getIncidenciaId()).blockingGet(), nullValue());
     }
 
     @Test

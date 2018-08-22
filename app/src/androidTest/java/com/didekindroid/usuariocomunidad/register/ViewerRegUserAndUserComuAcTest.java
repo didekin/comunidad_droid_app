@@ -18,8 +18,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -35,6 +33,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkTextsInDialog;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
@@ -44,6 +43,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -81,6 +81,8 @@ public class ViewerRegUserAndUserComuAcTest {
             try {
                 cleanOptions(CLEAN_TK_HANDLER);
                 comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+                cleanWithTkhandler();
+                getInstance().deleteInstanceId();
             } catch (Exception e) {
                 fail();
             }
@@ -92,9 +94,7 @@ public class ViewerRegUserAndUserComuAcTest {
     public void setUp() throws Exception
     {
         activity = intentRule.getActivity();
-        AtomicReference<ViewerRegUserAndUserComuAc> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
+        waitAtMost(4, SECONDS).until(() -> activity.viewer != null);
     }
 
     @After
@@ -107,24 +107,21 @@ public class ViewerRegUserAndUserComuAcTest {
     }
 
     @Test
-    public void test_NewViewerRegUserAndUserComuAc()
+    public void test_OnRegisterSuccess()
     {
+        // test_NewViewerRegUserAndUserComuAc
         assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
-    }
-
-    @Test
-    public void test_DoViewInViewer()
-    {
+        // test_DoViewInViewer.
         onView(allOf(
                 withId(R.id.descripcion_comunidad_text),
                 withText(comunidad.getNombreComunidad())
         )).check(matches(isDisplayed()));
         onView(withId(R.id.reg_user_plus_button)).perform(scrollTo()).check(matches(isDisplayed()));
-    }
+        // test_OnCreate: Check for initialization of fragments viewers.
+        ParentViewerIf viewerParent = activity.viewer;
+        assertThat(viewerParent.getChildViewer(ViewerRegUserFr.class), notNullValue());
+        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
 
-    @Test
-    public void test_OnRegisterSuccess()
-    {
         /* Precondition: the user is registered and the cache is NOT initialized.*/
         requireNonNull(activity.viewer.getController()).updateIsRegistered(true);
         // Exec.
@@ -154,15 +151,6 @@ public class ViewerRegUserAndUserComuAcTest {
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnCreate()
-    {
-        // Check for initialization of fragments viewers.
-        ParentViewerIf viewerParent = activity.viewer;
-        assertThat(viewerParent.getChildViewer(ViewerRegUserFr.class), notNullValue());
-        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
-    }
 
     @Test
     public void test_OnStop()

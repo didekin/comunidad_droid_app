@@ -120,17 +120,14 @@ public class ViewerIncidEditMaxFrTest {
     //    ============================  TESTS  ===================================
 
     @Test
-    public void testNewViewerIncidEditMaxFr()
+    public void testDoViewInViewer_1()
     {
+        // testNewViewerIncidEditMaxFr
         assertThat(viewer.getController(), instanceOf(CtrlerIncidenciaCore.class));
         assertThat(viewer.getParentViewer(), is(activity.getInjectedParentViewer()));
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
-    }
 
-    @Test
-    public void testDoViewInViewer_1()
-    {
         // Preconditions.
         assertThat(viewer.hasResolucion.get(), is(false));
 
@@ -141,6 +138,20 @@ public class ViewerIncidEditMaxFrTest {
 
         checkScreenEditMaxPowerFrErase(resolBundle);
         checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);
+
+        // testSaveState
+        Bundle bundleTest = new Bundle();
+        viewer.viewerAmbitoIncidSpinner.setSelectedItemId(11);
+        viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
+        viewer.saveState(bundleTest);
+
+        assertThat(bundleTest.getLong(AMBITO_INCIDENCIA_POSITION.key), is(11L));
+        assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));
+
+        // testClearSubscriptions
+        checkSubscriptionsOnStop(activity, viewer.viewerAmbitoIncidSpinner.getController(),
+                viewer.getController());
+
     }
 
     @Test
@@ -231,30 +242,6 @@ public class ViewerIncidEditMaxFrTest {
         assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("initiator_name", PROPIETARIO.function)), is(false));
         assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("adm_name", ADMINISTRADOR.function)), is(false));
 
-    }
-
-    @Test
-    public void testSaveState()
-    {
-        Bundle bundleTest = new Bundle();
-        viewer.viewerAmbitoIncidSpinner.setSelectedItemId(11);
-        viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
-        viewer.saveState(bundleTest);
-
-        assertThat(bundleTest.getLong(AMBITO_INCIDENCIA_POSITION.key), is(11L));
-        assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));
-    }
-
-    //    ============================  LIFE CYCLE TESTS  ===================================
-
-    /* We check that all the viewers' controllers are invoked, as the result of invoking the method viewer.clearSubscriptions.
-     * It serves also as a test on the activity's onStop() method. */
-    @Test
-    public void testClearSubscriptions()
-    {
-        checkSubscriptionsOnStop(activity, viewer.viewerAmbitoIncidSpinner.getController(),
-                viewer.viewerImportanciaSpinner.getController(),
-                viewer.getController());
     }
 
     //    ............................... HELPERS .................................

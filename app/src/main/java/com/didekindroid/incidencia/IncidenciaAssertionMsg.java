@@ -9,14 +9,11 @@ package com.didekindroid.incidencia;
 public final class IncidenciaAssertionMsg {
 
 
-    public static final String comment_should_be_registered = "Incidencia comment should be registered";
     public static final String incidencia_should_be_initialized = "Incidencia ID should be initialized";
-    public static final String incidencia_should_be_cancelled = "Incidencia should be cancelled";
+    public static final String incidencia_fecha_cierre_null = "Incidencia should be open";
     public static final String incid_importancia_should_be_initialized = "IncidenciaImportancia should be initialized";
     public static final String incid_listFlag_should_be_initialized = "Flag for type of incidencias in list should be initialized";
     public static final String resolucion_should_be_initialized = "Resolucion should be initialized";
-    public static final String resolucion_should_be_registered = "Resolucion should be registered";
-    public static final String resolucion_should_be_modified = "Resolucion should be modified";
     public static final String resolucion_fechaPrev_should_be_initialized = "FechaPrevista Resolucion should be initialized";
 
     private IncidenciaAssertionMsg()

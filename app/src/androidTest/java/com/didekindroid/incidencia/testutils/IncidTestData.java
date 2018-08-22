@@ -31,12 +31,15 @@ import static org.junit.Assert.assertThat;
  */
 public final class IncidTestData {
 
-    public static final String INCID_DEFAULT_DESC = "Incidencia_1";
+    public static final String INCID_DEFAULT_DESC = "Default_incidencia_desc";
     public static final String RESOLUCION_DEFAULT_DESC = "Resolucion_1";
-    public static final String AVANCE_DEFAULT_DES = "Avance_1";
+    public static final String AVANCE_DEFAULT_DES = "avance1_desc";
     public static final int COSTE_ESTIM_DEFAULT = 1122;
     static final String COSTE_ESTIM_DEFAULT_String = getStringFromInteger(COSTE_ESTIM_DEFAULT);
+    private static final String USER_NAME_DEFAULT = "default_username";
+    private static final long COMUNIDAD_ID_DEFAULT = 987L;
     private static final short importancia_default = (short) 3;
+    private static final short ambito_incidencia_default = (short) 33;
 
     private IncidTestData()
     {
@@ -114,7 +117,7 @@ public final class IncidTestData {
         // Registramos resolución.
         Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
         // Modificamos con avances.
-        Avance avance = new Avance.AvanceBuilder().avanceDesc("avance1_desc").build();
+        Avance avance = new Avance.AvanceBuilder().avanceDesc(AVANCE_DEFAULT_DES).build();
         List<Avance> avances = new ArrayList<>(1);
         avances.add(avance);
         resolucion = new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia())
@@ -150,7 +153,7 @@ public final class IncidTestData {
                 .build();
     }
 
-    public static Incidencia doIncidencia(String userName, String descripcion, long comunidadId, long indidenciaId,short ambitoId)
+    public static Incidencia doIncidencia(String userName, String descripcion, long comunidadId, long indidenciaId, short ambitoId)
     {
         // Precondition: incidencia in DB.
         return new Incidencia.IncidenciaBuilder()
@@ -177,12 +180,15 @@ public final class IncidTestData {
 
     public static List<IncidenciaUser> doIncidenciaUsers(IncidImportancia incidImportancia)
     {
+        return doIncidenciaUsers(incidImportancia.getIncidencia().getFechaCierre(), incidImportancia.getIncidencia().getFechaAlta());
+    }
+
+    public static List<IncidenciaUser> doIncidenciaUsers(Timestamp fechaCierreIncidencia, Timestamp fechaAltaIncidencia)
+    {
         final List<IncidenciaUser> list = new ArrayList<>(3);
-        Timestamp resolucionDate = incidImportancia.getIncidencia().getFechaCierre();
-        Timestamp altaIncidDate = incidImportancia.getIncidencia().getFechaAlta();
-        IncidenciaUser iu_1 = doSimpleIncidenciaUser(33L, altaIncidDate, 34L, resolucionDate);
-        IncidenciaUser iu_2 = doSimpleIncidenciaUser(11L, altaIncidDate, 14L, resolucionDate);
-        IncidenciaUser iu_3 = doSimpleIncidenciaUser(22L, altaIncidDate, 24L, resolucionDate);
+        IncidenciaUser iu_1 = doSimpleIncidenciaUser(33L, fechaAltaIncidencia, 34L, fechaCierreIncidencia);
+        IncidenciaUser iu_2 = doSimpleIncidenciaUser(11L, fechaAltaIncidencia, 14L, fechaCierreIncidencia);
+        IncidenciaUser iu_3 = doSimpleIncidenciaUser(22L, fechaAltaIncidencia, 24L, fechaCierreIncidencia);
         list.add(iu_1);
         list.add(iu_2);
         list.add(iu_3);
@@ -229,10 +235,10 @@ public final class IncidTestData {
     {
         return new Incidencia.IncidenciaBuilder()
                 .incidenciaId(incidenciaId)
-                .comunidad(new Comunidad.ComunidadBuilder().c_id(987L).build())
-                .descripcion("Simple description")
-                .userName("simpleUser")
-                .ambitoIncid(new AmbitoIncidencia((short) 33))
+                .comunidad(new Comunidad.ComunidadBuilder().c_id(COMUNIDAD_ID_DEFAULT).build())
+                .descripcion(INCID_DEFAULT_DESC)
+                .userName(USER_NAME_DEFAULT)
+                .ambitoIncid(new AmbitoIncidencia(ambito_incidencia_default))
                 .fechaAlta(altaDate)
                 .fechaCierre(resolucionDate)
                 .build();

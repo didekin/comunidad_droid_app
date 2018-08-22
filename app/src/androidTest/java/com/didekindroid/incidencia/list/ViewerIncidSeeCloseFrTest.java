@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.list;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -9,8 +8,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.incidencia.IncidBundleKey;
-import com.didekindroid.lib_one.api.CtrlerSelectListIf;
-import com.didekindroid.lib_one.api.ViewerSelectListIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -22,7 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -123,17 +119,14 @@ public class ViewerIncidSeeCloseFrTest {
     //    ============================ TESTS  ===================================
 
     @Test
-    public void testNewViewerIncidSeeClose()
+    public void testDoViewInViewer()
     {
+        // testNewViewerIncidSeeClose
         assertThat(fragment.viewer.getController(), allOf(notNullValue(), instanceOf(CtrlerIncidSeeCloseByComu.class)));
         assertThat(fragment.viewer.comuSpinnerViewer, notNullValue());
         assertThat(fragment.viewer.getViewInViewer(), instanceOf(ListView.class));
         assertThat(fragment.viewer.getViewInViewer().getEmptyView(), instanceOf(TextView.class));
-    }
 
-    @Test
-    public void testDoViewInViewer()
-    {
         // itemSelectedId with default value.
         assertThat(fragment.viewer.getSelectedItemId(), is(0L));
         // When itemSelectedId == 0, no checkedItem.
@@ -141,6 +134,19 @@ public class ViewerIncidSeeCloseFrTest {
         assertThat(fragment.viewer.getViewInViewer().getOnItemClickListener(), instanceOf(ViewerIncidSeeCloseFr.ListItemOnClickListener.class));
         // Comunidad spinner. ***** Here is tested the visual display of the data *****.
         waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
+
+        // testSaveState
+        Bundle bundle = new Bundle(2);
+        fragment.viewer.comuSpinnerViewer.setSelectedItemId(7L);
+        fragment.viewer.setSelectedItemId(5L);
+
+        fragment.viewer.saveState(bundle);
+        assertThat(bundle.getLong(INCIDENCIA_ID_LIST_SELECTED.key), is(5L));
+        assertThat(bundle.getLong(COMUNIDAD_ID.key), is(7L));
+
+        // testClearSubscriptions
+        checkSubscriptionsOnStop(activity, fragment.viewer.comuSpinnerViewer.getController(),
+                fragment.viewer.getController());
     }
 
     @Test
@@ -155,12 +161,6 @@ public class ViewerIncidSeeCloseFrTest {
         savedState = new Bundle(0);
         fragment.viewer.initSelectedItemId(savedState);
         assertThat(fragment.viewer.getSelectedItemId(), is(0L));
-    }
-
-    @Test
-    public void test_OnSuccessLoadItems()
-    {
-        checkOnSuccessLoadItems(incidImportancia1, activity, fragment.viewer);
     }
 
     @Test
@@ -197,65 +197,5 @@ public class ViewerIncidSeeCloseFrTest {
                 .perform(click());
         assertThat(fragment.viewer.getSelectedItemId(), is(incidImportancia1.getIncidencia().getIncidenciaId()));
         waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
-    }
-
-    //    ============================ LIFE CYCLE TESTS  ===================================
-
-    @Test
-    public void testClearSubscriptions()
-    {
-        checkSubscriptionsOnStop(activity, fragment.viewer.comuSpinnerViewer.getController(),
-                fragment.viewer.getController());
-    }
-
-    @Test
-    public void testSaveState()
-    {
-        Bundle bundle = new Bundle(2);
-        fragment.viewer.comuSpinnerViewer.setSelectedItemId(7L);
-        fragment.viewer.setSelectedItemId(5L);
-
-        fragment.viewer.saveState(bundle);
-        assertThat(bundle.getLong(INCIDENCIA_ID_LIST_SELECTED.key), is(5L));
-        assertThat(bundle.getLong(COMUNIDAD_ID.key), is(7L));
-    }
-
-    //    ============================  STATIC UTILITIES  ===================================
-
-    public static void checkOnSuccessLoadItems(IncidImportancia incidImportancia, Activity activity,
-                                               final ViewerSelectListIf<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser> viewer)
-    {
-        final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia);
-
-        activity.runOnUiThread(() -> {
-            viewer.setSelectedItemId(22L);
-            viewer.onSuccessLoadItemList(list);
-            assertThat(viewer.getViewInViewer().getHeaderViewsCount(), is(1));
-            // ListView.getCount() and Adapter.getCount() take into account header views.
-            assertThat(viewer.getViewInViewer().getCount(), is(4));
-            assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(4));
-            assertThat(viewer.getViewInViewer().getCheckedItemPosition(), is(3));
-            assertThat(viewer.getViewInViewer().getItemAtPosition(viewer.getViewInViewer().getCheckedItemPosition()),
-                    allOf(notNullValue(), instanceOf(IncidenciaUser.class)));
-
-        });
-
-        activity.runOnUiThread(() -> {
-            viewer.setSelectedItemId(0L);
-            viewer.onSuccessLoadItemList(list);
-            // When itemSelectedId == 0, no checkedItem.
-            assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
-
-        });
-
-        final List<IncidenciaUser> listEmpty = new ArrayList<>(0);
-        activity.runOnUiThread(() -> {
-            viewer.setSelectedItemId(22L);
-            viewer.onSuccessLoadItemList(listEmpty);
-            // No se cumple la condición view.getCount() > view.getHeaderViewsCount(): no se llama  view.setItemChecked().
-            assertThat(viewer.getViewInViewer().getCount() <= viewer.getViewInViewer().getHeaderViewsCount(), is(true));
-            // When list is empty, no checkedItem.
-            assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
-        });
     }
 }

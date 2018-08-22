@@ -123,7 +123,7 @@ public class ViewerIncidSeeCloseFr extends
     @Override
     public Function<IncidenciaUser, Long> getBeanIdFunction()
     {
-        return incidenciaUser -> incidenciaUser.getIncidencia().getIncidenciaId();
+        return incidenciaUser ->  incidenciaUser != null ? incidenciaUser.getIncidencia().getIncidenciaId() : 0L;
     }
 
     /**

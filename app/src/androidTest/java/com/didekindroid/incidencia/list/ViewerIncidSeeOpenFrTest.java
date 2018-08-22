@@ -22,7 +22,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
-import static com.didekindroid.incidencia.list.ViewerIncidSeeCloseFrTest.checkOnSuccessLoadItems;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
@@ -105,11 +104,8 @@ public class ViewerIncidSeeOpenFrTest {
                 notNullValue(), instanceOf(CtrlerIncidSeeOpenByComu.class)
         ));
         assertThat(fragment.viewer.getComuSpinner(), notNullValue());
-    }
 
-    @Test
-    public void testClearSubscriptions()
-    {
+        // testClearSubscriptions
         checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
@@ -122,11 +118,5 @@ public class ViewerIncidSeeOpenFrTest {
                 INCID_RESOLUCION_BUNDLE.getBundleForKey(new IncidAndResolBundle(incidImportancia, resolucion != null))
         );
         onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test_OnSuccessLoadItems()
-    {
-        checkOnSuccessLoadItems(incidImportancia, activity, fragment.viewer);
     }
 }

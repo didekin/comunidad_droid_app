@@ -17,6 +17,7 @@ import org.junit.runners.Suite;
         IncidSeeByComuAc_Open_Mn_Test.class,
         IncidSeeByComuAc_Open_Test.class,
         ViewerIncidSeeCloseFrTest.class,
+        ViewerIncidSeeFr_Test.class,
         ViewerIncidSeeOpenFrTest.class,
 })
 public class IncidListSuite {

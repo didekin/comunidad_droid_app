@@ -133,8 +133,7 @@ public class ViewerIncidRegFrTest {
     {
         checkSubscriptionsOnStop(activity, viewer.getController(),
                 viewer.viewerAmbitoIncidSpinner.getController(),
-                viewer.viewerComuSpinner.getController(),
-                viewer.viewerImportanciaSpinner.getController());
+                viewer.viewerComuSpinner.getController());
     }
 
     @Test

@@ -1,11 +1,13 @@
 package com.didekindroid.incidencia.firebase;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -17,6 +19,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
@@ -27,7 +30,10 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.graphics.BitmapFactory.decodeResource;
 import static android.media.RingtoneManager.TYPE_NOTIFICATION;
 import static android.media.RingtoneManager.getDefaultUri;
+import static android.os.Build.VERSION.SDK_INT;
 import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
+import static android.support.v4.app.NotificationCompat.VISIBILITY_PRIVATE;
+import static android.support.v4.app.TaskStackBuilder.create;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
@@ -36,6 +42,7 @@ import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidenci
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static java.lang.Long.parseLong;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -114,7 +121,8 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
 
     // ======================= STATIC MEMBERS =========================
 
-    private static final String incid_notification_channel = "IncidenciaNotificationChannel";
+    private static final String INCID_ID_NOTIF_CHANNEL = "IncidenciaNotificationChannel";
+    private static final AtomicBoolean isNotifChannelSet = new AtomicBoolean(false);
 
     private static final Map<String, IncidDownStreamMsgHandler> typeToHandler = new HashMap<>();
 
@@ -126,19 +134,15 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
 
     private static FirebaseDownstreamMsgHandler getHandlerFromType(String handlerType)
     {
+        Timber.d("getHandlerFromType: %s", handlerType);
         return typeToHandler.get(handlerType);
     }
 
-    public static void processMsgWithHandler(RemoteMessage message, Context context)
-    {
-        getHandlerFromType(message.getData().get(type_message_key)).processMessage(message, context);
-    }
-
-    /* ===================== PUBLIC INSTANCE METHODS ==================*/
-
     static TaskStackBuilder doCommonStackBuilder(Context context, Intent firsOutIntent, Intent... lastOutIntents)
     {
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        Timber.d("doCommonStackBuilder()");
+
+        TaskStackBuilder stackBuilder = create(context);
         for (Intent intent : lastOutIntents) {
             // Remark: add intent without parentStack.
             stackBuilder.addNextIntent(intent);
@@ -148,21 +152,48 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
         return stackBuilder;
     }
 
+    /**
+     * Entry point to process an inbound message.
+     */
+    public static void processMsgWithHandler(RemoteMessage message, Context context)
+    {
+        Timber.d("processMsgWithHandler()");
+        isNotifChannelSet.compareAndSet(false, doNotificationChannel(context));
+        getHandlerFromType(message.getData().get(type_message_key)).processMessage(message, context);
+    }
+
+    private static boolean doNotificationChannel(Context context)
+    {
+        Timber.d("getNotificationChannel()");
+
+        if (SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    INCID_ID_NOTIF_CHANNEL,
+                    context.getString(R.string.incid_id_notification_channel),
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(context.getString(R.string.incid_desc_notification_channel));
+            requireNonNull(context.getSystemService(NotificationManager.class)).createNotificationChannel(channel);
+            return NotificationManager.class.cast(context.getSystemService(NOTIFICATION_SERVICE)).getNotificationChannel(INCID_ID_NOTIF_CHANNEL) != null;
+        }
+        return true;
+    }
+
+    /* ===================== PUBLIC INSTANCE METHODS ==================*/
+
     @Override
     public void processMessage(RemoteMessage message, Context context)
     {
         Timber.d("processMessage()");
+
         Map<String, String> data = message.getData();
         PendingIntent resultPendingIntent = doStackBuilder(context, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
-        NotificationManager mManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        if (mManager != null) {
-            mManager.notify(getBarNotificationId(), doNotification(context, resultPendingIntent));
+        NotificationManager notifManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        if (notifManager != null) {
+            notifManager.notify(getBarNotificationId(), doNotification(context, resultPendingIntent));
         }
 
-        Timber.d("onMessageReceived(), notification sent with ID: %d%n", getBarNotificationId());
+        Timber.d("processMessage(), notification sent with ID: %d%n", getBarNotificationId());
     }
-
-    /* ===================== PACKAGE PRIVATE INSTANCE METHODS ==================*/
 
     /**
      * We use as NotificationId the id for the resource string used as message, in the notification.
@@ -170,8 +201,11 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
     @Override
     public int getBarNotificationId()
     {
+        Timber.d("getBarNotificationId()");
         return getContentTextRsc();
     }
+
+    /* ===================== PACKAGE PRIVATE INSTANCE METHODS ==================*/
 
     abstract TaskStackBuilder doStackBuilder(Context context, Map<String, String> data);
 
@@ -184,12 +218,12 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
         return R.string.gcm_message_generic_subtext;
     }
 
-    /* ===================== STATIC HELPER METHODS ==================*/
-
     Notification doNotification(Context context, PendingIntent resultPendingIntent)
     {
+        Timber.d("doNotification()");
+
         Resources resources = context.getResources();
-        return new NotificationCompat.Builder(context, incid_notification_channel)
+        return new NotificationCompat.Builder(context, INCID_ID_NOTIF_CHANNEL)
                 .setSmallIcon(R.drawable.ic_info_outline_white_36dp)
                 .setLargeIcon(decodeResource(resources, R.drawable.ic_launcher))
                 .setSound(getDefaultUri(TYPE_NOTIFICATION))
@@ -199,7 +233,7 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
                 .setSubText(resources.getString(getSubTextRsc()))
                 .setContentIntent(resultPendingIntent)
                 .setAutoCancel(true)
+                .setVisibility(VISIBILITY_PRIVATE) // lock screen visibility
                 .build();
     }
-
 }

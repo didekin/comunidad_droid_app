@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.util.UiUtil;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -50,12 +51,16 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
 import static com.didekindroid.lib_one.util.UiUtil.isCalendarPreviousTimeStamp;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static java.lang.Thread.sleep;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -116,6 +121,7 @@ public class IncidResolucionRegAcTest {
     public void testOnCreate_1()
     {
         checkScreenResolucionRegFr();
+
         if (SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }
@@ -197,6 +203,17 @@ public class IncidResolucionRegAcTest {
         checkRegResolucionOk();
     }
 
+    @Test
+    public void testOnStop()
+    {
+        // Check OnStop.
+        IncidResolucionRegFr fr = (IncidResolucionRegFr) activity.getSupportFragmentManager().findFragmentByTag(IncidResolucionRegFr.class.getName());
+        fr.controller = new CtrlerIncidenciaCore();
+        checkSubscriptionsOnStop(activity, fr.controller);
+
+
+    }
+
 //    ============================= HELPER METHODS ===========================
 
     @SuppressWarnings("SameParameterValue")
@@ -210,7 +227,7 @@ public class IncidResolucionRegAcTest {
 
     private void checkRegResolucionOk()
     {
-        onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
+        waitAtMost(8, SECONDS).until(() -> isViewDisplayed(onView(withId(incidEditAcLayout))).call());
         onView(withId(incideEditMaxPowerFrLayout)).check(matches(isDisplayed()));
         // hasResolucion == true, because it has been registered.
         intended(hasExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true)));

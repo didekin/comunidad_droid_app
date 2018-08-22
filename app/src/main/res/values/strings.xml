@@ -116,6 +116,8 @@
     <string name="resolucion_duplicada">Ya existe resolución para esta incidencia</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ====================== Google Cloud Messages ====================== -->
+    <string name="incid_id_notification_channel">INCIDENCIAS</string>
+    <string name="incid_desc_notification_channel">Dídekin: incidencias comunidad</string>
     <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
     <string name="incid_gcm_incidencia_closed_body">Incidencia resuelta en tu comunidad.</string>
     <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de resolución.</string>

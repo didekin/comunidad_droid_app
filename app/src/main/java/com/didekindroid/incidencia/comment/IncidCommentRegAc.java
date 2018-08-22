@@ -60,10 +60,10 @@ public class IncidCommentRegAc extends AppCompatActivity {
     public void onStop()
     {
         Timber.d("onStop()");
-        super.onStop();
         if (controller != null) {
             controller.clearSubscriptions();
         }
+        super.onStop();
     }
 
 // ============================================================

@@ -3,6 +3,7 @@ package com.didekindroid.usuariocomunidad.repository;
 import com.didekindroid.lib_one.api.CompletableObserverMock;
 import com.didekindroid.lib_one.api.MaybeObserverMock;
 import com.didekindroid.lib_one.api.SingleObserverMock;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -18,6 +19,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_LA_FUENTE_PEPE;
@@ -27,6 +29,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUp
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpMockGcmGetComu;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
+import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 
 /**
  * User: pedro@didekin
@@ -125,12 +128,15 @@ public class CtrlerUsuarioComunidadTest {
     @Test
     public void test_regUserAndUserComu() throws Exception
     {
-        execCheckSchedulersTest(
-                ctrler -> ctrler.regUserAndUserComu(
-                        new CompletableObserverMock(),
-                        new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_REAL_JUAN), USER_PEPE)
-                                .roles(PRESIDENTE.function)
-                                .build()),
+        final Comunidad comunidad = signUpGetComu(COMU_REAL_JUAN);
+        cleanWithTkhandler();
+        getInstance().deleteInstanceId();
+        execCheckSchedulersTest(ctrler -> ctrler.regUserAndUserComu(
+                new CompletableObserverMock(),
+                new UsuarioComunidad.UserComuBuilder(comunidad, USER_PEPE)
+                        .roles(PRESIDENTE.function)
+                        .build()
+                ),
                 controller
         );
         cleanOptions(CLEAN_JUAN_AND_PEPE);

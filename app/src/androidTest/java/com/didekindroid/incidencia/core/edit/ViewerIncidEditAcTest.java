@@ -108,7 +108,7 @@ public class ViewerIncidEditAcTest {
         // Execute.
         viewer.checkResolucion();
         // Check.
-        assertThat(isDone, is(true));
+        assertThat(isDone.get(), is(true));
     }
 
     @Test

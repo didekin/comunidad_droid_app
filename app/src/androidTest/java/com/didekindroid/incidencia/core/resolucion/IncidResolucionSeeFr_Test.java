@@ -34,6 +34,7 @@ import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT
 import static com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFr.newInstance;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkResolucionSeeViews;
+import static com.didekindroid.incidencia.testutils.IncidTestData.AVANCE_DEFAULT_DES;
 import static com.didekindroid.incidencia.testutils.IncidTestData.COSTE_ESTIM_DEFAULT;
 import static com.didekindroid.incidencia.testutils.IncidTestData.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidTestData.RESOLUCION_DEFAULT_DESC;
@@ -106,7 +107,7 @@ public class IncidResolucionSeeFr_Test {
     {
         // Modificamos con avances.
         Avance avance = new Avance.AvanceBuilder()
-                .avanceDesc("avance1_desc")
+                .avanceDesc(AVANCE_DEFAULT_DES)
                 .author(USER_PEPE)
                 .fechaAlta(new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 100)))
                 .build();

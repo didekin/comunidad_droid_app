@@ -5,7 +5,6 @@ import android.view.View;
 
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.lib_one.api.ParentViewer;
-import com.didekindroid.lib_one.util.CommonAssertionMsg;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -58,7 +57,7 @@ final class ViewerIncidEditAc extends ParentViewer<View, CtrlerIncidenciaCore> {
     void checkResolucion()
     {
         Timber.d("checkResolucion()");
-        assertTrue(controller.isRegisteredUser(), CommonAssertionMsg.user_should_be_registered);
+        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
         controller.seeResolucion(
                 new ResolucionObserver(),
                 resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId());
@@ -93,10 +92,8 @@ final class ViewerIncidEditAc extends ParentViewer<View, CtrlerIncidenciaCore> {
         public void onComplete()
         {
             Timber.d("onComplete()");
-            Bundle bundle = new Bundle(1);
-            bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
             getContextualRouter().getActionFromContextNm(to_register_new_incid_resolucion)
-                    .initActivity(activity, bundle);
+                    .initActivity(activity, INCID_IMPORTANCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia()));
         }
     }
 }

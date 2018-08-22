@@ -22,7 +22,7 @@ public final class IncidNavigationTestConstant {
     public static final int incidSeeByComuAcLayout = R.id.incid_see_by_comu_ac;
     public static final int incidSeeGenericFrLayout = R.id.incid_see_generic_layout;
 
-    public static final int resolucion_coste_prev_id = R.id.incid_resolucion_coste_prev_view;
+    static final int resolucion_coste_prev_id = R.id.incid_resolucion_coste_prev_view;
 
     private IncidNavigationTestConstant()
     {

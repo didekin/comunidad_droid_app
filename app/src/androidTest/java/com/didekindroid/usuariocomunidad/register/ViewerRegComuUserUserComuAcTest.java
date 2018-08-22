@@ -101,20 +101,17 @@ public class ViewerRegComuUserUserComuAcTest {
     //  =========================  TESTS  ===========================
 
     @Test
-    public void test_NewViewerRegComuUserUserComuAc()
-    {
-        assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
-    }
-
-    @Test
-    public void test_DoViewInViewer()
-    {
-        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo()).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void test_OnRegisterSuccess()
     {
+        // test_NewViewerRegComuUserUserComuAc
+        assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
+        // test_DoViewInViewer
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo()).check(matches(isDisplayed()));
+        // test_OnCreate: Check for initialization of fragments viewers.
+        ParentViewerIf viewerParent = activity.viewer;
+        assertThat(viewerParent.getChildViewer(ViewerRegComuFr.class), notNullValue());
+        assertThat(viewerParent.getChildViewer(ViewerRegUserFr.class), notNullValue());
+        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
         /* Precondition: the user is registered and the cache is NOT initialized.*/
         requireNonNull(activity.viewer.getController()).updateIsRegistered(true);
         // Exec.
@@ -163,16 +160,6 @@ public class ViewerRegComuUserUserComuAcTest {
     }
 
     /*  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================*/
-
-    @Test
-    public void test_OnCreate()
-    {
-        // Check for initialization of fragments viewers.
-        ParentViewerIf viewerParent = activity.viewer;
-        assertThat(viewerParent.getChildViewer(ViewerRegComuFr.class), notNullValue());
-        assertThat(viewerParent.getChildViewer(ViewerRegUserFr.class), notNullValue());
-        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
-    }
 
     @Test
     public void test_OnStop()

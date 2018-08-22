@@ -32,13 +32,13 @@ class AdapterIncidSeeOpenByComu extends ArrayAdapter<IncidenciaUser> {
     {
         Timber.d("getViewInViewer()");
         VwHolderIncidSeeItem viewHolder;
-        final IncidenciaUser incidencia = getItem(position);
+        @NonNull final IncidenciaUser incidencia = requireNonNull(getItem(position));
 
         if (convertView == null) {
             Timber.d("getViewInViewer(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_comu_list_item, parent, false);
             // Hacemos visible el bloque de la fecha de alta de la resolución.
-            if (requireNonNull(incidencia).getFechaAltaResolucion() != null) {
+            if (incidencia.getFechaAltaResolucion() != null) {
                 convertView.findViewById(R.id.incid_see_resolucion_block).setVisibility(View.VISIBLE);
                 viewHolder = new VwHolderIncidSeeOpenItem(convertView);
             } else {
