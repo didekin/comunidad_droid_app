@@ -3,6 +3,7 @@ package com.didekindroid.incidencia;
 import android.os.Bundle;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.Avance;
@@ -40,6 +41,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuG
 import static com.didekindroid.lib_one.util.UiUtil.getMilliSecondsFromCalendarAdd;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
 import static java.util.Calendar.SECOND;
 import static java.util.Calendar.getInstance;
 import static org.hamcrest.CoreMatchers.is;
@@ -84,8 +86,8 @@ public class IncidenciaDaoTest {
                 .build();
 
         assertThat(incidenciaDao.closeIncidencia(resolucion).blockingGet(), is(2)); // Accede a 2 tablas.
-        int returned =  incidenciaDao.closeIncidencia(resolucion).blockingGet();
-        assertThat(returned, is(0));
+        incidenciaDao.closeIncidencia(resolucion).test()
+                .assertError(exception -> UiException.class.cast(exception).getErrorHtppMsg().equals(INCIDENCIA_NOT_FOUND.getHttpMessage()));
     }
 
     @Test
@@ -149,10 +151,11 @@ public class IncidenciaDaoTest {
     {
         /* Caso OK.*/
         assertThat(pepeUserComu, notNullValue());
-        IncidImportancia incidPepe = new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
-                .usuarioComunidad(pepeUserComu)
-                .importancia((short) 3)
-                .build();
+        IncidImportancia incidPepe =
+                new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
+                        .usuarioComunidad(pepeUserComu)
+                        .importancia((short) 3)
+                        .build();
         assertThat(incidenciaDao.regIncidImportancia(incidPepe).blockingGet(), is(2));
     }
 

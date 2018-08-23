@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 
 import java.sql.Timestamp;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -63,7 +64,7 @@ public class Incid_Firebase_Notif_Test {
     @Before
     public void setUp() throws Exception
     {
-        getInstrumentation().startActivitySync(new Intent(getTargetContext(), ActivityMock.class));
+        getInstrumentation().startActivitySync(new Intent(getTargetContext(), ActivityMock.class).setFlags(FLAG_ACTIVITY_NEW_TASK));
         notificationManager = (NotificationManager) getTargetContext().getSystemService(Context.NOTIFICATION_SERVICE);
     }
 

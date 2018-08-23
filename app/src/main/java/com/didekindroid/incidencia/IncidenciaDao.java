@@ -23,9 +23,11 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.lib_one.api.exception.UiExceptionIf.uiExceptionConsumer;
+import static com.didekindroid.lib_one.api.exception.UiException.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getRespSingleListFunction;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseMaybeFunction;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseSingleFunction;
 import static io.reactivex.Single.just;
 
 /**
@@ -141,7 +143,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("closeIncidencia()");
         return just(resolucion)
                 .flatMap(resolucionIn -> closeIncidencia(tkCacher.doAuthHeaderStr(), resolucionIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -150,7 +152,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("deleteIncidencia()");
         return just(incidenciaId)
                 .flatMap(incidenciaIdIn -> deleteIncidencia(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -159,7 +161,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("modifyIncidImportancia()");
         return just(incidImportancia)
                 .flatMap(incidImportanciaIn -> modifyIncidImportancia(tkCacher.doAuthHeaderStr(), incidImportanciaIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -168,7 +170,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("modifyResolucion()");
         return just(resolucion)
                 .flatMap(resolucionIn -> modifyResolucion(tkCacher.doAuthHeaderStr(), resolucionIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -177,7 +179,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("regIncidComment()");
         return just(comment)
                 .flatMap(commentIn -> regIncidComment(tkCacher.doAuthHeaderStr(), commentIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -186,7 +188,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("regIncidImportancia()");
         return just(incidImportancia)
                 .flatMap(incidImportanciaIn -> regIncidImportancia(tkCacher.doAuthHeaderStr(), incidImportanciaIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -195,7 +197,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("regResolucion()");
         return just(resolucion)
                 .flatMap(resolucionIn -> regResolucion(tkCacher.doAuthHeaderStr(), resolucionIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -204,7 +206,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeCommentsByIncid()");
         return just(incidenciaId)
                 .flatMap(incidenciaIdIn -> seeCommentsByIncid(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -213,14 +215,16 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeIncidImportanciaRaw()");
         return just(incidenciaId)
                 .flatMap(incidenciaIdIn -> seeIncidImportancia(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
     public Single<Bundle> seeIncidImportancia(long incidenciaId)
     {
         Timber.d("seeIncidImportancia()");
-        return seeIncidImportanciaRaw(incidenciaId).map(INCID_RESOLUCION_BUNDLE::getBundleForKey);
+        return seeIncidImportanciaRaw(incidenciaId)
+                .map(INCID_RESOLUCION_BUNDLE::getBundleForKey)
+                .doOnError(uiExceptionConsumer);
     }
 
     public Single<List<IncidenciaUser>> seeIncidsOpenByComu(long comunidadId)
@@ -228,7 +232,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeIncidsOpenByComu()");
         return just(comunidadId)
                 .flatMap(comunidadIdIn -> seeIncidsOpenByComu(tkCacher.doAuthHeaderStr(), comunidadIdIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -237,7 +241,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeIncidsClosedByComu()");
         return just(comunidadId)
                 .flatMap(comunidadIdIn -> seeIncidsClosedByComu(tkCacher.doAuthHeaderStr(), comunidadIdIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
@@ -246,7 +250,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeResolucionRaw()");
         return Maybe.just(incidenciaId)
                 .flatMap(incidenciaIdIn -> seeResolucion(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
-                .flatMap(getResponseMaybeFunction());
+                .flatMap(getResponseMaybeFunction())
+                .doOnError(uiExceptionConsumer);
     }
 
     /**
@@ -257,7 +262,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeResolucionInBundle()");
         return seeResolucionRaw(incidenciaId)
                 .map(INCID_RESOLUCION_OBJECT::getBundleForKey)
-                .toSingle();
+                .toSingle()
+                .doOnError(uiExceptionConsumer);
     }
 
     public Single<List<ImportanciaUser>> seeUserComusImportancia(long incidenciaId)
@@ -265,7 +271,7 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
         Timber.d("seeUserComusImportancia()");
         return just(incidenciaId)
                 .flatMap(incidenciaIdIn -> seeUserComusImportancia(tkCacher.doAuthHeaderStr(), incidenciaIdIn))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
 }

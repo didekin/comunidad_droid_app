@@ -13,8 +13,10 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
-import static com.didekindroid.lib_one.api.exception.UiExceptionIf.uiExceptionConsumer;
+import static com.didekindroid.lib_one.api.exception.UiException.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getRespSingleListFunction;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseSingleFunction;
 import static io.reactivex.Single.just;
 
 /**
@@ -71,14 +73,15 @@ public final class ComunidadDao implements ComunidadEndPoints {
         Timber.d("getComuData()");
         return just(idComunidad)
                 .flatMap(idCom -> getComuData(tkCacher.doAuthHeaderStr(), idCom))
-                .map(httpInitializer.get()::getResponseBody)
+                .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
     public Single<List<Comunidad>> searchInComunidades(Comunidad comunidad)
     {
         Timber.d("getComuData()");
-        return searchComunidades(comunidad).map(httpInitializer.get()::getResponseBody)
+        return searchComunidades(comunidad)
+                .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
 }

@@ -3,6 +3,7 @@ package com.didekindroid.comunidad;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.comunidad.testutil.ComuTestData;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
@@ -21,6 +22,8 @@ import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
+import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USERCOMU_WRONG_INIT;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -47,6 +50,14 @@ public class ComunidadDaoTest {
         Comunidad cDB = userComuDao.getComusByUser().blockingGet().get(0);
         Comunidad c1 = comunidadDao.getComuData(cDB.getC_Id()).blockingGet();
         assertThat(c1, is(cDB));
+    }
+
+    @Test
+    public void testGetComuData_wrong() throws Exception
+    {
+        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+        comunidadDao.getComuData(999L).test()
+                .assertError(exception -> UiException.class.cast(exception).getErrorHtppMsg().equals(USERCOMU_WRONG_INIT.getHttpMessage()));
     }
 
     @Test

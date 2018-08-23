@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static android.app.TaskStackBuilder.create;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -105,6 +106,7 @@ public class IncidResolucionEditFrTest {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
+        TimeUnit.SECONDS.sleep(4);
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -219,6 +221,7 @@ public class IncidResolucionEditFrTest {
         // OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
         // BACK
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidSeeByComuAcLayout)));
         checkBack(onView(withId(incidSeeByComuAcLayout)), incidResolucionEditFrLayout);
         // Error al intentar borrar otra vez la incidencia.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
