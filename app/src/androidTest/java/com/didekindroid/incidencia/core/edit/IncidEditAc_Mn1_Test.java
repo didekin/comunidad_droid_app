@@ -31,7 +31,7 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.check
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionRegFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
@@ -164,7 +164,7 @@ public class IncidEditAc_Mn1_Test {
         /* Perfil adm, inicidador de la incidencia.*/
         final IncidImportancia incidImportancia = insertGetIncidImportancia(usuarioComunidad);
         if (hasResolucion) {
-            insertGetResolucionNoAdvances(incidImportancia);
+            insertGetResolucionNoAvances(incidImportancia);
             return new IncidAndResolBundle(incidImportancia, true);
         } else {
             return new IncidAndResolBundle(incidImportancia, false);

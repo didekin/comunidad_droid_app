@@ -27,7 +27,7 @@ import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentsSeeFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
@@ -93,7 +93,7 @@ public class IncidCommentSeeAcTest_1 {
     public void testOnCreate_2()
     {
         // Precondition: incidencia is closed.
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidPepeEscorial);
+        Resolucion resolucion = insertGetResolucionNoAvances(incidPepeEscorial);
         assertThat(incidenciaDao.closeIncidencia(resolucion).blockingGet(), is(2));
         // Run.
         getInstrumentation().startActivitySync(intent);

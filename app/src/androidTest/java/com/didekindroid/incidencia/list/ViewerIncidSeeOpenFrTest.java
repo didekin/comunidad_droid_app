@@ -25,7 +25,7 @@ import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
@@ -67,7 +67,7 @@ public class ViewerIncidSeeOpenFrTest {
             incidImportancia = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0),
                     (short) 2);
             // Cierre incidencias..
-            resolucion = insertGetResolucionNoAdvances(incidImportancia);
+            resolucion = insertGetResolucionNoAvances(incidImportancia);
             incidenciaUser = incidenciaDao
                     .seeIncidsOpenByComu(incidImportancia.getIncidencia().getComunidadId()).blockingGet().get(0);
             return new Intent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);

@@ -48,7 +48,7 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidTestData.AVANCE_DEFAULT_DES;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionAdvances;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
@@ -145,7 +145,7 @@ public class IncidResolucionEditFrTest {
     public void testOnCreate_2()
     {
         // Precondition: NO avances.
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAdvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAvances(incidImportancia)));
         // Check.
         checkScreenResolucionEditFr();
         checkDataResolucionEditFr(resolucion);

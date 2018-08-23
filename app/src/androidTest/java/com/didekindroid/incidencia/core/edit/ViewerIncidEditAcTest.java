@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
@@ -115,7 +115,7 @@ public class ViewerIncidEditAcTest {
     public void test_ResolucionObserver_1()
     {
         // Usuario ADM, con resolución.
-        Resolucion resolucion = insertGetResolucionNoAdvances(resolBundle.getIncidImportancia());
+        Resolucion resolucion = insertGetResolucionNoAvances(resolBundle.getIncidImportancia());
         just(resolucion).subscribeWith(viewer.new ResolucionObserver());
         onView(withId(R.id.incid_resolucion_edit_fr_layout)).check(matches(isDisplayed()));
     }

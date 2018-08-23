@@ -34,7 +34,7 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.RESOLUCION_DEF
 import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetUser;
@@ -122,7 +122,7 @@ public class Incid_Firebase_Notif_Test {
         }
 
         // Preconditions.
-        Resolucion resolucion = insertGetResolucionNoAdvances(insertGetIncidImportancia(COMU_PLAZUELA5_PEPE));
+        Resolucion resolucion = insertGetResolucionNoAvances(insertGetIncidImportancia(COMU_PLAZUELA5_PEPE));
         notificationManager.cancelAll(); // Erase notifications produced for the previous line call.
         // Exec.
         assertThat(incidenciaDao.closeIncidencia(resolucion).blockingGet(), is(2));

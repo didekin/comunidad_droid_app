@@ -40,6 +40,7 @@ public final class IncidTestData {
     private static final long COMUNIDAD_ID_DEFAULT = 987L;
     private static final short importancia_default = (short) 3;
     private static final short ambito_incidencia_default = (short) 33;
+    private static final Timestamp fechaPrev_default = new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 30));
 
     private IncidTestData()
     {
@@ -98,7 +99,7 @@ public final class IncidTestData {
         return incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).blockingGet().get(0);
     }
 
-    public static Resolucion insertGetResolucionNoAdvances(IncidImportancia incidImportancia)
+    public static Resolucion insertGetResolucionNoAvances(IncidImportancia incidImportancia)
     {
         // Precondition: incidImportancia already in DB.
         // Registramos resolución.
@@ -106,7 +107,7 @@ public final class IncidTestData {
                 incidImportancia.getIncidencia(),
                 RESOLUCION_DEFAULT_DESC,
                 COSTE_ESTIM_DEFAULT,
-                new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 30)));
+                fechaPrev_default);
         incidenciaDao.regResolucion(resolucion).blockingGet();
         return incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet();
     }
@@ -115,7 +116,7 @@ public final class IncidTestData {
     {
         // Precondition: incidImportancia already in DB.
         // Registramos resolución.
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
+        Resolucion resolucion = insertGetResolucionNoAvances(incidImportancia);
         // Modificamos con avances.
         Avance avance = new Avance.AvanceBuilder().avanceDesc(AVANCE_DEFAULT_DES).build();
         List<Avance> avances = new ArrayList<>(1);
@@ -206,6 +207,11 @@ public final class IncidTestData {
                 .incidencia(incidenciaIn)
                 .redactor(null)
                 .build();
+    }
+
+    public static Resolucion doSimpleResolucion(Incidencia incidencia)
+    {
+        return doResolucion(incidencia, RESOLUCION_DEFAULT_DESC, COSTE_ESTIM_DEFAULT, fechaPrev_default);
     }
 
     public static Resolucion doResolucion(Incidencia incidencia, String descripcion, int costeEstimado, Timestamp fechaPrev)

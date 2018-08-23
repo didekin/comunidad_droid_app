@@ -21,18 +21,20 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionEditFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -89,7 +91,7 @@ public class IncidResolucionEditAcTest {
     public void test_OnCreate_2()
     {
         // Preconditions: resolucion in intent != null;  NO hasAdmRole (because no INCID_IMPORTANCIA_OBJECT in intent).
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
+        Resolucion resolucion = insertGetResolucionNoAvances(incidImportancia);
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
@@ -104,13 +106,32 @@ public class IncidResolucionEditAcTest {
     public void test_OnCreate_3()
     {
         // Preconditions: resolucion in intent != null; hasAdmRole.
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
+        Resolucion resolucion = insertGetResolucionNoAvances(incidImportancia);
         Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia)
                 .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
         // Check screen of IncidResolucionEditFr.
         checkScreenResolucionEditFr();
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
+        }
+    }
+
+    @Test
+    public void test_OnCreate_4()
+    {
+        /* Preconditions: incidencia cerrada (con resolución previa en BD).*/
+        incidenciaDao.closeIncidencia(insertGetResolucionNoAvances(incidImportancia)).blockingGet();
+        Resolucion resolucion = incidenciaDao.seeResolucionRaw(incidImportancia.getIncidencia().getIncidenciaId()).blockingGet();
+        assertThat(resolucion.getIncidencia().getFechaCierre(), notNullValue());
+        /* Launch activity */
+        Intent intent = new Intent(getTargetContext(), IncidResolucionEditAc.class).setFlags(FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia)
+                .putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(intent);
+        // Check screen of IncidResolucionSeeFr.
+        checkScreenResolucionSeeFr();
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }

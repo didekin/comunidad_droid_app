@@ -36,7 +36,7 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidenciaUsers;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
@@ -79,7 +79,7 @@ public class ViewerIncidSeeCloseFrTest {
             }
             incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
             // Cierre incidencias..
-            resolucion = insertGetResolucionNoAdvances(incidImportancia1);
+            resolucion = insertGetResolucionNoAvances(incidImportancia1);
             incidenciaDao.closeIncidencia(resolucion).blockingGet();
             // Incidencias con fecha de cierre.
             incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
