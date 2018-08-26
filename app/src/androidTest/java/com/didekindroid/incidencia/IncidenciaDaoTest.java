@@ -232,7 +232,7 @@ public class IncidenciaDaoTest {
     }
 
     @Test
-    public void testSeeResolucionRaw()
+    public void testSeeResolucionRaw()       // TODO: fail.
     {
         // Caso OK.
         Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu); // Implicitly tested calling this utilities method.

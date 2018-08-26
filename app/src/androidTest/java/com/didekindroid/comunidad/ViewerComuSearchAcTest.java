@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.testutil.ActivityTestUtil;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,8 +31,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -51,13 +50,12 @@ public class ViewerComuSearchAcTest {
     {
         activity = activityRule.getActivity();
         waitAtMost(4, SECONDS).until(() -> activity.viewerAc != null);
-        assertThat(activity.viewerAc, notNullValue());
     }
 
     @Test
     public void test_DoViewInViewer()
     {
-        onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
+        waitAtMost(6, SECONDS).until(ActivityTestUtil.isViewDisplayed(withId(comuSearchAcLayout)));
         onView(withId(R.id.searchComunidad_Bton)).check(matches(isDisplayed()));
         checkRegComuFrViewEmpty();
     }
