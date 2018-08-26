@@ -19,7 +19,7 @@ public enum UserMenuTestUtil implements MenuTestUtilIf {
         @Override
         public void checkItem(Activity activity)
         {
-            if (secInitializer.get().getTkCacher().isRegisteredCache()) {
+            if (secInitializer.get().getTkCacher().isUserRegistered()) {
                 checkAppBarMnNotExist(activity, R.string.login_ac_mn);
             } else {
                 checkAppBarMenu(activity, R.string.login_ac_mn, R.id.login_ac_layout);

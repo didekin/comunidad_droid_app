@@ -9,7 +9,6 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.lib_one.api.ParentViewerIf;
-import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -28,7 +27,6 @@ import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinn
 import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_should_have_admAuthority;
-import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -62,13 +60,6 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
     }
 
     // .............................. ViewerIf ..................................
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return requireNonNull(getParentViewer()).getExceptionRouter();
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)

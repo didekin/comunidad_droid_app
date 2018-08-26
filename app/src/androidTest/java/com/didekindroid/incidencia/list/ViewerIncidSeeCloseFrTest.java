@@ -107,7 +107,7 @@ public class ViewerIncidSeeCloseFrTest {
         activity = activityRule.getActivity();
         fragment = (IncidSeeByComuFr) activity.getSupportFragmentManager().findFragmentByTag(IncidSeeByComuFr.class.getName());
         // Wait until list is made. ***** Here is tested the visual display of the data *****.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
     @After

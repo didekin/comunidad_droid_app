@@ -112,8 +112,6 @@ public class ViewerRegComuUserUserComuAcTest {
         assertThat(viewerParent.getChildViewer(ViewerRegComuFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
-        /* Precondition: the user is registered and the cache is NOT initialized.*/
-        requireNonNull(activity.viewer.getController()).updateIsRegistered(true);
         // Exec.
         activity.viewer.onRegisterSuccess(COMU_ESCORIAL_PEPE);
         // Check.

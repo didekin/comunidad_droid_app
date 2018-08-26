@@ -8,8 +8,6 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewer;
-import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
-import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -20,7 +18,7 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.util.ComuContextualName.comu_data_just_modified;
 import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comuData_should_be_modified;
 import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comunidadId_should_be_initialized;
-import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
@@ -32,7 +30,7 @@ import static com.didekindroid.lib_one.util.UiUtil.makeToast;
  */
 class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
 
-    ViewerComuDataAc(View view, AppCompatActivity activity)
+    private ViewerComuDataAc(View view, AppCompatActivity activity)
     {
         super(view, activity, null);
     }
@@ -47,13 +45,6 @@ class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
     }
 
     // ==================================== ViewerIf ====================================
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        Timber.d("getExceptionRouter()");
-        return routerInitializer.get().getExceptionRouter();
-    }
 
     @Override
     public void doViewInViewer(Bundle savedState, final Serializable viewBean)
@@ -84,9 +75,9 @@ class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
             Comunidad comunidadFromViewer = getChildViewer(ViewerRegComuFr.class).getComunidadFromViewer(errorBuilder);
             if (comunidadFromViewer == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!ConnectionUtils.isInternetConnected(activity)) {
-                makeToast(activity, R.string.no_internet_conn_toast);
-            } else {
+                return;
+            }
+            if (checkInternetConnected(activity)){
                 controller.modifyComunidadData(new ComuDataAcObserver(),
                         new Comunidad.ComunidadBuilder()
                                 .c_id(comunidadIn.getC_Id())

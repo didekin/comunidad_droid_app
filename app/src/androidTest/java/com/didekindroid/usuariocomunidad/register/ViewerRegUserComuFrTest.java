@@ -108,7 +108,7 @@ public class ViewerRegUserComuFrTest {
     public void test_DoViewInViewer_NotNull()
     {
         // Precondition
-        fragment.viewer.getController().updateIsRegistered(true);
+        fragment.viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
 
         activity.runOnUiThread(() -> fragment.viewer.doViewInViewer(new Bundle(0), COMU_TRAV_PLAZUELA_PEPE));
         checkUserComuData(COMU_TRAV_PLAZUELA_PEPE);

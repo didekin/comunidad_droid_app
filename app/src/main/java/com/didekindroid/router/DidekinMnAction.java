@@ -74,7 +74,7 @@ public enum DidekinMnAction implements MnRouterActionIf {
         {
             Timber.d("initActivity(), reg_nueva_comunidad_mn");
             // for not registered users
-            if (!secInitializer.get().getTkCacher().isRegisteredCache()) {
+            if (!secInitializer.get().getTkCacher().isUserRegistered()) {
                 activity.startActivity(new Intent(activity, RegComuAndUserAndUserComuAc.class));
             } else {
                 super.initActivity(activity);

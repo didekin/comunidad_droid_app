@@ -34,14 +34,6 @@ final class ViewerComuSearchResultAc extends Viewer<View, Controller> {
         return instance;
     }
 
-    // .............................. ViewerIf ..................................
-
-    @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        return routerInitializer.get().getExceptionRouter();
-    }
-
     // .............................. HELPERS ..................................
 
     /**

@@ -62,12 +62,6 @@ public class ViewerIncidRegAc extends ParentViewer<View, CtrlerIncidenciaCore> {
     }
 
     @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        return routerInitializer.get().getExceptionRouter();
-    }
-
-    @Override
     public int clearSubscriptions()
     {
         Timber.d("clearSubscriptions()");

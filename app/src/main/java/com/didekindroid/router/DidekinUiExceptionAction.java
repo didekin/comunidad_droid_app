@@ -18,14 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import timber.log.Timber;
-
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.DidekinApp.defaultAc;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.lib_one.usuario.router.UserUiExceptionAction.userExceptionMsgMap;
-import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_DUPLICATE;
 import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.http.exception.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
@@ -47,17 +44,15 @@ import static java.util.EnumSet.of;
 public enum DidekinUiExceptionAction implements UiExceptionActionIf {
 
     generic(
-            of(GENERIC_INTERNAL_ERROR, NOT_FOUND),
+            of(
+                    GENERIC_INTERNAL_ERROR,
+                    NOT_FOUND),
             com.didekindroid.lib_one.R.string.exception_generic_message,
             defaultAc) {
         @Override
-        public void initActivity(@NonNull Activity activity)
+        public void handleExceptionInUi(@NonNull Activity activity)
         {
-            Timber.d("initActivity()");
-            if (getResourceIdForToast() > 0) {
-                makeToast(activity, getResourceIdForToast());
-            }
-            initActivity(activity, null, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+            handleExceptionInUi(activity, null, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
         }
     },
     show_comunidad_duplicate(
@@ -73,21 +68,23 @@ public enum DidekinUiExceptionAction implements UiExceptionActionIf {
             R.string.incidencia_not_registered,
             IncidRegAc.class),
     show_incid_open_list(
-            of(INCIDENCIA_NOT_FOUND, INCID_IMPORTANCIA_NOT_FOUND),
+            of(
+                    INCIDENCIA_NOT_FOUND,
+                    INCID_IMPORTANCIA_NOT_FOUND),
             R.string.incidencia_wrong_init,
             IncidSeeByComuAc.class) {
         @Override
-        public void initActivity(@NonNull Activity activity)
+        public void handleExceptionInUi(@NonNull Activity activity)
         {
-            initActivity(activity, new Bundle());
+            handleExceptionInUi(activity, null);
         }
 
         @Override
-        public void initActivity(@NonNull Activity activity, @Nullable Bundle bundleIn)
+        public void handleExceptionInUi(@NonNull Activity activity, @Nullable Bundle bundleIn)
         {
             Bundle bundle = bundleIn != null ? bundleIn : new Bundle(1);
             bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
-            super.initActivity(activity, bundle);
+            handleExceptionInUi(activity, bundle, FLAG_ACTIVITY_NEW_TASK);
         }
     },
     show_login_noPowers(
@@ -99,17 +96,9 @@ public enum DidekinUiExceptionAction implements UiExceptionActionIf {
             R.string.resolucion_duplicada,
             IncidSeeByComuAc.class) {
         @Override
-        public void initActivity(@NonNull Activity activity)
+        public void handleExceptionInUi(@NonNull Activity activity)
         {
-            initActivity(activity, new Bundle());
-        }
-
-        @Override
-        public void initActivity(@NonNull Activity activity, @Nullable Bundle bundleIn)
-        {
-            Bundle bundle = bundleIn != null ? bundleIn : new Bundle(1);
-            bundle.putBoolean(INCID_CLOSED_LIST_FLAG.key, false);
-            super.initActivity(activity, bundle);
+            handleExceptionInUi(activity, INCID_CLOSED_LIST_FLAG.getBundleForKey(false), FLAG_ACTIVITY_NEW_TASK);
         }
     },;
 
@@ -141,13 +130,9 @@ public enum DidekinUiExceptionAction implements UiExceptionActionIf {
     }
 
     @Override
-    public void initActivity(@NonNull Activity activity, @Nullable Bundle bundle)
+    public void handleExceptionInUi(@NonNull Activity activity)
     {
-        Timber.d("initActivity(), two parameters.");
-        if (resourceIdForToast > 0) {
-            makeToast(activity, resourceIdForToast);
-        }
-        initActivity(activity, bundle, FLAG_ACTIVITY_NEW_TASK);
+        handleExceptionInUi(activity, null, FLAG_ACTIVITY_NEW_TASK);
     }
 
     public int getResourceIdForToast()

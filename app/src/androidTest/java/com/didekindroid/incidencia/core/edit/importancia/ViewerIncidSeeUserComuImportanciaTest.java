@@ -71,8 +71,6 @@ public class ViewerIncidSeeUserComuImportanciaTest {
 
         activity = (IncidEditAc) getInstrumentation().startActivitySync(intent);
         viewer = (ViewerIncidSeeUserComuImportancia) activity.getInjectedParentViewer().getChildViewer(ViewerIncidSeeUserComuImportancia.class);
-        // Precondition.
-        viewer.getController().getTkCacher().updateIsRegistered(true);
     }
 
     @After

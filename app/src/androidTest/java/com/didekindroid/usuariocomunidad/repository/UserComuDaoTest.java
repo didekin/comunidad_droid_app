@@ -48,7 +48,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -74,7 +73,7 @@ public class UserComuDaoTest {
     {
         assertThat(userComuDao
                 .deleteUserComu(signUpGetComu(COMU_PLAZUELA5_JUAN).getC_Id()).blockingGet(), is(IS_USER_DELETED));
-        assertThat(userComuDao.getTkCacher().isRegisteredCache(), is(false));
+        assertThat(userComuDao.getTkCacher().isUserRegistered(), is(false));
         cleanWithTkhandler();
     }
 
@@ -180,7 +179,7 @@ public class UserComuDaoTest {
         whatClean = CLEAN_JUAN_AND_PEPE;
         // Comunidad1 and user1 in DB.
         Comunidad comunidad1 = signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_mock_gcmTk");
-        userComuDao.getTkCacher().updateIsRegistered(false);
+        userComuDao.getTkCacher().updateAuthToken(null);
         /* Comunidad2 and user2 in DB.*/
         regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         // Add comunidad1 and user2 (her data are in cache now and they can be null).
@@ -205,18 +204,5 @@ public class UserComuDaoTest {
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         assertThat(userComuDao.seeUserComusByUser().blockingGet(), hasItem(COMU_REAL_JUAN));
-    }
-
-    @Test
-    public void test_GetUserWithAppTk()
-    {
-        // Precondition
-        assertThat(COMU_PLAZUELA5_JUAN.getUsuario().getGcmToken(), nullValue());
-        // Check.
-        UsuarioComunidad userComuAfter = userComuDao.getUserWithAppTk(COMU_PLAZUELA5_JUAN);
-        assertThat(userComuAfter.getUsuario().getGcmToken().length() > 2, is(true));
-        assertThat(COMU_PLAZUELA5_JUAN.getUsuario(), is(userComuAfter.getUsuario()));
-        assertThat(COMU_PLAZUELA5_JUAN.getComunidad(), is(userComuAfter.getComunidad()));
-        assertThat(COMU_PLAZUELA5_JUAN.getRoles(), is(userComuAfter.getRoles()));
     }
 }

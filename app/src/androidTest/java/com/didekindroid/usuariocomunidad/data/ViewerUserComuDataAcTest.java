@@ -132,7 +132,7 @@ public class ViewerUserComuDataAcTest {
     {
         hasToClean = false;
         // Before.
-        assertThat(activity.viewer.getController().getTkCacher().isRegisteredCache(), is(true));
+        assertThat(activity.viewer.getController().getTkCacher().isUserRegistered(), is(true));
         // Exec.
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
         // Check.

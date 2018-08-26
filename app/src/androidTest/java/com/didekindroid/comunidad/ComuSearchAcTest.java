@@ -83,6 +83,9 @@ public class ComuSearchAcTest {
         assertThat(activity.regComuFrg.viewerInjector, is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), is(activity.viewerAc));
         checkSpinnersDoInViewerOffNull(activity.regComuFrg.viewer);
+
+        // test_OnStop
+        checkSubscriptionsOnStop(activity, activity.viewerAc.getController(), activity.viewerDrawer.getController());
     }
 
     @Test
@@ -163,14 +166,5 @@ public class ComuSearchAcTest {
 
         checkUp(comuSearchAcLayout);
         cleanOneUser(USER_JUAN.getUserName());
-    }
-
-    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnStop()
-    {
-        activity = activityRule.launchActivity(new Intent());
-        checkSubscriptionsOnStop(activity, activity.viewerAc.getController(), activity.viewerDrawer.getController());
     }
 }

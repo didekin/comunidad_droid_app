@@ -14,6 +14,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -26,11 +27,15 @@ public enum ComuMenuTestUtil implements MenuTestUtilIf {
     COMU_DATA_AC {
 
         @Override
-        public void checkItem(Activity activity) throws InterruptedException
+        public void checkItem(Activity activity)
         {
             onView(withText(R.string.comu_data_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
-            sleep(1000);
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                fail();
+            }
             onView(withText(R.string.comu_data_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.comu_data_ac_layout)).check(matches(isDisplayed()));
         }
@@ -39,10 +44,14 @@ public enum ComuMenuTestUtil implements MenuTestUtilIf {
     COMU_SEARCH_AC {
 
         @Override
-        public void checkItem(Activity activity) throws InterruptedException
+        public void checkItem(Activity activity)
         {
             onView(withText(R.string.comu_search_ac_mn)).check(doesNotExist());
-            sleep(1000);
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                fail();
+            }
             openActionBarOverflowOrOptionsMenu(activity);
             onView(withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));

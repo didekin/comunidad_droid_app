@@ -18,7 +18,7 @@ import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidContextualName.new_incid_comment_just_registered;
 import static com.didekindroid.incidencia.comment.CtrlerIncidComment.doErrorInCtrler;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
-import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
@@ -100,9 +100,9 @@ public class IncidCommentRegAc extends AppCompatActivity {
         if (comment == null) {
             Timber.d("registerComment(); comment == null");
             makeToast(this, errorMsg.toString());
-        } else if (!isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast);
-        } else {
+            return;
+        }
+        if (checkInternetConnected(this)){
             controller = new CtrlerIncidComment();
             controller.regIncidComment(new DisposableSingleObserver<Integer>() {
                 @Override

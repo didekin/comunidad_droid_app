@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
-import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
@@ -22,6 +21,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.lib_one.usuario.router.UserContextName.new_user_usercomu_just_registered;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
@@ -88,9 +88,9 @@ final class ViewerRegUserAndUserComuAc extends ParentViewer<View, CtrlerUsuarioC
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!ConnectionUtils.isInternetConnected(activity)) {
-                makeToast(activity, R.string.no_internet_conn_toast);
-            } else {
+                return;
+            }
+            if (checkInternetConnected(activity)) {
                 controller.regUserAndUserComu(
                         new DisposableCompletableObserver() {
                             @Override

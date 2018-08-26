@@ -70,7 +70,7 @@ public class ViewerComuSearchResultAcTest {
         assertThat(!itemSeeUserComu.isVisible() && !itemSeeUserComu.isEnabled(), is(true));
 
         //Preconditions.
-        viewer.getController().updateIsRegistered(true);
+        viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
         // Exec.
         viewer.updateActivityMenu(myMenu);
         // Check: change both attributes.

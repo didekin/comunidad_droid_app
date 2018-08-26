@@ -90,7 +90,7 @@ public class ViewerComuSearchResultsFrTest {
         if (isPepeToDelete) {
             cleanOneUser(USER_PEPE.getUserName());
         }
-        viewer.getController().updateIsRegistered(false);
+        viewer.getController().getTkCacher().updateAuthToken(null);
     }
 
     @Test
@@ -147,7 +147,7 @@ public class ViewerComuSearchResultsFrTest {
     @Test   // User IS registered.
     public void test_OnSuccessEmptyList()
     {
-        viewer.getController().updateIsRegistered(true);
+        viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
         activity.runOnUiThread(() -> viewer.onSuccessEmptyList(comu_real));
 
         waitAtMost(6, SECONDS).until(isToastInView(R.string.no_result_search_comunidad, activity));
@@ -183,7 +183,7 @@ public class ViewerComuSearchResultsFrTest {
                 return false;
             }
         });
-        viewer.getController().updateIsRegistered(true);
+        viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
 
         final ViewerComuSearchResultsFr.ComuSearchResultListener listener = viewer.new ComuSearchResultListener();
         activity.runOnUiThread(() -> {

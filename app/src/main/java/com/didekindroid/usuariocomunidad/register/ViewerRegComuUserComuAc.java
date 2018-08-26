@@ -18,7 +18,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuContextualName.new_comu_usercomu_just_registered;
-import static com.didekindroid.lib_one.util.ConnectionUtils.isInternetConnected;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
@@ -70,9 +70,9 @@ final class ViewerRegComuUserComuAc extends ParentViewer<View, CtrlerUsuarioComu
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!isInternetConnected(activity)) {
-                makeToast(activity, R.string.no_internet_conn_toast);
-            } else {
+                return;
+            }
+            if (checkInternetConnected(activity)) {
                 controller.regComuAndUserComu(new RegComuAndUserComuObserver(), usuarioComunidad);
             }
         }

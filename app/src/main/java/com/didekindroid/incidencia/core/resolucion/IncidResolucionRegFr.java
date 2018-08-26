@@ -130,7 +130,7 @@ public class IncidResolucionRegFr extends Fragment {
                                 Timber.d(e);
                                 routerInitializer.get().getExceptionRouter()
                                         .getActionFromMsg(getUiExceptionFromThrowable(e).getErrorHtppMsg())
-                                        .initActivity(getActivity());
+                                        .handleExceptionInUi(getActivity());
                             }
                         },
                         resolucion);

@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekindroid.lib_one.util.FechaPickerFr;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;
@@ -39,6 +38,7 @@ import static com.didekindroid.incidencia.IncidContextualName.incid_resolucion_j
 import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
 import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.FechaPickerFr.fecha_picker_fr_tag;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
@@ -150,37 +150,39 @@ public class IncidResolucionEditFr extends Fragment {
 
         if (resolucion == null) {
             makeToast(getActivity(), errorMsg.toString());
-        } else if (!ConnectionUtils.isInternetConnected(getActivity())) {
-            makeToast(getActivity(), R.string.no_internet_conn_toast);
-        } else if (isToBeClosed)
-            controller.closeIncidencia(
-                    new ResolucionSingleObserver<Integer>() {
-                        @Override
-                        public void onSuccess(Integer updatedRows)
-                        {
-                            Timber.d("closeIncidencia().onSuccess(), updatedRows: %d", updatedRows);
-                            routerInitializer.get().getContextRouter()
-                                    .getActionFromContextNm(incid_open_just_closed)
-                                    .initActivity(getActivity(), INCID_CLOSED_LIST_FLAG.getBundleForKey(true));
-                        }
-                    },
-                    resolucion);
-        else {
-            controller.modifyResolucion(
-                    new ResolucionSingleObserver<Integer>() {
-                        @Override
-                        public void onSuccess(Integer updatedRows)
-                        {
-                            Timber.d("modifyResolucion().onSuccess(), updatedRows: %d", updatedRows);
-                            routerInitializer.get().getContextRouter()
-                                    .getActionFromContextNm(incid_resolucion_just_modified)
-                                    .initActivity(
-                                            getActivity(),
-                                            INCID_RESOLUCION_BUNDLE.getBundleForKey(new IncidAndResolBundle(incidImportancia, true))
-                                    );
-                        }
-                    },
-                    resolucion);
+            return;
+        }
+        if (checkInternetConnected(getActivity())) {
+            if (isToBeClosed)
+                controller.closeIncidencia(
+                        new ResolucionSingleObserver<Integer>() {
+                            @Override
+                            public void onSuccess(Integer updatedRows)
+                            {
+                                Timber.d("closeIncidencia().onSuccess(), updatedRows: %d", updatedRows);
+                                routerInitializer.get().getContextRouter()
+                                        .getActionFromContextNm(incid_open_just_closed)
+                                        .initActivity(getActivity(), INCID_CLOSED_LIST_FLAG.getBundleForKey(true));
+                            }
+                        },
+                        resolucion);
+            else {
+                controller.modifyResolucion(
+                        new ResolucionSingleObserver<Integer>() {
+                            @Override
+                            public void onSuccess(Integer updatedRows)
+                            {
+                                Timber.d("modifyResolucion().onSuccess(), updatedRows: %d", updatedRows);
+                                routerInitializer.get().getContextRouter()
+                                        .getActionFromContextNm(incid_resolucion_just_modified)
+                                        .initActivity(
+                                                getActivity(),
+                                                INCID_RESOLUCION_BUNDLE.getBundleForKey(new IncidAndResolBundle(incidImportancia, true))
+                                        );
+                            }
+                        },
+                        resolucion);
+            }
         }
     }
 
@@ -239,7 +241,10 @@ public class IncidResolucionEditFr extends Fragment {
             Timber.d(e);
             routerInitializer.get().getExceptionRouter()
                     .getActionFromMsg(getUiExceptionFromThrowable(e).getErrorHtppMsg())
-                    .initActivity(requireNonNull(getActivity()), COMUNIDAD_ID.getBundleForKey(incidImportancia.getIncidencia().getComunidadId()));
+                    .handleExceptionInUi(
+                            requireNonNull(getActivity()),
+                            COMUNIDAD_ID.getBundleForKey(incidImportancia.getIncidencia().getComunidadId())
+                    );
         }
     }
 }

@@ -23,7 +23,7 @@ public class CtrlerIncidComment extends Controller implements CtrlerListIf<Incid
         routerInitializer.get()
                 .getExceptionRouter()
                 .getActionFromMsg(getUiExceptionFromThrowable(e).getErrorHtppMsg())
-                .initActivity(activity);
+                .handleExceptionInUi(activity);
     }
 
     @Override

@@ -11,7 +11,6 @@ import android.widget.ListView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.AbstractSingleObserver;
 import com.didekindroid.lib_one.api.Viewer;
-import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -23,13 +22,12 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.comunidad.util.ComuContextualName.found_comu_single_for_current_neighbour;
+import static com.didekindroid.comunidad.util.ComuContextualName.found_comu_single_for_current_user;
+import static com.didekindroid.comunidad.util.ComuContextualName.found_comu_single_for_no_reg_user;
+import static com.didekindroid.comunidad.util.ComuContextualName.no_found_comu_for_current_user;
+import static com.didekindroid.comunidad.util.ComuContextualName.no_found_comu_for_no_reg_user;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekindroid.router.DidekinContextAction.editCurrentUserComu;
-import static com.didekindroid.router.DidekinContextAction.regNewComuAndNewUser;
-import static com.didekindroid.router.DidekinContextAction.regNewComuAndUserComu;
-import static com.didekindroid.router.DidekinContextAction.regNewUser;
-import static com.didekindroid.router.DidekinContextAction.regNewUserComu;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 
 /**
@@ -55,12 +53,6 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
     // ==================================  VIEWER  =================================
 
     @Override
-    public UiExceptionRouterIf getExceptionRouter()
-    {
-        return routerInitializer.get().getExceptionRouter();
-    }
-
-    @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
@@ -84,12 +76,10 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
     {
         Timber.d("onSuccessEmptyList()");
         makeToast(activity, R.string.no_result_search_comunidad);
-        Bundle bundle = new Bundle(1);
-        bundle.putSerializable(COMUNIDAD_SEARCH.key, comunidad);
         if (controller.isRegisteredUser()) {
-            regNewComuAndUserComu.initActivity(activity, bundle);
+            getContextualRouter().getActionFromContextNm(no_found_comu_for_current_user).initActivity(activity, COMUNIDAD_SEARCH.getBundleForKey(comunidad));
         } else {
-            regNewComuAndNewUser.initActivity(activity, bundle);
+            getContextualRouter().getActionFromContextNm(no_found_comu_for_no_reg_user).initActivity(activity, COMUNIDAD_SEARCH.getBundleForKey(comunidad));
         }
         activity.finish();
     }
@@ -107,9 +97,8 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
             final Comunidad comunidadSelect = (Comunidad) view.getItemAtPosition(position);
 
             if (!controller.isRegisteredUser()) {
-                Bundle bundle = new Bundle(1);
-                bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidadSelect);
-                regNewUser.initActivity(activity, bundle);
+                getContextualRouter().getActionFromContextNm(found_comu_single_for_no_reg_user)
+                        .initActivity(activity, COMUNIDAD_LIST_OBJECT.getBundleForKey(comunidadSelect));
             } else {
                 controller.getUserComu(new UsuarioComunidadObserver(comunidadSelect), comunidadSelect);
             }
@@ -129,9 +118,8 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         public void onSuccess(UsuarioComunidad usuarioComunidad)
         {
             Timber.d("onSuccess()");
-            Bundle bundle = new Bundle(1);
-            bundle.putSerializable(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
-            editCurrentUserComu.initActivity(activity, bundle);
+            getContextualRouter().getActionFromContextNm(found_comu_single_for_current_neighbour)
+                    .initActivity(activity, USERCOMU_LIST_OBJECT.getBundleForKey(usuarioComunidad));
         }
 
         @Override
@@ -145,9 +133,7 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         public void onComplete()
         {
             Timber.d("onComplete()");
-            Bundle bundle = new Bundle(1);
-            bundle.putSerializable(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            regNewUserComu.initActivity(activity, bundle);
+            getContextualRouter().getActionFromContextNm(found_comu_single_for_current_user).initActivity(activity, COMUNIDAD_LIST_OBJECT.getBundleForKey(comunidad));
         }
     }
 

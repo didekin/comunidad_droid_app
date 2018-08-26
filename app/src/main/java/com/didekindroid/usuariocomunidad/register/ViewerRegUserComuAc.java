@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ParentViewer;
-import com.didekindroid.lib_one.util.ConnectionUtils;
 import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -21,6 +20,7 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.util.ComuContextualName.new_usercomu_just_registered;
 import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
@@ -78,9 +78,9 @@ final class ViewerRegUserComuAc extends ParentViewer<View, CtrlerUsuarioComunida
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!ConnectionUtils.isInternetConnected(activity)) {
-                makeToast(activity, R.string.no_internet_conn_toast);
-            } else {
+                return;
+            }
+            if (checkInternetConnected(activity)) {
                 controller.regUserComu(new RegUserComuObserver(comunidad), usuarioComunidad);
             }
         }

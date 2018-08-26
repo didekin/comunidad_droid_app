@@ -66,7 +66,7 @@ public class DidekinMnActionTest {
     @After
     public void cleanUp()
     {
-        secInitializer.get().getTkCacher().updateIsRegistered(false);
+        secInitializer.get().getTkCacher().updateAuthToken(null);
     }
 
     //  ===========================================================================
@@ -110,8 +110,8 @@ public class DidekinMnActionTest {
     @Test
     public void test_reg_nueva_comunidad_mn_2()
     {
-        secInitializer.get().getTkCacher().updateIsRegistered(true);
-        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredCache);
+        secInitializer.get().getTkCacher().updateAuthToken("mock_gcmTk");
+        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isUserRegistered);
         reg_nueva_comunidad_mn.initActivity(activity);
         intended(hasComponent(RegComuAndUserComuAc.class.getName()));
     }
@@ -119,8 +119,8 @@ public class DidekinMnActionTest {
     @Test
     public void test_see_usercomu_by_user_mn()
     {
-        secInitializer.get().getTkCacher().updateIsRegistered(true);
-        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isRegisteredCache);
+        secInitializer.get().getTkCacher().updateAuthToken("mock_gcmTk");
+        waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isUserRegistered);
         see_usercomu_by_user_mn.initActivity(activity);
         intended(hasComponent(SeeUserComuByUserAc.class.getName()));
     }

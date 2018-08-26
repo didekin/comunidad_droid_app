@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -17,6 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -86,7 +86,7 @@ public class ComuSearchResultsAcTest {
                     } catch (Exception e) {
                         fail();
                     }
-                    TaskStackBuilder.create(getTargetContext()).addParentStack(ComuSearchResultsAc.class).startActivities();
+                    create(getTargetContext()).addParentStack(ComuSearchResultsAc.class).startActivities();
                 }
 
                 @Override
@@ -117,11 +117,15 @@ public class ComuSearchResultsAcTest {
     {
         onView(withId(R.id.comu_list_fragment)).check(matches(isDisplayed()));
         assertThat(activity.viewer, notNullValue());
-    }
 
-    @Test
-    public void testOnStop()
-    {
+        // test_OnPrepareOptionsMenu
+        // Preconditions:
+        assertThat(activity.viewer.getController().isRegisteredUser(), is(true));
+        // Check in the overflow menu.
+        openActionBarOverflowOrOptionsMenu(activity);
+        onView(withText(activity.getString(R.string.see_usercomu_by_user_ac_mn))).check(matches(isDisplayed()));
+
+        // testOnStop
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
@@ -144,7 +148,7 @@ public class ComuSearchResultsAcTest {
     @Test
     public void testSelectComunidad_RegUser_Up()
     {
-        TaskStackBuilder.create(getTargetContext()).addParentStack(UserComuDataAc.class).startActivities();
+        create(getTargetContext()).addParentStack(UserComuDataAc.class).startActivities();
         doSelectComunidadRegUser();
         checkUp(seeUserComuByUserFrRsId);
     }
@@ -152,22 +156,12 @@ public class ComuSearchResultsAcTest {
     @Test
     public void testSelectComunidad_UnRegUser_Up()
     {
-        activity.viewer.getController().updateIsRegistered(false);
+        activity.viewer.getController().getTkCacher().updateAuthToken(null);
         doSelectComunidadNotRegUser();
         checkUp(comuSearchResultsListLayout);
     }
 
     //    ======================= MENU =========================
-
-    @Test
-    public void test_OnPrepareOptionsMenu()
-    {
-        // Preconditions:
-        assertThat(activity.viewer.getController().isRegisteredUser(), is(true));
-        // Check in the overflow menu.
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withText(activity.getString(R.string.see_usercomu_by_user_ac_mn))).check(matches(isDisplayed()));
-    }
 
     @SuppressWarnings("RedundantThrows")
     @Test
@@ -192,7 +186,7 @@ public class ComuSearchResultsAcTest {
     public void testRegComuAndUserComu_UnRegUser_Up()  throws InterruptedException
     {
         // Usuario no registrado.
-        activity.viewer.getController().updateIsRegistered(false);
+        activity.viewer.getController().getTkCacher().updateAuthToken(null);
         REG_COMU_USER_USERCOMU_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
@@ -202,7 +196,7 @@ public class ComuSearchResultsAcTest {
     public void testRegComuAndUserComu_UnRegUser_Back() throws InterruptedException
     {
         // Usuario no registrado.
-        activity.viewer.getController().updateIsRegistered(false);
+        activity.viewer.getController().getTkCacher().updateAuthToken(null);
         REG_COMU_USER_USERCOMU_AC.checkItem(activity);
         checkBack(onView(withId(regComu_User_UserComuAcLayout)), comuSearchResultsListLayout);
     }
