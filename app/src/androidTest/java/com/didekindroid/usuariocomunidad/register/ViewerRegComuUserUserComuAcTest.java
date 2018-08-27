@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.lib_one.api.ParentViewerIf;
-import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.lib_one.usuario.LoginAc;
 import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
 import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
@@ -126,7 +125,7 @@ public class ViewerRegComuUserUserComuAcTest {
         // Data.
         typeComunidadDefault(new ComunidadAutonoma((short) 10, "Valencia"));
         // Data, exec and check.
-        execCheckCleanDialog(activity.viewer);
+        execCheckCleanDialog();
     }
 
     @Test
@@ -167,7 +166,7 @@ public class ViewerRegComuUserUserComuAcTest {
 
     /*  =========================  Helpers  ===========================*/
 
-    static void execCheckCleanDialog(ViewerIf viewer)
+    static void execCheckCleanDialog()
     {
         typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
@@ -176,7 +175,6 @@ public class ViewerRegComuUserUserComuAcTest {
         // Check.
         waitAtMost(8, SECONDS)
                 .until(isViewDisplayed(onView(withText(R.string.receive_password_by_mail_dialog)).inRoot(isDialog())));
-        assertThat(requireNonNull(viewer.getController()).isRegisteredUser(), is(true));
         // Exec.
         onView(withText(R.string.continuar_button_rot)).inRoot(isDialog()).perform(click());
         // Check.

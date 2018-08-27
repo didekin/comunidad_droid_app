@@ -133,7 +133,7 @@ public class ViewerRegUserAndUserComuAcTest {
         // Precondition:
         assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));
         // Data, exec and check.
-        execCheckCleanDialog(activity.viewer);
+        execCheckCleanDialog();
     }
 
     @Test
