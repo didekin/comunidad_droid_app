@@ -64,6 +64,7 @@ public class ViewerComuSearchAcTest {
     @Test
     public void test_SetChildViewer()
     {
+        waitAtMost(6, SECONDS).until(() -> activity.regComuFrg.viewer.getViewInViewer() != null );
         activity.viewerAc.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), activity.viewerAc));
         waitAtMost(6, SECONDS).until(() -> activity.viewerAc.getChildViewer(ViewerRegComuFr.class) != null);
     }
