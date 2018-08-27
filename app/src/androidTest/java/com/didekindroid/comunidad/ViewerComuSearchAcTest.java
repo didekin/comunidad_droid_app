@@ -11,22 +11,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtras;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
-import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -49,34 +41,19 @@ public class ViewerComuSearchAcTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        waitAtMost(6, SECONDS).until(() -> activity.viewerAc != null && activity.viewerAc.getViewInViewer() != null);
-        waitAtMost(6, SECONDS).until(() -> activity.regComuFrg != null && activity.regComuFrg.frView != null);
-    }
-
-    @Test
-    public void test_DoViewInViewer()
-    {
-        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(comuSearchAcLayout)));
-        onView(withId(R.id.searchComunidad_Bton)).check(matches(isDisplayed()));
-        checkRegComuFrViewEmpty();
-    }
-
-    @Test
-    public void test_SetChildViewer()
-    {
-        waitAtMost(6, SECONDS).until(() -> activity.regComuFrg.viewer.getViewInViewer() != null );
-        activity.viewerAc.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), activity.viewerAc));
-        waitAtMost(6, SECONDS).until(() -> activity.viewerAc.getChildViewer(ViewerRegComuFr.class) != null);
+        waitAtMost(6, SECONDS).until(() -> activity.viewerAc != null
+                && activity.viewerAc.getViewInViewer() != null);
+        waitAtMost(6, SECONDS).until(() -> activity.regComuFrg != null
+                && activity.regComuFrg.frView != null
+                && activity.regComuFrg.viewer != null
+                && activity.regComuFrg.viewer.getViewInViewer() != null);
     }
 
     @Test
     public void test_ComuSearchButtonListener()
     {
-        checkMunicipioSpinner("municipio"); /* Esperamos por los viejos datos.*/
+        checkRegComuFrViewEmpty(); /* Esperamos por los viejos datos.*/
         typeComunidadData();
-
-        ViewerRegComuFr viewerRegComuFrOld = activity.viewerAc.getChildViewer(ViewerRegComuFr.class);
-        activity.setChildInParentViewer(viewerRegComuFrOld);
 
         Button button = activity.acView.findViewById(R.id.searchComunidad_Bton);
         button.setOnClickListener(activity.viewerAc.new ComuSearchButtonListener());

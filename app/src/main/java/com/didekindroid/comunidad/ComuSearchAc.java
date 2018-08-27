@@ -63,7 +63,8 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
     {
         Timber.d("onStop()");
         super.onStop();
-        clearViewersSubscr();
+        viewerAc.clearSubscriptions();
+        viewerDrawer.clearSubscriptions();
     }
 
     @Override
