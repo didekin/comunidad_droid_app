@@ -9,11 +9,9 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.util.ComuBundleKey;
 import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ParentViewerIf;
-import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
