@@ -151,7 +151,7 @@ public class IncidRegAcTest {
         SECONDS.sleep(1);
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(incidSeeByComuAcLayout)));  // TODO: fail.
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(incidSeeByComuAcLayout)));
         checkBack(onView(withId(incidSeeByComuAcLayout)), incidRegAcLayout, incidRegFrLayout);
     }
 

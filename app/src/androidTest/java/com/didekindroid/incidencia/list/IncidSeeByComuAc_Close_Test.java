@@ -187,7 +187,7 @@ public class IncidSeeByComuAc_Close_Test {
     }
 
     @Test
-    public void testOnSelectedWithBack()  // TODO: fail.
+    public void testOnSelectedWithBack()
     {
         waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
         // Seleccionamos incidencia.

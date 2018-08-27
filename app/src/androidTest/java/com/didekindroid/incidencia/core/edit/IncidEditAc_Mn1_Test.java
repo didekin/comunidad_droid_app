@@ -89,7 +89,7 @@ public class IncidEditAc_Mn1_Test {
 
     @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidCommentsSee_Mn() throws Exception   // TODO: fail.
+    public void testIncidCommentsSee_Mn() throws Exception
     {
         activity = doIntentStartActivity(initDbData(COMU_ESCORIAL_PEPE, true));
         dbHelper = new IncidenciaDataDbHelper(activity);

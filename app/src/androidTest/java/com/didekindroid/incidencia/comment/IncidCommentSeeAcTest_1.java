@@ -96,11 +96,15 @@ public class IncidCommentSeeAcTest_1 {
         Resolucion resolucion = insertGetResolucionNoAvances(incidPepeEscorial);
         assertThat(incidenciaDao.closeIncidencia(resolucion).blockingGet(), is(2));
         // Run.
-        getInstrumentation().startActivitySync(intent);
+        AppCompatActivity activity = (AppCompatActivity) getInstrumentation().startActivitySync(intent);
         // Check.
         onView(withId(incidCommentsSeeFrLayout)).check(matches(isDisplayed()));
         // FloatingButton
         onView(withId(R.id.incid_new_comment_fab)).check(matches(isDisplayed()));
+
+        // test_OnStop
+        IncidCommentSeeListFr fr = ((IncidCommentSeeListFr) activity.getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName()));
+        checkSubscriptionsOnStop(activity, fr.controller);
     }
 
     @Test
@@ -111,14 +115,5 @@ public class IncidCommentSeeAcTest_1 {
         waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_comment_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidCommentRegAcLayout));
         checkUp(incidCommentsSeeFrLayout);
-    }
-
-    @Test
-    public void test_OnStop()
-    {
-        // Run.
-        AppCompatActivity activity = (AppCompatActivity) getInstrumentation().startActivitySync(intent);
-        IncidCommentSeeListFr fr = ((IncidCommentSeeListFr) activity.getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName()));
-        checkSubscriptionsOnStop(activity, fr.controller);
     }
 }
