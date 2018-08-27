@@ -138,7 +138,7 @@ public final class IncidTestData {
                 incidencia,
                 RESOLUCION_DEFAULT_DESC,
                 1122,
-                new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 2)));
+                new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 30)));
         assertThat(incidenciaDao.regResolucion(resolucion).blockingGet(), is(1));
         return incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet();
     }

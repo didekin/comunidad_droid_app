@@ -43,7 +43,6 @@ import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuD
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
 import static java.util.Calendar.SECOND;
-import static java.util.Calendar.getInstance;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -235,8 +234,8 @@ public class IncidenciaDaoTest {
     public void testSeeResolucionRaw()
     {
         // Caso OK.
-        Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu); // Implicitly tested calling this utilities method.
-        assertThat(resolucion.getFechaPrev().getTime() > getInstance().getTimeInMillis(), is(true));
+        Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu);
+        assertThat(incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet(), is(resolucion));
     }
 
     @Test
