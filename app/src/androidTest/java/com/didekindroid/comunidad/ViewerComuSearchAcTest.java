@@ -49,7 +49,7 @@ public class ViewerComuSearchAcTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        waitAtMost(6, SECONDS).until(() -> activity.viewerAc != null);
+        waitAtMost(6, SECONDS).until(() -> activity.viewerAc != null && activity.viewerAc.getViewInViewer() != null);
     }
 
     @Test
