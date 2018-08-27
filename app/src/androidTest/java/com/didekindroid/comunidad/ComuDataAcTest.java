@@ -107,6 +107,18 @@ public class ComuDataAcTest {
     @Test
     public void testModifyComuData_UP()
     {
+        // test_OnCreate
+        assertThat(activity, isA(InjectorOfParentViewerIf.class));
+        assertThat(activity.acView, notNullValue());
+        assertThat(activity.viewer, notNullValue());
+        assertThat(activity.regComuFrg, notNullValue());
+
+        assertThat(activity.viewer, isA(ParentViewerIf.class));
+        assertThat(activity.regComuFrg.viewerInjector, is(activity));
+
+        // test_GetViewerAsParent
+        assertThat(activity.regComuFrg.viewer.getParentViewer(), is(activity.viewer));
+
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
         // Modificamos.
         typeComuCalleNumero("nombre via One", "123", "Tris");
@@ -127,34 +139,10 @@ public class ComuDataAcTest {
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
-        checkBack(onView(withId(seeUserComuByUserFrRsId)), comuDataAcLayout, regComuFrLayout);
-    }
-
-    @Test
-    public void test_GetViewerAsParent()
-    {
-        assertThat(activity.getInjectedParentViewer(), Matchers.<ViewerIf>is(activity.viewer));
-    }
-
-    //  =========================  TESTS FOR ACTIVITY LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnCreate()
-    {
-        assertThat(activity, isA(InjectorOfParentViewerIf.class));
-        assertThat(activity.acView, notNullValue());
-        assertThat(activity.viewer, notNullValue());
-        assertThat(activity.regComuFrg, notNullValue());
-
-        assertThat(activity.viewer, isA(ParentViewerIf.class));
-        assertThat(activity.regComuFrg.viewerInjector, is(activity));
-        assertThat(activity.regComuFrg.viewer.getParentViewer(), is(activity.viewer));
-    }
-
-    @Test
-    public void testOnStop()
-    {
+        //  testOnStop
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
+
+        checkBack(onView(withId(seeUserComuByUserFrRsId)), comuDataAcLayout, regComuFrLayout);
     }
 
 //     ==================== MENU ====================
