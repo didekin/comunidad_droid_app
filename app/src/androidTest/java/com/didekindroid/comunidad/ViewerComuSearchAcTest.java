@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.testutil.ActivityTestUtil;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,6 +26,7 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuni
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -50,12 +50,13 @@ public class ViewerComuSearchAcTest {
     {
         activity = activityRule.getActivity();
         waitAtMost(6, SECONDS).until(() -> activity.viewerAc != null && activity.viewerAc.getViewInViewer() != null);
+        waitAtMost(6, SECONDS).until(() -> activity.regComuFrg != null && activity.regComuFrg.frView != null);
     }
 
     @Test
     public void test_DoViewInViewer()
     {
-        waitAtMost(6, SECONDS).until(ActivityTestUtil.isViewDisplayed(withId(comuSearchAcLayout)));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(comuSearchAcLayout)));
         onView(withId(R.id.searchComunidad_Bton)).check(matches(isDisplayed()));
         checkRegComuFrViewEmpty();
     }
