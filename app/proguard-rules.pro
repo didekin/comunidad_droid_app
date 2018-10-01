@@ -16,6 +16,9 @@
 #   public *;
 #}
 
+# Ignore annotation used for build tooling.
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
 # Java lambda
@@ -39,9 +42,9 @@
 -dontwarn kotlin.Unit
 # Top-level functions that can only be used by Kotlin.
 -dontwarn retrofit2.-KotlinExtensions
+-dontwarn okhttp3.internal.platform.*
 
-# Ignore annotation used for build tooling.
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
 
 
 
