@@ -13,6 +13,7 @@ import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.router.MnRouterActionIf;
+import com.didekindroid.lib_one.usuario.UserDataAc;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
@@ -67,6 +68,8 @@ public enum DidekinMnAction implements MnRouterActionIf {
     // COMUNIDAD.
     comu_data_mn(R.id.comu_data_ac_mn, ComuDataAc.class),
     comu_search_mn(R.id.comu_search_ac_mn, ComuSearchAc.class),
+    // USUARIO
+    user_data_mn(R.id.user_data_ac_mn, UserDataAc.class), // TODO: testar
     // USUARIO_COMUNIDAD.
     reg_nueva_comunidad_mn(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserComuAc.class) {
         @Override

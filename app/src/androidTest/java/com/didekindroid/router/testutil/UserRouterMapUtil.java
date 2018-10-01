@@ -14,9 +14,9 @@ import static com.didekindroid.lib_one.usuario.router.UserUiExceptionAction.show
 import static com.didekindroid.router.DidekinContextAction.didekinContextAcMap;
 import static com.didekindroid.router.DidekinMnAction.didekinMnItemMap;
 import static com.didekindroid.router.DidekinUiExceptionAction.didekinExcpMsgMap;
-import static com.didekinlib.http.usuario.UsuarioExceptionMsg.BAD_REQUEST;
-import static com.didekinlib.http.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
-import static com.didekinlib.http.usuario.UsuarioExceptionMsg.UNAUTHORIZED;
+import static com.didekinlib.model.usuario.http.UsuarioExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.model.usuario.http.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
+import static com.didekinlib.model.usuario.http.UsuarioExceptionMsg.UNAUTHORIZED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

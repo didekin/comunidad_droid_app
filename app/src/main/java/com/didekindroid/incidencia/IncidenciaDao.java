@@ -6,13 +6,13 @@ import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.security.AuthTkCacherIf;
 import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekindroid.lib_one.usuario.dao.AppIdHelper;
-import com.didekinlib.http.incidencia.IncidenciaServEndPoints;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.incidencia.http.IncidenciaServEndPoints;
 
 import java.util.List;
 

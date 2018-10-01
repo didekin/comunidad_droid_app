@@ -36,7 +36,7 @@ import static android.support.v4.app.NotificationCompat.VISIBILITY_PRIVATE;
 import static android.support.v4.app.TaskStackBuilder.create;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
+import static com.didekinlib.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;

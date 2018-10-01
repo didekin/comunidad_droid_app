@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.comment;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.DidekinApp;
 import com.didekindroid.lib_one.api.SingleObserverMock;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -10,10 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.app.Instrumentation.newApplication;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doComment;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
-import static com.didekindroid.lib_one.testutil.InitializerTestUtil.initSec_Http;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.execCheckSchedulersTest;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_RODRIGO;
@@ -31,7 +33,7 @@ public class CtrlerIncidCommentTest {
     @Before
     public void setUp() throws Exception
     {
-        initSec_Http(getTargetContext());
+        getInstrumentation().callApplicationOnCreate(newApplication(DidekinApp.class, getTargetContext()));
         controller = new CtrlerIncidComment();
         incidencia = insertGetIncidImportancia(comu_real_rodrigo).getIncidencia();
     }

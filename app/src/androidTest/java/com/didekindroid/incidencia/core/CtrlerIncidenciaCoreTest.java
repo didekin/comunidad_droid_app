@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.core;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.DidekinApp;
 import com.didekindroid.lib_one.api.MaybeObserverMock;
 import com.didekindroid.lib_one.api.SingleObserverMock;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -16,6 +17,8 @@ import org.junit.runner.RunWith;
 import java.sql.Timestamp;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static android.app.Instrumentation.newApplication;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.incidencia.testutils.IncidTestData.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
@@ -23,7 +26,6 @@ import static com.didekindroid.incidencia.testutils.IncidTestData.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetDefaultResolucion;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidenciaUser;
-import static com.didekindroid.lib_one.testutil.InitializerTestUtil.initSec_Http;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.execCheckSchedulersTest;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
@@ -53,7 +55,7 @@ public class CtrlerIncidenciaCoreTest {
     @Before
     public void setUp() throws Exception
     {
-        initSec_Http(getTargetContext());
+        getInstrumentation().callApplicationOnCreate(newApplication(DidekinApp.class, getTargetContext()));
         controller = new CtrlerIncidenciaCore();
         toClean.set(true);
         waitAtMost(2, SECONDS).until(() -> toClean.get());

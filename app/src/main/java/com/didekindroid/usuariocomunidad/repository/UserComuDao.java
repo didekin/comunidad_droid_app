@@ -6,10 +6,10 @@ import com.didekindroid.lib_one.security.AuthTkCacherIf;
 import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekindroid.lib_one.usuario.dao.AppIdHelper;
 import com.didekinlib.http.exception.ErrorBean;
-import com.didekinlib.http.usuariocomunidad.UsuarioComunidadEndPoints;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
+import com.didekinlib.model.usuariocomunidad.http.UsuarioComunidadEndPoints;
 
 import java.util.List;
 
@@ -29,8 +29,8 @@ import static com.didekindroid.lib_one.util.Device.getDeviceLanguage;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getRespSingleListFunction;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseMaybeFunction;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseSingleFunction;
-import static com.didekinlib.http.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
-import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekinlib.model.usuario.http.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
+import static com.didekinlib.model.usuario.http.UsuarioServConstant.IS_USER_DELETED;
 import static io.reactivex.Completable.complete;
 import static io.reactivex.Completable.error;
 

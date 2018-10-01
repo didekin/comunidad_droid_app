@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.repository;
 
+import com.didekindroid.DidekinApp;
 import com.didekindroid.lib_one.api.CompletableObserverMock;
 import com.didekindroid.lib_one.api.MaybeObserverMock;
 import com.didekindroid.lib_one.api.SingleObserverMock;
@@ -10,9 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static android.app.Instrumentation.newApplication;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
-import static com.didekindroid.lib_one.testutil.InitializerTestUtil.initSec_Http;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.execCheckSchedulersTest;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -43,7 +45,7 @@ public class CtrlerUsuarioComunidadTest {
     @Before
     public void setUp() throws Exception
     {
-        initSec_Http(getTargetContext());
+        getInstrumentation().callApplicationOnCreate(newApplication(DidekinApp.class, getTargetContext()));
         controller = new CtrlerUsuarioComunidad();
     }
 

@@ -29,7 +29,7 @@ import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnect
 import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
 import static com.didekindroid.lib_one.util.UiUtil.makeToast;
-import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekinlib.model.usuario.http.UsuarioServConstant.IS_USER_DELETED;
 
 /**
  * User: pedro@didekin

@@ -130,7 +130,9 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
         // Precondition.
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(true));
+
         LOGIN_AC.checkItem(activity);
+
         cleanOneUser(USER_JUAN.getUserName());
     }
 

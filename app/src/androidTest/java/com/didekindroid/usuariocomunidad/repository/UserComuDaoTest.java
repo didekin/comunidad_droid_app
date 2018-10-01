@@ -40,8 +40,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUs
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regTwoUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpMockGcmGetComu;
-import static com.didekinlib.http.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
-import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekinlib.model.comunidad.http.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
+import static com.didekinlib.model.usuario.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
 import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 import static java.util.concurrent.TimeUnit.SECONDS;

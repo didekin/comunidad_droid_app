@@ -41,7 +41,7 @@ import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuG
 import static com.didekindroid.lib_one.util.UiUtil.getMilliSecondsFromCalendarAdd;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static com.didekinlib.http.incidencia.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
+import static com.didekinlib.model.incidencia.http.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
 import static java.util.Calendar.SECOND;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

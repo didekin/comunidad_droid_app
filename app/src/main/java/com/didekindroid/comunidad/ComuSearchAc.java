@@ -12,7 +12,6 @@ import com.didekindroid.lib_one.api.DrawerDecoratedIf;
 import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.lib_one.api.ViewerIf;
-import com.didekindroid.lib_one.api.ViewerManagerIf;
 import com.didekindroid.lib_one.usuario.ViewerUserDrawer;
 
 import timber.log.Timber;
@@ -34,8 +33,7 @@ import static java.util.Objects.requireNonNull;
  * -- sufijoNumero (it can be an empty string).
  * -- municipio with codInProvincia and provinciaId.
  */
-public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentViewerIf,
-        ViewerManagerIf, DrawerDecoratedIf {
+public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentViewerIf, DrawerDecoratedIf {
 
     DrawerLayout acView;
     RegComuFr regComuFrg;
@@ -54,7 +52,10 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
         setContentView(acView);
         doToolBar(this, true).setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
-        initViewers(savedInstanceState);
+        viewerAc = newViewerComuSearch(this);
+        viewerAc.doViewInViewer(savedInstanceState, null);
+        viewerDrawer = newViewerDrawerMain(DrawerDecoratedIf.class.cast(this));
+        viewerDrawer.doViewInViewer(savedInstanceState, null);
         regComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
     }
 
@@ -72,7 +73,8 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
-        savedStateViewers(outState);
+        viewerAc.saveState(outState);
+        viewerDrawer.saveState(outState);
     }
 
     // ==================================  InjectorOfParentViewerIf  =================================
@@ -89,34 +91,6 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
     {
         Timber.d("setChildInParentViewer()");
         viewerAc.setChildViewer(viewerChild);
-    }
-
-    /* ==================================== ViewerManagerIf ====================================*/
-
-    @Override
-    public void initViewers(Bundle savedInstanceState)
-    {
-        Timber.d("initViewers()");
-        viewerAc = newViewerComuSearch(this);
-        viewerAc.doViewInViewer(savedInstanceState, null);
-        viewerDrawer = newViewerDrawerMain(DrawerDecoratedIf.class.cast(this));
-        viewerDrawer.doViewInViewer(savedInstanceState, null);
-    }
-
-    @Override
-    public void clearViewersSubscr()
-    {
-        Timber.d("clearViewersSubscr()");
-        viewerAc.clearSubscriptions();
-        viewerDrawer.clearSubscriptions();
-    }
-
-    @Override
-    public void savedStateViewers(Bundle outState)
-    {
-        Timber.d("savedStateViewers()");
-        viewerAc.saveState(outState);
-        viewerDrawer.saveState(outState);
     }
 
     /* ==================================== DrawerDecoratedIf ====================================*/

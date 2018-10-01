@@ -39,7 +39,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
-import static com.didekinlib.http.usuario.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekinlib.model.usuario.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -55,7 +55,7 @@ import static org.junit.Assert.fail;
  * Date: 07/06/17
  * Time: 12:29
  */
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
 @RunWith(AndroidJUnit4.class)
 public class ViewerUserComuDataAcTest {
 

@@ -13,7 +13,6 @@ android {
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* , "en"  Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
-        multiDexEnabled true
     }
     compileOptions {
         sourceCompatibility = "1.8"
@@ -26,7 +25,6 @@ android {
         }
     }
 
-    //noinspection GroovyAssignabilityCheck
     signingConfigs {
         release {
             if (project.hasProperty('keyalias')) {
@@ -43,8 +41,17 @@ android {
             }
         }
     }
-//    TODO: descomentar antes de pasar a PRE.
-//  testBuildType "debugPre"    -- Activar antes de pasar a PRE.
+
+    sourceSets {
+        debugPre {
+            /*manifest.srcFile 'src/debug/AndroidManifest.xml'*/
+            java.srcDirs = ['src/debug/java']
+            res.srcDirs = ['src/debug/res']
+        }
+    }
+
+    // Descomentar antes de pasar a PRE.
+//  testBuildType "debugPre"
 
     buildTypes {
         release {
@@ -53,49 +60,34 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            resValue "string", "didekin_web_host", '"https://didekin-web-pro.eu-central-1.elasticbeanstalk.com"'
-            resValue "string", "didekin_web_port", '":443"'
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pro.eu-central-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_port", '":443"'
         }
         pre {
             initWith release
-            resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
-            resValue "string", "didekin_web_port", '":443"'
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_port", '":443"'
         }
         local {
             initWith release
-            resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
-            resValue "string", "didekin_web_port", '""'
+            buildConfigField "String", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            buildConfigField "String", "didekin_web_port", '""'
         }
         debugPre {
             initWith debug
             minifyEnabled true
-            shrinkResources true
+            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-debug-rules.pro'
-            // Variables for android_studio default run-debug configuration.
-            if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null") {
-                // AWSPRE url's
-                resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
-                resValue "string", "didekin_web_port", '":443"'
-            } else {
-                // Variables defined in buildtest.sh environments.
-                resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
-                resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
-            }
-            matchingFallbacks = ['debug']
+            // To be used in DidekinApp.
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_port", '":443"'
         }
         debug {
             debuggable true
             versionNameSuffix ''
-            // Variables for android_studio default run-debug configuration.
-            if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null") {
-                // LOCAL url's
-                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
-                resValue "string", "didekin_web_port", '""'
-            } else {
-                // Variables defined in buildtest.sh for local and awspre environments.
-                resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
-                resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
-            }
+            // To be used in DidekinApp.
+            buildConfigField "String", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            buildConfigField "String", "didekin_web_port", '""'
         }
     }
     lintOptions {
@@ -104,7 +96,6 @@ android {
         quiet true
         ignoreWarnings false
         htmlReport true
-//        disable  "InvalidPackage"
     }
     productFlavors {
     }
@@ -116,18 +107,18 @@ android {
 }
 
 dependencies {
-//    TODO: cambiar a release y dejar esta dependencia para debug.
-    implementation rootProject.didekindroidlib_one_debug
-/*    debugImplementation rootProject.ext.didekindroidlib_one_debug*/
-
     implementation rootProject.ext.firebase_msg
     implementation rootProject.ext.didekinlib_model
-    implementation rootProject.ext.didekinlib_http
+    implementation rootProject.ext.didekinlib_utilities
     implementation rootProject.ext.timber
     runtimeOnly rootProject.ext.retrofit2
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
-    androidTestImplementation rootProject.ext.didekinlib_gcm
+
+    releaseImplementation rootProject.didekindroidlib_one_release
+    debugImplementation rootProject.ext.didekindroidlib_one_debug
+    debugPreImplementation rootProject.ext.didekindroidlib_one_debug
+
     androidTestImplementation rootProject.ext.testRuler
     androidTestImplementation rootProject.ext.testRunner
     androidTestImplementation rootProject.ext.espresso
@@ -135,7 +126,6 @@ dependencies {
     androidTestUtil rootProject.ext.testOrchestrator
     testImplementation rootProject.ext.junit
     androidTestImplementation rootProject.ext.junit
-
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -2,8 +2,8 @@ package com.didekindroid;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.FragmentManager;
 import android.os.StrictMode;
+import android.support.v4.app.FragmentManager;
 
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.lib_one.HttpInitializer;
@@ -15,6 +15,7 @@ import com.didekindroid.lib_one.security.SecInitializer;
 
 import timber.log.Timber;
 
+import static com.didekindroid.BuildConfig.BUILD_TYPE;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
@@ -32,8 +33,8 @@ import static io.reactivex.plugins.RxJavaPlugins.setErrorHandler;
  */
 public final class DidekinApp extends Application {
 
-    private static final int webHost = R.string.didekin_web_host;
-    private static final int webHostPort = R.string.didekin_web_port;
+    private static final String webHost = BuildConfig.didekin_web_host;
+    private static final String webHostPort = BuildConfig.didekin_web_port;
     private static final int timeOut = R.string.timeOut;
     private static final int bks_pswd = R.string.didekindroid_bks_pswd;
     private static final int bks_name = R.string.didekindroid_bks_name;
@@ -63,9 +64,10 @@ public final class DidekinApp extends Application {
         setErrorHandler(emptyConsumer());
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void initDebugBuildConfig()
     {
-        if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals("local")) {
+        if (!BUILD_TYPE.equalsIgnoreCase("release")) {
 
             Timber.plant(new Timber.DebugTree());
 
@@ -84,7 +86,7 @@ public final class DidekinApp extends Application {
                     .penaltyLog()
                     .build());
 
-            Timber.d("initDebugBuildConfig(), BUILD_TYPE: %s", BuildConfig.BUILD_TYPE);
+            Timber.d("================= initDebugBuildConfig(), BUILD_TYPE: %s ===================", BUILD_TYPE);
         }
         // TODO: ejemplo en Timber para librería de comunicación de errores en cliente al servidor.
     }

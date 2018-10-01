@@ -4,8 +4,8 @@ import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.security.AuthTkCacherIf;
 import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekindroid.lib_one.usuario.dao.AppIdHelper;
-import com.didekinlib.http.comunidad.ComunidadEndPoints;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.http.ComunidadEndPoints;
 
 import java.util.List;
 

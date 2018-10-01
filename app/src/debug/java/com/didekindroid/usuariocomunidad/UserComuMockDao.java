@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad;
 
-import com.didekinlib.http.HttpHandler;
-import com.didekinlib.http.usuario.UserMockEndPoints;
+import com.didekinlib.http.retrofit.HttpHandler;
+import com.didekinlib.model.usuario.http.UserMockEndPoints;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import io.reactivex.Single;

@@ -16,7 +16,7 @@ import static com.didekindroid.usuariocomunidad.UserComuMockDao.userComuMockDao;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.makeUsuarioComunidad;
-import static com.didekinlib.http.usuario.TkValidaPatterns.tkEncrypted_direct_symmetricKey_REGEX;
+import static com.didekinlib.model.usuario.http.TkValidaPatterns.tkEncrypted_direct_symmetricKey_REGEX;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.Matchers.is;
@@ -48,5 +48,4 @@ public class UserComuMockDaoTest {
 
         cleanOptions(CLEAN_JUAN2_AND_PEPE);
     }
-
 }
