@@ -119,7 +119,8 @@ public class PasswordChange_App_Test {
         onView(withId(R.id.password_validation_ediT)).perform(replaceText(USER_DROID.getPassword()), closeSoftKeyboard());
 
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
+        waitAtMost(8, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
+        waitAtMost(8, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+
     }
 }
