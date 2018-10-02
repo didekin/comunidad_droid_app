@@ -77,6 +77,6 @@ public class ViewerUserData_App_Test {
         activity.getViewer().getOldUser().set(new Usuario.UsuarioBuilder().copyUsuario(usuario).password(user_crodrigo.getPassword()).build());
         activity.getViewer().getNewUser().set(new Usuario.UsuarioBuilder().copyUsuario(activity.getViewer().getOldUser().get()).build());
         activity.runOnUiThread(() -> activity.getViewer().modifyUserData(alias_only));
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(8, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 }
