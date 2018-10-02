@@ -3,10 +3,8 @@ package com.didekindroid.incidencia.core.edit;
 import android.os.Bundle;
 import android.view.View;
 
-import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.usuario.UsuarioAssertionMsg;
+import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -16,25 +14,25 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableMaybeObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.editResolucion;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.regResolucion;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidContextualName.to_edit_incid_resolucion;
+import static com.didekindroid.incidencia.IncidContextualName.to_register_new_incid_resolucion;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
  * Date: 04/04/17
  * Time: 15:06
  */
-final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
+final class ViewerIncidEditAc extends ParentViewer<View, CtrlerIncidenciaCore> {
 
     IncidAndResolBundle resolBundle;
 
     private ViewerIncidEditAc(IncidEditAc activity)
     {
-        super(activity.acView, activity);
+        super(activity.acView, activity, null);
     }
 
     static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity)
@@ -44,6 +42,8 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
         instance.setController(new CtrlerIncidenciaCore());
         return instance;
     }
+
+    // .................................... ViewerIf .................................
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -57,7 +57,7 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
     void checkResolucion()
     {
         Timber.d("checkResolucion()");
-        assertTrue(controller.isRegisteredUser(), UsuarioAssertionMsg.user_should_be_registered);
+        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
         controller.seeResolucion(
                 new ResolucionObserver(),
                 resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId());
@@ -78,7 +78,7 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
             for (ViewerIncidEditFr child : getChildViewersFromSuperClass(ViewerIncidEditFr.class)) {
                 child.setHasResolucion();
             }
-            initAcFromRouter(bundle, editResolucion);
+            getContextualRouter().getActionFromContextNm(to_edit_incid_resolucion).initActivity(activity, bundle);
         }
 
         @Override
@@ -92,9 +92,8 @@ final class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidenci
         public void onComplete()
         {
             Timber.d("onComplete()");
-            Bundle bundle = new Bundle(1);
-            bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
-            initAcFromRouter(bundle, regResolucion);
+            getContextualRouter().getActionFromContextNm(to_register_new_incid_resolucion)
+                    .initActivity(activity, INCID_IMPORTANCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia()));
         }
     }
 }

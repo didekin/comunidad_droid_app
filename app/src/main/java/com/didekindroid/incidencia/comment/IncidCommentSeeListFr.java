@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.comment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,19 +10,19 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import java.util.List;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewComment;
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidContextualName.to_register_new_incid_comment;
+import static com.didekindroid.incidencia.comment.CtrlerIncidComment.doErrorInCtrler;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -30,12 +30,13 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * <p/>
  * Postconditions:
  */
-public class IncidCommentSeeListFr extends Fragment implements ActivityInitiatorIf {
+public class IncidCommentSeeListFr extends Fragment {
 
-    IncidCommentSeeAdapter mAdapter;
-    View mView;
-    ListView mListView;
-    Incidencia mIncidencia;
+    IncidCommentSeeAdapter adapter;
+    View view;
+    ListView listView;
+    Incidencia incidencia;
+    CtrlerIncidComment controller;
 
     public static IncidCommentSeeListFr newInstance(Incidencia incidencia)
     {
@@ -48,15 +49,20 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
+        view = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
         // Floating button.
-        FloatingActionButton fab = mView.findViewById(R.id.incid_new_comment_fab);
-        fab.setOnClickListener(v -> initAcFromRouter(getArguments(), writeNewComment));
-        return mView;
+        FloatingActionButton fab = view.findViewById(R.id.incid_new_comment_fab);
+        fab.setOnClickListener(
+                v -> routerInitializer.get()
+                        .getContextRouter()
+                        .getActionFromContextNm(to_register_new_incid_comment)
+                        .initActivity(requireNonNull(getActivity()), getArguments())
+        );
+        return view;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -66,54 +72,40 @@ public class IncidCommentSeeListFr extends Fragment implements ActivityInitiator
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter = new IncidCommentSeeAdapter(getActivity());
-        mIncidencia = (Incidencia) getArguments().getSerializable(INCIDENCIA_OBJECT.key);
-        new IncidCommentLoader().execute(mIncidencia);
-        mListView = mView.findViewById(android.R.id.list);
+        adapter = new IncidCommentSeeAdapter(getActivity());
+        incidencia = (Incidencia) getArguments().getSerializable(INCIDENCIA_OBJECT.key);
+        listView = view.findViewById(android.R.id.list);
+        controller = new CtrlerIncidComment();
+
+        controller.loadItemsByEntitiyId(new DisposableSingleObserver<List<IncidComment>>() {
+            @Override
+            public void onSuccess(List<IncidComment> incidComments)
+            {
+                Timber.d("onSuccess()");
+                if (incidComments != null && !incidComments.isEmpty()) {
+                    Timber.d("onPostExecute(): incidComments != null");
+                    adapter.clear();
+                    adapter.addAll(incidComments);
+                    listView.setAdapter(adapter);
+                } else {
+                    listView.setEmptyView(view.findViewById(android.R.id.empty));
+                }
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+                Timber.d("onError()");
+                doErrorInCtrler(e, getActivity());
+            }
+        }, incidencia.getIncidenciaId());
     }
 
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    //    ============================================================
-
-    @SuppressWarnings("WeakerAccess")
-    class IncidCommentLoader extends AsyncTask<Incidencia, Void, List<IncidComment>> {
-
-        UiException uiException;
-
-        @Override
-        protected List<IncidComment> doInBackground(Incidencia... params)
-        {
-            Timber.d("doInBackground()");
-            List<IncidComment> comments = null;
-            try {
-                comments = incidenciaDao.seeCommentsByIncid(params[0].getIncidenciaId());
-            } catch (UiException ue) {
-                uiException = ue;
-            }
-            return comments;
-        }
-
-        @SuppressWarnings("ConstantConditions")
-        @Override
-        protected void onPostExecute(List<IncidComment> incidComments)
-        {
-            Timber.d("onPostExecute()");
-
-            if (checkPostExecute(getActivity())) return;
-
-            if (uiException != null) {
-                Timber.d("onPostExecute(): uiException != null");
-                uiException.processMe(getActivity());
-            }
-            if (incidComments != null && !incidComments.isEmpty()) {
-                Timber.d("onPostExecute(): incidComments != null");
-                mAdapter.clear();
-                mAdapter.addAll(incidComments);
-                mListView.setAdapter(mAdapter);
-            } else {
-                mListView.setEmptyView(mView.findViewById(android.R.id.empty));
-            }
-        }
+    @Override
+    public void onStop()
+    {
+        Timber.d("onStop()");
+        super.onStop();
+        controller.clearSubscriptions();
     }
 }

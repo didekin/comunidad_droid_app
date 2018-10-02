@@ -5,19 +5,14 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
-import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -27,27 +22,26 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doComment;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentsSeeFrLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doComment;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,52 +54,35 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentSeeAcTest_2 {
 
-    IncidCommentSeeAc mActivity;
-    IncidImportancia incidJuanReal1;
+    private IncidCommentSeeAdapter mAdapter;
+
     @Rule
     public IntentsTestRule<IncidCommentSeeAc> activityRule = new IntentsTestRule<IncidCommentSeeAc>(IncidCommentSeeAc.class) {
-
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            // Insertamos comentarios.
-            try {
-                incidenciaDao.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()));
-                incidenciaDao.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()));
-            } catch (UiException e) {
-                e.printStackTrace();
-            }
-        }
-
         @Override
         protected Intent getActivityIntent()
         {
+            IncidImportancia incidJuanReal1 = null;
             try {
-                signUpAndUpdateTk(COMU_REAL_JUAN);
-                UsuarioComunidad juanReal = userComuDaoRemote.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuarioComunidad(juanReal)
-                        .importancia((short) 3).build();
-                incidenciaDao.regIncidImportancia(incidJuanReal1);
-                IncidenciaUser incidenciaUser = incidenciaDao.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0);
-                incidJuanReal1 = incidenciaDao.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (IOException | UiException e) {
-                e.printStackTrace();
+                incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
+            } catch (Exception e) {
+                fail();
             }
-            Intent intent = new Intent();
-            intent.putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
-            return intent;
+            // Insertamos comentarios.
+            incidenciaDao.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()))
+                    .blockingGet();
+            incidenciaDao.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()))
+                    .blockingGet();
+            return new Intent().putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
         }
     };
-    private IncidCommentSeeAdapter mAdapter;
 
     @Before
     public void setUp() throws Exception
     {
-        mActivity = activityRule.getActivity();
-        Thread.sleep(2000);
-        mAdapter = ((IncidCommentSeeListFr) mActivity.getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName())).mAdapter;
+        mAdapter =
+                ((IncidCommentSeeListFr) activityRule.getActivity().getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName()))
+                .adapter;
+        waitAtMost(4, SECONDS).until(() -> mAdapter != null && mAdapter.getCount() == 2);
     }
 
     @After
@@ -115,10 +92,8 @@ public class IncidCommentSeeAcTest_2 {
     }
 
     @Test
-    public void testOnData_1() throws Exception
+    public void testOnData_1()
     {
-        assertThat(mAdapter, notNullValue());
-        assertThat(mAdapter.getCount(), is(2));
         IncidComment comment_1 = mAdapter.getItem(0);
         assertThat(comment_1.getCommentId() > 0, is(true));
         assertThat(comment_1.getFechaAlta(), notNullValue());
@@ -128,7 +103,7 @@ public class IncidCommentSeeAcTest_2 {
     }
 
     @Test
-    public void testOnData_2() throws Exception
+    public void testOnData_2()
     {
         IncidComment comment_1 = mAdapter.getItem(0);
 
@@ -162,7 +137,7 @@ public class IncidCommentSeeAcTest_2 {
     }
 
     @Test
-    public void test_newCommentButton() throws InterruptedException
+    public void test_newCommentButton()
     {
         waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_comment_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidCommentRegAcLayout));

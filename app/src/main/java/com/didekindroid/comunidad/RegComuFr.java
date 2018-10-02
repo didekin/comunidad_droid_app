@@ -2,6 +2,7 @@ package com.didekindroid.comunidad;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,18 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
-import com.didekindroid.util.CommonAssertionMsg;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -40,10 +40,10 @@ public class RegComuFr extends Fragment {
 
     View frView;
     ViewerRegComuFr viewer;
-    ChildViewersInjectorIf viewerInjector;
+    InjectorOfParentViewerIf viewerInjector;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
@@ -59,24 +59,24 @@ public class RegComuFr extends Fragment {
 
         Comunidad comunidad;
 
-        long comunidadId = getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
-        if (comunidadId > 0){
+        long comunidadId = requireNonNull(getActivity()).getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
+        if (comunidadId > 0) {
             comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
-        } else if (getActivity().getIntent().hasExtra(COMUNIDAD_SEARCH.key)){
+        } else if (getActivity().getIntent().hasExtra(COMUNIDAD_SEARCH.key)) {
             comunidad = (Comunidad) getActivity().getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
             assertTrue(comunidad.getMunicipio().getProvincia().getComunidadAutonoma() != null, intent_extra_should_be_initialized);
         } else {
             comunidad = null;
         }
 
-        viewerInjector = (ChildViewersInjectorIf) getActivity();
-        viewer = newViewerRegComuFr(frView, viewerInjector.getParentViewer());
+        viewerInjector = (InjectorOfParentViewerIf) getActivity();
+        viewer = newViewerRegComuFr(frView, viewerInjector.getInjectedParentViewer());
         viewer.doViewInViewer(savedInstanceState, comunidad);
         viewerInjector.setChildInParentViewer(viewer);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState)
+    public void onSaveInstanceState(@NonNull Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(savedState);

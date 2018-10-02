@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.comment;
 
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.app.AppCompatActivity;
 
 import com.didekindroid.R;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -21,22 +22,22 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentRegAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidCommentsSeeFrLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
@@ -49,9 +50,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentSeeAcTest_1 {
 
-    IncidCommentSeeAc activity;
-    IncidImportancia incidPepeEscorial;
-    Intent intent;
+    private IncidImportancia incidPepeEscorial;
+    private Intent intent;
 
     @Before
     public void setUp() throws Exception
@@ -69,12 +69,12 @@ public class IncidCommentSeeAcTest_1 {
     }
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1() throws InterruptedException   // TODO: fail.
     {
-        // Precondition: incidenica is open.
+        // Precondition: incidencia is open.
         assertThat(incidPepeEscorial.getIncidencia().getFechaCierre(), nullValue());
         // Run.
-        activity = (IncidCommentSeeAc) getInstrumentation().startActivitySync(intent);
+        getInstrumentation().startActivitySync(intent);
         // Check.
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(incidCommentsSeeFrLayout)).check(matches(isDisplayed()));
@@ -82,29 +82,36 @@ public class IncidCommentSeeAcTest_1 {
         onView(withId(R.id.incid_new_comment_fab)).check(matches(isDisplayed()));
 
         // No hay comentarios registrados.
-        onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
-        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
+        SECONDS.sleep(1L);
+        waitAtMost(4, SECONDS).until(() -> {
+            onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
+            return true;
+        });
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         // Precondition: incidencia is closed.
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidPepeEscorial);
-        assertThat(incidenciaDao.closeIncidencia(resolucion), is(2));
+        Resolucion resolucion = insertGetResolucionNoAvances(incidPepeEscorial);
+        assertThat(incidenciaDao.closeIncidencia(resolucion).blockingGet(), is(2));
         // Run.
-        activity = (IncidCommentSeeAc) getInstrumentation().startActivitySync(intent);
+        AppCompatActivity activity = (AppCompatActivity) getInstrumentation().startActivitySync(intent);
         // Check.
         onView(withId(incidCommentsSeeFrLayout)).check(matches(isDisplayed()));
         // FloatingButton
         onView(withId(R.id.incid_new_comment_fab)).check(matches(isDisplayed()));
+
+        // test_OnStop
+        IncidCommentSeeListFr fr = ((IncidCommentSeeListFr) activity.getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName()));
+        checkSubscriptionsOnStop(activity, fr.controller);
     }
 
     @Test
-    public void test_newCommentButton() throws InterruptedException
+    public void test_newCommentButton()
     {
         // Run.
-        activity = (IncidCommentSeeAc) getInstrumentation().startActivitySync(intent);
+        getInstrumentation().startActivitySync(intent);
         waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_new_comment_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidCommentRegAcLayout));
         checkUp(incidCommentsSeeFrLayout);

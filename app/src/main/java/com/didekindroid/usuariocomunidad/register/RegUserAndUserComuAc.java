@@ -1,27 +1,25 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.usuario.RegUserFr;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.usuario.RegUserFr;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegUserAndUserComuAc.newViewerRegUserAndUserComuAc;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -41,8 +39,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. A long comunidadId is passed as an intent key.
  * 2. The activity SeeUserComuByComuAc is started.
  */
-@SuppressWarnings("ConstantConditions")
-public class RegUserAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
+public class RegUserAndUserComuAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     View acView;
     ViewerRegUserAndUserComuAc viewer;
@@ -63,7 +60,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
         viewer.doViewInViewer(savedInstanceState,
                 new Comunidad.ComunidadBuilder()
                         .copyComunidadNonNullValues(
-                                (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key)
+                                (Comunidad) requireNonNull(requireNonNull(getIntent().getExtras()).getSerializable(COMUNIDAD_LIST_OBJECT.key))
                         )
                         .build());
 
@@ -79,12 +76,12 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -93,14 +90,6 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
     {
         Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
-    }
-
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
 //    ============================================================
@@ -112,8 +101,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
     {
         Timber.d("onCreateOptionsMenu()");
 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.reg_user_activities_mn, menu);
+        getMenuInflater().inflate(R.menu.login_item_menu, menu);
         acMenu = menu;
         return super.onCreateOptionsMenu(menu);
     }
@@ -122,7 +110,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        boolean isRegistered = viewer.getController().isRegisteredUser();
+        boolean isRegistered = requireNonNull(viewer.getController()).isRegisteredUser();
         menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
         return true;
     }
@@ -135,10 +123,8 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ChildView
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
-                return true;
             case R.id.login_ac_mn:
-                initAcFromMenu(null, resourceId);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

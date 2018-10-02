@@ -1,7 +1,6 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.Adapter;
@@ -10,9 +9,6 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComunidadBean;
-import com.didekindroid.exception.UiException;
-import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -21,34 +17,26 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicReference;
-
-import io.reactivex.observers.DisposableSingleObserver;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuRol;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuNoPortalNoEscalera;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPlantaNoPuerta;
@@ -56,6 +44,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPortalEscalera;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPortalNoEscalera;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.runFinalCheckUserComuByComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -74,9 +63,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerSeeUserComuByComuTest {
 
-    final static AtomicReference<String> flagMethod1 = new AtomicReference<>(BEFORE_METHOD_EXEC);
-    final static AtomicReference<String> flagMethod2 = new AtomicReference<>(BEFORE_METHOD_EXEC);
-    UsuarioComunidad usuarioComunidad;
+    private UsuarioComunidad usuarioComunidad;
+
     @Rule
     public IntentsTestRule<SeeUserComuByComuAc> activityRule = new IntentsTestRule<SeeUserComuByComuAc>(SeeUserComuByComuAc.class, true) {
 
@@ -84,36 +72,34 @@ public class ViewerSeeUserComuByComuTest {
         protected Intent getActivityIntent()
         {
             try {
-                signUpAndUpdateTk(COMU_REAL_PEPE);
-                usuarioComunidad = userComuDaoRemote.seeUserComusByUser().get(0);
-            } catch (IOException | UiException e) {
+                regComuUserUserComuGetAuthTk(COMU_REAL_PEPE);
+            } catch (Exception e) {
                 fail();
             }
-            Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id());
-            return intent;
+            usuarioComunidad = userComuDao.seeUserComusByUser().blockingGet().get(0);
+            return new Intent().putExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id());
         }
     };
-    SeeUserComuByComuFr fragment;
-    SeeUserComuByComuAc activity;
-    ViewerSeeUserComuByComu viewer;
+    private SeeUserComuByComuAc activity;
+    private SeeUserComuByComuFr fragment;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        fragment = (SeeUserComuByComuFr) activity.getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
-
-        AtomicReference<ViewerSeeUserComuByComu> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, fragment.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
-        viewer = viewerAtomic.get();
+        waitAtMost(4, SECONDS).until(
+                () -> {
+                    fragment = (SeeUserComuByComuFr) activity.getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
+                    return fragment.viewer;
+                },
+                notNullValue()
+        );
         // Esperamos hasta que se ha hecho la 'primera' carga de datos.
         checkAdapterAndHeader(1);
     }
 
     @After
-    public void cleanUp() throws UiException
+    public void cleanUp()
     {
         cleanOptions(CLEAN_PEPE);
     }
@@ -121,42 +107,16 @@ public class ViewerSeeUserComuByComuTest {
     // ==================================  TESTS  =================================
 
     @Test
-    public void test_NewViewerUserComuByComu() throws Exception
+    public void test_NewViewerUserComuByComu()
     {
-        assertThat(viewer.getViewInViewer(), instanceOf(ListView.class));
-        assertThat(viewer.nombreComuView, notNullValue());
-        assertThat(viewer.getViewInViewer().getHeaderViewsCount(), is(1));
-        assertThat(viewer.getController(), instanceOf(CtrlerUserComuByComuList.class));
+        assertThat(fragment.viewer.getViewInViewer(), instanceOf(ListView.class));
+        assertThat(fragment.viewer.nombreComuView, notNullValue());
+        assertThat(fragment.viewer.getViewInViewer().getHeaderViewsCount(), is(1));
+        assertThat(fragment.viewer.getController(), instanceOf(CtrlerUserComuByComuList.class));
     }
 
     @Test
-    public void test_DoViewInViewer() throws Exception
-    {
-        viewer.setController(new CtrlerUserComuByComuList() {
-            @Override
-            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<UsuarioComunidad>> observer, Long... entityId)
-            {
-                assertThat(flagMethod1.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                return true;
-            }
-
-            @Override
-            boolean comunidadData(DisposableSingleObserver<Comunidad> observer, long comunidadId)
-            {
-                assertThat(flagMethod2.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-                return true;
-            }
-        });
-        ComunidadBean comunidadBean = new ComunidadBean();
-        comunidadBean.setComunidadId(activity.getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
-
-        viewer.doViewInViewer(new Bundle(0), comunidadBean);
-        assertThat(flagMethod1.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
-        assertThat(flagMethod2.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
-    }
-
-    @Test
-    public void test_OnSuccessLoadItems_1() throws Exception
+    public void test_OnSuccessLoadItems_1()
     {
         final List<UsuarioComunidad> list = new ArrayList<>(1);
         list.add(usuarioComunidad);
@@ -166,7 +126,7 @@ public class ViewerSeeUserComuByComuTest {
 
     /* Test de presentación de los datos en la pantalla.*/
     @Test
-    public void test_OnSuccessLoadItems_2() throws Exception
+    public void test_OnSuccessLoadItems_2()
     {
         UsuarioComunidad usuarioComunidad1 = new UsuarioComunidad.UserComuBuilder(
                 COMU_LA_PLAZUELA_5,
@@ -231,12 +191,12 @@ public class ViewerSeeUserComuByComuTest {
     }
 
     @Test
-    public void test_OnSuccessComunidadData() throws Exception
+    public void test_OnSuccessComunidadData()
     {
         final String testTxt = "testNombre";
         activity.runOnUiThread(() -> {
-            viewer.onSuccessComunidadData(testTxt);
-            assertThat(viewer.nombreComuView.getText().toString(), is(testTxt));
+            fragment.viewer.onSuccessComunidadData(testTxt);
+            assertThat(fragment.viewer.nombreComuView.getText().toString(), is(testTxt));
         });
     }
 
@@ -244,15 +204,26 @@ public class ViewerSeeUserComuByComuTest {
 
     public void checkAdapterAndHeader(int count)
     {
-        waitAtMost(6, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
-        SeeUserComuByComuListAdapter adapter = (SeeUserComuByComuListAdapter) HeaderViewListAdapter.class.cast(viewer.getViewInViewer().getAdapter()).getWrappedAdapter();
+        waitAtMost(6, SECONDS)
+                .until(
+                        (Callable<Adapter>) ((AdapterView<? extends Adapter>) fragment.viewer.getViewInViewer())::getAdapter,
+                        notNullValue());
+
+        SeeUserComuByComuListAdapter adapter =
+                (SeeUserComuByComuListAdapter) HeaderViewListAdapter.class.cast(fragment.viewer.getViewInViewer().getAdapter()).getWrappedAdapter();
+
         assertThat(adapter.getCount(), is(count));
-        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(allOf(withId(R.id.see_usercomu_by_comu_list_header), withText(containsString(COMU_REAL.getNombreComunidad())))));
+        waitAtMost(6, SECONDS)
+                .until(isViewDisplayed(
+                        allOf(
+                                withId(R.id.see_usercomu_by_comu_list_header),
+                                withText(containsString(comu_real.getNombreComunidad())))
+                ));
     }
 
     public void runAndCheckAdapterAndHeader(final List<UsuarioComunidad> list, int rowCount)
     {
-        activity.runOnUiThread(() -> viewer.onSuccessLoadItems(list));
+        activity.runOnUiThread(() -> fragment.viewer.onSuccessLoadItems(list));
         checkAdapterAndHeader(rowCount);
     }
 }

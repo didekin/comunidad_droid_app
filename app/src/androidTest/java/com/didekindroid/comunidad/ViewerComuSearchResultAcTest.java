@@ -3,7 +3,6 @@ package com.didekindroid.comunidad;
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,51 +16,49 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.comunidad.ViewerComuSearchResultAc.newViewerComuSearchResultAc;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.doMockMenu;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
 
 /**
  * User: pedro@didekin
  * Date: 21/06/17
  * Time: 14:24
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class ViewerComuSearchResultAcTest {
 
-    AppCompatActivity activity;
-    ViewerComuSearchResultAc viewer;
+    private AppCompatActivity activity;
+    private ViewerComuSearchResultAc viewer;
 
     @Before
-    public void setUp() throws InterruptedException
+    public void setUp()
     {
         cleanWithTkhandler();
-        SECONDS.sleep(2);
 
-        Intent intent = new Intent(getTargetContext(), ComuSearchResultsAc.class);
-        intent.putExtra(COMUNIDAD_SEARCH.key, COMU_REAL);
-        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(getTargetContext(), ComuSearchResultsAc.class)
+                .putExtra(COMUNIDAD_SEARCH.key, comu_real)
+                .setFlags(FLAG_ACTIVITY_NEW_TASK);
         activity = (AppCompatActivity) getInstrumentation().startActivitySync(intent);
         viewer = newViewerComuSearchResultAc((ComuSearchResultsAc) activity);
     }
 
     @Test
-    public void test_NewViewerComuSearchResultAc() throws Exception
+    public void test_NewViewerComuSearchResultAc()
     {
         assertThat(viewer.getController(), notNullValue());
     }
 
     @Test
-    public void test_UpdateActivityMenu() throws Exception
+    public void test_UpdateActivityMenu()
     {
-        PopupMenu popupMenu = new PopupMenu(getTargetContext(), null);
-        Menu myMenu = popupMenu.getMenu();
-        activity.getMenuInflater().inflate(R.menu.menu_mock_one, myMenu);
-
+        Menu myMenu = doMockMenu(activity, R.menu.menu_mock_one);
         MenuItem itemSeeUserComu = myMenu.findItem(R.id.see_usercomu_by_user_ac_mn);
 
         //Preconditions.
@@ -73,7 +70,7 @@ public class ViewerComuSearchResultAcTest {
         assertThat(!itemSeeUserComu.isVisible() && !itemSeeUserComu.isEnabled(), is(true));
 
         //Preconditions.
-        viewer.getController().updateIsRegistered(true);
+        viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
         // Exec.
         viewer.updateActivityMenu(myMenu);
         // Check: change both attributes.

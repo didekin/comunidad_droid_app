@@ -14,8 +14,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.ArrayMap;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.ActivityMock;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.junit.After;
@@ -24,7 +23,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -41,19 +39,19 @@ import static com.didekindroid.R.string.gcm_message_generic_subtext;
 import static com.didekindroid.R.string.incid_gcm_incidencia_closed_body;
 import static com.didekindroid.R.string.incid_gcm_nueva_incidencia_body;
 import static com.didekindroid.R.string.incid_gcm_resolucion_open_body;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.RESOLUCION_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.processMsgWithHandler;
-import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
+import static com.didekindroid.incidencia.testutils.GcmTestConstant.PACKAGE_TEST;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
-import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.clickNavigateUp;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekinlib.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
@@ -73,9 +71,10 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidDownStreamMsgHandlerTest {
 
-    ActivityMock mActivity;
-    long comunidadId;
-    Map<String, String> data;
+    private ActivityMock mActivity;
+    private long comunidadId;
+    private Map<String, String> data;
+    private NotificationManager notificationManager;
 
     @Rule
     public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {
@@ -84,16 +83,14 @@ public class IncidDownStreamMsgHandlerTest {
         protected void beforeActivityLaunched()
         {
             try {
-                comunidadId = signUpWithTkGetComu(COMU_REAL_JUAN).getC_Id();
-                data = new ArrayMap<>(1);
-                data.put(comunidadId_key, String.valueOf(comunidadId));
-            } catch (IOException | UiException e) {
-                e.printStackTrace();
+                comunidadId = signUpGetComu(COMU_REAL_JUAN).getC_Id();
+            } catch (Exception e) {
+                fail();
             }
+            data = new ArrayMap<>(1);
+            data.put(comunidadId_key, String.valueOf(comunidadId));
         }
     };
-
-    NotificationManager notificationManager;
 
     @Before
     public void setUp() throws Exception
@@ -117,7 +114,7 @@ public class IncidDownStreamMsgHandlerTest {
     //  ============================= UNIT TESTS ==============================
 
     @Test
-    public void testDoStackBuilder_INCIDENCIA_OPEN() throws Exception
+    public void testDoStackBuilder_INCIDENCIA_OPEN()
     {
         TaskStackBuilder stackBuilder = INCIDENCIA_OPEN.doStackBuilder(mActivity, data);
         assertThat(stackBuilder.getIntentCount(), is(2));
@@ -128,28 +125,28 @@ public class IncidDownStreamMsgHandlerTest {
     }
 
     @Test
-    public void testPendingIntent_INCIDENCIA_OPEN() throws Exception
+    public void testPendingIntent_INCIDENCIA_OPEN()
     {
         final PendingIntent pendingIntent = INCIDENCIA_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
         checkUiPendingIntent(pendingIntent, incidSeeByComuAcLayout, R.id.comu_search_ac_linearlayout);
     }
 
     @Test
-    public void testPendingIntent_INCIDENCIA_CLOSE() throws Exception
+    public void testPendingIntent_INCIDENCIA_CLOSE()
     {
         final PendingIntent pendingIntent = INCIDENCIA_CLOSE.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
         checkUiPendingIntent(pendingIntent, R.id.incid_see_by_comu_ac, R.id.comu_search_ac_linearlayout);
     }
 
     @Test
-    public void testPendingIntent_RESOLUCION_OPEN() throws Exception
+    public void testPendingIntent_RESOLUCION_OPEN()
     {
         final PendingIntent pendingIntent = RESOLUCION_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
         checkUiPendingIntent(pendingIntent, incidSeeByComuAcLayout, R.id.comu_search_ac_linearlayout);
     }
 
     @Test
-    public void testDoNotification_INCIDENCIA_OPEN() throws Exception
+    public void testDoNotification_INCIDENCIA_OPEN()
     {
         Notification notification = INCIDENCIA_OPEN
                 .doNotification(mActivity, INCIDENCIA_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT));
@@ -158,7 +155,7 @@ public class IncidDownStreamMsgHandlerTest {
     }
 
     @Test
-    public void testDoNotification_INCIDENCIA_CLOSE() throws Exception
+    public void testDoNotification_INCIDENCIA_CLOSE()
     {
         Notification notification = INCIDENCIA_CLOSE
                 .doNotification(mActivity, INCIDENCIA_CLOSE.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT));
@@ -167,7 +164,7 @@ public class IncidDownStreamMsgHandlerTest {
     }
 
     @Test
-    public void testDoNotification_RESOLUCION_OPEN() throws Exception
+    public void testDoNotification_RESOLUCION_OPEN()
     {
         Notification notification = RESOLUCION_OPEN
                 .doNotification(mActivity, RESOLUCION_OPEN.doStackBuilder(mActivity, data).getPendingIntent(0, FLAG_UPDATE_CURRENT));

@@ -6,32 +6,23 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.comunidad.spinner.MunicipioSpinnerEventItemSelect;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.comunidad.spinner.MunicipioSpinnerEventItemSelect;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkProvinciaSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrView;
@@ -40,19 +31,18 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doMunicipi
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doProvinciaSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCalleNumero;
+import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_LA_FUENTE;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_AUTONOMA_ID;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.MUNICIPIO_SPINNER_EVENT;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.PROVINCIA_ID;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.COMUNIDAD_AUTONOMA_ID;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.MUNICIPIO_SPINNER_EVENT;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.PROVINCIA_ID;
+import static com.didekindroid.lib_one.comunidad.spinner.ComunidadSpinnerKey.TIPO_VIA_ID;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -70,8 +60,9 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegComuFrTest {
 
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
     Comunidad comunidad;
+    private ComuDataAc activity;
+    private RegComuFr fragment;
 
     @Rule
     public ActivityTestRule<ComuDataAc> activityRule = new ActivityTestRule<ComuDataAc>(ComuDataAc.class) {
@@ -79,27 +70,20 @@ public class ViewerRegComuFrTest {
         protected Intent getActivityIntent()
         {
             try {
-                comunidad = signUpWithTkGetComu(COMU_PLAZUELA5_JUAN);
-            } catch (IOException | UiException e) {
+                comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+            } catch (Exception e) {
                 fail();
             }
-            Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
-            return intent;
+            return new Intent().putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };
-    ComuDataAc activity;
-    RegComuFr fragment;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
         fragment = (RegComuFr) activity.getSupportFragmentManager().findFragmentById(regComuFrLayout);
-
-        AtomicReference<ViewerRegComuFr> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, fragment.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
+        waitAtMost(4, SECONDS).until(() -> fragment.viewer != null);
     }
 
     @After
@@ -111,26 +95,23 @@ public class ViewerRegComuFrTest {
     //    =============================================================================================
 
     @Test
-    public void test_NewViewerRegComuFr() throws Exception
+    public void test_DoViewInViewer()
     {
+        // test_NewViewerRegComuFr
         assertThat(CtrlerComunidad.class.cast(fragment.viewer.getController()), notNullValue());
         assertThat(fragment.viewer.tipoViaSpinner, notNullValue());
         assertThat(fragment.viewer.comuAutonomaSpinner, notNullValue());
         assertThat(fragment.viewer.provinciaSpinner, notNullValue());
         assertThat(fragment.viewer.municipioSpinner, notNullValue());
-    }
 
-    @Test
-    public void test_DoViewInViewer() throws Exception
-    {
         // Case: ComuDataAc instance; viewBean != null.
         onView(withId(regComuFrLayout)).check(matches(isDisplayed()));
         checkRegComuFrView(comunidad, "Galicia");
-    }
 
-    @Test
-    public void test_ClearSubscriptions() throws Exception
-    {
+        // test_OnActivityCreated
+        assertThat(fragment.viewerInjector.getInjectedParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
+
+        // test_ClearSubscriptions()
         checkSubscriptionsOnStop(activity, fragment.viewer.tipoViaSpinner.getController(),
                 fragment.viewer.comuAutonomaSpinner.getController(),
                 fragment.viewer.provinciaSpinner.getController(),
@@ -139,7 +120,7 @@ public class ViewerRegComuFrTest {
     }
 
     @Test
-    public void test_SaveState() throws Exception
+    public void test_SaveState()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
 
@@ -156,10 +137,13 @@ public class ViewerRegComuFrTest {
         final MunicipioSpinnerEventItemSelect spinnerEventItem = MunicipioSpinnerEventItemSelect.class.cast(bundle.getSerializable(MUNICIPIO_SPINNER_EVENT.key));
         assertThat(spinnerEventItem.getSpinnerItemIdSelect(), is(23L));
         assertThat(spinnerEventItem.getMunicipio().getProvincia().getProvinciaId(), is((short) 34));
+
+        // test_OnStop
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
     @Test
-    public void test_DoOnClickItemId_1() throws Exception
+    public void test_DoOnClickItemId_1()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
         // Cambiamos comunidad autónoma: cambio en provincias y municipios, posiciones 0 o iniciales.
@@ -169,7 +153,7 @@ public class ViewerRegComuFrTest {
     }
 
     @Test
-    public void test_DoOnClickItemId_2() throws Exception
+    public void test_DoOnClickItemId_2()
     {
         // Cambiamos provincia: cambian los municipios.
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
@@ -178,16 +162,10 @@ public class ViewerRegComuFrTest {
     }
 
     @Test
-    public void test_OnSuccessLoadComunidad() throws Exception
+    public void test_OnSuccessLoadComunidad()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                fragment.viewer.onSuccessLoadComunidad(COMU_LA_FUENTE, null);
-            }
-        });
+        activity.runOnUiThread(() -> fragment.viewer.onSuccessLoadComunidad(COMU_LA_FUENTE, null));
         checkMunicipioSpinner(COMU_LA_FUENTE.getMunicipio().getNombre());
         checkRegComuFrView(COMU_LA_FUENTE, "Valencia");
     }
@@ -213,7 +191,7 @@ public class ViewerRegComuFrTest {
     }
 
     @Test
-    public void test_GetComunidadFromViewer_Error() throws Exception
+    public void test_GetComunidadFromViewer_Error()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
 
@@ -222,52 +200,5 @@ public class ViewerRegComuFrTest {
         final StringBuilder errors = new StringBuilder(activity.getText(R.string.error_validation_msg));
         assertThat(fragment.viewer.getComunidadFromViewer(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getText(R.string.tipo_via).toString()));
-    }
-
-    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnActivityCreated()
-    {
-        AtomicReference<ViewerRegComuFr> viewerFrAtomic = new AtomicReference<>(null);
-        viewerFrAtomic.compareAndSet(null, fragment.viewer);
-        AtomicReference<ChildViewersInjectorIf> viewerParentAtomic = new AtomicReference<>(null);
-        viewerParentAtomic.compareAndSet(null, fragment.viewerInjector);
-        waitAtMost(4, SECONDS).untilAtomic(viewerFrAtomic, notNullValue());
-        waitAtMost(2, SECONDS).untilAtomic(viewerParentAtomic, notNullValue());
-        assertThat(fragment.viewerInjector.getParentViewer().getChildViewer(fragment.viewer.getClass()),
-                Matchers.<ViewerIf>is(fragment.viewer));
-    }
-
-    @Test
-    public void test_OnSaveInstanceState()
-    {
-        fragment.viewer = new ViewerRegComuFr(fragment.getView(), activity, activity.viewer) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-
-            @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
-            {
-                return 0;
-            }
-        };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
-        waitAtMost(6, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
-    }
-
-    @Test
-    public void test_OnStop()
-    {
-        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 }

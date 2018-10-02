@@ -21,8 +21,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.RolUi.formatRolToString;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
@@ -66,7 +66,7 @@ public final class UserComuEspressoTestUtil {
         return onData(is(userComuRow))
                 .inAdapterView(withId(android.R.id.list))
                 .onChildView(allOf(
-                        withText(formatRolToString(userComuRow.getRoles(), creator.get().getContext().getResources())),
+                        withText(formatRolToString(userComuRow.getRoles(), httpInitializer.get().getContext().getResources())),
                         withId(R.id.usercomu_item_roles_txt)
                 ));
     }

@@ -5,11 +5,11 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ListView;
 
-import com.didekindroid.api.ObserverSingleList;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.ViewerListIf;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
+import com.didekindroid.lib_one.api.ObserverSingleList;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.ViewerListIf;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -19,9 +19,9 @@ import java.util.List;
 import timber.log.Timber;
 
 import static android.R.id.list;
-import static com.didekindroid.incidencia.IncidObservable.incidImportanciaByUsers;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+//import static com.didekindroid.incidencia.IncidObservable.incidImportanciaByUsers;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -31,13 +31,13 @@ import static com.didekindroid.util.UIutils.assertTrue;
 public final class ViewerIncidSeeUserComuImportancia extends Viewer<ListView, CtrlerIncidenciaCore> implements
         ViewerListIf<ListView, CtrlerIncidenciaCore, ImportanciaUser> {
 
-    private ViewerIncidSeeUserComuImportancia(View frView, ParentViewerInjectedIf parentViewer)
+    private ViewerIncidSeeUserComuImportancia(View frView, ParentViewerIf parentViewer)
     {
         super(frView.findViewById(list), parentViewer.getActivity(), parentViewer);
     }
 
     public static ViewerIncidSeeUserComuImportancia newViewerIncidSeeUserComuImportancia(@NonNull View frView,
-                                                                                         @NonNull ParentViewerInjectedIf parentViewer)
+                                                                                         @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerUserComuByComu()");
         ViewerIncidSeeUserComuImportancia instance = new ViewerIncidSeeUserComuImportancia(frView, parentViewer);
@@ -54,10 +54,7 @@ public final class ViewerIncidSeeUserComuImportancia extends Viewer<ListView, Ct
         // Precondition.
         long incidenciaId = Incidencia.class.cast(incidencia).getIncidenciaId();
         assertTrue(incidenciaId > 0L, intent_extra_should_be_initialized);
-        controller.loadItemsByEntitiyId(
-                incidImportanciaByUsers(incidenciaId),
-                new ObserverSingleList<>(this),
-                incidenciaId);
+        controller.loadItemsByEntitiyId(new ObserverSingleList<>(this), incidenciaId);
     }
 
     @Override

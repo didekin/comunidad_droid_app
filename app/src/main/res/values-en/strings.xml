@@ -9,24 +9,11 @@
     <string name="checkbox_si">Yes</string>
     <string name="checkbox_no">No</string>
     <string name="euros_rot">EUR</string>
-    <string name="decimal_separator">,</string>
-    <string name="navigate_up_txt">Navigate-up</string>
-    <string name="modif_button_rot">Modify</string>
     <string name="borrar_button_rot">Delete</string>
-    <string name="continuar_button_rot">Proceed</string>
     <!--Messages-->
-    <string name="no_internet_conn_toast">No network connection available.</string>
-    <string name="exception_generic_message">We can not continue. Try again in a few seconds.</string>
-    <string name="error_validation_msg">The following data are not valid:</string>
     <!-- Google Cloud Messages -->
-    <string name="gcm_message_generic_subtext">Click here to see datails.</string>
-    <!--******************************************************************************-->
-    <!--                                 ACCESORIOS                                   -->
-    <!--******************************************************************************-->
-    <!--Menús-->
-    <string name="confidencialiad_mn">Privacy</string>
+    <string name="gcm_message_generic_subtext">Click here to see details.</string>
     <!-- ============================= ACTIVITIES ============================= -->
-    <string name="confidencialidad_ac_label">Data Protection</string>
     <string name="proteccion_datos_txt" tools:ignore="Typos">
         30 September 2017 version \n\n
 
@@ -116,11 +103,12 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_to_show">No incidents to show</string>
     <string name="incidencia_not_registered">Try again to record the incident.</string>
-    <string name="incidencia_wrong_init">Verify that the incident is still open.
-    </string>
+    <string name="incidencia_wrong_init">Verify that the incident is still open.</string>
     <string name="resolucion_duplicada">Resolution for this incident already exists.</string>
     <string name="user_without_powers">Sign in and access again to the incident.</string>
     <!-- ====================== Google Cloud Messages ====================== -->
+    <string name="incid_id_notification_channel">INCIDENTS</string>
+    <string name="incid_desc_notification_channel">Dídekin: community incidents.</string>
     <string name="incid_gcm_nueva_incidencia_body">New incident in your community.</string>
     <string name="incid_gcm_incidencia_closed_body">Incident resolved in your community.</string>
     <string name="incid_gcm_resolucion_open_body">Incident in your community in process of resolution.</string>
@@ -150,8 +138,6 @@
     <string name="incid_reg_hint">-- Describe the incident (max. 300 characters) --</string>
     <string name="incid_reg_ac_button_rot">Register incident</string>
     <string name="incid_reg_importancia">Importance</string>
-    <string name="incid_reg_ambitoIncidencia">Scope of incidence</string>
-    <string name="incid_reg_descripcion">Description</string>
     <!-- =============== IncidResolucionRegEditSeeAc =============== -->
     <!-- ======== IncidResolucionEditFr ======== -->
     <string name="incid_resolucion_coste_final_rot">Final cost: EUR:</string>
@@ -192,32 +178,18 @@
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
-    <string name="exception_generic_app_message">We can not continue. Search your community or sign in.</string>
     <string name="comunidad_not_found_message">We can not show you this community. Search it again.</string>
     <string name="comunidad_duplicate">This community had already been registered</string>
     <string name="no_result_search_comunidad">We have not found your community.\nYou can register it here.</string>
     <string name="login_wrong_no_mail">"Search your community and sign up.\nIf it does not exist, register it in 'New community'."</string>
-    <string name="username_wrong_in_login">Email address is not recorded.</string>
-    <string name="password_wrong">The password does not match with your username.</string>
-    <string name="password_new_in_login">We have send you your new password. Sign in, again, with it.</string>
-    <string name="password_remote_change">Your password is already modified.</string>
-    <string name="send_password_by_mail_dialog">Do we send to you a new password to the email address above?</string>
-    <string name="send_password_by_mail_YES">Send it to me</string>
-    <string name="user_email_wrong">We were unable to send the new password. Your mail address may be wrong.</string>
-    <string name="user_without_signedUp">"Sign in. Or search your community and sign up.\nIf it does not exist, register it in 'New community'."</string>
-    <string name="user_with_token_null">"Sign in to continue."</string>
-    <string name="user_data_not_modified_msg">We were unable to modify your data.</string>
+
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Community data</string>
     <string name="comu_search_ac_mn">Search community</string>
-    <string name="delete_me_ac_mn">Delete your data</string>
-    <string name="login_ac_mn">Login</string>
-    <string name="password_change_ac_mn">Renew password</string>
     <string name="reg_nueva_comunidad_ac_mn">New community</string>
     <!--Válido para reg_comu_usercomu-->
     <string name="see_usercomu_by_comu_ac_mn">Neighbours</string>
     <string name="see_usercomu_by_user_ac_mn">Your communities</string>
-    <string name="user_data_ac_mn">Your user</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== ComuDataActivity =============== -->
     <string name="comu_data_ac_label">Community data</string>
@@ -229,26 +201,10 @@
     <string name="comu_search_results_ac_label">Search your community: results</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
     <string name="rotulo_comunidad">Your community</string>
-    <!-- ================= DeleteMeAc ===================== -->
-    <string name="delete_me_ac_label">Delete your data</string>
-    <string name="delete_me_ac_unreg_rot_txt">Do you wish to remove your data in Dídekin?</string>
-    <string name="delete_me_ac_unreg_button_txt">Yes. Delete my data.</string>
-    <!--================= LoginAc =================== -->
-    <string name="login_label">Login</string>
-    <string name="login_ac_rotulo">Login</string>
-    <string name="login_ac_button_txt">Validate your data</string>
-    <!-- ================== PasswordChangeAc ============== -->
-    <string name="password_ac_label">Your password</string>
-    <string name="password_change_ac_rotulo">New password</string>
-    <string name="password_send_txt">If you do not remember your password, we can send you a new one.</string>
-    <string name="password_send_button_txt">Sending a new password</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Community registration</string>
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
     <string name="reg_comunidad_ac_label">New community</string>
-    <string name="receive_password_by_mail_dialog">
-        We have sent your new password to your email address.\nLog on in the next screen.
-    </string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Your home</string>
     <string name="reg_usercomu_portal_hint">-- Block --</string>
@@ -267,29 +223,17 @@
     <string name="reg_usercomu_checbox_pro_rot">Owner</string>
     <string name="reg_usercomu_checbox_inq_rot">Tenant</string>
     <string name="reg_usercomu_role_rot">Link to community</string>
-    <string name="reg_usercomu_comunidad_null">Community</string>
     <!-- .......... RegComuFr ........... -->
     <string name="municipio_spinner">Town</string>
     <string name="municipio">Town</string>
     <string name="tipo_via">Street type</string>
     <string name="tipo_via_spinner">street type </string>
-    <string name="nombre_via_hint">Nombre de la vía, sin número</string>
-    <string name="nombre_via">Nombre de la vía</string>
-    <string name="numero_en_via">Número</string>
-    <string name="sufijo_numero_en_via_hint">Sufijo (op.)</string>
-    <string name="sufijo_numero">Sufijo</string>
-    <!-- ============= RegComuAndUserComuAc =============== -->
+    <string name="nombre_via">Street name</string>
+    <string name="sufijo_numero">Suffix number</string>
     <!-- ================== RegUserComuAc ================= -->
     <string name="regusuario_comu_ac_label">Selected community</string>
     <!-- ........... RegUserFr ......... -->
-    <string name="reg_usuario_rotulo">Your data</string>
-    <string name="alias">Name</string>
-    <string name="password">Password</string>
-    <string name="password_different">(no match)</string>
-    <string name="usuario_password_hint">Password: 6–60 letters, numbers, _</string>
-    <string name="usuario_password_confirm_hint">Password confirmation</string>
     <string name="usuario_alias_hint">Name: 6–30 letters, numbers, _</string>
-    <string name="email_hint">Email</string>
     <!-- ================= SeeUserComuByComuAc ============ -->
     <string name="see_usercomu_by_comu_ac_label">Neighbours</string>
     <string name="usercomu_portal_rot">Block:</string>
@@ -305,10 +249,4 @@
     <string name="usercomu_data_ac_delete_button_txt">Unsubscribe yourself from the community</string>
     <string name="comu_list_no_result_txt">We have not found any result for your search.
     </string>
-    <!-- ================= UserDataAc ===================== -->
-    <string name="user_data_ac_cambios_text">Rewrite the data to modify</string>
-    <string name="user_data_ac_password_txt">Validate the changes.</string>
-    <string name="user_data_ac_password_hint">Current password</string>
-    <string name="user_data_modif_button_rot">Modify your data</string>
-    <string name="no_user_data_to_be_modified">No data to modify</string>
 </resources>

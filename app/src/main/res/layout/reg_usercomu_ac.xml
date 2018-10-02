@@ -10,7 +10,7 @@
         <LinearLayout android:id="@+id/reg_usercomu_ac_layout"
                       style="@style/baseLayout"
                       android:layout_marginTop="@dimen/app_bar_bottom_margin"
-                      tools:context="com.didekindroid.com.didekindroid.usuario.RegUserComuAc">
+                      tools:context="com.didekindroid.com.didekindroid.lib_one.usuario.RegUserComuAc">
 
             <include layout="@layout/nombre_comunidad_include"/>
 

@@ -4,10 +4,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.list.VwHolderIncidSeeItem;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 
 /**
  * User: pedro@didekin

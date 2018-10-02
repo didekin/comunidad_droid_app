@@ -2,7 +2,9 @@ package com.didekindroid;
 
 import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.incidencia.IncidSuite;
-import com.didekindroid.security.SecuritySuite;
+import com.didekindroid.router.DidekinContextActionTest;
+import com.didekindroid.router.DidekinMnActionTest;
+import com.didekindroid.router.DidekinUiExceptionActionTest;
 import com.didekindroid.usuario.UsuarioSuite;
 import com.didekindroid.usuariocomunidad.UserComuSuite;
 
@@ -20,14 +22,14 @@ import org.junit.runners.Suite;
         ComunidadSuite.class,
         // incidencia
         IncidSuite.class,
-        // security
-        SecuritySuite.class,
+        // router.
+        DidekinContextActionTest.class,
+        DidekinMnActionTest.class,
+        DidekinUiExceptionActionTest.class,
         // usuario
         UsuarioSuite.class,
         // usuariocomunidad
         UserComuSuite.class,
-        // miscelánea: api, accesorio, exception, ...
-        MiscSuite.class,
 })
 public class AppFullSuite {
 }

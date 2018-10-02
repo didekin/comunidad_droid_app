@@ -1,18 +1,17 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.router.MnRouterIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * User: pedro@didekin
@@ -22,7 +21,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Preconditions:
  * 1. a long comunidadId is passed as an intent key.
  */
-public class SeeUserComuByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class SeeUserComuByComuAc extends AppCompatActivity {
 
     SeeUserComuByComuFr fragment;
 
@@ -36,14 +35,6 @@ public class SeeUserComuByComuAc extends AppCompatActivity implements ActivityIn
         doToolBar(this, true);
 
         fragment = (SeeUserComuByComuFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
-    }
-
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
     // ============================================================
@@ -62,16 +53,16 @@ public class SeeUserComuByComuAc extends AppCompatActivity implements ActivityIn
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
+        MnRouterIf router = routerInitializer.get().getMnRouter();
 
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
-            case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                initAcFromMenu(null, resourceId);
+                router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

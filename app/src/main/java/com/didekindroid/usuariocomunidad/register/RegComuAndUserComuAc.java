@@ -6,23 +6,22 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekindroid.router.ActivityRouter;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 
 import timber.log.Timber;
 
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserComuAc.newViewerRegComuUserComuAc;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
  * 1. The user is registered with a different comunidad.
  */
-@SuppressWarnings("ConstantConditions")
-public class RegComuAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
+public class RegComuAndUserComuAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     ViewerRegComuUserComuAc viewer;
     View acView;
@@ -55,12 +54,12 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ChildView
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -84,7 +83,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ChildView
 
         switch (resourceId) {
             case android.R.id.home:
-                ActivityRouter.doUpMenu(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

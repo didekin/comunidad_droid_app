@@ -4,16 +4,15 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -23,20 +22,20 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.focusOnView;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
-import static io.reactivex.Single.just;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static io.reactivex.Completable.complete;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
@@ -53,7 +52,7 @@ public class ViewerRegComuUserComuAcTest {
 
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> acActivityTestRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, true);
-    RegComuAndUserComuAc activity;
+    private RegComuAndUserComuAc activity;
 
     @Before
     public void setUp()
@@ -65,13 +64,13 @@ public class ViewerRegComuUserComuAcTest {
     }
 
     @Test
-    public void test_NewViewerRegComuUserComuAc() throws Exception
+    public void test_NewViewerRegComuUserComuAc()
     {
         assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
     }
 
     @Test
-    public void test_DoViewInViewer() throws Exception
+    public void test_DoViewInViewer()
     {
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
     }
@@ -80,7 +79,7 @@ public class ViewerRegComuUserComuAcTest {
     public void test_RegComuUserComuButtonListener_1() throws Exception
     {
         // Precondition: user is registered.
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         int buttonId = R.id.reg_comu_usuariocomunidad_button;
@@ -96,7 +95,7 @@ public class ViewerRegComuUserComuAcTest {
     public void test_RegComuUserComuButtonListener_2() throws Exception
     {
         // Precondition: user is registered.
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         int buttonId = R.id.reg_comu_usuariocomunidad_button;
@@ -112,13 +111,13 @@ public class ViewerRegComuUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuAndUserComuObserver() throws IOException, UiException
+    public void test_RegComuAndUserComuObserver() throws Exception
     {
         // Precondition: user is registered.
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
 
         ViewerRegComuUserComuAc.RegComuAndUserComuObserver observer = activity.viewer.new RegComuAndUserComuObserver();
-        just(true).subscribeWith(observer);
+        complete().subscribeWith(observer);
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
         cleanOptions(CLEAN_PEPE);
     }
@@ -126,10 +125,10 @@ public class ViewerRegComuUserComuAcTest {
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
 
     @Test
-    public void test_OnCreate() throws Exception
+    public void test_OnCreate()
     {
         // Check for initialization of fragments viewers.
-        ParentViewerInjectedIf viewerParent = activity.viewer;
+        ParentViewerIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegComuFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
         test_DoViewInViewer();

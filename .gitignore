@@ -24,7 +24,7 @@ terminal/*
 logs/
 
 # Releases
-/**/releases
+!/**/releases/release/*.apk
 
 #  MISCELÁNEA
 administracion

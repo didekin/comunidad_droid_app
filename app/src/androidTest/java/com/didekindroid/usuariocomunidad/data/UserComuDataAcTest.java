@@ -6,8 +6,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -15,8 +13,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -31,24 +27,24 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkChildInViewer;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -65,23 +61,22 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class UserComuDataAcTest {
 
-    UsuarioComunidad usuarioComunidad;
+    private UsuarioComunidad usuarioComunidad;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            Comunidad comunidad = null;
             try {
-                comunidad = signUpWithTkGetComu(COMU_TRAV_PLAZUELA_PEPE);
-            } catch (IOException | UiException e) {
+                usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
+                        .planta("One")
+                        .roles(PROPIETARIO.function)
+                        .build();
+            } catch (Exception e) {
                 fail();
             }
-            usuarioComunidad = new UsuarioComunidad.UserComuBuilder(comunidad, USER_PEPE).planta("One").roles(PROPIETARIO.function).build();
-            Intent intent = new Intent();
-            intent.putExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
-            return intent;
+            return new Intent().putExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
         }
     };
 
@@ -107,7 +102,7 @@ public class UserComuDataAcTest {
 //  ===========================================================================
 
     @Test
-    public void test_OnCreate() throws Exception
+    public void test_OnCreate()
     {
         assertThat(activity.acView, notNullValue());
         assertThat(activity.viewer, notNullValue());
@@ -117,13 +112,13 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void test_SetChildInViewer() throws Exception
+    public void test_SetChildInViewer()
     {
         checkChildInViewer(activity);
     }
 
     @Test
-    public void testModifyUserComu_1() throws InterruptedException
+    public void testModifyUserComu_1()
     {
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(replaceText("??=portalNew"));
         // Data wrong: pro rol is not compatible with inq.
@@ -149,7 +144,7 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testDeleteUserComu_1() throws UiException
+    public void testDeleteUserComu_1()
     {
         toClean = false;
 
@@ -165,44 +160,48 @@ public class UserComuDataAcTest {
 
 //    ======================= MENU =========================
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
+        SEE_USERCOMU_BY_COMU_AC.checkItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 
     @Test
-    public void testComuDataMn() throws InterruptedException
+    public void testComuDataMn()
     {
         // Only one user associated to the comunidad: the menu shows the item.
-        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showComuDataMn);
-        COMU_DATA_AC.checkItemRegisterUser(activity);
+        waitAtMost(8, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
+        COMU_DATA_AC.checkItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem(activity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkItem(activity);
         onView(withText(R.string.incid_see_by_user_ac_label)).check(matches(isDisplayed()));
         checkUp(userComuDataLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidSeeCloseByComuMn() throws InterruptedException
     {
-        INCID_SEE_CLOSED_BY_COMU_AC.checkMenuItem(activity);
+        INCID_SEE_CLOSED_BY_COMU_AC.checkItem(activity);
         onView(withText(R.string.incid_closed_by_user_ac_label)).check(matches(isDisplayed()));
         checkUp(userComuDataLayout);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
-        INCID_REG_AC.checkMenuItem(activity);
+        INCID_REG_AC.checkItem(activity);
         checkUp(userComuDataLayout);
     }
 }

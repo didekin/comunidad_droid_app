@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.reg;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,13 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerIncidRegFr;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -23,11 +25,11 @@ import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerInc
 public class IncidRegFr extends Fragment {
 
     View rootFrgView;
-    ChildViewersInjectorIf viewerInjector;
+    InjectorOfParentViewerIf viewerInjector;
     ViewerIncidRegFr viewer;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedState)
     {
         Timber.d("onCreateView()");
@@ -43,15 +45,15 @@ public class IncidRegFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         /* Initialization of viewers.*/
-        viewerInjector = (ChildViewersInjectorIf) getActivity();
-        viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getParentViewer());
-        long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
+        viewerInjector = (InjectorOfParentViewerIf) getActivity();
+        viewer = newViewerIncidRegFr(rootFrgView, requireNonNull(viewerInjector).getInjectedParentViewer());
+        long comunidadId = requireNonNull(getArguments()).getLong(COMUNIDAD_ID.key);
         viewer.doViewInViewer(savedInstanceState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
         viewerInjector.setChildInParentViewer(viewer);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState)
+    public void onSaveInstanceState(@NonNull Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(savedState);

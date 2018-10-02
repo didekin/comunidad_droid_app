@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -19,6 +20,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
  */
 public class IncidImportanciaBean implements Serializable {
 
+    private final static int incidenciaDescEditField = R.id.incid_reg_desc_ed;
     private short importancia;
 
     public IncidImportanciaBean()
@@ -61,7 +63,8 @@ public class IncidImportanciaBean implements Serializable {
 
     public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean)
     {
-        final Incidencia incidencia = incidenciaBean.makeIncidenciaFromView(fragmentView, errorMsg, resources);
+        final Incidencia incidencia = incidenciaBean
+                .makeIncidenciaFromView(fragmentView.findViewById(incidenciaDescEditField), errorMsg, resources);
 
         if (incidencia != null & validateRange(errorMsg, resources)) {
             return new IncidImportancia.IncidImportanciaBuilder(incidencia)
@@ -74,7 +77,8 @@ public class IncidImportanciaBean implements Serializable {
 
     public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean, Incidencia oldIncidencia)
     {
-        final Incidencia newIncidencia = incidenciaBean.makeIncidenciaFromView(fragmentView, errorMsg, resources);
+        final Incidencia newIncidencia = incidenciaBean
+                .makeIncidenciaFromView(fragmentView.findViewById(incidenciaDescEditField), errorMsg, resources);
 
         if (newIncidencia != null & validateRange(errorMsg, resources)) {
             return new IncidImportancia.IncidImportanciaBuilder(

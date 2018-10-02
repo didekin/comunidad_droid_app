@@ -1,6 +1,6 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
-import com.didekindroid.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;

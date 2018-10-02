@@ -1,52 +1,29 @@
 package com.didekindroid.incidencia.list;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.exception.UiException;
-import com.didekinlib.model.incidencia.dominio.Incidencia;
-import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekindroid.DidekinApp;
+import com.didekindroid.lib_one.api.SingleObserverMock;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import io.reactivex.observers.DisposableSingleObserver;
-
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu.bundleWithResolucion;
-import static com.didekindroid.incidencia.list.CtrlerIncidSeeCloseByComu.incidCloseList;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static android.app.Instrumentation.newApplication;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doSimpleIncidenciaUser;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetDefaultResolucion;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.execCheckSchedulersTest;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetUserComu;
 
 /**
  * User: pedro@didekin
@@ -56,43 +33,13 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class CtrlerIncidSeeCloseByComuTest {
 
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-    Resolucion resolucion;
-    List<IncidenciaUser> incidList;
-    Incidencia incidencia;
-    IncidenciaUser incidenciaUser;
-    CtrlerIncidSeeCloseByComu controller;
-    Activity activity;
-    UsuarioComunidad pepeUserComu;
+    private CtrlerIncidSeeCloseByComu controller;
 
-    @Rule
-    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<ActivityMock>(ActivityMock.class, true, true) {
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
-                resolucion = insertGetDefaultResolucion(pepeUserComu);
-                assertThat(incidenciaDao.closeIncidencia(resolucion), is(2));
-            } catch (UiException | InterruptedException | IOException e) {
-                fail();
-            }
-
-            incidList = new ArrayList<>();
-            incidencia = resolucion.getIncidencia();
-            incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(pepeUserComu.getUsuario()).build();
-            incidList.add(incidenciaUser);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
     @Before
-    public void setUp() throws IOException, UiException, InterruptedException
+    public void setUp() throws Exception
     {
-        activity = activityRule.getActivity();
+        getInstrumentation().callApplicationOnCreate(newApplication(DidekinApp.class, getTargetContext()));
         controller = new CtrlerIncidSeeCloseByComu();
-        assertThat(controller, notNullValue());
     }
 
     @After
@@ -103,84 +50,32 @@ public class CtrlerIncidSeeCloseByComuTest {
         cleanOptions(CLEAN_PEPE);
     }
 
-    // ......................... OBSERVABLES .............................
-
-    @Test
-    public void testResolucion()
-    {
-        bundleWithResolucion(resolucion.getIncidencia()).test().assertOf(bundleTestObserver -> {
-            Bundle bundleIn = bundleTestObserver.values().get(0);
-            checkBundle(bundleIn);
-        });
-    }
-
-
-    @Test
-    public void testIncidCloseList()
-    {
-        incidCloseList(resolucion.getIncidencia().getComunidadId()).test().assertValue(incidList);
-    }
-
     /* ............................ INSTANCE METHODS ...............................*/
 
     @Test
-    public void testLoadItemsByEntitiyId()
+    public void testLoadItemsByEntitiyId() throws Exception
     {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.loadItemsByEntitiyId(new DisposableSingleObserver<List<IncidenciaUser>>() {
-                @Override
-                public void onSuccess(List<IncidenciaUser> incidenciaUsers)
-                {
-                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                }
-
-                @Override
-                public void onError(Throwable e)
-                {
-                    fail();
-                }
-            }, pepeUserComu.getComunidad().getC_Id()), is(true));
-        } finally {
-            resetAllSchedulers();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        // No hay incidencias.
+        execCheckSchedulersTest(
+                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpGetComu(COMU_ESCORIAL_PEPE).getC_Id()),
+                controller
+        );
     }
 
     @Test
-    public void testSelectItem()
+    public void testSelectItem() throws Exception
     {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.selectItem(new DisposableSingleObserver<Bundle>() {
-                @Override
-                public void onSuccess(Bundle bundle)
-                {
-                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-                }
-
-                @Override
-                public void onError(Throwable e)
-                {
-                    fail();
-                }
-            }, incidenciaUser), is(true));
-        } finally {
-            resetAllSchedulers();
-        }
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
-        assertThat(controller.getSubscriptions().size(), is(1));
-    }
-
-    //  ============================================================================================
-    //    .................................... HELPERS .................................
-    //  ============================================================================================
-
-    void checkBundle(Bundle bundleIn)
-    {
-        assertThat(bundleIn.getSerializable(INCID_RESOLUCION_OBJECT.key), CoreMatchers.is(resolucion));
+        UsuarioComunidad userComu = signUpGetUserComu(COMU_ESCORIAL_PEPE);
+        Resolucion resolucion = insertGetDefaultResolucion(userComu);
+        execCheckSchedulersTest(
+                ctrler -> ctrler.selectItem(
+                        new SingleObserverMock<>(),
+                        doSimpleIncidenciaUser(
+                                resolucion.getIncidencia().getIncidenciaId(),
+                                resolucion.getIncidencia().getFechaAlta(),
+                                userComu.getUsuario().getuId(),
+                                resolucion.getFechaPrev())),
+                controller
+        );
     }
 }

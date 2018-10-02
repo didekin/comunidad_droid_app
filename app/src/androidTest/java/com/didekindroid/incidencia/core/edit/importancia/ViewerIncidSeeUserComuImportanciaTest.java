@@ -29,16 +29,15 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -51,12 +50,13 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * Date: 23/10/2017
  * Time: 17:34
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeUserComuImportanciaTest {
 
-    IncidEditAc activity;
-    IncidImportancia incidImportancia;
-    ViewerIncidSeeUserComuImportancia viewer;
+    private IncidEditAc activity;
+    private IncidImportancia incidImportancia;
+    private ViewerIncidSeeUserComuImportancia viewer;
 
     @Before
     public void setUp() throws Exception
@@ -69,9 +69,8 @@ public class ViewerIncidSeeUserComuImportanciaTest {
         intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
 
-        TKhandler.updateIsRegistered(true);
         activity = (IncidEditAc) getInstrumentation().startActivitySync(intent);
-        viewer = (ViewerIncidSeeUserComuImportancia) activity.getParentViewer().getChildViewer(ViewerIncidSeeUserComuImportancia.class);
+        viewer = (ViewerIncidSeeUserComuImportancia) activity.getInjectedParentViewer().getChildViewer(ViewerIncidSeeUserComuImportancia.class);
     }
 
     @After
@@ -81,7 +80,7 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     }
 
     @Test
-    public void testDoViewInViewer() throws Exception
+    public void testDoViewInViewer()
     {
         // Verificamos layout.
         ImportanciaUser importanciaUser = new ImportanciaUser(incidImportancia.getUserComu().getUsuario().getAlias(), incidImportancia.getImportancia());
@@ -94,13 +93,13 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     }
 
     @Test
-    public void test_NewViewerIncidSeeUserComuImportancia() throws Exception
+    public void test_NewViewerIncidSeeUserComuImportancia()
     {
         assertThat(viewer.getController(), isA(CtrlerIncidenciaCore.class));
     }
 
     @Test
-    public void test_OnSuccessLoadItems() throws Exception
+    public void test_OnSuccessLoadItems()
     {
 
         // Preconditions.
@@ -124,7 +123,7 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     //    ============================  LIFE CYCLE TESTS  ===================================
 
     @Test
-    public void testClearSubscriptions() throws Exception
+    public void testClearSubscriptions()
     {
         checkSubscriptionsOnStop(activity, viewer.getController());
     }

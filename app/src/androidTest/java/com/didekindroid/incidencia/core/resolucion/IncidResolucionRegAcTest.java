@@ -7,15 +7,11 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
-import com.didekindroid.util.UIutils;
-import com.didekinlib.http.ErrorBean;
+import com.didekindroid.lib_one.util.UiUtil;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
-import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,10 +19,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import static android.app.TaskStackBuilder.create;
 import static android.os.Build.VERSION.SDK_INT;
@@ -44,28 +38,26 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.exception.UiExceptionRouter.ActionsForRouter.show_resolucionDup;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.closeDatePicker;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.reSetDatePicker;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.util.UIutils.formatTimeToString;
-import static com.didekindroid.util.UIutils.isCalendarPreviousTimeStamp;
-import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
+import static com.didekindroid.lib_one.util.UiUtil.isCalendarPreviousTimeStamp;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -82,19 +74,19 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionRegAcTest {
 
-    IncidResolucionRegAc activity;
-    IncidImportancia incidImportancia;
-    TaskStackBuilder taskStackBuilder;
+    private IncidResolucionRegAc activity;
+    private IncidImportancia incidImportancia;
+    private TaskStackBuilder taskStackBuilder;
 
     @Rule
     public IntentsTestRule<IncidResolucionRegAc> testRule = new IntentsTestRule<IncidResolucionRegAc>(IncidResolucionRegAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
+            // A user WITH powers 'adm'.
             try {
-                // A user WITH powers 'adm'.
                 incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-            } catch (IOException | UiException e) {
+            } catch (Exception e) {
                 fail();
             }
 
@@ -126,16 +118,17 @@ public class IncidResolucionRegAcTest {
 
     //  ===============================  TESTS ================================
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         checkScreenResolucionRegFr();
+
         if (SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
         }
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         // DatePicker tests.
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed())).perform(click());
@@ -144,13 +137,13 @@ public class IncidResolucionRegAcTest {
         Calendar fechaPrev = reSetDatePicker(0, 0);
         closeDatePicker(activity);
 
-        if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE) && SDK_INT < M) {
+        if (Locale.getDefault().equals(UiUtil.SPAIN_LOCALE) && SDK_INT < M) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
                     withText(formatTimeToString(fechaPrev.getTimeInMillis()))
             )).check(matches(isDisplayed()));
         }
-        if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE) && SDK_INT >= M) {
+        if (Locale.getDefault().equals(UiUtil.SPAIN_LOCALE) && SDK_INT >= M) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
                     withText(formatTimeToString(fechaPrev.getTimeInMillis()))
@@ -159,7 +152,7 @@ public class IncidResolucionRegAcTest {
     }
 
     @Test
-    public void test_registerResolucion_1() throws InterruptedException
+    public void test_registerResolucion_1()
     {
         // NOT OK: Descripción errónea y fecha sin fijar.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
@@ -211,35 +204,14 @@ public class IncidResolucionRegAcTest {
     }
 
     @Test
-    public void test_registerResolucion_4()
+    public void testOnStop()
     {
-        // Test of RESOLUCION_DUPLICATE excepction.
+        // Check OnStop.
         IncidResolucionRegFr fr = (IncidResolucionRegFr) activity.getSupportFragmentManager().findFragmentByTag(IncidResolucionRegFr.class.getName());
-        IncidResolucionRegFr.ResolucionRegister resolucionRegister = fr.new ResolucionRegister() {
-            @Override
-            protected Integer doInBackground(Resolucion... params)
-            {
-                uiException = new UiException(new ErrorBean(RESOLUCION_DUPLICATE.getHttpMessage(), RESOLUCION_DUPLICATE.getHttpStatus()));
-                return 0;
-            }
-        };
-        resolucionRegister.doInBackground(new Resolucion.ResolucionBuilder(incidImportancia.getIncidencia()).buildAsFk());
-        activity.runOnUiThread(() -> resolucionRegister.onPostExecute(0));
-        waitAtMost(2, SECONDS).until(isToastInView(show_resolucionDup.getToastResourceId(), activity));
-    }
+        fr.controller = new CtrlerIncidenciaCore();
+        checkSubscriptionsOnStop(activity, fr.controller);
 
-    @Test
-    public void test_OnStart() throws Exception
-    {
-        CtrlerFirebaseTokenIf controller = CtrlerFirebaseToken.class.cast(activity.viewerFirebaseToken.getController());
-        TimeUnit.SECONDS.sleep(4);
-        assertThat(controller.isGcmTokenSentServer(), is(true));
-    }
 
-    @Test
-    public void test_OnStop() throws Exception
-    {
-        checkSubscriptionsOnStop(activity, activity.viewerFirebaseToken.getController());
     }
 
 //    ============================= HELPER METHODS ===========================
@@ -255,7 +227,7 @@ public class IncidResolucionRegAcTest {
 
     private void checkRegResolucionOk()
     {
-        onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
+        waitAtMost(8, SECONDS).until(() -> isViewDisplayed(onView(withId(incidEditAcLayout))).call());
         onView(withId(incideEditMaxPowerFrLayout)).check(matches(isDisplayed()));
         // hasResolucion == true, because it has been registered.
         intended(hasExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true)));
