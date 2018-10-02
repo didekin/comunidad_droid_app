@@ -170,10 +170,10 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testComuDataMn() throws InterruptedException
+    public void testComuDataMn()
     {
         // Only one user associated to the comunidad: the menu shows the item.
-        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
+        waitAtMost(8, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
         COMU_DATA_AC.checkItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);

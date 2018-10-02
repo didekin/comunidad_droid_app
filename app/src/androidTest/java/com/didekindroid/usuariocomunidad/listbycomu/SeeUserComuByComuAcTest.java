@@ -163,7 +163,7 @@ public class SeeUserComuByComuAcTest {
     }
 
     @Test
-    public void testComuSearchMn() throws InterruptedException
+    public void testComuSearchMn()
     {
         COMU_SEARCH_AC.checkItem(activity);
         // En este caso no hay opción de 'navigate-up'.

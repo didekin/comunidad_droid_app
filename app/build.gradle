@@ -75,9 +75,6 @@ android {
         }
         debugPre {
             initWith debug
-            minifyEnabled true
-            useProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-debug-rules.pro'
             // To be used in DidekinApp.
             buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-west-1.elasticbeanstalk.com"'
             buildConfigField "String", "didekin_web_port", '":443"'

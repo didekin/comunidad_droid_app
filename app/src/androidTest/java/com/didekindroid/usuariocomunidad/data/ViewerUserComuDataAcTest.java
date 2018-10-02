@@ -110,7 +110,7 @@ public class ViewerUserComuDataAcTest {
         checkUserComuData(activity.viewer.userComuIntent);
         onView(withId(R.id.usercomu_data_ac_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.usercomu_data_ac_delete_button)).check(matches(isDisplayed()));
-        waitAtMost(4, SECONDS).until(() -> activity.viewer.showMnOldestAdmonUser.get());
+        waitAtMost(8, SECONDS).until(() -> activity.viewer.showMnOldestAdmonUser.get());
     }
 
     // .............................. LISTENERS ..................................
