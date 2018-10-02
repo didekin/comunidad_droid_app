@@ -93,24 +93,21 @@ public class ViewerRegUserComuAcTest {
     }
 
     @Test
-    public void test_NewViewerRegUserComuAc()
+    public void test_RegUserComuButtonListener()
     {
+        // test_NewViewerRegUserComuAc
         assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
-    }
-
-    @Test
-    public void test_DoViewInViewer()
-    {
+        // Check for initialization of fragments viewers.
+        ParentViewerIf viewerParent = activity.viewer;
+        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
+        // test_DoViewInViewer
         onView(allOf(
                 withId(R.id.descripcion_comunidad_text),
                 withText(comunidad.getNombreComunidad())
         )).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_button)).perform(scrollTo()).check(matches(isDisplayed()));
-    }
 
-    @Test
-    public void test_RegUserComuButtonListener()
-    {
+        // Exec OK
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         onView(withId(R.id.reg_usercomu_button)).perform(scrollTo(), click());
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
@@ -126,15 +123,7 @@ public class ViewerRegUserComuAcTest {
         assertThat(observer.isDisposed(), is(true));
     }
 
-    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnCreate()
-    {
-        // Check for initialization of fragments viewers.
-        ParentViewerIf viewerParent = activity.viewer;
-        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
-    }
+    /*  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================*/
 
     @Test
     public void test_OnStop()

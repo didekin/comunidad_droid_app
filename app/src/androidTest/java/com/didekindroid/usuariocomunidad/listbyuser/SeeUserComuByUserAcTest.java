@@ -92,16 +92,7 @@ public class SeeUserComuByUserAcTest {
 //  ================================================================================================================
 
     @Test
-    public void test_OnCreate_1()
-    {
-        // Verificamos navegación en ambas direcciones.
-        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(is(COMU_ESCORIAL_PEPE)));
-        onView(withId(userComuDataLayout)).check(matches(isDisplayed()));
-        checkUp(seeUserComuByUserFrRsId);
-    }
-
-    @Test
-    public void test_Oncreate_2()
+    public void test_Oncreate_1()
     {
         waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.new_comunidad_fab), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regComu_UserComuAcLayout));
@@ -111,7 +102,7 @@ public class SeeUserComuByUserAcTest {
     }
 
     @Test
-    public void test_Oncreate_3()
+    public void test_Oncreate_2()
     {
         waitAtMost(4, SECONDS).until(
                 () -> {
@@ -171,10 +162,16 @@ public class SeeUserComuByUserAcTest {
                         withText("Almería")
                 ))
         )).check(matches(isDisplayed()));
+
+        // Change comunidad.
+        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(is(COMU_ESCORIAL_PEPE)));
+        onView(withId(userComuDataLayout)).check(matches(isDisplayed()));
+        // Check UP.
+        checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test
-    public void testComuSearchMn_withToken() throws InterruptedException
+    public void testComuSearchMn_withToken()
     {
         COMU_SEARCH_AC.checkItem(activity);
         // NO hay opción de navigate-up.

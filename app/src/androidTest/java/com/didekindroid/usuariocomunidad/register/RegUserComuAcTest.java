@@ -83,6 +83,19 @@ public class RegUserComuAcTest {
     @Test
     public void testOnclick_1()
     {
+        // test_OnCreate
+        assertThat(activity.regUserComuFr, notNullValue());
+        assertThat(activity.acView, notNullValue());
+        assertThat(activity.viewer, isA(ViewerRegUserComuAc.class));
+
+        onView(withId(regUserComuAcLayout)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
+
+        // test_SetChildInViewer.
+        checkChildInViewer(activity);
+
         // Validation errors.
         typeUserComuData("portal?", "select *", "planta!", "puerta_1");
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
@@ -93,6 +106,8 @@ public class RegUserComuAcTest {
                 R.string.reg_usercomu_escalera_rot,
                 R.string.reg_usercomu_planta_rot,
                 R.string.reg_usercomu_role_rot));
+
+        clickNavigateUp();
     }
 
     @Test
@@ -105,25 +120,5 @@ public class RegUserComuAcTest {
 
         waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         checkUp(regUserComuAcLayout);
-    }
-
-    @Test
-    public void test_OnCreate()
-    {
-        assertThat(activity.regUserComuFr, notNullValue());
-        assertThat(activity.acView, notNullValue());
-        assertThat(activity.viewer, isA(ViewerRegUserComuAc.class));
-
-        onView(withId(regUserComuAcLayout)).check(matches(isDisplayed()));
-        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
-        clickNavigateUp();
-    }
-
-    @Test
-    public void test_SetChildInViewer()
-    {
-        checkChildInViewer(activity);
     }
 }

@@ -98,19 +98,23 @@ public class ViewerUserComuDataAcTest {
     // .............................. VIEWER ..................................
 
     @Test
-    public void test_NewViewerUserComuDataAc()
-    {
-        assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
-    }
-
-    @Test
     public void test_DoViewInViewer()
     {
+        // test_NewViewerUserComuDataAc
+        assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
+
+        // test_OnCreate: Check for initialization of fragments viewers.
+        ParentViewerIf viewerParent = activity.viewer;
+        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
+
         assertThat(activity.viewer.userComuIntent, is(userComu));
         checkUserComuData(activity.viewer.userComuIntent);
         onView(withId(R.id.usercomu_data_ac_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.usercomu_data_ac_delete_button)).check(matches(isDisplayed()));
         waitAtMost(8, SECONDS).until(() -> activity.viewer.showMnOldestAdmonUser.get());
+
+        // test_OnStop
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
     // .............................. LISTENERS ..................................
@@ -124,7 +128,7 @@ public class ViewerUserComuDataAcTest {
 
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
         // Verificación.
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(8, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 
     @Test
@@ -141,15 +145,11 @@ public class ViewerUserComuDataAcTest {
     }
 
     @Test
-    public void test_actionAfterDeleteUser_1() throws Exception
+    public void test_actionAfterDeleteUser() throws Exception
     {
         activity.viewer.actionAfterDeleteUser.accept(1);
         onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
-    }
 
-    @Test
-    public void test_actionAfterDeleteUser_2() throws Exception
-    {
         activity.viewer.actionAfterDeleteUser.accept(IS_USER_DELETED);
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
     }
@@ -157,46 +157,29 @@ public class ViewerUserComuDataAcTest {
     // .............................. SUBSCRIBERS ..................................
 
     @Test
-    public void test_ModifyComuObserver_1()
+    public void test_ModifyComuObserver()
     {
         // Exec and check.
         just(1).subscribeWith(activity.viewer.new ModifyUserComuObserver(true));
+        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
-        waitAtMost(4, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
     }
 
     @Test
     public void test_ModifyComuObserver_2()
     {
         just(1).subscribeWith(activity.viewer.new ModifyUserComuObserver(false));
-        waitAtMost(10, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
+        waitAtMost(6, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
-
     }
 
     @Test
     public void test_OldestObserver()
     {
         just(true).subscribeWith(activity.viewer.new OldestObserver());
-        waitAtMost(6, SECONDS).until(() -> activity.viewer.showMnOldestAdmonUser.get());
+        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
 
         just(false).subscribeWith(activity.viewer.new OldestObserver());
-        waitAtMost(6, SECONDS).until(() -> !activity.viewer.showMnOldestAdmonUser.get());
-    }
-
-    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
-
-    @Test
-    public void test_OnCreate()
-    {
-        // Check for initialization of fragments viewers.
-        ParentViewerIf viewerParent = activity.viewer;
-        assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
-    }
-
-    @Test
-    public void test_OnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
+        waitAtMost(6, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
     }
 }

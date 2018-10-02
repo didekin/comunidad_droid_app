@@ -45,6 +45,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUti
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPortalNoEscalera;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.runFinalCheckUserComuByComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -63,8 +64,6 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerSeeUserComuByComuTest {
 
-    private UsuarioComunidad usuarioComunidad;
-
     @Rule
     public IntentsTestRule<SeeUserComuByComuAc> activityRule = new IntentsTestRule<SeeUserComuByComuAc>(SeeUserComuByComuAc.class, true) {
 
@@ -76,8 +75,7 @@ public class ViewerSeeUserComuByComuTest {
             } catch (Exception e) {
                 fail();
             }
-            usuarioComunidad = userComuDao.seeUserComusByUser().blockingGet().get(0);
-            return new Intent().putExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id());
+            return new Intent().putExtra(COMUNIDAD_ID.key, userComuDao.seeUserComusByUser().blockingGet().get(0).getComunidad().getC_Id());
         }
     };
     private SeeUserComuByComuAc activity;
@@ -90,7 +88,7 @@ public class ViewerSeeUserComuByComuTest {
         waitAtMost(4, SECONDS).until(
                 () -> {
                     fragment = (SeeUserComuByComuFr) activity.getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
-                    return fragment.viewer;
+                    return requireNonNull(fragment).viewer;
                 },
                 notNullValue()
         );
@@ -106,28 +104,16 @@ public class ViewerSeeUserComuByComuTest {
 
     // ==================================  TESTS  =================================
 
+    /* Test de presentación de los datos en la pantalla.*/
     @Test
-    public void test_NewViewerUserComuByComu()
+    public void test_OnSuccessLoadItems()
     {
+        // test_NewViewerUserComuByComu
         assertThat(fragment.viewer.getViewInViewer(), instanceOf(ListView.class));
         assertThat(fragment.viewer.nombreComuView, notNullValue());
         assertThat(fragment.viewer.getViewInViewer().getHeaderViewsCount(), is(1));
         assertThat(fragment.viewer.getController(), instanceOf(CtrlerUserComuByComuList.class));
-    }
 
-    @Test
-    public void test_OnSuccessLoadItems_1()
-    {
-        final List<UsuarioComunidad> list = new ArrayList<>(1);
-        list.add(usuarioComunidad);
-        // Run and check.
-        runAndCheckAdapterAndHeader(list, 1);
-    }
-
-    /* Test de presentación de los datos en la pantalla.*/
-    @Test
-    public void test_OnSuccessLoadItems_2()
-    {
         UsuarioComunidad usuarioComunidad1 = new UsuarioComunidad.UserComuBuilder(
                 COMU_LA_PLAZUELA_5,
                 USER_JUAN)
