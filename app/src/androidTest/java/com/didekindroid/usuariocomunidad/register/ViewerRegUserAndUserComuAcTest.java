@@ -29,19 +29,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.focusOnView;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtil.checkTextsInDialog;
 import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
+import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAcTest.execCheckCleanDialog;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 import static java.util.Objects.requireNonNull;
@@ -107,8 +107,11 @@ public class ViewerRegUserAndUserComuAcTest {
     }
 
     @Test
-    public void test_OnRegisterSuccess()
+    public void test_RegUserAndUserComuButtonListener_1()
     {
+        // Precondition:
+        assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));
+
         // test_NewViewerRegUserAndUserComuAc
         assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
         // test_DoViewInViewer.
@@ -121,30 +124,19 @@ public class ViewerRegUserAndUserComuAcTest {
         ParentViewerIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegUserFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
-        // Exec.
-        activity.viewer.onRegisterSuccess(COMU_PLAZUELA5_PEPE);
-        // Check.
-        checkTextsInDialog(R.string.receive_password_by_mail_dialog, R.string.continuar_button_rot);
-    }
 
-    @Test
-    public void test_RegUserAndUserComuButtonListener_1()
-    {
-        // Precondition:
-        assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));
-        // Data, exec and check.
-        execCheckCleanDialog();
-    }
-
-    @Test
-    public void test_RegUserAndUserComuButtonListener_2()
-    {
-        typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
-        typeUserComuData("port2", "escale_b", "planta-N", "puerta5");
-        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
-
+        /* Error.*/
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE);
+        int buttonId = R.id.reg_user_plus_button;
+        focusOnView(activity, buttonId);
+        onView(withId(buttonId)).perform(scrollTo(), click());
         waitAtMost(5, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
-                R.string.reg_usercomu_role_rot));
+                R.string.email_hint,
+                R.string.alias));
+
+        /* OK.*/
+        typeUserNameAlias(USER_PEPE.getUserName(), USER_PEPE.getAlias());
+        execCheckCleanDialog();
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

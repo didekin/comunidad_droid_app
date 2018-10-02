@@ -139,7 +139,7 @@ public class UserComuDataAcTest {
 
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
         // Verificación.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         checkUp(userComuDataLayout);
     }
 

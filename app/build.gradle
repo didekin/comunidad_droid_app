@@ -111,11 +111,9 @@ dependencies {
     runtimeOnly rootProject.ext.retrofit2
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
-
     releaseImplementation rootProject.didekindroidlib_one_release
     debugImplementation rootProject.ext.didekindroidlib_one_debug
     debugPreImplementation rootProject.ext.didekindroidlib_one_debug
-
     androidTestImplementation rootProject.ext.testRuler
     androidTestImplementation rootProject.ext.testRunner
     androidTestImplementation rootProject.ext.espresso
