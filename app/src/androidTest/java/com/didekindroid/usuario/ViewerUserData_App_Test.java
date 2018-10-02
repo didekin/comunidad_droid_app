@@ -73,7 +73,7 @@ public class ViewerUserData_App_Test {
     public void testModifyUserData()
     {
         // Datos de entrada userName == oldUser.userName.
-        waitAtMost(6, SECONDS).untilAtomic(activity.getViewer().getOldUser(), is(usuario));
+        waitAtMost(8, SECONDS).untilAtomic(activity.getViewer().getOldUser(), is(usuario));
         activity.getViewer().getOldUser().set(new Usuario.UsuarioBuilder().copyUsuario(usuario).password(user_crodrigo.getPassword()).build());
         activity.getViewer().getNewUser().set(new Usuario.UsuarioBuilder().copyUsuario(activity.getViewer().getOldUser().get()).build());
         activity.runOnUiThread(() -> activity.getViewer().modifyUserData(alias_only));

@@ -26,6 +26,8 @@ fi
 assembleBuildType ${BUILD_TYPE}
 echo "==== AssembleBuildType exit code = $?"
 
+mv app/build/outputs/apk/${BUILD_TYPE}/app-${BUILD_TYPE}.apk app/releases/${BUILD_TYPE}/app-${VERSION}-${BUILD_TYPE}.apk
+
 adb -s ${DEVICE} uninstall com.didekindroid
 echo "==== Uninstalling com.didekindroid exit code = $?"
 
