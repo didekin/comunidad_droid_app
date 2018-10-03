@@ -102,24 +102,18 @@ public class UserComuDataAcTest {
 //  ===========================================================================
 
     @Test
-    public void test_OnCreate()
+    public void testModifyUserComu_1()
     {
+        // test_OnCreate
         assertThat(activity.acView, notNullValue());
         assertThat(activity.viewer, notNullValue());
         assertThat(activity.regUserComuFr, notNullValue());
         // Check call to viewer.doViewInViewer().
         assertThat(activity.viewer.userComuIntent, notNullValue());
-    }
-
-    @Test
-    public void test_SetChildInViewer()
-    {
+        // test_SetChildInViewer
         checkChildInViewer(activity);
-    }
 
-    @Test
-    public void testModifyUserComu_1()
-    {
+        // Error.
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(replaceText("??=portalNew"));
         // Data wrong: pro rol is not compatible with inq.
         onView(withId(R.id.reg_usercomu_checbox_pro)).check(matches(isChecked()));
@@ -128,11 +122,8 @@ public class UserComuDataAcTest {
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.reg_usercomu_role_rot, R.string.reg_usercomu_portal_rot);
-    }
 
-    @Test
-    public void testModifyUserComu_2()
-    {
+        // OK.
         onView(withId(R.id.reg_usercomu_checbox_pro)).check(matches(isChecked()))
                 .perform(click()).check(matches(isNotChecked()));
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(click()).check(matches(isChecked()));
@@ -160,9 +151,8 @@ public class UserComuDataAcTest {
 
 //    ======================= MENU =========================
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testSeeUserComuByComuMn() throws InterruptedException
+    public void testSeeUserComuByComuMn()
     {
         SEE_USERCOMU_BY_COMU_AC.checkItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
@@ -179,27 +169,24 @@ public class UserComuDataAcTest {
         checkUp(userComuDataLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidSeeOpenByComuMn() throws InterruptedException
+    public void testIncidSeeOpenByComuMn()
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkItem(activity);
         onView(withText(R.string.incid_see_by_user_ac_label)).check(matches(isDisplayed()));
         checkUp(userComuDataLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidSeeCloseByComuMn() throws InterruptedException
+    public void testIncidSeeCloseByComuMn()
     {
         INCID_SEE_CLOSED_BY_COMU_AC.checkItem(activity);
         onView(withText(R.string.incid_closed_by_user_ac_label)).check(matches(isDisplayed()));
         checkUp(userComuDataLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidRegMn() throws InterruptedException
+    public void testIncidRegMn()
     {
         INCID_REG_AC.checkItem(activity);
         checkUp(userComuDataLayout);

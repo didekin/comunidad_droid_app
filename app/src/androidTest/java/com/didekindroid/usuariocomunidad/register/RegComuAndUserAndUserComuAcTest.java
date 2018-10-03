@@ -94,6 +94,9 @@ public class RegComuAndUserAndUserComuAcTest {
         typeComunidad();
         focusOnView(activity, R.id.reg_usercomu_portal_ed);
         execCheckRegisterError(activity);
+
+        // test_OnStop
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
     @Test
@@ -113,28 +116,18 @@ public class RegComuAndUserAndUserComuAcTest {
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
 
+        // test_SetChildInViewer
+        checkChildInViewer(activity);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
     }
 
-    @Test
-    public void test_OnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
-    }
-
-    @Test
-    public void test_SetChildInViewer()
-    {
-        checkChildInViewer(activity);
-    }
-
     /*    =================================== MENU ===================================*/
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testLoginMn() throws InterruptedException
+    public void testLoginMn()
     {
         // Precondition.
         assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
