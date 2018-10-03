@@ -16,11 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.app.TaskStackBuilder.create;
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
@@ -29,6 +25,7 @@ import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
@@ -40,13 +37,10 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SE
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByComuFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
-import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /**
@@ -117,8 +111,7 @@ public class SeeUserComuByComuAcTest {
     @Test
     public void testOnCreate()
     {
-        onView(withId(seeUserComuByComuFrRsId)).check(matches(isDisplayed()));
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByComuFrRsId)));
 
         runFinalCheckUserComuByComu(
                 checkUserComuPortalEscalera(
@@ -137,10 +130,7 @@ public class SeeUserComuByComuAcTest {
     @Test
     public void testOnStop()
     {
-        activity.runOnUiThread(() -> {
-            getInstrumentation().callActivityOnStop(activity);
-            assertThat(requireNonNull(fragment.viewer.getController()).getSubscriptions().size(), is(0));
-        });
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
     //    =====================================  MENU TESTS  =======================================

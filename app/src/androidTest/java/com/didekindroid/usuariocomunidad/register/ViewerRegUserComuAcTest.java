@@ -15,8 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -81,9 +79,7 @@ public class ViewerRegUserComuAcTest {
     public void setUp() throws Exception
     {
         activity = intentRule.getActivity();
-        AtomicReference<ViewerRegUserComuAc> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
+        waitAtMost(4, SECONDS).until(() -> activity.viewer != null);
     }
 
     @After
@@ -110,7 +106,7 @@ public class ViewerRegUserComuAcTest {
         // Exec OK
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         onView(withId(R.id.reg_usercomu_button)).perform(scrollTo(), click());
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 
     @Test
