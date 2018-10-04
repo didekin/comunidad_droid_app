@@ -10,7 +10,9 @@ import com.didekindroid.comunidad.util.ComuBundleKey;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +43,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -53,7 +54,7 @@ public class SeeUserComuByComuAcTest {
 
     private SeeUserComuByComuAc activity;
     private SeeUserComuByComuFr fragment;
-    private UsuarioComunidad usuarioComunidad;
+    private static UsuarioComunidad usuarioComunidad;
 
     @Rule
     public IntentsTestRule<SeeUserComuByComuAc> mActivityRule = new IntentsTestRule<SeeUserComuByComuAc>(SeeUserComuByComuAc.class) {
@@ -69,15 +70,16 @@ public class SeeUserComuByComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
-            } catch (Exception e) {
-                fail();
-            }
-            usuarioComunidad = userComuDao.seeUserComusByUser().blockingGet().get(0);
             return new Intent().putExtra(ComuBundleKey.COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id());
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
+        usuarioComunidad = userComuDao.seeUserComusByUser().blockingGet().get(0);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -85,6 +87,7 @@ public class SeeUserComuByComuAcTest {
         activity = mActivityRule.getActivity();
         fragment = (SeeUserComuByComuFr) activity.getSupportFragmentManager().findFragmentById(seeUserComuByComuFrRsId);
         // Wait until the screen data are there.
+        waitAtMost(8, SECONDS).until(() -> fragment.viewer.getViewInViewer().getAdapter() != null);
         waitAtMost(6, SECONDS)
                 .until(
                         isViewDisplayed(
@@ -94,7 +97,6 @@ public class SeeUserComuByComuAcTest {
                                 )
                         )
                 );
-        waitAtMost(4, SECONDS).until(() -> fragment.viewer.getViewInViewer().getAdapter() != null);
     }
 
     @After
@@ -103,6 +105,11 @@ public class SeeUserComuByComuAcTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_PEPE);
     }
 
