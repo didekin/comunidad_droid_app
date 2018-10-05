@@ -50,6 +50,7 @@ import static org.junit.Assert.fail;
 public class IncidSeeByComuAc_Close_Mn_Test {
 
     private Comunidad comunidadInIntent;
+    private IncidSeeByComuAc activity;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class, true, true) {
@@ -73,8 +74,6 @@ public class IncidSeeByComuAc_Close_Mn_Test {
                     .putExtra(INCID_CLOSED_LIST_FLAG.key, true);
         }
     };
-
-    private IncidSeeByComuAc activity;
 
     @Before
     public void setUp() throws Exception

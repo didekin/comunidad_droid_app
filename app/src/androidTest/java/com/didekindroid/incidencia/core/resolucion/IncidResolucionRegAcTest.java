@@ -14,7 +14,9 @@ import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,13 +60,12 @@ import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
-import static java.lang.Thread.sleep;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -75,7 +76,7 @@ import static org.junit.Assert.fail;
 public class IncidResolucionRegAcTest {
 
     private IncidResolucionRegAc activity;
-    private IncidImportancia incidImportancia;
+    private static IncidImportancia incidImportancia;
     private TaskStackBuilder taskStackBuilder;
 
     @Rule
@@ -83,13 +84,6 @@ public class IncidResolucionRegAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            // A user WITH powers 'adm'.
-            try {
-                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-            } catch (Exception e) {
-                fail();
-            }
-
             if (SDK_INT >= LOLLIPOP) {
                 Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
                 taskStackBuilder = create(getTargetContext());
@@ -98,6 +92,13 @@ public class IncidResolucionRegAcTest {
             return new Intent().putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        // A user WITH powers 'adm'.
+        incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -113,23 +114,21 @@ public class IncidResolucionRegAcTest {
         if (SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 
     //  ===============================  TESTS ================================
+
     @Test
-    public void testOnCreate_1()
+    public void testOnCreate()
     {
         checkScreenResolucionRegFr();
 
-        if (SDK_INT >= LOLLIPOP) {
-            checkUp(incidSeeByComuAcLayout);
-        }
-    }
-
-    @Test
-    public void testOnCreate_2()
-    {
         // DatePicker tests.
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed())).perform(click());
         onView(withClassName(is(DatePicker.class.getName()))).inRoot(isDialog()).check(matches(isDisplayed()));
@@ -149,16 +148,6 @@ public class IncidResolucionRegAcTest {
                     withText(formatTimeToString(fechaPrev.getTimeInMillis()))
             )).check(matches(isDisplayed()));
         }
-    }
-
-    @Test
-    public void test_registerResolucion_1()
-    {
-        // NOT OK: Descripción errónea y fecha sin fijar.
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        checkToastInTest(R.string.error_validation_msg, activity,
-                R.string.incid_resolucion_fecha_prev_msg, R.string.incid_resolucion_descrip_msg);
 
         if (SDK_INT >= LOLLIPOP) {
             checkUp(incidSeeByComuAcLayout);
@@ -166,7 +155,7 @@ public class IncidResolucionRegAcTest {
     }
 
     @Test
-    public void test_registerResolucion_2() throws InterruptedException
+    public void test_registerResolucion()
     {
         // NOT OK: Fecha inferior a fecha_alta incidencia. Descripción ausente. Coste erróneo.
         Calendar fechaPrev = setFechaEnPicker(0, -1);
@@ -178,21 +167,6 @@ public class IncidResolucionRegAcTest {
                 R.string.incid_resolucion_descrip_msg,
                 R.string.incid_resolucion_coste_prev_msg);
 
-        sleep(2000);
-
-        // Intentamos corregir: fecha de hoy.
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));
-        fechaPrev = setFechaEnPicker(0, 0);
-        assertThat(isCalendarPreviousTimeStamp(fechaPrev, incidImportancia.getFechaAlta()), is(false));
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        // Check coste erróneo.
-        checkToastInTest(R.string.error_validation_msg, activity,
-                R.string.incid_resolucion_coste_prev_msg);
-    }
-
-    @Test
-    public void test_registerResolucion_3()
-    {
         /*Caso: OK*/
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
@@ -208,10 +182,8 @@ public class IncidResolucionRegAcTest {
     {
         // Check OnStop.
         IncidResolucionRegFr fr = (IncidResolucionRegFr) activity.getSupportFragmentManager().findFragmentByTag(IncidResolucionRegFr.class.getName());
-        fr.controller = new CtrlerIncidenciaCore();
+        requireNonNull(fr).controller = new CtrlerIncidenciaCore();
         checkSubscriptionsOnStop(activity, fr.controller);
-
-
     }
 
 //    ============================= HELPER METHODS ===========================

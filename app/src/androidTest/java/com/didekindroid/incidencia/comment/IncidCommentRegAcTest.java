@@ -10,7 +10,9 @@ import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,7 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -48,7 +51,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -59,7 +61,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentRegAcTest {
 
-    private IncidImportancia incidJuanReal1;
+    private static IncidImportancia incidJuanReal1;
     private IncidCommentRegAc activity;
 
     @Rule
@@ -68,12 +70,6 @@ public class IncidCommentRegAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
-            } catch (Exception e) {
-                fail();
-            }
-
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
                 create(getTargetContext()).addNextIntent(intent1).startActivities();
@@ -81,6 +77,12 @@ public class IncidCommentRegAcTest {
             return new Intent().putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -94,6 +96,11 @@ public class IncidCommentRegAcTest {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -124,20 +131,16 @@ public class IncidCommentRegAcTest {
     }
 
     @Test
-    public void testRegComment_1() throws InterruptedException
+    public void testRegComment() throws InterruptedException
     {
         // Descripción de comentario no válido.
         onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment = not valid")).perform(closeSoftKeyboard());
         Thread.sleep(1000);
         onView(withId(R.id.incid_comment_reg_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, activity, R.string.incid_comment_label);
-    }
 
-    @Test
-    public void testRegComment_2() throws InterruptedException
-    {
         // Caso OK.
-        onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment is now valid")).perform(closeSoftKeyboard());
+        onView(withId(R.id.incid_comment_ed)).perform(replaceText("Comment is now valid")).perform(closeSoftKeyboard());
         Thread.sleep(1000);
         onView(withId(R.id.incid_comment_reg_button)).perform(scrollTo(), click());
         // Verificación.

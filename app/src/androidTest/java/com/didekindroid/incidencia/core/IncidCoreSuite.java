@@ -1,9 +1,12 @@
 package com.didekindroid.incidencia.core;
 
 import com.didekindroid.incidencia.core.edit.IncidEditAcMaxTest;
+import com.didekindroid.incidencia.core.edit.IncidEditAcMax_delete_Test;
 import com.didekindroid.incidencia.core.edit.IncidEditAc_Mn1_Test;
+import com.didekindroid.incidencia.core.edit.IncidEditAc_Mn2_Test;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditAcTest;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFrTest;
+import com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr_erase_Test;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFrTest;
 import com.didekindroid.incidencia.core.edit.importancia.ViewerIncidSeeUserComuImportanciaTest;
 import com.didekindroid.incidencia.core.reg.IncidRegAcTest;
@@ -26,9 +29,12 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         /* core.edit*/
         IncidEditAc_Mn1_Test.class,
+        IncidEditAc_Mn2_Test.class,
         IncidEditAcMaxTest.class,
+        IncidEditAcMax_delete_Test.class,
         ViewerIncidEditAcTest.class,
         ViewerIncidEditMaxFrTest.class,
+        ViewerIncidEditMaxFr_erase_Test.class,
         ViewerIncidEditMinFrTest.class,
         // core.edit.importancia
         ViewerIncidSeeUserComuImportanciaTest.class,

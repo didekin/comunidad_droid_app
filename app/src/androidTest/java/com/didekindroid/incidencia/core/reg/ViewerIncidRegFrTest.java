@@ -12,14 +12,14 @@ import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -51,7 +51,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -65,7 +64,7 @@ public class ViewerIncidRegFrTest {
 
     private ViewerIncidRegFr viewer;
     private IncidRegAc activity;
-    private UsuarioComunidad userComuIntent;
+    private static UsuarioComunidad userComuIntent;
     private View frgView;
 
     @Rule
@@ -73,15 +72,16 @@ public class ViewerIncidRegFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regTwoUserComuSameUser(asList(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE));
-            } catch (Exception e) {
-                fail();
-            }
-            userComuIntent = userComuDao.seeUserComusByUser().blockingGet().get(1);
             return new Intent().putExtra(COMUNIDAD_ID.key, userComuIntent.getComunidad().getC_Id());
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regTwoUserComuSameUser(asList(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE));
+        userComuIntent = userComuDao.seeUserComusByUser().blockingGet().get(1);
+    }
 
     @Before
     public void setUp()
@@ -89,32 +89,25 @@ public class ViewerIncidRegFrTest {
         activity = activityRule.getActivity();
         frgView = activity.findViewById(incidRegFrLayout);
         assertThat(activity.getIntent().getLongExtra(COMUNIDAD_ID.key, 0), is(userComuIntent.getComunidad().getC_Id()));
-
-        AtomicReference<ViewerIncidRegFr> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.incidRegFr.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
-        viewer = viewerAtomic.get();
+        waitAtMost(4, SECONDS).until(() -> activity.incidRegFr != null && activity.incidRegFr.viewer != null);
+        viewer = activity.incidRegFr.viewer;
     }
 
-    @After
-    public void clearUp()
+    @AfterClass
+    public static void clearUp()
     {
         cleanOptions(CLEAN_PEPE);
     }
 
     @Test
-    public void testNewViewerIncidReg()
+    public void testDoViewInViewer()
     {
         assertThat(viewer.getController(), notNullValue());
         assertThat(viewer.getParentViewer(), notNullValue());
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerComuSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
-    }
 
-    @Test
-    public void testDoViewInViewer()
-    {
         onView(withId(incidRegFrLayout)).check(matches(isDisplayed()));
 
         // Comunidad spinner.
@@ -126,28 +119,28 @@ public class ViewerIncidRegFrTest {
         onView(withId(R.id.incid_reg_importancia_spinner))
                 .check(matches(withSpinnerText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[0])))
                 .check(matches(isDisplayed()));
-    }
 
-    @Test
-    public void testClearSubscriptions()
-    {
-        checkSubscriptionsOnStop(activity, viewer.getController(),
-                viewer.viewerAmbitoIncidSpinner.getController(),
-                viewer.viewerComuSpinner.getController());
-    }
-
-    @Test
-    public void testSaveState()
-    {
+        // testSaveState
         Bundle bundleTest = new Bundle();
         viewer.viewerAmbitoIncidSpinner.setSelectedItemId(11);
         viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
         // Solo hay una comunidad en el spinner.
         viewer.saveState(bundleTest);
-
         assertThat(bundleTest.getLong(AMBITO_INCIDENCIA_POSITION.key), is(11L));
         assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));
         assertThat(bundleTest.containsKey(COMUNIDAD_ID.key), is(true));
+
+        // test_DoOnClickItemId
+        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect());
+        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(0L));
+
+        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(23L).build()));
+        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(23L));
+
+        // testClearSubscriptions
+        checkSubscriptionsOnStop(activity, viewer.getController(),
+                viewer.viewerAmbitoIncidSpinner.getController(),
+                viewer.viewerComuSpinner.getController());
     }
 
     @Test
@@ -184,15 +177,5 @@ public class ViewerIncidRegFrTest {
         // Exec and checkMenu for NOT ok case.
         assertThat(viewer.doIncidImportanciaFromView(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getResources().getText(R.string.incid_reg_importancia).toString()));
-    }
-
-    @Test
-    public void test_DoOnClickItemId()
-    {
-        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect());
-        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(0L));
-
-        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(23L).build()));
-        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(23L));
     }
 }

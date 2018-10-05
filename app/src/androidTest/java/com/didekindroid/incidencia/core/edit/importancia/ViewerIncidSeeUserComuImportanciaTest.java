@@ -80,8 +80,10 @@ public class ViewerIncidSeeUserComuImportanciaTest {
     }
 
     @Test
-    public void testDoViewInViewer()
+    public void test_OnSuccessLoadItems()
     {
+        assertThat(viewer.getController(), isA(CtrlerIncidenciaCore.class));
+
         // Verificamos layout.
         ImportanciaUser importanciaUser = new ImportanciaUser(incidImportancia.getUserComu().getUsuario().getAlias(), incidImportancia.getImportancia());
         onView(withId(android.R.id.list)).check(matches(isDisplayed()));
@@ -90,20 +92,8 @@ public class ViewerIncidSeeUserComuImportanciaTest {
         waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(1));
         checkImportanciaUser(importanciaUser, activity);
-    }
-
-    @Test
-    public void test_NewViewerIncidSeeUserComuImportancia()
-    {
-        assertThat(viewer.getController(), isA(CtrlerIncidenciaCore.class));
-    }
-
-    @Test
-    public void test_OnSuccessLoadItems()
-    {
 
         // Preconditions.
-        waitAtMost(4, SECONDS).until((Callable<Adapter>) ((AdapterView<? extends Adapter>) viewer.getViewInViewer())::getAdapter, notNullValue());
         activity.runOnUiThread(() -> viewer.getViewInViewer().setAdapter(null));
 
         final List<ImportanciaUser> listUsers = Arrays.asList(new ImportanciaUser(USER_PEPE.getAlias(), (short) 3),
@@ -118,13 +108,8 @@ public class ViewerIncidSeeUserComuImportanciaTest {
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(2));
         checkImportanciaUser(listUsers.get(0), activity);
         checkImportanciaUser(listUsers.get(1), activity);
-    }
 
-    //    ============================  LIFE CYCLE TESTS  ===================================
-
-    @Test
-    public void testClearSubscriptions()
-    {
+        // testClearSubscriptions
         checkSubscriptionsOnStop(activity, viewer.getController());
     }
 }

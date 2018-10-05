@@ -8,7 +8,9 @@ import com.didekindroid.R;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +43,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -51,22 +52,24 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class RegUserComuAcTest {
 
+    private static Comunidad comunidad;
+    private RegUserComuAc activity;
+
     @Rule
     public IntentsTestRule<RegUserComuAc> intentRule = new IntentsTestRule<RegUserComuAc>(RegUserComuAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            Comunidad comunidad = null;
-            try {
-                comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_gcm_mock");
-                regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };
-    private RegUserComuAc activity;
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_gcm_mock");
+        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -74,8 +77,8 @@ public class RegUserComuAcTest {
         activity = intentRule.getActivity();
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_JUAN_AND_PEPE);
     }

@@ -10,7 +10,9 @@ import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +59,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegUserComuAcTest {
 
-    private Comunidad comunidad;
+    private static Comunidad comunidad;
     private RegUserComuAc activity;
 
     @Rule
@@ -65,15 +67,16 @@ public class ViewerRegUserComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_mock_gcm");
-                regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_mock_gcm");
+        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -82,8 +85,8 @@ public class ViewerRegUserComuAcTest {
         waitAtMost(4, SECONDS).until(() -> activity.viewer != null);
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_JUAN_AND_PEPE);
     }
