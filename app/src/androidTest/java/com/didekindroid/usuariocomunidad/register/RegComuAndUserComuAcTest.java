@@ -8,7 +8,9 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -33,10 +36,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnSto
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
-import static com.didekindroid.usuariocomunidad.RolUi.ADM;
-import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
-import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regComu_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
@@ -60,14 +60,18 @@ public class RegComuAndUserComuAcTest {
     private RegComuAndUserComuAc activity;
     private int buttonId;
 
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
+    }
+
     @Before
     public void setUp() throws Exception
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             create(getTargetContext()).addParentStack(RegComuAndUserComuAc.class).startActivities();
         }
-
-        regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
         activity = mActivityRule.launchActivity(new Intent());
         buttonId = R.id.reg_comu_usuariocomunidad_button;
     }
@@ -75,44 +79,23 @@ public class RegComuAndUserComuAcTest {
     @After
     public void tearDown() throws Exception
     {
-        cleanOneUser(USER_PEPE.getUserName());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
     }
 
-    //    ================================================================================
-
-    @Test
-    public void testRegisterComuAndUserComu_1()
+    @AfterClass
+    public static void cleanStatic()
     {
-        // Wrong data both in comunidad and usuarioComunidad.
-        typeUserComuData("port2", "escal ?? b", "planta-N", "puerta5", PRE, ADM, INQ, PRO);
-        onView(withId(buttonId)).perform(scrollTo(), click());
-        // Check: usuarioComunidad wrong data have no effect because its validation requires previous FULL comunidad data validation.
-        checkToastInTest(R.string.error_validation_msg, activity,
-                R.string.tipo_via,
-                R.string.nombre_via,
-                R.string.municipio);
+        cleanOneUser(USER_PEPE.getUserName());
     }
+
+    //    ================================================================================
 
     @Test
     public void testRegisterComuAndUserComu_2()
     {
-        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, ADM, INQ);
-        focusOnView(activity, buttonId);
-        typeComunidadData();
-        onView(withId(buttonId)).perform(scrollTo(), click());
-
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
-        checkUp(comuSearchAcLayout);
-    }
-
-    //    =================================== Life cycle ===================================
-
-    @Test
-    public void testOnCreate()
-    {
+        // testOnCreate
         assertThat(activity.regComuFr, notNullValue());
         assertThat(activity.regUserComuFr, notNullValue());
         assertThat(activity.acView, notNullValue());
@@ -125,20 +108,33 @@ public class RegComuAndUserComuAcTest {
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(comuSearchAcLayout);
-        }
+        // test_SetChildInViewer
+        checkChildInViewer(activity);
+
+        // Wrong data both in comunidad and usuarioComunidad.
+        typeUserComuData("port2", "escal ?? b", "planta-N", "puerta5", PRE);
+        onView(withId(buttonId)).perform(scrollTo(), click());
+        // Check: usuarioComunidad wrong data have no effect because its validation requires previous FULL comunidad data validation.
+        checkToastInTest(R.string.error_validation_msg, activity,
+                R.string.tipo_via,
+                R.string.nombre_via,
+                R.string.municipio);
+
+        // OK.
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(replaceText("escaleraB"));
+        focusOnView(activity, buttonId);
+        typeComunidadData();
+        onView(withId(buttonId)).perform(scrollTo(), click());
+
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        checkUp(comuSearchAcLayout);
     }
+
+    //    =================================== Life cycle ===================================
 
     @Test
     public void test_OnStop()
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
-    }
-
-    @Test
-    public void test_SetChildInViewer()
-    {
-        checkChildInViewer(activity);
     }
 }

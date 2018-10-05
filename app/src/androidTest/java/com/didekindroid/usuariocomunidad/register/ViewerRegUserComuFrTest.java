@@ -16,6 +16,9 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
@@ -66,18 +69,13 @@ public class ViewerRegUserComuFrTest {
         assertThat(InjectorOfParentViewerIf.class.isInstance(activity), is(true));
         ParentViewerIf parentViewer = (ParentViewerIf) fragment.viewer.getParentViewer();
         assertThat(parentViewer.getChildViewer(ViewerRegUserComuFr.class), is(fragment.viewer));
-    }
 
-    @Test
-    public void test_OnStop()
-    {
-        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
-    }
+        // test_GetUserComuFromViewer_Wrong
+        typeUserComuData("po + =", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        assertThat(fragment.viewer.getUserComuFromViewer(new StringBuilder(), COMU_EL_ESCORIAL, USER_PEPE), nullValue());
 
-    @Test
-    public void test_GetUserComuFromViewer_OK()
-    {
-        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        // test_GetUserComuFromViewer_OK
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(replaceText("port2"));
         assertThat(fragment.viewer.getUserComuFromViewer(new StringBuilder(), COMU_EL_ESCORIAL, USER_PEPE), allOf(
                 notNullValue(),
                 is(new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, USER_PEPE)
@@ -87,13 +85,9 @@ public class ViewerRegUserComuFrTest {
                         .puerta("puerta5")
                         .build())
         ));
-    }
 
-    @Test
-    public void test_GetUserComuFromViewer_Wrong()
-    {
-        typeUserComuData("po + =", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        assertThat(fragment.viewer.getUserComuFromViewer(new StringBuilder(), COMU_EL_ESCORIAL, USER_PEPE), nullValue());
+        // test_OnStop
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
     @Test

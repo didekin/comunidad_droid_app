@@ -13,7 +13,9 @@ import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +51,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -59,7 +60,9 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ComuDataAcTest {
 
-    Comunidad comunidad;
+    static Comunidad comunidad;
+    private ComuDataAc activity;
+
     @Rule
     public IntentsTestRule<ComuDataAc> intentRule = new IntentsTestRule<ComuDataAc>(ComuDataAc.class) {
 
@@ -74,15 +77,15 @@ public class ComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };
-    private ComuDataAc activity;
+
+    @BeforeClass
+    public static void setStatic() throws Exception
+    {
+        comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -97,6 +100,11 @@ public class ComuDataAcTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -145,9 +153,8 @@ public class ComuDataAcTest {
 
 //     ==================== MENU ====================
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testSeeUserComuByComuMn() throws InterruptedException
+    public void testSeeUserComuByComuMn()
     {
         SEE_USERCOMU_BY_COMU_AC.checkItem(activity);
         intended(hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));

@@ -9,8 +9,9 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,6 @@ import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
 import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtil.isStatementTrue;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
@@ -40,7 +40,6 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -50,32 +49,33 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeOpenFrTest {
 
-    private Resolucion resolucion;
-    private IncidenciaUser incidenciaUser;
-    private IncidImportancia incidImportancia;
+    private static Resolucion resolucion;
+    private static IncidenciaUser incidenciaUser;
+    private static IncidImportancia incidImportancia;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
-            } catch (Exception e) {
-                fail();
-            }
-            incidImportancia = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0),
-                    (short) 2);
-            // Cierre incidencias..
-            resolucion = insertGetResolucionNoAvances(incidImportancia);
-            incidenciaUser = incidenciaDao
-                    .seeIncidsOpenByComu(incidImportancia.getIncidencia().getComunidadId()).blockingGet().get(0);
             return new Intent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);
         }
     };
 
     private IncidSeeByComuAc activity;
     private IncidSeeByComuFr fragment;
+
+    @BeforeClass
+    public static void setStatically() throws Exception
+    {
+        regComuUserUserComuGetAuthTk(COMU_ESCORIAL_PEPE);
+        incidImportancia = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0),
+                (short) 2);
+        // Cierre incidencias..
+        resolucion = insertGetResolucionNoAvances(incidImportancia);
+        incidenciaUser = incidenciaDao
+                .seeIncidsOpenByComu(incidImportancia.getIncidencia().getComunidadId()).blockingGet().get(0);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -89,8 +89,8 @@ public class ViewerIncidSeeOpenFrTest {
 
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_PEPE);
     }
@@ -113,7 +113,7 @@ public class ViewerIncidSeeOpenFrTest {
     public void test_OnSuccessLoadSelectedItem()
     {
         // Exec and check.
-        waitAtMost(4, SECONDS).until(isStatementTrue(fragment.viewer != null));
+        waitAtMost(4, SECONDS).until(() -> fragment.viewer != null);
         fragment.viewer.onSuccessLoadSelectedItem(
                 INCID_RESOLUCION_BUNDLE.getBundleForKey(new IncidAndResolBundle(incidImportancia, resolucion != null))
         );

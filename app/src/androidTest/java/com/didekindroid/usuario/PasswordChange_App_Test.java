@@ -8,9 +8,12 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.lib_one.usuario.PasswordChangeAc;
+import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +44,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -65,16 +67,18 @@ public class PasswordChange_App_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                return new Intent().putExtra(user_name.key, regComuUserUserComuGetUser(COMU_REAL_DROID).getUserName());
-            } catch (Exception e) {
-                fail();
-            }
-            return null;
+            return new Intent().putExtra(user_name.key, usuario.getUserName());
         }
     };
 
     private PasswordChangeAc activity;
+    private static Usuario usuario;
+
+    @BeforeClass
+    public static void setStatic() throws Exception
+    {
+        usuario = regComuUserUserComuGetUser(COMU_REAL_DROID);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -89,6 +93,11 @@ public class PasswordChange_App_Test {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_DROID);
     }
 

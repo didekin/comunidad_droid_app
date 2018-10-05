@@ -10,7 +10,9 @@ import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +39,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -47,7 +48,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidEditAcTest {
 
-    private IncidAndResolBundle resolBundle;
+    private static IncidAndResolBundle resolBundle;
     private ViewerIncidEditAc viewer;
 
     @Rule
@@ -55,15 +56,15 @@ public class ViewerIncidEditAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            // Perfil adm.
-            try {
-                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -80,6 +81,11 @@ public class ViewerIncidEditAcTest {
     public void tearDown() throws Exception
     {
         viewer.clearSubscriptions();
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 

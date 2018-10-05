@@ -8,7 +8,9 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +30,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -44,22 +45,23 @@ public class IncidSeeByComuAc_Open_Mn_Test {
         @Override
         protected Intent getActivityIntent()
         {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();
             }
-            try {
-                return new Intent()
-                        .putExtra(COMUNIDAD_ID.key, signUpGetComu(COMU_REAL_DROID).getC_Id())
-                        .putExtra(INCID_CLOSED_LIST_FLAG.key, false);
-            } catch (Exception e) {
-                fail();
-            }
-            return null;
+            return new Intent()
+                    .putExtra(COMUNIDAD_ID.key, c_id)
+                    .putExtra(INCID_CLOSED_LIST_FLAG.key, false);
         }
     };
 
+    private static long c_id;
     private IncidSeeByComuAc activity;
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        c_id = signUpGetComu(COMU_REAL_DROID).getC_Id();
+    }
 
     @Before
     public void setUp() throws Exception
@@ -73,6 +75,11 @@ public class IncidSeeByComuAc_Open_Mn_Test {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activityRule.getActivity());
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_DROID);
     }
 
@@ -88,9 +95,8 @@ public class IncidSeeByComuAc_Open_Mn_Test {
         }
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidSeeCloseByComuMn_1() throws InterruptedException
+    public void testIncidSeeCloseByComuMn_1()
     {
         // Precondition
         assertThat(activity.getTitle(), is(activity.getText(R.string.incid_see_by_user_ac_label)));
@@ -103,9 +109,8 @@ public class IncidSeeByComuAc_Open_Mn_Test {
         checkAppBarMnNotExist(activity, R.id.incid_see_closed_by_comu_ac_mn);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidSeeCloseByComuMn_2() throws InterruptedException
+    public void testIncidSeeCloseByComuMn_2()
     {
         INCID_SEE_CLOSED_BY_COMU_AC.checkItem(activity);
         // CheckUp.

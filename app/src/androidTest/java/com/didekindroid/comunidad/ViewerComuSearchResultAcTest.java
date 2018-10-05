@@ -50,14 +50,10 @@ public class ViewerComuSearchResultAcTest {
     }
 
     @Test
-    public void test_NewViewerComuSearchResultAc()
-    {
-        assertThat(viewer.getController(), notNullValue());
-    }
-
-    @Test
     public void test_UpdateActivityMenu()
     {
+        assertThat(viewer.getController(), notNullValue());
+
         Menu myMenu = doMockMenu(activity, R.menu.menu_mock_one);
         MenuItem itemSeeUserComu = myMenu.findItem(R.id.see_usercomu_by_user_ac_mn);
 

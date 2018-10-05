@@ -11,13 +11,14 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -40,7 +41,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -50,65 +50,44 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidRegAcTest {
 
-    private Comunidad comuReal, comuPlazuela5;
+    private static Comunidad comuReal;
+    private static Comunidad comuPlazuela5;
     private ViewerIncidRegAc viewer;
     private IncidRegAc activity;
 
     @Rule
-    public ActivityTestRule<IncidRegAc> activityRule = new ActivityTestRule<IncidRegAc>(IncidRegAc.class) {
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            try {
-                regTwoUserComuSameUser(makeListTwoUserComu());
-            } catch (Exception e) {
-                fail();
-            }
-            List<Comunidad> comunidades = userComuDao.getComusByUser().blockingGet();
-            comuReal = comunidades.get(0);
-            comuPlazuela5 = comunidades.get(1);
-        }
-    };
+    public ActivityTestRule<IncidRegAc> activityRule = new ActivityTestRule<>(IncidRegAc.class);
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regTwoUserComuSameUser(makeListTwoUserComu());
+        List<Comunidad> comunidades = userComuDao.getComusByUser().blockingGet();
+        comuReal = comunidades.get(0);
+        comuPlazuela5 = comunidades.get(1);
+    }
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        AtomicReference<ViewerIncidRegAc> atomicViewer = new AtomicReference<>(null);
-        atomicViewer.compareAndSet(null, activity.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(atomicViewer, notNullValue());
-        viewer = atomicViewer.get();
+        waitAtMost(4, SECONDS).until(() -> activity.viewer != null);
+        viewer = activity.viewer;
     }
 
     @After
     public void clearUp()
     {
         viewer.clearSubscriptions();
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 
     //  ================================ TESTS ===================================
-
-    @Test
-    public void testNewViewerIncidRegAc()
-    {
-        assertThat(viewer.getController(), notNullValue());
-        assertThat(viewer.getController().isRegisteredUser(), is(true));
-    }
-
-    @Test
-    public void testDoViewInViewer()
-    {
-        // The flag should be turned to true.
-        onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_ac_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testClearSubscriptions()
-    {
-        checkSubscriptionsOnStop(activity, viewer.getController());
-    }
 
     @Test
     public void testRegisterIncidencia_1()
@@ -116,17 +95,25 @@ public class ViewerIncidRegAcTest {
         // Check change of activity.
         viewer.registerIncidencia(doIncidImportancia(), getErrorMsgBuilder(activity));
         waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeByComuAcLayout)));
-
     }
 
     @Test
     public void testRegisterIncidencia_2()
     {
+        assertThat(viewer.getController(), notNullValue());
+        assertThat(viewer.getController().isRegisteredUser(), is(true));
+        // The flag should be turned to true.
+        onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_reg_ac_button)).check(matches(isDisplayed()));
+
         final StringBuilder errors = getErrorMsgBuilder(activity);
         errors.append(activity.getResources().getString(R.string.incid_reg_importancia)).append(LINE_BREAK.getRegexp());
         activity.runOnUiThread(() -> assertThat(viewer.registerIncidencia(null, errors), is(false)));
         // Check errors.
         waitAtMost(4, SECONDS).until(isToastInView(R.string.incid_reg_importancia, activity));
+
+        // testClearSubscriptions
+        checkSubscriptionsOnStop(activity, viewer.getController());
     }
 
     @Test

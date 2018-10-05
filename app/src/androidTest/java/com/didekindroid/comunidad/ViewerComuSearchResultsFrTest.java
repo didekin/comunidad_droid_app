@@ -80,7 +80,6 @@ public class ViewerComuSearchResultsFrTest {
         activity = intentsTestRule.getActivity();
         ListMockFr mockFr = (ListMockFr) activity.getSupportFragmentManager().findFragmentById(R.id.list_mock_frg);
         viewer = ViewerComuSearchResultsFr.newViewerComuSearchResultsFr(mockFr.getView(), activity);
-
         isPepeToDelete = false;
     }
 
@@ -93,15 +92,10 @@ public class ViewerComuSearchResultsFrTest {
         viewer.getController().getTkCacher().updateAuthToken(null);
     }
 
-    @Test
-    public void test_NewViewerComuSearchResultsFr()
-    {
-        assertThat(viewer.getController(), isA(CtrlerComunidad.class));
-    }
-
     @Test  // User NOT registered
     public void test_DoViewInViewer_Empty()
     {
+        assertThat(viewer.getController(), isA(CtrlerComunidad.class));
         try {
             trampolineReplaceIoScheduler();
             viewer.doViewInViewer(null, comu_real);

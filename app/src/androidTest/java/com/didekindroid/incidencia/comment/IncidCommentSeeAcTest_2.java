@@ -8,8 +8,9 @@ import com.didekindroid.R;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,9 +40,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -55,57 +54,48 @@ import static org.junit.Assert.fail;
 public class IncidCommentSeeAcTest_2 {
 
     private IncidCommentSeeAdapter mAdapter;
+    private static IncidImportancia incidJuanReal1;
 
     @Rule
     public IntentsTestRule<IncidCommentSeeAc> activityRule = new IntentsTestRule<IncidCommentSeeAc>(IncidCommentSeeAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            IncidImportancia incidJuanReal1 = null;
-            try {
-                incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
-            } catch (Exception e) {
-                fail();
-            }
-            // Insertamos comentarios.
-            incidenciaDao.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()))
-                    .blockingGet();
-            incidenciaDao.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()))
-                    .blockingGet();
             return new Intent().putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        incidJuanReal1 = insertGetIncidImportancia(COMU_REAL_JUAN);
+        // Insertamos comentarios.
+        incidenciaDao.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()))
+                .blockingGet();
+        incidenciaDao.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()))
+                .blockingGet();
+    }
 
     @Before
     public void setUp() throws Exception
     {
         mAdapter =
                 ((IncidCommentSeeListFr) activityRule.getActivity().getSupportFragmentManager().findFragmentByTag(IncidCommentSeeListFr.class.getName()))
-                .adapter;
+                        .adapter;
         waitAtMost(4, SECONDS).until(() -> mAdapter != null && mAdapter.getCount() == 2);
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_JUAN);
-    }
-
-    @Test
-    public void testOnData_1()
-    {
-        IncidComment comment_1 = mAdapter.getItem(0);
-        assertThat(comment_1.getCommentId() > 0, is(true));
-        assertThat(comment_1.getFechaAlta(), notNullValue());
-        assertThat(comment_1.getRedactor(), is(COMU_REAL_JUAN.getUsuario()));
-        assertThat(comment_1.getDescripcion(), is("Comment_1_incidjuanReal1"));
-        assertThat(mAdapter.getItem(1).getDescripcion(), is("Comment_2_incidjuanReal1"));
     }
 
     @Test
     public void testOnData_2()
     {
         IncidComment comment_1 = mAdapter.getItem(0);
+        assertThat(comment_1.getCommentId() > 0, is(true));
 
         onData(is(comment_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
         onView(allOf(

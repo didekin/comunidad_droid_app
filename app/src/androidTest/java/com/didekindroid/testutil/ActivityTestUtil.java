@@ -19,6 +19,7 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ControllerIf;
 import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
@@ -40,7 +41,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -73,11 +73,6 @@ public final class ActivityTestUtil {
     public static Callable<Boolean> isActivityDying(final Activity activity)
     {
         return () -> activity.isFinishing() || activity.isDestroyed();
-    }
-
-    public static Callable<Boolean> isStatementTrue(Boolean objetToTest)
-    {
-        return () -> objetToTest;
     }
 
     public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceIds)
@@ -210,22 +205,6 @@ public final class ActivityTestUtil {
         }
     }
 
-    // ============================  Dialogs  ============================
-
-    public static void checkTextsInDialog(int... textsDialogs)
-    {
-        for (int textsDialog : textsDialogs) {
-            waitAtMost(6, SECONDS).until(() -> {
-                try {
-                    onView(withText(textsDialog)).inRoot(isDialog()).check(matches(isDisplayed()));
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
-                }
-            });
-        }
-    }
-
     //    ============================= IDENTITY ===================================
 
     @SuppressWarnings("ConstantConditions")
@@ -296,6 +275,20 @@ public final class ActivityTestUtil {
                 fail();
             }
         }
+    }
+
+    //    ============================ TOASTS ============================
+
+    public static void checkComuInSpinner(UsuarioComunidad usuarioComunidad)
+    {
+        // Precondition: comuRealJuan is shown in screen.
+        waitAtMost(4, SECONDS).until(() -> {
+            onView(allOf(
+                    withId(R.id.incid_comunidad_txt),
+                    withText(usuarioComunidad.getComunidad().getNombreComunidad())
+            )).check(matches(isDisplayed()));
+            return true;
+        });
     }
 
     //    ============================ TOASTS ============================

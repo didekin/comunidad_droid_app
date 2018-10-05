@@ -13,8 +13,9 @@ import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +51,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,7 +60,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegComuFrTest {
 
-    Comunidad comunidad;
+    static Comunidad comunidad;
     private ComuDataAc activity;
     private RegComuFr fragment;
 
@@ -69,14 +69,15 @@ public class ViewerRegComuFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };
+
+    @BeforeClass
+    public static void setStatic() throws Exception
+    {
+        comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+    }
 
     @Before
     public void setUp()
@@ -86,8 +87,8 @@ public class ViewerRegComuFrTest {
         waitAtMost(4, SECONDS).until(() -> fragment.viewer != null);
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_JUAN);
     }
@@ -111,19 +112,7 @@ public class ViewerRegComuFrTest {
         // test_OnActivityCreated
         assertThat(fragment.viewerInjector.getInjectedParentViewer().getChildViewer(fragment.viewer.getClass()), is(fragment.viewer));
 
-        // test_ClearSubscriptions()
-        checkSubscriptionsOnStop(activity, fragment.viewer.tipoViaSpinner.getController(),
-                fragment.viewer.comuAutonomaSpinner.getController(),
-                fragment.viewer.provinciaSpinner.getController(),
-                fragment.viewer.municipioSpinner.getController(),
-                fragment.viewer.getController());
-    }
-
-    @Test
-    public void test_SaveState()
-    {
-        checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
-
+        // test_SaveState
         Bundle bundle = new Bundle(4);
         fragment.viewer.comuAutonomaSpinner.setSelectedItemId(2L);
         fragment.viewer.provinciaSpinner.setSelectedItemId(11L);
@@ -138,8 +127,12 @@ public class ViewerRegComuFrTest {
         assertThat(spinnerEventItem.getSpinnerItemIdSelect(), is(23L));
         assertThat(spinnerEventItem.getMunicipio().getProvincia().getProvinciaId(), is((short) 34));
 
-        // test_OnStop
-        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
+        // test_ClearSubscriptions()
+        checkSubscriptionsOnStop(activity, fragment.viewer.tipoViaSpinner.getController(),
+                fragment.viewer.comuAutonomaSpinner.getController(),
+                fragment.viewer.provinciaSpinner.getController(),
+                fragment.viewer.municipioSpinner.getController(),
+                fragment.viewer.getController());
     }
 
     @Test

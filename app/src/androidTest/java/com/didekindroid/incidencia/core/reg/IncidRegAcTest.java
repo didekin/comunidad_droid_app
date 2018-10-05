@@ -12,7 +12,9 @@ import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +59,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -68,20 +69,15 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidRegAcTest {
 
-    private List<UsuarioComunidad> usuarioComunidades;
+    private static List<UsuarioComunidad> usuarioComunidades;
+    private AmbitoIncidValueObj ambitoObj = new AmbitoIncidValueObj((short) 10, "Calefacción comunitaria");
+    private IncidRegAc activity;
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (Exception e) {
-                fail();
-            }
-            usuarioComunidades = userComuDao.seeUserComusByUser().blockingGet();
-
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 Intent intent0 = new Intent(getTargetContext(), UserComuDataAc.class)
                         .putExtra(USERCOMU_LIST_OBJECT.key,
@@ -97,8 +93,12 @@ public class IncidRegAcTest {
         }
     };
 
-    private AmbitoIncidValueObj ambitoObj = new AmbitoIncidValueObj((short) 10, "Calefacción comunitaria");
-    private IncidRegAc activity;
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
+        usuarioComunidades = userComuDao.seeUserComusByUser().blockingGet();
+    }
 
     @Before
     public void setUp() throws Exception
@@ -112,6 +112,11 @@ public class IncidRegAcTest {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -127,7 +132,8 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
-        checkUp(incidSeeByComuAcLayout);
+        //  testOnStop
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
     @Test
@@ -182,11 +188,5 @@ public class IncidRegAcTest {
         assertThat(activity.incidRegFr.viewer.getParentViewer(), is(activity.viewer));
 
         checkUp(incidSeeByComuAcLayout);
-    }
-
-    @Test
-    public void testOnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 }

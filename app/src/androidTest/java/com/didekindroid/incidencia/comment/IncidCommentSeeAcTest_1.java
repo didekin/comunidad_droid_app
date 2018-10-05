@@ -8,8 +8,9 @@ import com.didekindroid.R;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -50,26 +51,31 @@ import static org.hamcrest.CoreMatchers.nullValue;
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentSeeAcTest_1 {
 
-    private IncidImportancia incidPepeEscorial;
+    private static IncidImportancia incidPepeEscorial;
     private Intent intent;
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        incidPepeEscorial = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
+    }
 
     @Before
     public void setUp() throws Exception
     {
-        incidPepeEscorial = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
         intent = new Intent(getTargetContext(), IncidCommentSeeAc.class)
                 .putExtra(INCIDENCIA_OBJECT.key, incidPepeEscorial.getIncidencia())
                 .setFlags(FLAG_ACTIVITY_NEW_TASK);
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_PEPE);
     }
 
     @Test
-    public void testOnCreate_1() throws InterruptedException   // TODO: fail.
+    public void testOnCreate_1() throws InterruptedException
     {
         // Precondition: incidencia is open.
         assertThat(incidPepeEscorial.getIncidencia().getFechaCierre(), nullValue());

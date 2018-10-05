@@ -9,7 +9,9 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.lib_one.usuario.LoginAc;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +44,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,12 +61,6 @@ public class LoginAc_App_Test {
         @Override
         protected void beforeActivityLaunched()
         {
-            // Precondition: the user is registered.
-            try {
-                regComuUserUserComuGetAuthTk(COMU_REAL_DROID);
-            } catch (Exception e) {
-                fail();
-            }
             if (Build.VERSION.SDK_INT >= LOLLIPOP) {
                 create(getTargetContext())
                         .addParentStack(LoginAc.class)
@@ -80,6 +75,12 @@ public class LoginAc_App_Test {
         }
     };
 
+    @BeforeClass
+    public static void setStatic() throws Exception
+    {
+        regComuUserUserComuGetAuthTk(COMU_REAL_DROID);
+    }
+
     @Before
     public void setUp() throws Exception
     {
@@ -93,6 +94,11 @@ public class LoginAc_App_Test {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_DROID);
     }
 

@@ -13,7 +13,9 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -65,6 +67,7 @@ import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -85,15 +88,19 @@ import static org.junit.Assert.assertThat;
 public class IncidResolucionEditFrTest {
 
     private IncidResolucionEditAc activity;
-    private IncidImportancia incidImportancia;
+    private static IncidImportancia incidImportancia;
     private Resolucion resolucion;
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
+    }
 
     @Before
     public void setUp() throws Exception
     {
-        incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
             create(getTargetContext()).addNextIntentWithParentStack(intent1).startActivities();
@@ -106,7 +113,11 @@ public class IncidResolucionEditFrTest {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
-        TimeUnit.SECONDS.sleep(4);
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -157,7 +168,7 @@ public class IncidResolucionEditFrTest {
 
         // Check OnStop.
         IncidResolucionEditFr fr = (IncidResolucionEditFr) activity.getSupportFragmentManager().findFragmentByTag(IncidResolucionEditFr.class.getName());
-        fr.controller = new CtrlerIncidenciaCore();
+        requireNonNull(fr).controller = new CtrlerIncidenciaCore();
         checkSubscriptionsOnStop(activity, fr.controller);
     }
 
@@ -210,7 +221,6 @@ public class IncidResolucionEditFrTest {
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance * no válido"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("-1234,5"));
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-
         waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_resolucion_avance_rot));
     }
 

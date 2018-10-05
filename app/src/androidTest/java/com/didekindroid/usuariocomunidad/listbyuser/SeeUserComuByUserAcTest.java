@@ -9,7 +9,9 @@ import com.didekindroid.comunidad.testutil.ComuTestData;
 import com.didekindroid.usuariocomunidad.RolUi;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,18 +62,18 @@ public class SeeUserComuByUserAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            try {
-                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE);   // Almería, Alicante.
-            } catch (Exception e) {
-                fail();
-            }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(SeeUserComuByUserAc.class).startActivities();
             }
         }
     };
     private SeeUserComuByUserAc activity;
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE);   // Almería, Alicante.
+    }
 
     @Before
     public void setUp() throws Exception
@@ -86,6 +88,11 @@ public class SeeUserComuByUserAcTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
+
+    }
+
+    @AfterClass
+    public static void cleanStatic(){
         cleanOptions(CLEAN_PEPE);
     }
 

@@ -9,7 +9,9 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -47,15 +49,19 @@ import static org.junit.Assert.assertThat;
 public class IncidResolucionEditAcTest {
 
     private IncidResolucionEditAc activity;
-    private IncidImportancia incidImportancia;
+    private static IncidImportancia incidImportancia;
 
-    @Before
-    public void setUp() throws Exception
+    @BeforeClass
+    public static void setUpStatic() throws Exception
     {
         // Precondition: ADM user.
         incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
+    }
 
+    @Before
+    public void setUp() throws Exception
+    {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
             create(getTargetContext()).addNextIntentWithParentStack(intent1).startActivities();
@@ -68,6 +74,11 @@ public class IncidResolucionEditAcTest {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 

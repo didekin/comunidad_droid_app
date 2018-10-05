@@ -122,7 +122,6 @@ public class ComuSearchAcTest {
 
     //    ============================ MENU ==============================
 
-    @SuppressWarnings("RedundantThrows")
     @Test
     public void testLogin_Registered() throws Exception
     {
@@ -136,9 +135,8 @@ public class ComuSearchAcTest {
         cleanOneUser(USER_JUAN.getUserName());
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testLogin_Unregistered() throws InterruptedException
+    public void testLogin_Unregistered()
     {
         activity = activityRule.launchActivity(new Intent());
         // Precondition.
@@ -147,9 +145,8 @@ public class ComuSearchAcTest {
         checkUp(comuSearchAcLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testMenuNuevaComunidad_NotRegistered()  throws InterruptedException
+    public void testMenuNuevaComunidad_NotRegistered()
     {
         activity = activityRule.launchActivity(new Intent());
         assertThat(activity.viewerAc.getController().isRegisteredUser(), is(false));
@@ -158,7 +155,6 @@ public class ComuSearchAcTest {
         checkUp(comuSearchAcLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
     public void testMenuNuevaComunidad_Registered() throws Exception
     {

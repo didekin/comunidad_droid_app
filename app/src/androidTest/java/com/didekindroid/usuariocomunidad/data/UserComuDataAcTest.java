@@ -1,15 +1,15 @@
 package com.didekindroid.usuariocomunidad.data;
 
 import android.content.Intent;
-import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
@@ -35,7 +34,6 @@ import static com.didekindroid.lib_one.testutil.UiTestUtil.checkChildInViewer;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
-import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtil.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtil.isResourceIdDisplayed;
@@ -48,10 +46,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUp
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -61,41 +57,36 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class UserComuDataAcTest {
 
-    private UsuarioComunidad usuarioComunidad;
+    private static UsuarioComunidad usuarioComunidad;
+    private UserComuDataAc activity;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
-                        .planta("One")
-                        .roles(PROPIETARIO.function)
-                        .build();
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad);
         }
     };
 
-    private UserComuDataAc activity;
-    private boolean toClean;
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        usuarioComunidad = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
+                .planta("One")
+                .roles(PROPIETARIO.function)
+                .build();
+    }
 
     @Before
     public void setUp() throws Exception
     {
         activity = intentRule.getActivity();
-        toClean = true;
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
-        if (!toClean) {
-            return;
-        }
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -126,27 +117,12 @@ public class UserComuDataAcTest {
         // OK.
         onView(withId(R.id.reg_usercomu_checbox_pro)).check(matches(isChecked()))
                 .perform(click()).check(matches(isNotChecked()));
-        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(click()).check(matches(isChecked()));
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(replaceText("portalOK"));
 
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
         // Verificación.
         waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         checkUp(userComuDataLayout);
-    }
-
-    @Test
-    public void testDeleteUserComu_1()
-    {
-        toClean = false;
-
-        onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
-        // Sale de la aplicación.
-        try {
-            checkBack(onView(withId(comuSearchAcLayout)));
-        } catch (NoActivityResumedException e) {
-            assertThat(e, isA(NoActivityResumedException.class));
-        }
     }
 
 //    ======================= MENU =========================

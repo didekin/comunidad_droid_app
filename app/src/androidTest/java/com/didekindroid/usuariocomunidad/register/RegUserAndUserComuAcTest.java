@@ -11,7 +11,9 @@ import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +49,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -57,7 +58,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class RegUserAndUserComuAcTest {
 
-    private Comunidad comunidad;
+    private static Comunidad comunidad;
     private RegUserAndUserComuAc activity;
 
     @Rule
@@ -80,15 +81,16 @@ public class RegUserAndUserComuAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
-            } catch (Exception e) {
-                fail();
-            }
-            cleanOptions(CLEAN_TK_HANDLER);
             return new Intent().putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+        cleanOptions(CLEAN_TK_HANDLER);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -104,18 +106,15 @@ public class RegUserAndUserComuAcTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 
     //    =================================== Tests ===================================
-
-    @Test
-    public void testRegisterUserAndUserComu_NotOk()
-    {
-        execCheckRegisterError(activity);
-    }
-
-    //    =================================== Life cycle ===================================
 
     @Test
     public void test_OnCreate()
@@ -131,6 +130,9 @@ public class RegUserAndUserComuAcTest {
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
 
+        // testRegisterUserAndUserComu_NotOk
+        execCheckRegisterError(activity);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchResultsListLayout);
         }
@@ -139,19 +141,16 @@ public class RegUserAndUserComuAcTest {
     @Test
     public void test_OnStop()
     {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
-    }
-
-    @Test
-    public void test_SetChildInViewer()
-    {
+        // test_SetChildInViewer
         checkChildInViewer(activity);
+
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
     //    =================================== MENU ===================================
 
     @Test
-    public void testLoginMn_Up() throws InterruptedException
+    public void testLoginMn_Up()
     {
         doLoginUnRegUser();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -160,7 +159,7 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void testLoginMn_Back() throws InterruptedException
+    public void testLoginMn_Back()
     {
         doLoginUnRegUser();
         checkBack(onView(withId(loginAcResourceId)), regUser_UserComuAcLayout);
@@ -168,8 +167,7 @@ public class RegUserAndUserComuAcTest {
 
     //    =================================== HELPERS ===================================
 
-    @SuppressWarnings("RedundantThrowsDeclaration")
-    private void doLoginUnRegUser() throws InterruptedException
+    private void doLoginUnRegUser()
     {
         // Precondition.
         assertThat(requireNonNull(activity.viewer.getController()).isRegisteredUser(), is(false));
