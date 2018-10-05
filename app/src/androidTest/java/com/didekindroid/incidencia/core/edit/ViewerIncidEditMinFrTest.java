@@ -166,18 +166,18 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testOnSuccessModifyIncidImportancia()
     {
-        Comunidad incidComu = viewer.resolBundle.getIncidImportancia().getIncidencia().getComunidad();
-        // Precondition: incidComu name is shown in screen.
+        Comunidad comunidad = viewer.resolBundle.getIncidImportancia().getIncidencia().getComunidad();
+        // Precondition: comunidad name is shown in screen.
         waitAtMost(4, SECONDS).until(() -> {
             onView(allOf(
                     withId(R.id.incid_comunidad_txt),
-                    withText(incidComu.getNombreComunidad())
+                    withText(comunidad.getNombreComunidad())
             )).check(matches(isDisplayed()));
             return true;
         });
-        viewer.onSuccessModifyIncidImportancia(incidComu);
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidSeeByComuAcLayout)));
+        viewer.onSuccessModifyIncidImportancia(comunidad);
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidSeeByComuAcLayout)));
         // Check comuSpinner initialization: the same initial comunidad is shown.
-        waitAtMost(4, SECONDS).until(isComuSpinnerWithText(incidComu.getNombreComunidad()));
+        waitAtMost(6, SECONDS).until(isComuSpinnerWithText(comunidad.getNombreComunidad()));
     }
 }

@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -10,8 +11,9 @@ import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +58,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -68,35 +69,33 @@ import static org.junit.Assert.fail;
 public class ComuSearchResultsAcTest {
 
     private ComuSearchResultsAc activity;
-    private Comunidad comuRondaDelNorte;
+    private static Comunidad comuRondaDelNorte;
+    private static Comunidad comunidadToSearch;
 
     @Rule
-    public IntentsTestRule<ComuSearchResultsAc> intentRule =
-            new IntentsTestRule<ComuSearchResultsAc>(ComuSearchResultsAc.class) {
-                @Override
-                protected void beforeActivityLaunched()
-                {
-                    comuRondaDelNorte =
-                            makeComunidad("Ronda", "del Norte", (short) 5, "", new Municipio((short) 2, new Provincia((short) 27)));
-                    try {
-                        regSeveralUserComuSameUser(
-                                COMU_PLAZUELA5_JUAN,
-                                makeUsuarioComunidad(comuRondaDelNorte, USER_JUAN, "portal_3", "esc_A", "planta_1", "puerta_2", INQUILINO.function)
-                        );
-                    } catch (Exception e) {
-                        fail();
-                    }
-                    create(getTargetContext()).addParentStack(ComuSearchResultsAc.class).startActivities();
-                }
+    public IntentsTestRule<ComuSearchResultsAc> intentRule = new IntentsTestRule<ComuSearchResultsAc>(ComuSearchResultsAc.class) {
+        @Override
+        protected Intent getActivityIntent()
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addParentStack(ComuSearchResultsAc.class).startActivities();
+            }
+            return new Intent().putExtra(COMUNIDAD_SEARCH.key, comunidadToSearch);
+        }
+    };
 
-                @Override
-                protected Intent getActivityIntent()
-                {
-                    Comunidad comunidadToSearch = makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
-                            new Municipio((short) 2, new Provincia((short) 27)));
-                    return new Intent().putExtra(COMUNIDAD_SEARCH.key, comunidadToSearch);
-                }
-            };
+    @BeforeClass
+    public static void setStatic() throws Exception
+    {
+        comuRondaDelNorte =
+                makeComunidad("Ronda", "del Norte", (short) 5, "", new Municipio((short) 2, new Provincia((short) 27)));
+        regSeveralUserComuSameUser(
+                COMU_PLAZUELA5_JUAN,
+                makeUsuarioComunidad(comuRondaDelNorte, USER_JUAN, "portal_3", "esc_A", "planta_1", "puerta_2", INQUILINO.function)
+        );
+        comunidadToSearch = makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
+                new Municipio((short) 2, new Provincia((short) 27)));
+    }
 
     @Before
     public void setUp()
@@ -104,8 +103,8 @@ public class ComuSearchResultsAcTest {
         activity = intentRule.getActivity();
     }
 
-    @After
-    public void cleanData()
+    @AfterClass
+    public static void cleanData()
     {
         cleanOptions(CLEAN_JUAN);
     }
@@ -163,27 +162,24 @@ public class ComuSearchResultsAcTest {
 
     //    ======================= MENU =========================
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_RegUser_Up()  throws InterruptedException
+    public void testRegComuAndUserComu_RegUser_Up()
     {
         // Usuario registrado.
         REG_COMU_USERCOMU_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_RegUser_Back()  throws InterruptedException
+    public void testRegComuAndUserComu_RegUser_Back()
     {
         // Usuario registrado.
         REG_COMU_USERCOMU_AC.checkItem(activity);
         checkBack(onView(withId(regComu_UserComuAcLayout)), comuSearchResultsListLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_UnRegUser_Up()  throws InterruptedException
+    public void testRegComuAndUserComu_UnRegUser_Up()
     {
         // Usuario no registrado.
         activity.viewer.getController().getTkCacher().updateAuthToken(null);
@@ -191,9 +187,8 @@ public class ComuSearchResultsAcTest {
         checkUp(comuSearchAcLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testRegComuAndUserComu_UnRegUser_Back() throws InterruptedException
+    public void testRegComuAndUserComu_UnRegUser_Back()
     {
         // Usuario no registrado.
         activity.viewer.getController().getTkCacher().updateAuthToken(null);
@@ -201,18 +196,16 @@ public class ComuSearchResultsAcTest {
         checkBack(onView(withId(regComu_User_UserComuAcLayout)), comuSearchResultsListLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testSeeUserComuByUser_Up()  throws InterruptedException
+    public void testSeeUserComuByUser_Up()
     {
         // La consulta muestra las comunidades del usuario.
         SEE_USERCOMU_BY_USER_AC.checkItem(activity);
         checkUp(comuSearchAcLayout);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testSeeUserComuByUser_Back()  throws InterruptedException
+    public void testSeeUserComuByUser_Back()
     {
         // La consulta muestra las comunidades del usuario.
         SEE_USERCOMU_BY_USER_AC.checkItem(activity);

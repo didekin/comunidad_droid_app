@@ -18,6 +18,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -34,19 +35,26 @@ import static org.hamcrest.CoreMatchers.is;
 public class ViewerComuSearchAcTest {
 
     @Rule
-    public IntentsTestRule<ComuSearchAc> activityRule = new IntentsTestRule<>(ComuSearchAc.class, true, true);
+    public IntentsTestRule<ComuSearchAc> activityRule = new IntentsTestRule<ComuSearchAc>(ComuSearchAc.class, true, true) {
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            // Precondition.
+            cleanWithTkhandler();
+        }
+    };
     private ComuSearchAc activity;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        waitAtMost(6, SECONDS).until(() -> activity.viewerAc != null
-                && activity.viewerAc.getViewInViewer() != null);
-        waitAtMost(6, SECONDS).until(() -> activity.regComuFrg != null
-                && activity.regComuFrg.frView != null
-                && activity.regComuFrg.viewer != null
-                && activity.regComuFrg.viewer.getViewInViewer() != null);
+        waitAtMost(6, SECONDS).until(() -> activity.viewerAc != null && activity.viewerAc.getViewInViewer() != null);
+        waitAtMost(6, SECONDS).until(() ->
+                activity.regComuFrg != null
+                        && activity.regComuFrg.frView != null
+                        && activity.regComuFrg.viewer != null
+                        && activity.regComuFrg.viewer.getViewInViewer() != null);
     }
 
     @Test

@@ -85,17 +85,13 @@ public class UserData_App_Test {
     public void testOncreate()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            testBackStack();
+            List<Intent> intents = asList(stackBuilder.getIntents());
+            assertThat(intents.size(), is(2));
+            // El intent con posición inferior es el primero que hemos añadido.
+            assertThat(requireNonNull(intents.get(0).getComponent()).getClassName(), is(ComuSearchAc.class.getName()));
+            assertThat(requireNonNull(intents.get(1).getComponent()).getClassName(), is(SeeUserComuByUserAc.class.getName()));
             checkUp(seeUserComuByUserFrRsId);
         }
     }
 
-    public void testBackStack()
-    {
-        List<Intent> intents = asList(stackBuilder.getIntents());
-        assertThat(intents.size(), is(2));
-        // El intent con posición inferior es el primero que hemos añadido.
-        assertThat(requireNonNull(intents.get(0).getComponent()).getClassName(), is(ComuSearchAc.class.getName()));
-        assertThat(requireNonNull(intents.get(1).getComponent()).getClassName(), is(SeeUserComuByUserAc.class.getName()));
-    }
 }

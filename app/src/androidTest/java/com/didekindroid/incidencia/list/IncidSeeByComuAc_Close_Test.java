@@ -10,7 +10,9 @@ import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -53,7 +55,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -64,57 +65,55 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("ConstantConditions")
 public class IncidSeeByComuAc_Close_Test {
 
-    private IncidImportancia incidImportancia2;
-    private IncidImportancia incidImportancia1;
+    private static IncidImportancia incidImportancia2;
+    private static IncidImportancia incidImportancia1;
+    private IncidSeeByComuAc activity;
+    private IncidSeeByComuFr fragment;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE); // Orden en lista: lafuente(0), plazuelas(1).
-            } catch (Exception e) {
-                fail();
-            }
-            incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
-            incidImportancia2 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(1), (short) 4);
-
-            // Cierre incidencias..
-            incidenciaDao.closeIncidencia(insertGetResolucionNoAvances(incidImportancia1)).blockingGet();
-            incidenciaDao.closeIncidencia(insertGetResolucionNoAvances(incidImportancia2)).blockingGet();
-
-            // Incidencias con fecha de cierre.
-            incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
-                    new Incidencia.IncidenciaBuilder()
-                            .copyIncidencia(incidImportancia1.getIncidencia())
-                            .fechaCierre(
-                                    incidenciaDao.seeIncidsClosedByComu(incidImportancia1.getIncidencia().getComunidadId()).blockingGet().get(0).getIncidencia().getFechaCierre()
-                            )
-                            .build())
-                    .copyIncidImportancia(incidImportancia1)
-                    .build();
-
-            incidImportancia2 = new IncidImportancia.IncidImportanciaBuilder(
-                    new Incidencia.IncidenciaBuilder()
-                            .copyIncidencia(incidImportancia2.getIncidencia())
-                            .fechaCierre(
-                                    incidenciaDao.seeIncidsClosedByComu(incidImportancia2.getIncidencia().getComunidadId()).blockingGet().get(0).getIncidencia().getFechaCierre()
-                            )
-                            .build())
-                    .copyIncidImportancia(incidImportancia2)
-                    .build();
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();
             }
-
             return new Intent().putExtra(COMUNIDAD_ID.key, incidImportancia1.getIncidencia().getComunidadId()).putExtra(INCID_CLOSED_LIST_FLAG.key, true);
         }
     };
 
-    private IncidSeeByComuAc activity;
-    private IncidSeeByComuFr fragment;
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE); // Orden en lista: lafuente(0), plazuelas(1).
+        incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
+        incidImportancia2 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(1), (short) 4);
+
+        // Cierre incidencias..
+        incidenciaDao.closeIncidencia(insertGetResolucionNoAvances(incidImportancia1)).blockingGet();
+        incidenciaDao.closeIncidencia(insertGetResolucionNoAvances(incidImportancia2)).blockingGet();
+
+        // Incidencias con fecha de cierre.
+        incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
+                new Incidencia.IncidenciaBuilder()
+                        .copyIncidencia(incidImportancia1.getIncidencia())
+                        .fechaCierre(
+                                incidenciaDao.seeIncidsClosedByComu(incidImportancia1.getIncidencia().getComunidadId()).blockingGet().get(0).getIncidencia().getFechaCierre()
+                        )
+                        .build())
+                .copyIncidImportancia(incidImportancia1)
+                .build();
+
+        incidImportancia2 = new IncidImportancia.IncidImportanciaBuilder(
+                new Incidencia.IncidenciaBuilder()
+                        .copyIncidencia(incidImportancia2.getIncidencia())
+                        .fechaCierre(
+                                incidenciaDao.seeIncidsClosedByComu(incidImportancia2.getIncidencia().getComunidadId()).blockingGet().get(0).getIncidencia().getFechaCierre()
+                        )
+                        .build())
+                .copyIncidImportancia(incidImportancia2)
+                .build();
+    }
 
     @Before
     public void setUp() throws Exception
@@ -129,23 +128,18 @@ public class IncidSeeByComuAc_Close_Test {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activityRule.getActivity());
         }
-        cleanOptions(CLEAN_PEPE);
     }
 
+    @AfterClass
+    public static void cleanStatic()
+    {
+        cleanOptions(CLEAN_PEPE);
+    }
 
     //  ==================================== INTEGRATION TESTS  ====================================
 
     @Test
-    public void testOnCreate_1()
-    {
-        assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(seeUserComuByUserFrRsId);
-        }
-    }
-
-    @Test
-    public void testOnCreate_2()
+    public void testOnCreate()
     {
         /* CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).*/
         assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(incidImportancia1.getIncidencia().getComunidadId()));
@@ -159,6 +153,10 @@ public class IncidSeeByComuAc_Close_Test {
         // Cambiamos la comunidad en el spinner y revisamos los datos.
         doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
         waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia2, activity)));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(seeUserComuByUserFrRsId);
+        }
     }
 
     @Test

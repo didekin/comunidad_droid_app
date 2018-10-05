@@ -10,7 +10,9 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +60,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -79,9 +80,9 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeByComuAc_Open_Test {
 
-    private IncidImportancia incidImportancia1;
-    private IncidImportancia incidImportancia2;
-    private IncidenciaUser incidenciaUser1;
+    private static IncidImportancia incidImportancia1;
+    private static IncidImportancia incidImportancia2;
+    private static IncidenciaUser incidenciaUser1;
     private IncidSeeByComuAc activity;
     private IncidSeeByComuFr fragment;
 
@@ -90,20 +91,20 @@ public class IncidSeeByComuAc_Open_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (Exception e) {
-                fail();
-            }
-            incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
-            incidImportancia2 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(1), (short) 4);
-            // Resolución para incidencia1.
-            insertGetResolucionNoAvances(incidImportancia1);
-            incidenciaUser1 = incidenciaDao.seeIncidsOpenByComu(incidImportancia1.getIncidencia().getComunidadId()).blockingGet().get(0);
             return new Intent().putExtra(INCID_CLOSED_LIST_FLAG.key, false);
         }
     };
 
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+        incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
+        incidImportancia2 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(1), (short) 4);
+        // Resolución para incidencia1.
+        insertGetResolucionNoAvances(incidImportancia1);
+        incidenciaUser1 = incidenciaDao.seeIncidsOpenByComu(incidImportancia1.getIncidencia().getComunidadId()).blockingGet().get(0);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -118,6 +119,11 @@ public class IncidSeeByComuAc_Open_Test {
     public void tearDown() throws Exception
     {
         activity.deleteDatabase(DB_NAME);
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_PEPE);
     }
 

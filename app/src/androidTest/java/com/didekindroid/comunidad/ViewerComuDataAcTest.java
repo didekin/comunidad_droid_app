@@ -8,8 +8,9 @@ import com.didekindroid.R;
 import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +25,6 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.ViewerComuDataAc.newViewerComuDataAc;
-import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
@@ -40,15 +39,12 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
 import static io.reactivex.Single.just;
-import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -60,21 +56,22 @@ public class ViewerComuDataAcTest {
 
     private ViewerComuDataAc viewer;
     private ComuDataAc activity;
-    private Comunidad comunidad;
+    private static Comunidad comunidad;
 
     @Rule
     public ActivityTestRule<ComuDataAc> activityRule = new ActivityTestRule<ComuDataAc>(ComuDataAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(COMUNIDAD_ID.key, comunidad.getC_Id());
         }
     };
+
+    @BeforeClass
+    public static void setStatic() throws Exception
+    {
+        comunidad = signUpGetComu(COMU_PLAZUELA5_JUAN);
+    }
 
     @Before
     public void setUp()
@@ -84,8 +81,8 @@ public class ViewerComuDataAcTest {
         viewer = activity.viewer;
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_JUAN);
     }
@@ -93,31 +90,15 @@ public class ViewerComuDataAcTest {
     //    ==================================== TESTS =========================================
 
     @Test
-    public void test_NewViewerComuDataAc()
-    {
-        assertThat(viewer.getController(), isA(CtrlerComunidad.class));
-    }
-
-    @Test
-    public void test_DoViewInViewer()
-    {
-        onView(withId(comuDataAcLayout)).check(matches(isDisplayed()));
-        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test_SetChildViewer()
-    {
-        viewer = newViewerComuDataAc(activity);
-        assertThat(viewer.getChildViewer(ViewerRegComuFr.class), nullValue());
-        // After.
-        viewer.setChildViewer(newViewerRegComuFr(requireNonNull(activity.regComuFrg.getView()), viewer));
-        assertThat(viewer.getChildViewer(ViewerRegComuFr.class), notNullValue());
-    }
-
-    @Test
     public void testComuDataAcButtonListener()
     {
+        // test_DoViewInViewer
+        assertThat(viewer.getController(), isA(CtrlerComunidad.class));
+        onView(withId(comuDataAcLayout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed()));
+        // test_SetChildViewer
+        assertThat(viewer.getChildViewer(ViewerRegComuFr.class), notNullValue());
+
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
 
         AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);

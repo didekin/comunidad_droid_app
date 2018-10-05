@@ -75,11 +75,6 @@ public final class ActivityTestUtil {
         return () -> activity.isFinishing() || activity.isDestroyed();
     }
 
-    public static Callable<Boolean> isStatementTrue(Boolean objetToTest)
-    {
-        return () -> objetToTest;
-    }
-
     public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceIds)
     {
         return () -> {

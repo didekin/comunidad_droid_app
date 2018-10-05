@@ -10,7 +10,9 @@ import com.didekindroid.R;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +41,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUp
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -49,7 +50,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeByComuAc_Close_Mn_Test {
 
-    private Comunidad comunidadInIntent;
+    private static Comunidad comunidadInIntent;
     private IncidSeeByComuAc activity;
 
     @Rule
@@ -58,22 +59,21 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                comunidadInIntent = signUpGetComu(COMU_REAL_DROID);
-            } catch (Exception e) {
-                fail();
-            }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 create(getTargetContext()).addParentStack(IncidSeeByComuAc.class).startActivities();
             }
-
             // Precondition: closed incidencias.
             return new Intent()
                     .putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id())
                     .putExtra(INCID_CLOSED_LIST_FLAG.key, true);
         }
     };
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        comunidadInIntent = signUpGetComu(COMU_REAL_DROID);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -87,6 +87,11 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activityRule.getActivity());
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_DROID);
     }
 
@@ -112,9 +117,8 @@ public class IncidSeeByComuAc_Close_Mn_Test {
     //    ..... ACTION BAR ....
     // ============================================================
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidSeeOpenByComuMn_1() throws InterruptedException
+    public void testIncidSeeOpenByComuMn_1()
     {
         // Precondition
         assertThat(activity.getTitle(), is(activity.getText(R.string.incid_closed_by_user_ac_label)));
@@ -127,9 +131,8 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         checkAppBarMnNotExist(activity, R.id.incid_see_open_by_comu_ac_mn);
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidSeeOpenByComuMn_2() throws InterruptedException
+    public void testIncidSeeOpenByComuMn_2()
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkItem(activity);
         // CheckUp.
@@ -138,9 +141,8 @@ public class IncidSeeByComuAc_Close_Mn_Test {
         }
     }
 
-    @SuppressWarnings("RedundantThrows")
     @Test
-    public void testIncidRegMn() throws InterruptedException
+    public void testIncidRegMn()
     {
         INCID_REG_AC.checkItem(activity);
         intended(hasExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()));

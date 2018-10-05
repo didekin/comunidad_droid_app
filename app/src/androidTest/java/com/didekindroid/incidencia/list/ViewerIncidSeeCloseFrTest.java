@@ -13,8 +13,9 @@ import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +54,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -63,8 +63,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeCloseFrTest {
 
-    private IncidImportancia incidImportancia1;
-    private Resolucion resolucion;
+    private static IncidImportancia incidImportancia1;
+    private static Resolucion resolucion;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class, true) {
@@ -72,26 +72,6 @@ public class ViewerIncidSeeCloseFrTest {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regComuUserUserComuGetAuthTk(COMU_PLAZUELA5_PEPE);
-            } catch (Exception e) {
-                fail();
-            }
-            incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
-            // Cierre incidencias..
-            resolucion = insertGetResolucionNoAvances(incidImportancia1);
-            incidenciaDao.closeIncidencia(resolucion).blockingGet();
-            // Incidencias con fecha de cierre.
-            incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
-                    new Incidencia.IncidenciaBuilder()
-                            .copyIncidencia(incidImportancia1.getIncidencia())
-                            .fechaCierre(
-                                    incidenciaDao.seeIncidsClosedByComu(incidImportancia1.getIncidencia().getComunidadId())
-                                            .blockingGet().get(0).getIncidencia().getFechaCierre()
-                            )
-                            .build())
-                    .copyIncidImportancia(incidImportancia1)
-                    .build();
             return new Intent().putExtra(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, true);
         }
     };
@@ -100,6 +80,27 @@ public class ViewerIncidSeeCloseFrTest {
     private IncidSeeByComuAc activity;
 
     //    ============================  SETUP - CLEAN  ===================================
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regComuUserUserComuGetAuthTk(COMU_PLAZUELA5_PEPE);
+        incidImportancia1 = insertGetIncidImportancia(userComuDao.seeUserComusByUser().blockingGet().get(0), (short) 1);
+        // Cierre incidencias..
+        resolucion = insertGetResolucionNoAvances(incidImportancia1);
+        incidenciaDao.closeIncidencia(resolucion).blockingGet();
+        // Incidencias con fecha de cierre.
+        incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
+                new Incidencia.IncidenciaBuilder()
+                        .copyIncidencia(incidImportancia1.getIncidencia())
+                        .fechaCierre(
+                                incidenciaDao.seeIncidsClosedByComu(incidImportancia1.getIncidencia().getComunidadId())
+                                        .blockingGet().get(0).getIncidencia().getFechaCierre()
+                        )
+                        .build())
+                .copyIncidImportancia(incidImportancia1)
+                .build();
+    }
 
     @Before
     public void setUp() throws Exception
@@ -110,8 +111,8 @@ public class ViewerIncidSeeCloseFrTest {
         waitAtMost(6, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
         cleanOptions(CLEAN_PEPE);
     }
@@ -144,14 +145,7 @@ public class ViewerIncidSeeCloseFrTest {
         assertThat(bundle.getLong(INCIDENCIA_ID_LIST_SELECTED.key), is(5L));
         assertThat(bundle.getLong(COMUNIDAD_ID.key), is(7L));
 
-        // testClearSubscriptions
-        checkSubscriptionsOnStop(activity, fragment.viewer.comuSpinnerViewer.getController(),
-                fragment.viewer.getController());
-    }
-
-    @Test
-    public void test_InitSelectedItemId()
-    {
+        // test_InitSelectedItemId
         Bundle savedState = new Bundle();
         savedState.putLong(INCIDENCIA_ID_LIST_SELECTED.key, 11L);
         fragment.viewer.initSelectedItemId(savedState);
@@ -161,6 +155,10 @@ public class ViewerIncidSeeCloseFrTest {
         savedState = new Bundle(0);
         fragment.viewer.initSelectedItemId(savedState);
         assertThat(fragment.viewer.getSelectedItemId(), is(0L));
+
+        // testClearSubscriptions
+        checkSubscriptionsOnStop(activity, fragment.viewer.comuSpinnerViewer.getController(),
+                fragment.viewer.getController());
     }
 
     @Test
