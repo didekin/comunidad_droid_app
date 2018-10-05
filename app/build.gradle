@@ -60,12 +60,12 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pro.eu-west-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pro.eu-central-1.elasticbeanstalk.com"'
             buildConfigField "String", "didekin_web_port", '":443"'
         }
         pre {
             initWith release
-            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-west-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
             buildConfigField "String", "didekin_web_port", '":443"'
         }
         local {
@@ -76,7 +76,7 @@ android {
         debugPre {
             initWith debug
             // To be used in DidekinApp.
-            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-west-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
             buildConfigField "String", "didekin_web_port", '":443"'
         }
         debug {
