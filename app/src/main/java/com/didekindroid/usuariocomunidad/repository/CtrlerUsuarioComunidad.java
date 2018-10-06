@@ -41,7 +41,7 @@ public class CtrlerUsuarioComunidad extends Controller {
         );
     }
 
-    public boolean getUserComuByUserAndComu(DisposableMaybeObserver<UsuarioComunidad> observer, Comunidad comunidad)
+    boolean getUserComuByUserAndComu(DisposableMaybeObserver<UsuarioComunidad> observer, Comunidad comunidad)
     {
         Timber.d("getUserComuByUserAndComu()");
         return getSubscriptions().add(

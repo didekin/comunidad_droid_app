@@ -10,19 +10,16 @@ import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasFlags;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
@@ -48,7 +45,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -59,26 +55,26 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerUserComuDataAcTest {
 
-    private UsuarioComunidad userComu;
+    private static UsuarioComunidad userComu;
     private UserComuDataAc activity;
-    private boolean hasToClean = true;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                userComu = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
-                        .planta("One")
-                        .roles(PROPIETARIO.function)
-                        .build();
-            } catch (Exception e) {
-                fail();
-            }
             return new Intent().putExtra(USERCOMU_LIST_OBJECT.key, userComu);
         }
     };
+
+    @BeforeClass
+    public static void setStatic() throws Exception
+    {
+        userComu = new UsuarioComunidad.UserComuBuilder(signUpGetComu(COMU_TRAV_PLAZUELA_PEPE), USER_PEPE)
+                .planta("One")
+                .roles(PROPIETARIO.function)
+                .build();
+    }
 
     @Before
     public void setUp() throws Exception
@@ -87,12 +83,10 @@ public class ViewerUserComuDataAcTest {
         waitAtMost(4, SECONDS).until(() -> activity.viewer, notNullValue());
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown()
     {
-        if (hasToClean){
-            cleanOptions(CLEAN_PEPE);
-        }
+        cleanOptions(CLEAN_PEPE);
     }
 
     // .............................. VIEWER ..................................
@@ -132,19 +126,6 @@ public class ViewerUserComuDataAcTest {
     }
 
     @Test
-    public void test_DeleteButtonListener()
-    {
-        hasToClean = false;
-        // Before.
-        assertThat(activity.viewer.getController().getTkCacher().isUserRegistered(), is(true));
-        // Exec.
-        onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
-        // Check.
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
-        intended(hasFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK));
-    }
-
-    @Test
     public void test_actionAfterDeleteUser() throws Exception
     {
         activity.viewer.actionAfterDeleteUser.accept(1);
@@ -159,15 +140,9 @@ public class ViewerUserComuDataAcTest {
     @Test
     public void test_ModifyComuObserver()
     {
-        // Exec and check.
-        just(1).subscribeWith(activity.viewer.new ModifyUserComuObserver(true));
+        // Wait for the initializaton by the activity: to 'true' (only one user).
         waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
-        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
-    }
 
-    @Test
-    public void test_ModifyComuObserver_2()
-    {
         just(1).subscribeWith(activity.viewer.new ModifyUserComuObserver(false));
         waitAtMost(6, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
@@ -176,10 +151,13 @@ public class ViewerUserComuDataAcTest {
     @Test
     public void test_OldestObserver()
     {
-        just(true).subscribeWith(activity.viewer.new OldestObserver());
+        // Wait for the initializaton by the activity: to 'true' (only one user).
         waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
 
         just(false).subscribeWith(activity.viewer.new OldestObserver());
         waitAtMost(6, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
+
+        just(true).subscribeWith(activity.viewer.new OldestObserver());
+        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
     }
 }
