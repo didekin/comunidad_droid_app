@@ -143,6 +143,7 @@ public class ViewerUserComuDataAcTest {
         // Wait for the initializaton by the activity: to 'true' (only one user).
         waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
 
+        // Change to false.
         just(1).subscribeWith(activity.viewer.new ModifyUserComuObserver(false));
         waitAtMost(6, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
@@ -154,10 +155,8 @@ public class ViewerUserComuDataAcTest {
         // Wait for the initializaton by the activity: to 'true' (only one user).
         waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
 
+        // Change to false.
         just(false).subscribeWith(activity.viewer.new OldestObserver());
         waitAtMost(6, SECONDS).untilFalse(activity.viewer.showMnOldestAdmonUser);
-
-        just(true).subscribeWith(activity.viewer.new OldestObserver());
-        waitAtMost(6, SECONDS).untilTrue(activity.viewer.showMnOldestAdmonUser);
     }
 }

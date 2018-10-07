@@ -244,6 +244,8 @@
     <string name="sufijo_numero">Sufijo</string>
     <!-- ================== RegUserComuAc ================= -->
     <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>
+    <!-- ........... RegUserFr ......... -->
+    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
     <!-- ================= SeeUserComuByComuAc ============ -->
     <string name="see_usercomu_by_comu_ac_label">Vecinos</string>
     <string name="usercomu_portal_rot">Portal:</string>
