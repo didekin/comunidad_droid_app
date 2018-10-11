@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.security.AuthTkCacherIf;
 import com.didekindroid.lib_one.security.SecInitializerIf;
-import com.didekindroid.lib_one.usuario.dao.AppIdHelper;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
@@ -26,7 +25,6 @@ import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static com.didekindroid.lib_one.api.exception.UiException.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
-import static com.didekindroid.lib_one.usuario.dao.AppIdHelper.appIdSingle;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getRespSingleListFunction;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseMaybeFunction;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseSingleFunction;
@@ -41,18 +39,16 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public static final IncidenciaDao incidenciaDao = new IncidenciaDao(secInitializer.get(), httpInitializer.get());
     private final IncidenciaServEndPoints endPoint;
     private final AuthTkCacherIf tkCacher;
-    private final AppIdHelper appIdHelper;
 
     private IncidenciaDao(SecInitializerIf secInitializerIn, HttpInitializerIf httpInitializerIn)
     {
-        this( httpInitializerIn.getHttpHandler().getService(IncidenciaServEndPoints.class), secInitializerIn.getTkCacher(), appIdSingle);
+        this(httpInitializerIn.getHttpHandler().getService(IncidenciaServEndPoints.class), secInitializerIn.getTkCacher());
     }
 
-    public IncidenciaDao(IncidenciaServEndPoints endPoint, AuthTkCacherIf tkCacher, AppIdHelper appIdHelper)
+    public IncidenciaDao(IncidenciaServEndPoints endPoint, AuthTkCacherIf tkCacher)
     {
         this.endPoint = endPoint;
         this.tkCacher = tkCacher;
-        this.appIdHelper = appIdHelper;
     }
 
     /*  ================================== IncidenciaServEndPoints implementation ============================*/
@@ -143,8 +139,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Integer> closeIncidencia(Resolucion resolucion)
     {
         Timber.d("closeIncidencia()");
-        return  appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> closeIncidencia(tkCacher.doAuthHeaderStr(gcmTk), resolucion))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> closeIncidencia(authToken, resolucion))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -152,8 +148,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Integer> deleteIncidencia(long incidenciaId)
     {
         Timber.d("deleteIncidencia()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> deleteIncidencia(tkCacher.doAuthHeaderStr(gcmTk), incidenciaId))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> deleteIncidencia(authToken, incidenciaId))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -161,8 +157,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Integer> modifyIncidImportancia(IncidImportancia incidImportancia)
     {
         Timber.d("modifyIncidImportancia()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> modifyIncidImportancia(tkCacher.doAuthHeaderStr(gcmTk), incidImportancia))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> modifyIncidImportancia(authToken, incidImportancia))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -170,8 +166,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Integer> modifyResolucion(Resolucion resolucion)
     {
         Timber.d("modifyResolucion()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> modifyResolucion(tkCacher.doAuthHeaderStr(gcmTk), resolucion))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> modifyResolucion(authToken, resolucion))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -179,8 +175,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Integer> regIncidComment(IncidComment comment)
     {
         Timber.d("regIncidComment()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> regIncidComment(tkCacher.doAuthHeaderStr(gcmTk), comment))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> regIncidComment(authToken, comment))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -188,8 +184,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Integer> regIncidImportancia(IncidImportancia incidImportancia)
     {
         Timber.d("regIncidImportancia()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> regIncidImportancia(tkCacher.doAuthHeaderStr(gcmTk), incidImportancia))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> regIncidImportancia(authToken, incidImportancia))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -197,8 +193,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<Integer> regResolucion(Resolucion resolucion)
     {
         Timber.d("regResolucion()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> regResolucion(tkCacher.doAuthHeaderStr(gcmTk), resolucion))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> regResolucion(authToken, resolucion))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -206,8 +202,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<List<IncidComment>> seeCommentsByIncid(long incidenciaId)
     {
         Timber.d("seeCommentsByIncid()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> seeCommentsByIncid(tkCacher.doAuthHeaderStr(gcmTk), incidenciaId))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> seeCommentsByIncid(authToken, incidenciaId))
                 .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -215,8 +211,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<IncidAndResolBundle> seeIncidImportanciaRaw(long incidenciaId)
     {
         Timber.d("seeIncidImportanciaRaw()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> seeIncidImportancia(tkCacher.doAuthHeaderStr(gcmTk), incidenciaId))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> seeIncidImportancia(authToken, incidenciaId))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -231,8 +227,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<List<IncidenciaUser>> seeIncidsOpenByComu(long comunidadId)
     {
         Timber.d("seeIncidsOpenByComu()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> seeIncidsOpenByComu(tkCacher.doAuthHeaderStr(gcmTk), comunidadId))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> seeIncidsOpenByComu(authToken, comunidadId))
                 .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -240,8 +236,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<List<IncidenciaUser>> seeIncidsClosedByComu(long comunidadId)
     {
         Timber.d("seeIncidsClosedByComu()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> seeIncidsClosedByComu(tkCacher.doAuthHeaderStr(gcmTk), comunidadId))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> seeIncidsClosedByComu(authToken, comunidadId))
                 .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -249,8 +245,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Maybe<Resolucion> seeResolucionRaw(long incidenciaId)
     {
         Timber.d("seeResolucionRaw()");
-        return appIdHelper.getTokenSingle()
-                .flatMapMaybe(gcmTk -> seeResolucion(tkCacher.doAuthHeaderStr(gcmTk), incidenciaId))
+        return tkCacher.getSingleAuthToken()
+                .flatMapMaybe(authToken -> seeResolucion(authToken, incidenciaId))
                 .flatMap(getResponseMaybeFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -269,8 +265,8 @@ public final class IncidenciaDao implements IncidenciaServEndPoints {
     public Single<List<ImportanciaUser>> seeUserComusImportancia(long incidenciaId)
     {
         Timber.d("seeUserComusImportancia()");
-        return appIdHelper.getTokenSingle()
-                .flatMap(gcmTk -> seeUserComusImportancia(tkCacher.doAuthHeaderStr(gcmTk), incidenciaId))
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> seeUserComusImportancia(authToken, incidenciaId))
                 .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
