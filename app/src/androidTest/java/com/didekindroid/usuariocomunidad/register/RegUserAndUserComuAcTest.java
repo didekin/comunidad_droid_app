@@ -134,7 +134,7 @@ public class RegUserAndUserComuAcTest {
         execCheckRegisterError(activity);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkUp(comuSearchResultsListLayout);
+            checkUp(comuSearchResultsListLayout);     // TODO: fail.
         }
     }
 
