@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekindroid.lib_one.api.ActivityMock;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc;
@@ -23,6 +24,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtras;
 import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.usuario.UserTestData.authTokenExample;
 import static com.didekindroid.router.DidekinMnAction.comu_search_mn;
 import static com.didekindroid.router.DidekinMnAction.incid_see_closed_by_comu_mn;
 import static com.didekindroid.router.DidekinMnAction.incid_see_open_by_comu_mn;
@@ -64,7 +66,7 @@ public class DidekinMnActionTest {
     }
 
     @After
-    public void cleanUp()
+    public void cleanUp() throws UiException
     {
         secInitializer.get().getTkCacher().updateAuthToken(null);
     }
@@ -108,18 +110,18 @@ public class DidekinMnActionTest {
     }
 
     @Test
-    public void test_reg_nueva_comunidad_mn_2()
+    public void test_reg_nueva_comunidad_mn_2() throws UiException
     {
-        secInitializer.get().getTkCacher().updateAuthToken("mock_gcmTk");
+        secInitializer.get().getTkCacher().updateAuthToken(authTokenExample);
         waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isUserRegistered);
         reg_nueva_comunidad_mn.initActivity(activity);
         intended(hasComponent(RegComuAndUserComuAc.class.getName()));
     }
 
     @Test
-    public void test_see_usercomu_by_user_mn()
+    public void test_see_usercomu_by_user_mn() throws UiException
     {
-        secInitializer.get().getTkCacher().updateAuthToken("mock_gcmTk");
+        secInitializer.get().getTkCacher().updateAuthToken(authTokenExample);
         waitAtMost(4, SECONDS).until(secInitializer.get().getTkCacher()::isUserRegistered);
         see_usercomu_by_user_mn.initActivity(activity);
         intended(hasComponent(SeeUserComuByUserAc.class.getName()));

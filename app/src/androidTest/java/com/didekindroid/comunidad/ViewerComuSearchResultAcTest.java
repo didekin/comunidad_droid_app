@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.exception.UiException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.comunidad.ViewerComuSearchResultAc.newViewerComuSearchResultAc;
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.doMockMenu;
+import static com.didekindroid.lib_one.usuario.UserTestData.authTokenExample;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static org.hamcrest.CoreMatchers.is;
@@ -50,7 +52,7 @@ public class ViewerComuSearchResultAcTest {
     }
 
     @Test
-    public void test_UpdateActivityMenu()
+    public void test_UpdateActivityMenu() throws UiException
     {
         assertThat(viewer.getController(), notNullValue());
 
@@ -66,7 +68,7 @@ public class ViewerComuSearchResultAcTest {
         assertThat(!itemSeeUserComu.isVisible() && !itemSeeUserComu.isEnabled(), is(true));
 
         //Preconditions.
-        viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
+        viewer.getController().getTkCacher().updateAuthToken(authTokenExample);
         // Exec.
         viewer.updateActivityMenu(myMenu);
         // Check: change both attributes.

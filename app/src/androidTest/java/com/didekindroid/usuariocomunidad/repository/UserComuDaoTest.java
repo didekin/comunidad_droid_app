@@ -44,6 +44,7 @@ import static com.didekinlib.model.comunidad.http.ComunidadExceptionMsg.COMUNIDA
 import static com.didekinlib.model.usuario.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
 import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -99,9 +100,10 @@ public class UserComuDaoTest {
         whatClean = CLEAN_JUAN;
         regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         // La comunidad no existe en BD.
-        userComuDao.getUserComuByUserAndComu(999L).test().assertError(
-                exception -> UiException.class.cast(exception).getErrorHtppMsg().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())
-        );
+        userComuDao.getUserComuByUserAndComu(999L).test()
+                .assertError(exception ->
+                        requireNonNull(UiException.class.cast(exception)).getErrorHtppMsg().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())
+                );
     }
 
     @Test

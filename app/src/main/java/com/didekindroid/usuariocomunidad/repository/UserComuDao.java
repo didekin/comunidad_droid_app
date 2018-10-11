@@ -4,7 +4,6 @@ import com.didekindroid.lib_one.api.HttpInitializerIf;
 import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.lib_one.security.AuthTkCacherIf;
 import com.didekindroid.lib_one.security.SecInitializerIf;
-import com.didekindroid.lib_one.usuario.dao.AppIdHelper;
 import com.didekinlib.http.exception.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
@@ -21,10 +20,10 @@ import io.reactivex.functions.Function;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.didekindroid.lib_one.FirebaseInitializer.firebaseInitializer;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static com.didekindroid.lib_one.api.exception.UiException.uiExceptionConsumer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
-import static com.didekindroid.lib_one.usuario.dao.AppIdHelper.appIdSingle;
 import static com.didekindroid.lib_one.util.Device.getDeviceLanguage;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getRespSingleListFunction;
 import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseMaybeFunction;
@@ -44,14 +43,12 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public static final UserComuDao userComuDao = new UserComuDao(secInitializer.get(), httpInitializer.get());
     private final UsuarioComunidadEndPoints endPoint;
     private final AuthTkCacherIf tkCacher;
-    private final AppIdHelper idHelper;
     private final Function<Boolean, CompletableSource> userDataErrorFunc;
 
     public UserComuDao(SecInitializerIf secInitializerIn, HttpInitializerIf httpInitializerIn)
     {
         endPoint = httpInitializerIn.getHttpHandler().getService(UsuarioComunidadEndPoints.class);
         tkCacher = secInitializerIn.getTkCacher();
-        idHelper = appIdSingle;
         userDataErrorFunc = isUpdated -> isUpdated ? complete() : error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)));
     }
 
@@ -87,9 +84,9 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     }
 
     @Override
-    public Single<Response<Integer>> modifyComuData(String currentauthHeader, Comunidad comunidad)
+    public Single<Response<Integer>> modifyComuData(String authHeader, Comunidad comunidad)
     {
-        return endPoint.modifyComuData(currentauthHeader, comunidad);
+        return endPoint.modifyComuData(authHeader, comunidad);
     }
 
     @Override
@@ -138,11 +135,11 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
-    public Single<Integer> deleteUserComu(long comunidadId)
+    Single<Integer> deleteUserComu(long comunidadId)
     {
         Timber.d("deleteUserComu()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmToken -> deleteUserComu(tkCacher.doAuthHeaderStr(gcmToken), comunidadId))
+        return   tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> deleteUserComu(authToken, comunidadId))
                 .flatMap(getResponseSingleFunction())
                 .doOnSuccess(rowsUpdated -> {
                     if (rowsUpdated == IS_USER_DELETED) {
@@ -155,8 +152,8 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Single<List<Comunidad>> getComusByUser()
     {
         Timber.d("getComusByUser()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmToken -> getComusByUser(tkCacher.doAuthHeaderStr(gcmToken)))
+        return   tkCacher.getSingleAuthToken()
+                .flatMap(this::getComusByUser)
                 .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -164,17 +161,16 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Maybe<UsuarioComunidad> getUserComuByUserAndComu(long comunidadId)
     {
         Timber.d("getUserComuByUserAndComu()");
-        return idHelper.getTokenSingle()
-                .flatMapMaybe(gcmTk -> getUserComuByUserAndComu(tkCacher.doAuthHeaderStr(gcmTk), comunidadId))
+        return  tkCacher.getSingleAuthToken()
+                .flatMapMaybe(authToken -> getUserComuByUserAndComu(authToken, comunidadId))
                 .flatMap(getResponseMaybeFunction());
     }
 
-    public Single<Boolean> isOldestOrAdmonUserComu(long comunidadId)
+    Single<Boolean> isOldestOrAdmonUserComu(long comunidadId)
     {
         Timber.d("isOldestOrAdmonUserComu()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmTk ->
-                        isOldestOrAdmonUserComu(tkCacher.doAuthHeaderStr(gcmTk), comunidadId))
+        return   tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> isOldestOrAdmonUserComu(authToken, comunidadId))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -182,26 +178,25 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Single<Integer> modifyComuData(Comunidad comunidad)
     {
         Timber.d("modifyComuData()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmTk ->
-                        modifyComuData(tkCacher.doAuthHeaderStr(gcmTk), comunidad))
+        return   tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> modifyComuData(authToken, comunidad))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
-    public Single<Integer> modifyUserComu(UsuarioComunidad userComu)
+    Single<Integer> modifyUserComu(UsuarioComunidad userComu)
     {
         Timber.d("modifyUserComu()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmTk -> modifyUserComu(tkCacher.doAuthHeaderStr(gcmTk), userComu))
+        return  tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> modifyUserComu(authToken, userComu))
                 .flatMap(getResponseSingleFunction())
                 .doOnError(uiExceptionConsumer);
     }
 
-    public Completable regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
+    Completable regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
     {
         Timber.d(("regComuAndUserAndUserComu()"));
-        return idHelper.getTokenSingle()
+        return  firebaseInitializer.get().getSingleAppIdToken()
                 .map(gcmTk ->
                         new UsuarioComunidad.UserComuBuilder(
                                 usuarioCom.getComunidad(),
@@ -217,8 +212,8 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Completable regComuAndUserComu(UsuarioComunidad usuarioComunidad)
     {
         Timber.d("regComuAndUserComu()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmTk -> regComuAndUserComu(tkCacher.doAuthHeaderStr(gcmTk), usuarioComunidad))
+        return  tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> regComuAndUserComu(authToken, usuarioComunidad))
                 .flatMap(getResponseSingleFunction())
                 .flatMapCompletable(
                         isUpdated -> isUpdated ? complete() : error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)))
@@ -226,10 +221,10 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
                 .doOnError(uiExceptionConsumer);
     }
 
-    public Completable regUserAndUserComu(UsuarioComunidad userCom)
+    Completable regUserAndUserComu(UsuarioComunidad userCom)
     {
         Timber.d("regUserAndUserComu()");
-        return idHelper.getTokenSingle()
+        return  firebaseInitializer.get().getSingleAppIdToken()
                 .map(gcmTk ->
                         new UsuarioComunidad.UserComuBuilder(
                                 userCom.getComunidad(),
@@ -242,11 +237,11 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
                 .doOnError(uiExceptionConsumer);
     }
 
-    public Completable regUserComu(UsuarioComunidad usuarioComunidad)
+    Completable regUserComu(UsuarioComunidad usuarioComunidad)
     {
         Timber.d("regUserComu()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmTk -> regUserComu(tkCacher.doAuthHeaderStr(gcmTk), usuarioComunidad))
+        return   tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> regUserComu(authToken, usuarioComunidad))
                 .flatMap(getResponseSingleFunction())
                 .flatMapCompletable(
                         rowInserted -> (rowInserted > 0) ? complete() : error(new UiException(new ErrorBean(USER_DATA_NOT_INSERTED)))
@@ -257,9 +252,9 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Single<List<UsuarioComunidad>> seeUserComusByComu(long idComunidad)
     {
         Timber.d("seeUserComusByComu()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmTk ->
-                        seeUserComusByComu(tkCacher.doAuthHeaderStr(gcmTk), idComunidad))
+        return   tkCacher.getSingleAuthToken()
+                .flatMap(authToken ->
+                        seeUserComusByComu(authToken, idComunidad))
                 .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }
@@ -267,8 +262,8 @@ public final class UserComuDao implements UsuarioComunidadEndPoints {
     public Single<List<UsuarioComunidad>> seeUserComusByUser()
     {
         Timber.d("seeUserComusByUser()");
-        return idHelper.getTokenSingle()
-                .flatMap(gcmTk -> seeUserComusByUser(tkCacher.doAuthHeaderStr(gcmTk)))
+        return  tkCacher.getSingleAuthToken()
+                .flatMap(this::seeUserComusByUser)
                 .flatMap(getRespSingleListFunction())
                 .doOnError(uiExceptionConsumer);
     }

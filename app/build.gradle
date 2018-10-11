@@ -108,12 +108,16 @@ dependencies {
     implementation rootProject.ext.didekinlib_model
     implementation rootProject.ext.didekinlib_utilities
     implementation rootProject.ext.timber
-    runtimeOnly rootProject.ext.retrofit2
+    implementation rootProject.ext.retrofit2
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
-    releaseImplementation rootProject.didekindroidlib_one_release
+
+//    releaseImplementation rootProject.didekindroidlib_one_release
+//    preImplementation rootProject.didekindroidlib_one_release
+//    localImplementation rootProject.didekindroidlib_one_release
     debugImplementation rootProject.ext.didekindroidlib_one_debug
     debugPreImplementation rootProject.ext.didekindroidlib_one_debug
+
     androidTestImplementation rootProject.ext.testRuler
     androidTestImplementation rootProject.ext.testRunner
     androidTestImplementation rootProject.ext.espresso

@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.ActivityMock;
 import com.didekindroid.lib_one.api.ListMockFr;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -34,6 +35,7 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.authTokenExample;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
 import static com.didekindroid.lib_one.usuario.UserTestData.comu_real;
 import static com.didekindroid.testutil.ActivityTestUtil.isActivityDying;
@@ -64,7 +66,7 @@ import static org.junit.Assert.assertThat;
  * Date: 19/06/17
  * Time: 11:32
  */
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
 public class ViewerComuSearchResultsFrTest {
 
     @Rule
@@ -84,7 +86,7 @@ public class ViewerComuSearchResultsFrTest {
     }
 
     @After
-    public void clean()
+    public void clean() throws UiException
     {
         if (isPepeToDelete) {
             cleanOneUser(USER_PEPE.getUserName());
@@ -139,9 +141,9 @@ public class ViewerComuSearchResultsFrTest {
     }
 
     @Test   // User IS registered.
-    public void test_OnSuccessEmptyList()
+    public void test_OnSuccessEmptyList() throws UiException
     {
-        viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
+        viewer.getController().getTkCacher().updateAuthToken(authTokenExample);
         activity.runOnUiThread(() -> viewer.onSuccessEmptyList(comu_real));
 
         waitAtMost(6, SECONDS).until(isToastInView(R.string.no_result_search_comunidad, activity));
@@ -165,7 +167,7 @@ public class ViewerComuSearchResultsFrTest {
     }
 
     @Test
-    public void test_ComuSearchResultListener()
+    public void test_ComuSearchResultListener() throws UiException
     {
         AtomicBoolean isDone = new AtomicBoolean(false);
         viewer.setController(new CtrlerComunidad() {
@@ -177,7 +179,7 @@ public class ViewerComuSearchResultsFrTest {
                 return false;
             }
         });
-        viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
+        viewer.getController().getTkCacher().updateAuthToken(authTokenExample);
 
         final ViewerComuSearchResultsFr.ComuSearchResultListener listener = viewer.new ComuSearchResultListener();
         activity.runOnUiThread(() -> {

@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
-import com.didekindroid.lib_one.security.AuthTkCacher;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -66,10 +65,10 @@ public final class UserComuTestData {
         return userComuDao.getComusByUser().blockingGet().get(0);
     }
 
-    public static Comunidad signUpMockGcmGetComu(UsuarioComunidad usuarioComunidad, String gcmTokenIn) throws Exception
+    public static Comunidad signUpMockGcmGetComu(UsuarioComunidad usuarioComunidad, String mockGcmToken) throws Exception
     {
-        regComuUserUserComuMock(usuarioComunidad, gcmTokenIn);
-        return userComuDao.getComusByUser(((AuthTkCacher) secInitializer.get().getTkCacher()).doAuthHeaderStrMock(gcmTokenIn))
+        regComuUserUserComuMock(usuarioComunidad, mockGcmToken);
+        return userComuDao.getComusByUser(secInitializer.get().getTkCacher().getAuthTokenCache())
                 .map(httpInitializer.get()::getResponseBody)
                 .blockingGet()
                 .get(0);
@@ -115,12 +114,5 @@ public final class UserComuTestData {
                 .planta(planta)
                 .puerta(puerta)
                 .roles(roles).build();
-    }
-
-    public static UsuarioComunidad makeUserComuWithComunidadId(UsuarioComunidad usuarioComunidad, long comunidadId)
-    {
-
-        Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
-        return new UsuarioComunidad.UserComuBuilder(comunidad, usuarioComunidad.getUsuario()).userComuRest(usuarioComunidad).build();
     }
 }

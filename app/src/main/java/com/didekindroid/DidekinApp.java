@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 
 import com.didekindroid.comunidad.ComuSearchAc;
+import com.didekindroid.lib_one.FirebaseInitializer;
 import com.didekindroid.lib_one.HttpInitializer;
 import com.didekindroid.lib_one.RouterInitializer;
 import com.didekindroid.lib_one.api.router.ContextualRouter;
@@ -16,6 +17,7 @@ import com.didekindroid.lib_one.security.SecInitializer;
 import timber.log.Timber;
 
 import static com.didekindroid.BuildConfig.BUILD_TYPE;
+import static com.didekindroid.lib_one.FirebaseInitializer.firebaseInitializer;
 import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
 import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
@@ -40,6 +42,11 @@ public final class DidekinApp extends Application {
     private static final int bks_name = R.string.didekindroid_bks_name;
     public static final Class<? extends Activity> defaultAc = ComuSearchAc.class;
 
+    // This is the project number in google-services.json.
+    static final String APP_PROJECT_ID = "61369502868";
+    // Scope used to get a token.
+    static final String SCOPE_TOKEN = "FCM";
+
     @Override
     public void onCreate()
     {
@@ -60,6 +67,7 @@ public final class DidekinApp extends Application {
                 .mnRouter(new MnRouter(didekinMnItemMap))
                 .defaultAc(defaultAc)
                 .build());
+        firebaseInitializer.compareAndSet(null, new FirebaseInitializer(APP_PROJECT_ID, SCOPE_TOKEN));
         // To avoid closing the application for the default Android uncaught exception handler.
         setErrorHandler(emptyConsumer());
     }

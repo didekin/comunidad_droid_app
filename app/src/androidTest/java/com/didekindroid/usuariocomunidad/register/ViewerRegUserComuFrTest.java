@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.Before;
@@ -21,6 +22,7 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuTestData.COMU_EL_ESCORIAL;
 import static com.didekindroid.lib_one.usuario.UserTestData.USER_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.authTokenExample;
 import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
@@ -99,10 +101,10 @@ public class ViewerRegUserComuFrTest {
     }
 
     @Test
-    public void test_DoViewInViewer_NotNull()
+    public void test_DoViewInViewer_NotNull() throws UiException
     {
         // Precondition
-        fragment.viewer.getController().getTkCacher().updateAuthToken("mock_gcmTk");
+        fragment.viewer.getController().getTkCacher().updateAuthToken(authTokenExample);
 
         activity.runOnUiThread(() -> fragment.viewer.doViewInViewer(new Bundle(0), COMU_TRAV_PLAZUELA_PEPE));
         checkUserComuData(COMU_TRAV_PLAZUELA_PEPE);

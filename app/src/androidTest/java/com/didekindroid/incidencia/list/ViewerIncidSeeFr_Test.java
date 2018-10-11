@@ -62,7 +62,7 @@ public class ViewerIncidSeeFr_Test {
         waitAtMost(4, SECONDS).until(() -> ac.getSupportFragmentManager().findFragmentByTag(fr.getClass().getName()) != null);
         waitAtMost(4, SECONDS).until(() -> (viewer = fr.viewer) != null);
         // Wait until list is made.
-        SECONDS.sleep(3);
+        SECONDS.sleep(4);
         onView(allOf(withId(android.R.id.empty), withText(R.string.no_incidencia_to_show))).check(matches(isDisplayed()));
     }
 

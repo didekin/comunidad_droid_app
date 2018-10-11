@@ -54,7 +54,7 @@ final class ViewerUserComuDataAc extends ParentViewer<View, CtrlerUsuarioComunid
         }
     };
 
-    private ViewerUserComuDataAc(View view, Activity activity)
+    ViewerUserComuDataAc(View view, Activity activity)
     {
         super(view, activity, null);
     }

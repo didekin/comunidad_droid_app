@@ -151,7 +151,7 @@ public class CtrlerUsuarioComunidadTest {
                 ctrler -> ctrler.regUserComu(
                         new CompletableObserverMock(),
                         new UsuarioComunidad.UserComuBuilder(
-                                signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_mock_gcm"), regComuUserUserComuGetUser(COMU_LA_FUENTE_PEPE)
+                                signUpMockGcmGetComu(COMU_REAL_JUAN, "juan_gcm_tk"), regComuUserUserComuGetUser(COMU_LA_FUENTE_PEPE)
                         ).planta("uno").roles(PROPIETARIO.function).build()),
                 controller
         );

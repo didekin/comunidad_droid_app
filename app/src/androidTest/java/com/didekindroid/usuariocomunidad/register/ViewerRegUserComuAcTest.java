@@ -9,7 +9,6 @@ import com.didekindroid.lib_one.api.ParentViewerIf;
 import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -49,13 +48,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
  * Date: 05/06/17
  * Time: 20:17
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegUserComuAcTest {
 
@@ -74,7 +73,7 @@ public class ViewerRegUserComuAcTest {
     @BeforeClass
     public static void setUpStatic() throws Exception
     {
-        comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_mock_gcm");
+        comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_gcm_tk");
         regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
     }
 

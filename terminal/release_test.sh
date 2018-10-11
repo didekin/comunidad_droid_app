@@ -24,17 +24,17 @@ if ! [ ${BUILD_TYPE} = "local" ] && ! [ ${BUILD_TYPE} = "pre" ] ; then
 fi
 
 assembleBuildType ${BUILD_TYPE}
-echo "==== AssembleBuildType exit code = $?"
+echo ".... AssembleBuildType exit code = $? ...."
 
 if [ -f app/build/outputs/mapping/release/mapping.txt ] ; then
     mv app/build/outputs/mapping/release/mapping.txt  app/releases/${BUILD_TYPE}/mapping-${VERSION}-${BUILD_TYPE}.txt
 fi
 
 adb -s ${DEVICE} uninstall com.didekindroid
-echo "==== Uninstalling com.didekindroid exit code = $?"
+echo ".... Uninstalling com.didekindroid exit code = $? ...."
 
 adb -s ${DEVICE} install -r app/releases/${BUILD_TYPE}/app-${VERSION}-${BUILD_TYPE}.apk
-echo "==== Installing new APK exit code = $?"
+echo ".... Installing new APK exit code = $? ...."
 
-echo "SALIENDO..."
+echo ".... SALIENDO ...."
 exit 0
