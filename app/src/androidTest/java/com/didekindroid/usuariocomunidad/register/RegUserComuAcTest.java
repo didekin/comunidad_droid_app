@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekinlib.model.comunidad.Comunidad;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -67,7 +66,7 @@ public class RegUserComuAcTest {
     @BeforeClass
     public static void setUpStatic() throws Exception
     {
-        comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_gcm_mock");
+        comunidad = signUpMockGcmGetComu(COMU_PLAZUELA5_JUAN, "juan_gcm_tk");
         regComuUserUserComuGetAuthTk(COMU_TRAV_PLAZUELA_PEPE);
     }
 

@@ -6,6 +6,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.lib_one.api.exception.UiException;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
@@ -153,7 +154,7 @@ public class ComuSearchResultsAcTest {
     }
 
     @Test
-    public void testSelectComunidad_UnRegUser_Up()
+    public void testSelectComunidad_UnRegUser_Up() throws UiException
     {
         activity.viewer.getController().getTkCacher().updateAuthToken(null);
         doSelectComunidadNotRegUser();
@@ -179,7 +180,7 @@ public class ComuSearchResultsAcTest {
     }
 
     @Test
-    public void testRegComuAndUserComu_UnRegUser_Up()
+    public void testRegComuAndUserComu_UnRegUser_Up() throws UiException
     {
         // Usuario no registrado.
         activity.viewer.getController().getTkCacher().updateAuthToken(null);
@@ -188,7 +189,7 @@ public class ComuSearchResultsAcTest {
     }
 
     @Test
-    public void testRegComuAndUserComu_UnRegUser_Back()
+    public void testRegComuAndUserComu_UnRegUser_Back() throws UiException
     {
         // Usuario no registrado.
         activity.viewer.getController().getTkCacher().updateAuthToken(null);
