@@ -39,6 +39,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
@@ -250,7 +251,7 @@ public final class ActivityTestUtil {
         onView(allOf(
                 withContentDescription(R.string.navigate_up_txt),
                 isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
     }
 
     public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
