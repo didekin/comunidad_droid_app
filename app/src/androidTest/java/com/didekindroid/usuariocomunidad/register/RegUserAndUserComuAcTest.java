@@ -32,7 +32,6 @@ import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_LIST_OBJEC
 import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.checkChildInViewer;
 import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
-import static com.didekindroid.lib_one.testutil.UiTestUtil.focusOnView;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
