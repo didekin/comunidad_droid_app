@@ -84,7 +84,7 @@ public class DidekinMnActionTest {
     {
         incid_see_closed_by_comu_mn.initActivity(activity);
         intended(hasComponent(IncidSeeByComuAc.class.getName()));
-        intended(hasExtras(hasEntry(INCID_CLOSED_LIST_FLAG.key, is(false))));
+        intended(hasExtras(hasEntry(INCID_CLOSED_LIST_FLAG.key, is(true))));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class DidekinMnActionTest {
     {
         incid_see_open_by_comu_mn.initActivity(activity);
         intended(hasComponent(IncidSeeByComuAc.class.getName()));
-        intended(hasExtras(hasEntry(INCID_CLOSED_LIST_FLAG.key, is(true))));
+        intended(hasExtras(hasEntry(INCID_CLOSED_LIST_FLAG.key, is(false))));
     }
 
     @Test
