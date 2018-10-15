@@ -60,6 +60,7 @@ import static org.junit.Assert.assertThat;
  * Date: 23/03/17
  * Time: 18:08
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeCloseFrTest {
 
