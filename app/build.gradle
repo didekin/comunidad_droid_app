@@ -51,7 +51,7 @@ android {
     }
 
     // Descomentar antes de pasar a PRE.
-    testBuildType "debugPre"
+//    testBuildType "debugPre"
 
     buildTypes {
         release {
@@ -112,9 +112,9 @@ dependencies {
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
 
-//    releaseImplementation rootProject.didekindroidlib_one_release
-//    preImplementation rootProject.didekindroidlib_one_release
-//    localImplementation rootProject.didekindroidlib_one_release
+    releaseImplementation rootProject.didekindroidlib_one_release
+    preImplementation rootProject.didekindroidlib_one_release
+    localImplementation rootProject.didekindroidlib_one_release
     debugImplementation rootProject.ext.didekindroidlib_one_debug
     debugPreImplementation rootProject.ext.didekindroidlib_one_debug
 
