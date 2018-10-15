@@ -49,7 +49,7 @@ public enum DidekinMnAction implements MnRouterActionIf {
         {
             Timber.d("initActivity(), incid_see_closed_by_comu_mn");
             if (bundle == null || !bundle.containsKey(INCID_CLOSED_LIST_FLAG.key)) {
-                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(false);
+                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(true);
             }
             super.initActivity(activity, bundle);
         }
@@ -60,7 +60,7 @@ public enum DidekinMnAction implements MnRouterActionIf {
         {
             Timber.d("initActivity(), incid_see_open_by_comu_mn");
             if (bundle == null || !bundle.containsKey(INCID_CLOSED_LIST_FLAG.key)) {
-                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(true);
+                bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(false);
             }
             super.initActivity(activity, bundle);
         }
@@ -69,7 +69,7 @@ public enum DidekinMnAction implements MnRouterActionIf {
     comu_data_mn(R.id.comu_data_ac_mn, ComuDataAc.class),
     comu_search_mn(R.id.comu_search_ac_mn, ComuSearchAc.class),
     // USUARIO
-    user_data_mn(R.id.user_data_ac_mn, UserDataAc.class), // TODO: testar
+    user_data_mn(R.id.user_data_ac_mn, UserDataAc.class),
     // USUARIO_COMUNIDAD.
     reg_nueva_comunidad_mn(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserComuAc.class) {
         @Override

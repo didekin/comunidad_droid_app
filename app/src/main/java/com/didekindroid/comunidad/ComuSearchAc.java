@@ -54,7 +54,7 @@ public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentV
 
         viewerAc = newViewerComuSearch(this);
         viewerAc.doViewInViewer(savedInstanceState, null);
-        viewerDrawer = newViewerDrawerMain(DrawerDecoratedIf.class.cast(this));
+        viewerDrawer = newViewerDrawerMain(requireNonNull(DrawerDecoratedIf.class.cast(this)));
         viewerDrawer.doViewInViewer(savedInstanceState, null);
         regComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
     }
