@@ -75,7 +75,7 @@ public final class DidekinApp extends Application {
     private void initDebugBuildConfig()
     {
         //noinspection ConstantConditions
-        if (/*!BUILD_TYPE.equalsIgnoreCase("release")*/ true) {
+        if (!BUILD_TYPE.equalsIgnoreCase("release") ) {
 
             Timber.plant(new Timber.DebugTree());
 
