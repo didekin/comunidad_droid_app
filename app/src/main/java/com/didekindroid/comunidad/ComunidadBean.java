@@ -3,7 +3,7 @@ package com.didekindroid.comunidad;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -37,8 +37,8 @@ public class ComunidadBean implements Serializable {
     {
     }
 
-    public ComunidadBean(TipoViaValueObj tipoVia, String nombreVia, String numeroEnVia,
-                         String sufijoNumero, Municipio municipio)
+    ComunidadBean(TipoViaValueObj tipoVia, String nombreVia, String numeroEnVia,
+                  String sufijoNumero, Municipio municipio)
     {
         this.tipoVia = tipoVia;
         this.nombreVia = nombreVia;
@@ -48,14 +48,7 @@ public class ComunidadBean implements Serializable {
         comunidadId = 0L;
     }
 
-    public ComunidadBean(long comunidadId, TipoViaValueObj tipoVia, String nombreVia, String numeroEnVia,
-                         String sufijoNumero, Municipio municipio)
-    {
-        this(tipoVia, nombreVia, numeroEnVia, sufijoNumero, municipio);
-        this.comunidadId = comunidadId;
-    }
-
-    public boolean validate(Resources resources, StringBuilder errorMsg)
+    boolean validate(Resources resources, StringBuilder errorMsg)
     {
         Timber.d("validate()");
 
@@ -177,11 +170,6 @@ public class ComunidadBean implements Serializable {
     public short getNumero()
     {
         return numero;
-    }
-
-    public String getNumeroString()
-    {
-        return numeroString;
     }
 
     void setNumeroString(String numeroString)

@@ -1,19 +1,21 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFr.newViewerIncidEditMinFr;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -42,7 +44,7 @@ public class IncidEditMinFr extends IncidEditFr {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_edit_nopower_fr, container, false);
@@ -50,14 +52,14 @@ public class IncidEditMinFr extends IncidEditFr {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
 
-        viewerInjector = (ChildViewersInjectorIf) getActivity();
+        viewerInjector = (InjectorOfParentViewerIf) getActivity();
 
-        viewer = newViewerIncidEditMinFr(frView, viewerInjector.getParentViewer());
+        viewer = newViewerIncidEditMinFr(frView, requireNonNull(viewerInjector).getInjectedParentViewer());
         viewer.doViewInViewer(savedInstanceState, resolBundle);
         viewerInjector.setChildInParentViewer(viewer);
 

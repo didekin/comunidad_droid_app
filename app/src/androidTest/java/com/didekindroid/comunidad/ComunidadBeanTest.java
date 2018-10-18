@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
+import com.didekindroid.lib_one.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
@@ -49,7 +49,7 @@ public class ComunidadBeanTest {
     }
 
     @Test
-    public void testValidate() throws Exception
+    public void testValidate()
     {
         ComunidadBean comunidadBean = new ComunidadBean(new TipoViaValueObj(0, "select *"), "24 de Otoño", "00A1", "",
                 new Municipio((short) 53, new Provincia((short) 12)));
@@ -60,7 +60,7 @@ public class ComunidadBeanTest {
     }
 
     @Test
-    public void testGetNombreVia() throws Exception
+    public void testGetNombreVia()
     {
         /*"[0-9a-zA-ZñÑáéíóúüÜ[\s]]{2,150}*/
 
@@ -72,7 +72,7 @@ public class ComunidadBeanTest {
     }
 
     @Test
-    public void testGetNumeroEnVia() throws Exception
+    public void testGetNumeroEnVia()
     {
         ComunidadBean comunidadBean = new ComunidadBean(new TipoViaValueObj(0, "tipoVia1"), "avenida de las 25 ñs", "001", "",
                 new Municipio((short) 118));
@@ -92,7 +92,7 @@ public class ComunidadBeanTest {
     }
 
     @Test
-    public void testValidateSufijo() throws Exception
+    public void testValidateSufijo()
     {
         ComunidadBean comunidadBean = new ComunidadBean(new TipoViaValueObj(0, ""), "", "", "ñÍs", new Municipio((short) 116));
         assertThat(comunidadBean.validateSufijo(TIPO_VIA_ERROR, errors), equalTo(true));
@@ -101,7 +101,7 @@ public class ComunidadBeanTest {
     }
 
     @Test
-    public void test_ValidateMunicipio_1() throws Exception
+    public void test_ValidateMunicipio_1()
     {
         ComunidadBean comunidadBean = new ComunidadBean(null, null, null, null, null);
         assertThat(comunidadBean.validateMunicipio(resources, errors), is(false));

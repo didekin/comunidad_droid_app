@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,18 +7,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuDataAc.newViewerComuDataAc;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * Preconditions:
@@ -30,7 +28,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. If the user has comunidad modification power, the comunidad data may have changed in DB.
  * 2. If user hasn't power, the data are merely shown.
  */
-public class ComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
+public class ComuDataAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     View acView;
     RegComuFr regComuFrg;
@@ -71,12 +69,12 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
         viewer.saveState(outState);
     }
 
-// ==================================  ChildViewersInjectorIf  =================================
+// ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -85,14 +83,6 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
     {
         Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
-    }
-
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
 //    =========================================  MENU  =============================================
@@ -113,10 +103,11 @@ public class ComuDataAc extends AppCompatActivity implements ChildViewersInjecto
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
-                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0L)), resourceId);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId)
+                        .initActivity(this, COMUNIDAD_ID.getBundleForKey(getIntent().getLongExtra(COMUNIDAD_ID.key, 0L)));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

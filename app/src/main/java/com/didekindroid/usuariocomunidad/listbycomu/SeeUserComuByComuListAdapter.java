@@ -2,6 +2,7 @@ package com.didekindroid.usuariocomunidad.listbycomu;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,12 @@ class SeeUserComuByComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
     SeeUserComuByComuListAdapter(Context context)
     {
-        super(context, R.layout.user_usercomu_list_item, R.id.usercomu_item_alias_txt);
+        super(context, R.layout.user_usercomu_list_item, R.id.user_item_alias_txt);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         Timber.d("getViewInViewer(), position= %d%n", position);
 
@@ -56,8 +58,8 @@ class SeeUserComuByComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
         UserVwHolder(View convertView)
         {
-            mUserName = convertView.findViewById(R.id.usercomu_item_username_txt);
-            mUserAlias = convertView.findViewById(R.id.usercomu_item_alias_txt);
+            mUserName = convertView.findViewById(R.id.user_item_username_txt);
+            mUserAlias = convertView.findViewById(R.id.user_item_alias_txt);
         }
 
         void initializeTextInViews(UsuarioComunidad userComu)

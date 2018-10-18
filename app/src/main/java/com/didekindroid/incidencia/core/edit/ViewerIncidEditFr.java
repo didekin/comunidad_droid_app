@@ -1,20 +1,19 @@
 package com.didekindroid.incidencia.core.edit;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.incidencia.IncidBundleKey;
 import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
-import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.incidencia.utils.IncidBundleKey;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.incidencia.IncidenciaBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -24,11 +23,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.modifiedOpenIncid;
-import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidContextualName.incid_open_just_modified;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
@@ -36,7 +35,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 15:06
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> implements ActivityInitiatorIf {
+abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> {
 
     IncidAndResolBundle resolBundle;
     IncidenciaBean incidenciaBean;
@@ -49,7 +48,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
      */
     AtomicBoolean hasResolucion = new AtomicBoolean(false);
 
-    ViewerIncidEditFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    ViewerIncidEditFr(View view, Activity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
@@ -71,7 +70,6 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
         buttonModify.setOnClickListener(v -> onClickButtonModify());
     }
 
-    @SuppressWarnings("WeakerAccess")
     void onClickButtonModify()
     {
         Timber.d("onClickButtonModify()");
@@ -85,7 +83,7 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
                         newIncidImportancia);
             }
         } catch (IllegalStateException e) {
-            Timber.e(e.getMessage());
+            Timber.e(e);
             makeToast(getActivity(), errorMsg.toString());
         }
     }
@@ -96,19 +94,10 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidenciaCore> impl
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
         bundle.putBoolean(IncidBundleKey.INCID_CLOSED_LIST_FLAG.key, false);
-        initAcFromRouter(bundle, modifiedOpenIncid);
+        getContextualRouter().getActionFromContextNm(incid_open_just_modified).initActivity(getActivity(), bundle);
     }
 
     //    ============================  LIFE CYCLE   ===================================
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public int clearSubscriptions()
-    {
-        Timber.d("clearSubscriptions()");
-        return controller.clearSubscriptions()
-                + viewerImportanciaSpinner.clearSubscriptions();
-    }
 
     @Override
     public void saveState(Bundle savedState)

@@ -5,10 +5,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekindroid.lib_one.incidencia.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 
 /**
  * User: pedro@didekin
@@ -24,7 +24,7 @@ public class VwHolderIncidSeeItem {
     private final TextView mAmbitoView;
     private final TextView mImportanciaComuView;
 
-    public VwHolderIncidSeeItem(View convertView)
+    VwHolderIncidSeeItem(View convertView)
     {
         mDescripcionView = convertView.findViewById(R.id.incid_descripcion_view);
         mFechaAltaView = convertView.findViewById(R.id.incid_fecha_alta_view);

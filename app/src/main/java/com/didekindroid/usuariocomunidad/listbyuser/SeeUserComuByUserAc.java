@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.listbyuser;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -8,17 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.security.IdentityCacher;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.newComunidadUserComu;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.comunidad.util.ComuContextualName.to_reg_new_comu_usercomu;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
+
 
 /**
  * Preconditions:
@@ -29,34 +24,25 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- an object Usuario fully initialized.
  * -- the rest of data of an object UsuarioComunidad fully initialized.
  */
-public class SeeUserComuByUserAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class SeeUserComuByUserAc extends AppCompatActivity {
 
     SeeUserComuByUserFr mFragment;
-    IdentityCacher identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
-        identityCacher = TKhandler;
-
-        // Preconditions: the user is registered.
-        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
+
         FloatingActionButton fab = findViewById(R.id.new_comunidad_fab);
-        fab.setOnClickListener(v -> initAcFromRouter(null, newComunidadUserComu));
+        fab.setOnClickListener(
+                v -> routerInitializer.get().getContextRouter()
+                        .getActionFromContextNm(to_reg_new_comu_usercomu).initActivity(this));
+
         mFragment = (SeeUserComuByUserFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
-    }
-
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
     // ============================================================
@@ -79,11 +65,8 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements ActivityIn
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
-                return true;
-            case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                initAcFromMenu(null, resourceId);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

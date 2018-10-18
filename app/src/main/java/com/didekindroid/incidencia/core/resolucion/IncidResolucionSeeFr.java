@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.resolucion;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,26 +13,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.router.MnRouterIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.util.UIutils.getStringFromInteger;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.resolucion_should_be_initialized;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.getStringFromInteger;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorIf {
+public class IncidResolucionSeeFr extends Fragment {
 
     View frView;
     Resolucion resolucion;
@@ -47,16 +49,8 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
         return fr;
     }
 
-    public static IncidResolucionSeeFr newInstance(Bundle bundle)
-    {
-        Timber.d("newInstance()");
-        IncidResolucionSeeFr fr = new IncidResolucionSeeFr();
-        fr.setArguments(bundle);
-        return fr;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
@@ -70,7 +64,7 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        resolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
+        resolucion = (Resolucion) requireNonNull(getArguments()).getSerializable(INCID_RESOLUCION_OBJECT.key);
         assertTrue(resolucion != null, resolucion_should_be_initialized);
         // Activamos el menú.
         setHasOptionsMenu(true);
@@ -93,14 +87,19 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
     {
         Timber.d("onOptionsItemSelected()");
 
+        MnRouterIf mnRouter = routerInitializer.get().getMnRouter();
         int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(getActivity());
+                mnRouter.getActionFromMnItemId(resourceId).initActivity(requireNonNull(getActivity()));
                 return true;
             case R.id.incid_comments_see_ac_mn:
-                initAcFromMenu(INCIDENCIA_OBJECT.getBundleForKey(getArguments().getSerializable(INCIDENCIA_OBJECT.key)), resourceId);
+                mnRouter.getActionFromMnItemId(resourceId)
+                        .initActivity(
+                                requireNonNull(getActivity()),
+                                INCIDENCIA_OBJECT.getBundleForKey(requireNonNull(getArguments()).getSerializable(INCIDENCIA_OBJECT.key))
+                        );
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -111,19 +110,22 @@ public class IncidResolucionSeeFr extends Fragment implements ActivityInitiatorI
 
     protected void paintViewData()
     {
-        IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
-        mAdapter.clear();
-        mAdapter.addAll(resolucion.getAvances());
-
         // Fecha estimada.
         ((TextView) frView.findViewById(R.id.incid_resolucion_fecha_view)).setText(formatTimeStampToString(resolucion.getFechaPrev()));
         // Coste estimado.
         ((TextView) frView.findViewById(R.id.incid_resolucion_coste_prev_view)).setText(getStringFromInteger(resolucion.getCosteEstimado()));
         // Plan.
         ((TextView) frView.findViewById(R.id.incid_resolucion_txt)).setText(resolucion.getDescripcion());
+
         // Lista de avances.
-        ListView mListView = frView.findViewById(android.R.id.list);
-        mListView.setEmptyView(frView.findViewById(android.R.id.empty));
-        mListView.setAdapter(mAdapter);
+        ListView listView = frView.findViewById(android.R.id.list);
+        if (resolucion.getAvances() != null && resolucion.getAvances().size() > 0) {
+            IncidAvanceSeeAdapter adapter = new IncidAvanceSeeAdapter(getActivity());
+            adapter.clear();
+            adapter.addAll(resolucion.getAvances());
+            listView.setAdapter(adapter);
+        } else {
+            listView.setEmptyView(frView.findViewById(android.R.id.empty));
+        }
     }
 }

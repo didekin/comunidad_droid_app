@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.comment;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import com.didekinlib.model.incidencia.dominio.IncidComment;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
 
 /**
  * User: pedro@didekin
@@ -26,8 +27,9 @@ class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
         super(activity, R.layout.incid_comments_see_list_item, R.id.incid_comment_fecha_view);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         Timber.d("getViewInViewer()");
 
@@ -53,9 +55,9 @@ class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
 
         IncidCommentViewHolder(View convertView)
         {
-            mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_comment_fecha_view);
-            mRedactorView = (TextView) convertView.findViewById(R.id.incid_comment_redactor_view);
-            mDescripcionView = (TextView) convertView.findViewById(R.id.incid_comment_descripcion_view);
+            mFechaAltaView = convertView.findViewById(R.id.incid_comment_fecha_view);
+            mRedactorView = convertView.findViewById(R.id.incid_comment_redactor_view);
+            mDescripcionView = convertView.findViewById(R.id.incid_comment_descripcion_view);
         }
 
         void initializeTextInViews(IncidComment comment)

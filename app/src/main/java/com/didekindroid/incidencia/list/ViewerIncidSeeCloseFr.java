@@ -9,26 +9,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.CtrlerSelectListIf;
-import com.didekindroid.api.ObserverSingleSelectItem;
-import com.didekindroid.api.ObserverSingleSelectList;
-import com.didekindroid.api.SpinnerEventItemSelectIf;
-import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.ViewerSelectList;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.CtrlerSelectListIf;
+import com.didekindroid.lib_one.api.ObserverSingleSelectItem;
+import com.didekindroid.lib_one.api.ObserverSingleSelectList;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.ViewerSelectList;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.io.Serializable;
 import java.util.List;
 
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.selectedClosedIncid;
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
+import static com.didekindroid.incidencia.IncidContextualName.incid_closed_just_selected;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
-import static com.didekindroid.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
-import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -40,22 +38,20 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * 2. The incidencias shown have been registered in the last 24 months and are closed.
  * 3. All the incidencias closed in a comunidad where the user is NOW registered are shown,
  * even is the user was not registered in the comunidad when incidencia was open or closed.
- * 4. All incidencias closed MUST HAVE a bundleWithResolucion.
+ * 4. All incidencias closed MUST HAVE a resolucion.
  * 5. An intent may be passed with a comunidadId, when a notification is sent when the
  * incidencia has been closed or from a comuSpinner instance in a previous activity or fragment.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.
- * 3. If an incidencia is selected, the bundleWithResolucion data are shown.
- * -- Arguments with incidImportancia, bundleWithResolucion and a toShowMenu flag are passed to the bundleWithResolucion
- * fragment.
+ * 3. If an incidencia is selected, the resolucion data are shown.
  */
 public class ViewerIncidSeeCloseFr extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
-        implements SpinnerEventListener, ActivityInitiatorIf {
+        implements SpinnerEventListener {
 
     ViewerComuSpinner comuSpinnerViewer;
-    View emptyListView;
+    private View emptyListView;
 
     ViewerIncidSeeCloseFr(View frView, AppCompatActivity activity)
     {
@@ -113,7 +109,7 @@ public class ViewerIncidSeeCloseFr extends
         comuSpinnerViewer.saveState(savedState);
     }
 
-    /* ==================================  ViewerSelectionIf  =================================*/
+    /* ==================================  ViewerSelectedListIf  =================================*/
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -125,26 +121,9 @@ public class ViewerIncidSeeCloseFr extends
     }
 
     @Override
-    public int getSelectedPositionFromItemId(long itemSelectedId)
+    public Function<IncidenciaUser, Long> getBeanIdFunction()
     {
-        Timber.d("getSelectedItemId()");
-        assertTrue(itemSelectedId > 0, item_selected_in_list_should_not_be_zero);
-
-        // Position set to take account header view in position 0, ...
-        int position = view.getHeaderViewsCount();
-        boolean isFound = false;
-        if (itemSelectedId > 0L) {
-            long incidenciaIdIn;
-            do {
-                incidenciaIdIn = ((IncidenciaUser) view.getItemAtPosition(position)).getIncidencia().getIncidenciaId();
-                if (incidenciaIdIn == itemSelectedId) {
-                    isFound = true;
-                    break;
-                }
-            } while (++position < view.getCount());
-        }
-        // Si no encontramos la incidencia, index = 0.
-        return isFound ? position : 0;
+        return incidenciaUser ->  incidenciaUser != null ? incidenciaUser.getIncidencia().getIncidenciaId() : 0L;
     }
 
     /**
@@ -164,7 +143,7 @@ public class ViewerIncidSeeCloseFr extends
     public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessLoadSelectedItem()");
-        initAcFromRouter(bundle, selectedClosedIncid);
+        getContextualRouter().getActionFromContextNm(incid_closed_just_selected).initActivity(activity, bundle);
     }
 
     void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
@@ -174,7 +153,7 @@ public class ViewerIncidSeeCloseFr extends
         view.setAdapter(adapter);
         view.setEmptyView(emptyListView);
         if (view.getCount() > view.getHeaderViewsCount() && itemSelectedId > 0L) {
-            view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
+            view.setItemChecked(getSelectedPositionFromItemId(getBeanIdFunction()), true);
         }
     }
 
@@ -187,7 +166,7 @@ public class ViewerIncidSeeCloseFr extends
      * @param spinnerEventItemSelect: comunidad selected in comunidades spinner.
      */
     @Override
-    public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
+    public void doOnClickItemId(@NonNull SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
         long comunidadIdInSpinner = spinnerEventItemSelect.getSpinnerItemIdSelect();
@@ -207,7 +186,11 @@ public class ViewerIncidSeeCloseFr extends
             view.setItemChecked(position, true);
             viewClick.setSelected(true);
             IncidenciaUser incidenciaUser = (IncidenciaUser) view.getItemAtPosition(position);
-            itemSelectedId = incidenciaUser.getIncidencia().getIncidenciaId();
+            try {
+                itemSelectedId = getBeanIdFunction().apply(incidenciaUser);
+            } catch (Exception e) {
+                Timber.e(e);
+            }
             controller.selectItem(new ObserverSingleSelectItem<>(ViewerIncidSeeCloseFr.this), incidenciaUser);
         }
     }

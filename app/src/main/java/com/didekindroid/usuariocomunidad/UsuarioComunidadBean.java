@@ -16,6 +16,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.PORTAL;
  * Date: 01/06/15
  * Time: 16:59
  */
+@SuppressWarnings("unused")
 public final class UsuarioComunidadBean {
 
 

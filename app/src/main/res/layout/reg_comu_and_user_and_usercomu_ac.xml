@@ -12,7 +12,7 @@
             android:id="@+id/reg_comu_and_user_and_usercomu_ac_layout"
             style="@style/baseLayout"
             android:layout_marginTop="@dimen/app_bar_bottom_margin"
-            tools:context="com.didekindroid.com.didekindroid.usuario.RegComuAndUserAndUserComuAc">
+            tools:context="com.didekindroid.com.didekindroid.lib_one.usuario.RegComuAndUserAndUserComuAc">
 
             <fragment
                 android:id="@+id/reg_comunidad_frg"
@@ -30,7 +30,7 @@
 
             <fragment
                 android:id="@+id/reg_user_frg"
-                android:name="com.didekindroid.usuario.RegUserFr"
+                android:name="com.didekindroid.lib_one.usuario.RegUserFr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout="@layout/reg_user_fr"/>

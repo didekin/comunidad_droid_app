@@ -9,21 +9,22 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 6
-        versionName "a-0.6"
+        versionName "b.1.5"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* , "en"  Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
     }
 
     testOptions {
-        execution 'ANDROID_TEST_ORCHESTRATOR'
+        if (rootProject.orchestrator) {
+            execution "ANDROID_TEST_ORCHESTRATOR"
+        }
     }
 
-    //noinspection GroovyAssignabilityCheck
     signingConfigs {
         release {
             if (project.hasProperty('keyalias')) {
@@ -41,6 +42,17 @@ android {
         }
     }
 
+    sourceSets {
+        debugPre {
+            /*manifest.srcFile 'src/debug/AndroidManifest.xml'*/
+            java.srcDirs = ['src/debug/java']
+            res.srcDirs = ['src/debug/res']
+        }
+    }
+
+    // Descomentar antes de pasar a PRE.
+//    testBuildType "debugPre"
+
     buildTypes {
         release {
             applicationIdSuffix ""
@@ -48,44 +60,43 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            resValue "string", "didekin_web_host", '"https://didekin-web-pro.eu-central-1.elasticbeanstalk.com"'
-            resValue "string", "didekin_web_port", '":443"'
+            buildConfigField "String", "didekin_web_host", '"https://didekinweb-pro.eu-central-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_port", '":443"'
         }
         pre {
+            initWith release
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_port", '":443"'
+
             applicationIdSuffix ""
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
-            resValue "string", "didekin_web_port", '":443"'
         }
         local {
+            initWith release
+            buildConfigField "String", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            buildConfigField "String", "didekin_web_port", '""'
+
             applicationIdSuffix ""
-            debuggable true
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
-            resValue "string", "didekin_web_port", '""'
+        }
+        debugPre {
+            initWith debug
+            // To be used in DidekinApp.
+            buildConfigField "String", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+            buildConfigField "String", "didekin_web_port", '":443"'
         }
         debug {
             debuggable true
             versionNameSuffix ''
-            // Variables for android_studio default run-debug configuration.
-            if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
-            // LOCAL url's
-                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
-                resValue "string", "didekin_web_port", '""'
-            // AWSPRE url's
-//                resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
-//                resValue "string", "didekin_web_port", '":443"'
-            } else {
-                // Variables defined in buildtest.sh for local and awspre environments.
-                resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
-                resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
-            }
+            // To be used in DidekinApp.
+            buildConfigField "String", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            buildConfigField "String", "didekin_web_port", '""'
         }
     }
     lintOptions {
@@ -94,32 +105,40 @@ android {
         quiet true
         ignoreWarnings false
         htmlReport true
-//        disable  "InvalidPackage"
     }
     productFlavors {
     }
 
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+        pickFirst 'protobuf.meta'
     }
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation rootProject.ext.firebase_msg
     implementation rootProject.ext.didekinlib_model
-    implementation rootProject.ext.didekinlib_http
+    implementation rootProject.ext.didekinlib_utilities
     implementation rootProject.ext.timber
-    runtimeOnly rootProject.ext.retrofit2
+    implementation rootProject.ext.retrofit2
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
+
+    releaseImplementation rootProject.didekindroidlib_one_release
+    preImplementation rootProject.didekindroidlib_one_release
+    localImplementation rootProject.didekindroidlib_one_release
+    debugImplementation rootProject.ext.didekindroidlib_one_debug
+    debugPreImplementation rootProject.ext.didekindroidlib_one_debug
+
     androidTestImplementation rootProject.ext.testRuler
-    androidTestImplementation rootProject.ext.espresso
-    androidTestImplementation rootProject.ext.didekinlib_gcm
-    androidTestImplementation rootProject.ext.awaitility
     androidTestImplementation rootProject.ext.testRunner
+    androidTestImplementation rootProject.ext.espresso
+    androidTestImplementation rootProject.ext.awaitility
     androidTestUtil rootProject.ext.testOrchestrator
     testImplementation rootProject.ext.junit
-    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation rootProject.ext.junit
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+

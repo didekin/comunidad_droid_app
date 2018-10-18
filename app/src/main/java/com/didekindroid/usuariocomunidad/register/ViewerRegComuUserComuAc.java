@@ -6,22 +6,21 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.comunidad.ViewerRegComuFr;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.ParentViewer;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.comunidad.util.ComuContextualName.new_comu_usercomu_just_registered;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
@@ -29,12 +28,11 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:31
  */
 
-final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> implements
-        ActivityInitiatorIf {
+final class ViewerRegComuUserComuAc extends ParentViewer<View, CtrlerUsuarioComunidad> {
 
     private ViewerRegComuUserComuAc(View view, AppCompatActivity activity)
     {
-        super(view, activity);
+        super(view, activity, null);
     }
 
     static ViewerRegComuUserComuAc newViewerRegComuUserComuAc(RegComuAndUserComuAc activity)
@@ -57,7 +55,6 @@ final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsu
 
     // ==================================  HELPERS =================================
 
-    @SuppressWarnings("WeakerAccess")
     class RegComuAndUserComuButtonListener implements View.OnClickListener {
 
         @Override
@@ -73,23 +70,21 @@ final class ViewerRegComuUserComuAc extends ParentViewerInjected<View, CtrlerUsu
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!ConnectionUtils.isInternetConnected(activity)) {
-                makeToast(activity, R.string.no_internet_conn_toast);
-            } else {
-                controller.registerUserComuAndComu(new RegComuAndUserComuObserver(), usuarioComunidad);
+                return;
+            }
+            if (checkInternetConnected(activity)) {
+                controller.regComuAndUserComu(new RegComuAndUserComuObserver(), usuarioComunidad);
             }
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
-    class RegComuAndUserComuObserver extends DisposableSingleObserver<Boolean> {
+    class RegComuAndUserComuObserver extends DisposableCompletableObserver {
 
         @Override
-        public void onSuccess(Boolean rowInserted)
+        public void onComplete()
         {
-            Timber.d("onSuccess()");
-            assertTrue(rowInserted, user_and_comunidad_should_be_registered);
-            initAcFromActivity(new Bundle(0));
+            Timber.d("onComplete()");
+            getContextualRouter().getActionFromContextNm(new_comu_usercomu_just_registered).initActivity(activity);
             dispose();
         }
 

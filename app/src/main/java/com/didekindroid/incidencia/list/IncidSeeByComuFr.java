@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.list;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,20 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.writeNewIncidencia;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidContextualName.to_register_new_incidencia;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
  * A list of IncidenciaUser instances, whose incidencias are closed, are shown.
  */
-public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
+public class IncidSeeByComuFr extends Fragment {
 
     View frView;
     ViewerIncidSeeCloseFr viewer;
@@ -40,18 +42,24 @@ public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedState)
     {
         Timber.d("onCreateView()");
         frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         FloatingActionButton fab = frView.findViewById(R.id.incid_new_incid_fab);
-        fab.setOnClickListener(v -> initAcFromRouter(COMUNIDAD_ID.getBundleForKey(viewer.getComuSpinner().getSelectedItemId()), writeNewIncidencia));
+        fab.setOnClickListener(
+                v -> routerInitializer.get().getContextRouter().getActionFromContextNm(to_register_new_incidencia)
+                        .initActivity(
+                                requireNonNull(getActivity()),
+                                COMUNIDAD_ID.getBundleForKey(viewer.getComuSpinner().getSelectedItemId())
+                        )
+        );
         return frView;
     }
 
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedState)
     {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedState);
@@ -61,7 +69,7 @@ public class IncidSeeByComuFr extends Fragment implements ActivityInitiatorIf {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedState)
+    public void onSaveInstanceState(@NonNull Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
         viewer.saveState(savedState);

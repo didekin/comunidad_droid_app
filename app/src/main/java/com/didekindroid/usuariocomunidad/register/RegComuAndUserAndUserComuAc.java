@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,18 +7,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.usuario.RegUserFr;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.usuario.RegUserFr;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Preconditions:
@@ -27,8 +26,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The comunidad has not been registered either, by other users.
  * 3. There is not extras in the activity intent.
  */
-public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
-        ChildViewersInjectorIf, ActivityInitiatorIf {
+public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -62,12 +60,12 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -78,14 +76,6 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         viewer.setChildViewer(viewerChild);
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
 //    ============================================================
 //    ..... ACTION BAR ....
 //    ============================================================
@@ -94,9 +84,17 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Timber.d("onCreateOptionsMenu()");
-
-        getMenuInflater().inflate(R.menu.reg_user_activities_mn, menu);
+        getMenuInflater().inflate(R.menu.login_item_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Timber.d("onPrepareOptionsMenu()");
+        boolean isRegistered = requireNonNull(viewer.getController()).isRegisteredUser();
+        menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
+        return true;
     }
 
     @Override
@@ -107,10 +105,8 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
-                return true;
             case R.id.login_ac_mn:
-                initAcFromMenu(null, resourceId);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

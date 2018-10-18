@@ -1,51 +1,49 @@
 package com.didekindroid.comunidad;
 
-import com.didekindroid.exception.UiException;
-import com.didekindroid.security.IdentityCacher;
-import com.didekinlib.http.ErrorBean;
-import com.didekinlib.http.retrofit.ComunidadEndPoints;
+import com.didekindroid.lib_one.api.HttpInitializerIf;
+import com.didekindroid.lib_one.security.AuthTkCacherIf;
+import com.didekindroid.lib_one.security.SecInitializerIf;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.http.ComunidadEndPoints;
 
-import java.io.EOFException;
-import java.io.IOException;
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.util.DaoUtil.getResponseBody;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekindroid.lib_one.HttpInitializer.httpInitializer;
+import static com.didekindroid.lib_one.api.exception.UiException.uiExceptionConsumer;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getRespSingleListFunction;
+import static com.didekindroid.lib_one.util.RxJavaUtil.getResponseSingleFunction;
 
 /**
  * User: pedro@didekin
  * Date: 20/11/16
  * Time: 12:55
  */
-@SuppressWarnings("WeakerAccess")
 public final class ComunidadDao implements ComunidadEndPoints {
 
-    public static final ComunidadDao comunidadDao = new ComunidadDao();
+    public static final ComunidadDao comunidadDao = new ComunidadDao(secInitializer.get(), httpInitializer.get());
     private final ComunidadEndPoints endPoint;
-    private final IdentityCacher identityCacher;
+    private final AuthTkCacherIf tkCacher;
 
-    private ComunidadDao()
+    private ComunidadDao(SecInitializerIf secInitializerIn, HttpInitializerIf httpInitializerIn)
     {
-        this(creator.get().getRetrofitHandler().getService(ComunidadEndPoints.class), TKhandler);
+        tkCacher = secInitializerIn.getTkCacher();
+        endPoint = httpInitializerIn.getHttpHandler().getService(ComunidadEndPoints.class);
     }
 
-    public ComunidadDao(ComunidadEndPoints endPoint, IdentityCacher identityCacher)
+    public AuthTkCacherIf getTkCacher()
     {
-        this.endPoint = endPoint;
-        this.identityCacher = identityCacher;
+        return tkCacher;
     }
 
     //  ================================== ComunidadEndPoints implementation ============================
 
     @Override
-    public Call<Comunidad> getComuData(String accessToken, long idComunidad)
+    public Single<Response<Comunidad>> getComuData(String accessToken, long idComunidad)
     {
         return endPoint.getComuData(accessToken, idComunidad);
     }
@@ -59,7 +57,7 @@ public final class ComunidadDao implements ComunidadEndPoints {
      * -- municipio with codInProvincia and provinciaId.
      */
     @Override
-    public Call<List<Comunidad>> searchComunidades(Comunidad comunidad)
+    public Single<Response<List<Comunidad>>> searchComunidades(Comunidad comunidad)
     {
         Timber.d("searchComunidades()");
         return endPoint.searchComunidades(comunidad);
@@ -69,17 +67,20 @@ public final class ComunidadDao implements ComunidadEndPoints {
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
-    public Comunidad getComuData(long idComunidad) throws UiException
+    public Single<Comunidad> getComuData(long idComunidad)
     {
         Timber.d("getComuData()");
+        return tkCacher.getSingleAuthToken()
+                .flatMap(authToken -> getComuData(authToken, idComunidad))
+                .flatMap(getResponseSingleFunction())
+                .doOnError(uiExceptionConsumer);
+    }
 
-        try {
-            Response<Comunidad> response = getComuData(identityCacher.checkBearerTokenInCache(), idComunidad).execute();
-            return getResponseBody(response);
-        } catch (EOFException eo) {
-            return null;
-        } catch (IOException e) {
-            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-        }
+    Single<List<Comunidad>> searchInComunidades(Comunidad comunidad)
+    {
+        Timber.d("getComuData()");
+        return searchComunidades(comunidad)
+                .flatMap(getRespSingleListFunction())
+                .doOnError(uiExceptionConsumer);
     }
 }

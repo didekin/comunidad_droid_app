@@ -7,23 +7,22 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.api.router.FragmentInitiatorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditAc.newViewerIncidEditAc;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * Preconditions:
@@ -36,7 +35,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf,
+public class IncidEditAc extends AppCompatActivity implements InjectorOfParentViewerIf,
         FragmentInitiatorIf<IncidEditFr> {
 
     View acView;
@@ -88,12 +87,12 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         viewer.saveState(outState);
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -104,15 +103,13 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
         viewer.setChildViewer(childViewer);
     }
 
-// ================  ActivityInitiatorIf  ====================
+// ================  FragmentInitiatorIf  ====================
 
     @Override
     public AppCompatActivity getActivity()
     {
         return this;
     }
-
-// ================  FragmentInitiatorIf  ====================
 
     @Override
     public int getContainerId()
@@ -163,11 +160,12 @@ public class IncidEditAc extends AppCompatActivity implements ChildViewersInject
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
-                initAcFromMenu(INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()), resourceId);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId)
+                        .initActivity(this, INCIDENCIA_OBJECT.getBundleForKey(resolBundle.getIncidImportancia().getIncidencia()));
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 viewer.checkResolucion();

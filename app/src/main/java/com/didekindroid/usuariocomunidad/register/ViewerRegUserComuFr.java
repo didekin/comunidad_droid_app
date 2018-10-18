@@ -1,18 +1,17 @@
 package com.didekindroid.usuariocomunidad.register;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.security.CtrlerAuthToken;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.Viewer;
 import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -23,8 +22,8 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_be_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -33,16 +32,16 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
 
-    private ViewerRegUserComuFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
+    private ViewerRegUserComuFr(View view, Activity activity, @NonNull ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    static ViewerRegUserComuFr newViewerRegUserComuFr(@NonNull View view, @NonNull ParentViewerInjectedIf parentViewer)
+    static ViewerRegUserComuFr newViewerRegUserComuFr(@NonNull View view, @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerRegUserComuFr()");
         ViewerRegUserComuFr instance = new ViewerRegUserComuFr(view, parentViewer.getActivity(), parentViewer);
-        instance.setController(new CtrlerAuthToken());
+        instance.setController(new Controller());
         return instance;
     }
 

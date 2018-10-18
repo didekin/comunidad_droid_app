@@ -6,20 +6,22 @@ import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.CtrlerIncidenciaCore;
 import com.didekindroid.incidencia.list.IncidSeeByComuAc;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static android.app.TaskStackBuilder.create;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -35,34 +37,38 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.core.resolucion.IncidResolucionSeeFrTest.doResolucionAvances;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaDao.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionEditFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionEditFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionEditFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeByComuAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incideEditMaxPowerFrLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.closeDatePicker;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.reSetDatePicker;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.util.UIutils.formatTimeToString;
+import static com.didekindroid.incidencia.testutils.IncidTestData.AVANCE_DEFAULT_DES;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionAdvances;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetResolucionNoAvances;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.util.UiUtil.SPAIN_LOCALE;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeStampToString;
+import static com.didekindroid.lib_one.util.UiUtil.formatTimeToString;
+import static com.didekindroid.router.DidekinUiExceptionAction.show_incid_open_list;
+import static com.didekindroid.testutil.ActivityTestUtil.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.closeDatePicker;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtil.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtil.reSetDatePicker;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_PLAZUELA5_JUAN;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static junit.framework.Assert.fail;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -81,20 +87,20 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionEditFrTest {
 
-    IncidResolucionEditAc activity;
-    IncidImportancia incidImportancia;
-    Resolucion resolucion;
+    private IncidResolucionEditAc activity;
+    private static IncidImportancia incidImportancia;
+    private Resolucion resolucion;
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
+    }
 
     @Before
     public void setUp() throws Exception
     {
-        try {
-            incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-            assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        } catch (IOException | UiException e) {
-            fail();
-        }
-
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             Intent intent1 = new Intent(getTargetContext(), IncidSeeByComuAc.class).putExtra(INCID_CLOSED_LIST_FLAG.key, false);
             create(getTargetContext()).addNextIntentWithParentStack(intent1).startActivities();
@@ -107,25 +113,30 @@ public class IncidResolucionEditFrTest {
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             cleanTasks(activity);
         }
+    }
+
+    @AfterClass
+    public static void cleanStatic()
+    {
         cleanOptions(CLEAN_JUAN);
     }
 
     /*    ============================  TESTS  ===================================*/
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate_1()
     {
         // Precondition: with avances.
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Check.
         assertThat(resolucion.getAvances().size(), is(1));
-        checkScreenResolucionEditFr(resolucion);
+        checkScreenResolucionEditFr();
         checkDataResolucionEditFr(resolucion);
         // Avances.
         Avance avance = resolucion.getAvances().get(0);
         onData(is(avance)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
         onView(allOf(
-                withText("avance1_desc"),
+                withText(AVANCE_DEFAULT_DES),
                 withId(R.id.incid_avance_desc_view)
         )).check(matches(isDisplayed()));
         onView(allOf(
@@ -142,12 +153,12 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2()
     {
         // Precondition: NO avances.
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAdvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAvances(incidImportancia)));
         // Check.
-        checkScreenResolucionEditFr(resolucion);
+        checkScreenResolucionEditFr();
         checkDataResolucionEditFr(resolucion);
         // Avances.
         onView(allOf(
@@ -155,34 +166,20 @@ public class IncidResolucionEditFrTest {
                 withText(R.string.incid_resolucion_no_avances_message)
         )).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
-            checkUp(incidSeeByComuAcLayout);
-        }
+        // Check OnStop.
+        IncidResolucionEditFr fr = (IncidResolucionEditFr) activity.getSupportFragmentManager().findFragmentByTag(IncidResolucionEditFr.class.getName());
+        requireNonNull(fr).controller = new CtrlerIncidenciaCore();
+        checkSubscriptionsOnStop(activity, fr.controller);
     }
 
     @Test
-    public void testOnEdit_1() throws UiException
+    public void testOnEdit_1()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionNoAdvances(incidImportancia)));
-        /* Caso OK: añadimos un avance con descripción Ok .*/
-        onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance2_desc_válida"));
-        onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-        // Verificamos pantalla de llegada.
-        checKIncidAcLayout();
-
-        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
-            checkUp(incidSeeByComuAcLayout);
-        }
-    }
-
-    @Test
-    public void testOnEdit_2() throws UiException, InterruptedException
-    {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Caso OK: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checKIncidAcLayout();
-        assertThat(incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId()), is(resolucion));
+        assertThat(incidenciaDao.seeResolucionRaw(resolucion.getIncidencia().getIncidenciaId()).blockingGet(), is(resolucion));
         // BACK.
         if (Build.VERSION.SDK_INT >= LOLLIPOP) {
             checkBack(onView(withId(incidEditAcLayout)), incidResolucionEditFrLayout);
@@ -190,9 +187,9 @@ public class IncidResolucionEditFrTest {
     }
 
     @Test
-    public void testOnEdit_3() throws UiException, InterruptedException
+    public void testOnEdit_2()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         /* Caso OK: cambiamos la fecha prevista, añadimos un avance con descripción Ok y cambiamos coste (admite importes negativos).*/
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
         Calendar newFechaPrev = reSetDatePicker(resolucion.getFechaPrev().getTime(), 1);
@@ -210,40 +207,44 @@ public class IncidResolucionEditFrTest {
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         // Check.
         checKIncidAcLayout();
+
+        if (Build.VERSION.SDK_INT >= LOLLIPOP) {
+            checkUp(incidSeeByComuAcLayout);
+        }
     }
 
     @Test
-    public void testOnEdit_4() throws UiException, InterruptedException
+    public void testOnEdit_3()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // Caso NO OK: descripción de avance errónea.
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance * no válido"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("-1234,5"));
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-
         waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_resolucion_avance_rot));
     }
 
     @Test
-    public void testCloseIncidenciaAndBack() throws InterruptedException, UiException
+    public void testCloseIncidenciaAndBack()
     {
-        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(doResolucionAvances(incidImportancia)));
+        activity = (IncidResolucionEditAc) getInstrumentation().startActivitySync(doIntent(insertGetResolucionAdvances(incidImportancia)));
         // OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
         // BACK
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidSeeByComuAcLayout)));
         checkBack(onView(withId(incidSeeByComuAcLayout)), incidResolucionEditFrLayout);
         // Error al intentar borrar otra vez la incidencia.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
+        waitAtMost(4, SECONDS).until(isToastInView(show_incid_open_list.getResourceIdForToast(), activity));
         onView(withId(incidSeeByComuAcLayout)).check(matches(isDisplayed()));
     }
 
-/*    ============================= HELPER METHODS ===========================*/
+    /*    ============================= HELPER METHODS ===========================*/
 
     private void checKIncidAcLayout()
     {
-        onView(withId(incidEditAcLayout)).check(matches(isDisplayed()));
-        onView(withId(incideEditMaxPowerFrLayout)).check(matches(isDisplayed()));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incideEditMaxPowerFrLayout)));
     }
 
     @NonNull

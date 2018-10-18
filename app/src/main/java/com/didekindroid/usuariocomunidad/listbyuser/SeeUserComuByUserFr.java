@@ -1,9 +1,8 @@
 package com.didekindroid.usuariocomunidad.listbyuser;
 
-import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.exception.UiException;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
-
-import java.io.Serializable;
-import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.newComunidadUserComu;
-import static com.didekindroid.router.ActivityRouter.IntrospectRouterToAc.userComuItemSelected;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.usuariocomunidad.listbyuser.ViewerSeeUserComuByUserFr.newViewerSeeUserComuByUserFr;
 
 /**
  * Preconditions:
@@ -38,23 +25,13 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * <p/>
  * 1. An object UsuarioComunidad is passed to the listener activity.
  */
-public class SeeUserComuByUserFr extends Fragment implements ActivityInitiatorIf {
+public class SeeUserComuByUserFr extends Fragment {
 
-    public SeeUserComuByUserAdapter mAdapter;
-    Activity activity;
     ListView frView;
+    ViewerSeeUserComuByUserFr viewer;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        Timber.d("onCreate()");
-        super.onCreate(savedInstanceState);
-        // Loading the data...
-        new UserComuByUserLoader().execute();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
         frView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
@@ -63,71 +40,27 @@ public class SeeUserComuByUserFr extends Fragment implements ActivityInitiatorIf
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        Timber.d("onActivityCreated()");
-        super.onActivityCreated(savedInstanceState);
-        activity = getActivity();
-        frView.setOnItemClickListener(
-                (parent, view, position, id) -> {
-                    frView.setItemChecked(position, true);
-                    view.setSelected(true);
-                    Bundle bundle = new Bundle(1);
-                    bundle.putSerializable(USERCOMU_LIST_OBJECT.key, (Serializable) frView.getItemAtPosition(position));
-                    initAcFromRouter(bundle, userComuItemSelected);
-                }
-        );
+        Timber.d("onViewCreated()");
+        super.onViewCreated(view, savedInstanceState);
+        viewer = newViewerSeeUserComuByUserFr(frView, getActivity());
+        viewer.doViewInViewer(savedInstanceState, null);
     }
 
-// .......... Interface to communicate with the Activity ...................
-
-    public View getFrView()
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState)
     {
-        Timber.d("getFrView()");
-        return frView;
+        Timber.d("onSaveInstanceState()");
+        viewer.saveState(outState);
+        super.onSaveInstanceState(outState);
     }
 
-//    ============================================================
-//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-//    ============================================================
-
-    @SuppressWarnings("WeakerAccess")
-    class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
-
-        UiException uiException;
-
-        @Override
-        protected List<UsuarioComunidad> doInBackground(Void... aVoid)
-        {
-            Timber.d("UserComuByUserLoader.doInBackground()");
-
-            List<UsuarioComunidad> usuarioComunidades = null;
-            try {
-                usuarioComunidades = userComuDaoRemote.seeUserComusByUser();
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return usuarioComunidades;
-        }
-
-        @SuppressWarnings("ConstantConditions")
-        @Override
-        protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
-        {
-            Timber.d("onPostExecute()");
-            if (checkPostExecute(activity)) return;
-
-            if (uiException != null) {  // action: LOGIN.
-                Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
-                assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
-                uiException.processMe(getActivity());
-            }
-            if (usuarioComunidades != null) {
-                Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
-                mAdapter = new SeeUserComuByUserAdapter(getActivity());
-                mAdapter.addAll(usuarioComunidades);
-                frView.setAdapter(mAdapter);
-            }
-        }
+    @Override
+    public void onStop()
+    {
+        Timber.d("onStop()");
+        super.onStop();
+        viewer.clearSubscriptions();
     }
 }

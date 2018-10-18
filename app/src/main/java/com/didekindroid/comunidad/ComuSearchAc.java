@@ -1,26 +1,27 @@
 package com.didekindroid.comunidad;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerManagerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.router.ViewerDrawerMain;
+import com.didekindroid.lib_one.api.DrawerDecoratedIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.usuario.ViewerUserDrawer;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
-import static com.didekindroid.router.ViewerDrawerMain.newViewerDrawerMain;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.usuario.ViewerUserDrawer.newViewerDrawerMain;
+import static com.didekindroid.lib_one.util.DrawerConstant.drawer_decorator_layout;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Postconditions:
@@ -32,14 +33,12 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- sufijoNumero (it can be an empty string).
  * -- municipio with codInProvincia and provinciaId.
  */
-@SuppressWarnings("ConstantConditions")
-public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjectorIf,
-        ViewerManagerIf, ActivityInitiatorIf {
+public class ComuSearchAc extends AppCompatActivity implements InjectorOfParentViewerIf, DrawerDecoratedIf {
 
-    View acView;
+    DrawerLayout acView;
     RegComuFr regComuFrg;
     ViewerComuSearchAc viewerAc;
-    ViewerDrawerMain viewerDrawer;
+    ViewerUserDrawer viewerDrawer;
 
     @SuppressLint("InflateParams")
     @Override
@@ -48,11 +47,15 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         Timber.d("In onCreate()");
         super.onCreate(savedInstanceState);
 
-        acView = getLayoutInflater().inflate(R.layout.comu_search_ac, null, false);
+        acView = (DrawerLayout) getLayoutInflater().inflate(drawer_decorator_layout, null, false);
+        acView.addView(getLayoutInflater().inflate(R.layout.comu_search_include, acView, false), 0);
         setContentView(acView);
         doToolBar(this, true).setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
-        initViewers(savedInstanceState);
+        viewerAc = newViewerComuSearch(this);
+        viewerAc.doViewInViewer(savedInstanceState, null);
+        viewerDrawer = newViewerDrawerMain(requireNonNull(DrawerDecoratedIf.class.cast(this)));
+        viewerDrawer.doViewInViewer(savedInstanceState, null);
         regComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
     }
 
@@ -61,7 +64,8 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
     {
         Timber.d("onStop()");
         super.onStop();
-        clearViewersSubscr();
+        viewerAc.clearSubscriptions();
+        viewerDrawer.clearSubscriptions();
     }
 
     @Override
@@ -69,20 +73,16 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
-        savedStateViewers(outState);
+        viewerAc.saveState(outState);
+        viewerDrawer.saveState(outState);
     }
 
-    public ViewerDrawerMain getViewerDrawer()
-    {
-        return viewerDrawer;
-    }
-
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewerAc;
     }
 
@@ -93,40 +93,26 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
         viewerAc.setChildViewer(viewerChild);
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
+    /* ==================================== DrawerDecoratedIf ====================================*/
 
     @Override
-    public Activity getActivity()
+    public DrawerLayout getDrawerDecoratedView()
     {
-        return this;
-    }
-
-    /* ==================================== ViewerManagerIf ====================================*/
-
-    @Override
-    public void initViewers(Bundle savedInstanceState)
-    {
-        Timber.d("initViewers()");
-        viewerAc = newViewerComuSearch(this);
-        viewerAc.doViewInViewer(savedInstanceState, null);
-        viewerDrawer = newViewerDrawerMain(this);
-        viewerDrawer.doViewInViewer(savedInstanceState, null);
+        Timber.d("getDrawerDecoratedView()");
+        return acView;
     }
 
     @Override
-    public void clearViewersSubscr()
+    public int getDrawerMnRsId()
     {
-        Timber.d("clearViewersSubscr()");
-        viewerAc.clearSubscriptions();
-        viewerDrawer.clearSubscriptions();
+        Timber.d("getDrawerMnRsId()");
+        return R.menu.drawer_user_mn;
     }
 
     @Override
-    public void savedStateViewers(Bundle outState)
+    public ViewerUserDrawer getViewerDrawer()
     {
-        Timber.d("savedStateViewers()");
-        viewerAc.saveState(outState);
-        viewerDrawer.saveState(outState);
+        return viewerDrawer;
     }
 
 //    ============================================================
@@ -138,6 +124,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Timber.d("onCreateOptionsMenu()");
+        getMenuInflater().inflate(R.menu.login_item_menu, menu);
         getMenuInflater().inflate(R.menu.comu_search_ac_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -146,7 +133,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        boolean isRegistered = viewerAc.getController().isRegisteredUser();
+        boolean isRegistered = requireNonNull(viewerAc.getController()).isRegisteredUser();
         menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
         return true;
     }
@@ -163,7 +150,7 @@ public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjec
                 return true;
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                initAcFromMenu(null, resourceId);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

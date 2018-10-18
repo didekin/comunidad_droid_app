@@ -7,17 +7,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.api.ObserverSingleSelectList;
-import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.ObserverSingleSelectList;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
 
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static java.util.Objects.requireNonNull;
 
 /**
  * User: pedro@didekin
@@ -62,33 +65,25 @@ public class ViewerComuSpinner extends
     }
 
     @Override
-    public int getSelectedPositionFromItemId(long itemId)
+    public Function<Comunidad, Long> getBeanIdFunction()
     {
-        Timber.d("getSelectedPositionFromItemId()");
-
-        int position = 0;
-        boolean isFound = false;
-        if (itemId > 0L) {
-            long comunidadIdIn;
-            do {
-                comunidadIdIn = ((Comunidad) view.getItemAtPosition(position)).getC_Id();
-                if (comunidadIdIn == itemId) {
-                    isFound = true;
-                    break;
-                }
-            } while (++position < view.getCount());
-        }
-        // Si no encontramos la comuidad, index = 0.
-        return isFound ? position : 0;
+        return Comunidad::getC_Id;
     }
 
     // ==================================== ViewerIf ====================================
 
     @Override
+    public UiExceptionRouterIf getExceptionRouter()
+    {
+        Timber.d("getExceptionRouter()");
+        return requireNonNull(getParentViewer()).getExceptionRouter();
+    }
+
+    @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        if (viewBean != null){
+        if (viewBean != null) {
             spinnerEvent = new ComuSpinnerEventItemSelect(Comunidad.class.cast(viewBean));
         }
         view.setOnItemSelectedListener(new ComuSelectedListener());
@@ -115,7 +110,6 @@ public class ViewerComuSpinner extends
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
             Timber.d("comunidadSpinner.onItemSelected()");
-
 
             Comunidad comunidadIn = ((Comunidad) parent.getItemAtPosition(position));
             spinnerEvent = new ComuSpinnerEventItemSelect(comunidadIn);

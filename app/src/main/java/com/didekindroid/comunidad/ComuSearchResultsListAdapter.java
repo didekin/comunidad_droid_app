@@ -1,12 +1,14 @@
 package com.didekindroid.comunidad;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.util.ComuViewHolder;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -23,8 +25,9 @@ class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
         super(context, R.layout.comu_include, R.id.nombreComunidad_view);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         Timber.d("getView(), position= %d%n", position);
 

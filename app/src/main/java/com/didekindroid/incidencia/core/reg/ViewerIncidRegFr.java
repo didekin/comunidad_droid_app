@@ -1,20 +1,21 @@
 package com.didekindroid.incidencia.core.reg;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.ControllerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.SpinnerEventItemSelectIf;
-import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.Viewer;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
-import com.didekindroid.incidencia.core.IncidenciaBean;
-import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.ControllerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.SpinnerEventItemSelectIf;
+import com.didekindroid.lib_one.api.SpinnerEventListener;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.incidencia.IncidenciaBean;
+import com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner;
 import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -24,8 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
+import static com.didekindroid.lib_one.incidencia.spinner.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
@@ -43,18 +44,18 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
 
 
     @SuppressWarnings("WeakerAccess")
-    ViewerIncidRegFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
+    ViewerIncidRegFr(View view, Activity activity, @NonNull ParentViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         atomIncidBean = new AtomicReference<>(null);
         atomIncidImportBean = new AtomicReference<>(null);
     }
 
-    static ViewerIncidRegFr newViewerIncidRegFr(View view, ParentViewerInjectedIf parentViewer)
+    static ViewerIncidRegFr newViewerIncidRegFr(View view, @NonNull ParentViewerIf parentViewer)
     {
         Timber.d("newViewerIncidRegFr()");
 
-        AppCompatActivity activity = parentViewer.getActivity();
+        Activity activity = parentViewer.getActivity();
         ViewerIncidRegFr instance = new ViewerIncidRegFr(view, activity, parentViewer);
         instance.setController(new Controller());
         instance.viewerAmbitoIncidSpinner =
@@ -65,6 +66,8 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
                 newViewerComuSpinner(instance.getViewInViewer().findViewById(R.id.incid_comunidad_spinner), instance);
         return instance;
     }
+
+    // .............................. ViewerIf ..................................
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -83,7 +86,6 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
         Timber.d("clearSubscriptions()");
         return controller.clearSubscriptions() +
                 viewerComuSpinner.clearSubscriptions()
-                + viewerImportanciaSpinner.clearSubscriptions()
                 + viewerAmbitoIncidSpinner.clearSubscriptions();
     }
 
@@ -107,7 +109,7 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
     }
 
     @Override
-    public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
+    public void doOnClickItemId(@NonNull SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
         if (ComuSpinnerEventItemSelect.class.isInstance(spinnerEventItemSelect)) {

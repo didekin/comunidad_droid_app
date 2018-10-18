@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -13,9 +14,9 @@ import com.didekinlib.model.comunidad.Comunidad;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchResultsFr.newViewerComuSearchResultsFr;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
 
 /**
  * Preconditions:
@@ -41,7 +42,7 @@ public class ComuSearchResultsListFr extends Fragment {
     ViewerComuSearchResultsFr viewer;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");

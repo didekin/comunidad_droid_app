@@ -1,15 +1,14 @@
 package com.didekindroid.usuariocomunidad;
 
-import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc_Mock_Test;
-import com.didekindroid.usuariocomunidad.repository.UserComuDaoRemoteTest;
-import com.didekindroid.usuariocomunidad.repository.UserComuObservableTest;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc_Delete_Test;
+import com.didekindroid.usuariocomunidad.repository.UserComuDaoTest;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.CtrlerUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.ViewerSeeUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAcTest;
-import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidadTest;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidadTest;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAcTest;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAcTest;
 import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAcTest;
@@ -34,7 +33,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         // data.
         UserComuDataAcTest.class,
-        ViewerUserComuDataAc_Mock_Test.class,
+        UserComuDataAc_Delete_Test.class,
         ViewerUserComuDataAcTest.class,
         // listbycomu
         CtrlerUserComuByComuTest.class,
@@ -54,12 +53,12 @@ import org.junit.runners.Suite;
         ViewerRegUserComuAcTest.class,
         ViewerRegUserComuFrTest.class,
         // repository.
-        UserComuDaoRemoteTest.class,
-        UserComuObservableTest.class,
-        /* spinner*/
+        UserComuDaoTest.class,
+        // spinner.
         CtrlerComuSpinnerTest.class,
         ViewerComuSpinnerTest.class,
         // .
+        UserComuMockDaoTest.class,
         UsuarioComunidadBeanTests.class,
 })
 public class UserComuSuite {

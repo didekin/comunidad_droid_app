@@ -8,20 +8,18 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -31,19 +29,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidRegFrLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.incidencia.spinner.IncidenciaSpinnerKey.AMBITO_INCIDENCIA_POSITION;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDao.userComuDao;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.regTwoUserComuSameUser;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -53,7 +51,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -63,27 +60,28 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidRegFrTest {
 
-    public static final String AMBITO_SPINNER_INIT_VALUE = "ámbito de incidencia";
+    private static final String AMBITO_SPINNER_INIT_VALUE = "ámbito de incidencia";
 
-    ViewerIncidRegFr viewer;
-    IncidRegAc activity;
-    UsuarioComunidad userComuIntent;
+    private ViewerIncidRegFr viewer;
+    private IncidRegAc activity;
+    private static UsuarioComunidad userComuIntent;
+    private View frgView;
 
     @Rule
     public IntentsTestRule<IncidRegAc> activityRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            try {
-                regTwoUserComuSameUser(asList(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE));
-                userComuIntent = userComuDaoRemote.seeUserComusByUser().get(1);
-            } catch (IOException | UiException e) {
-                fail();
-            }
             return new Intent().putExtra(COMUNIDAD_ID.key, userComuIntent.getComunidad().getC_Id());
         }
     };
-    View frgView;
+
+    @BeforeClass
+    public static void setUpStatic() throws Exception
+    {
+        regTwoUserComuSameUser(asList(COMU_ESCORIAL_PEPE, COMU_LA_FUENTE_PEPE));
+        userComuIntent = userComuDao.seeUserComusByUser().blockingGet().get(1);
+    }
 
     @Before
     public void setUp()
@@ -91,32 +89,25 @@ public class ViewerIncidRegFrTest {
         activity = activityRule.getActivity();
         frgView = activity.findViewById(incidRegFrLayout);
         assertThat(activity.getIntent().getLongExtra(COMUNIDAD_ID.key, 0), is(userComuIntent.getComunidad().getC_Id()));
-
-        AtomicReference<ViewerIncidRegFr> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.incidRegFr.viewer);
-        waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
-        viewer = viewerAtomic.get();
+        waitAtMost(4, SECONDS).until(() -> activity.incidRegFr != null && activity.incidRegFr.viewer != null);
+        viewer = activity.incidRegFr.viewer;
     }
 
-    @After
-    public void clearUp() throws UiException
+    @AfterClass
+    public static void clearUp()
     {
         cleanOptions(CLEAN_PEPE);
     }
 
     @Test
-    public void testNewViewerIncidReg() throws Exception
+    public void testDoViewInViewer()
     {
         assertThat(viewer.getController(), notNullValue());
         assertThat(viewer.getParentViewer(), notNullValue());
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerComuSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
-    }
 
-    @Test
-    public void testDoViewInViewer() throws Exception
-    {
         onView(withId(incidRegFrLayout)).check(matches(isDisplayed()));
 
         // Comunidad spinner.
@@ -128,33 +119,32 @@ public class ViewerIncidRegFrTest {
         onView(withId(R.id.incid_reg_importancia_spinner))
                 .check(matches(withSpinnerText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[0])))
                 .check(matches(isDisplayed()));
-    }
 
-    @Test
-    public void testClearSubscriptions() throws Exception
-    {
-        checkSubscriptionsOnStop(activity, viewer.getController(),
-                viewer.viewerAmbitoIncidSpinner.getController(),
-                viewer.viewerComuSpinner.getController(),
-                viewer.viewerImportanciaSpinner.getController());
-    }
-
-    @Test
-    public void testSaveState() throws Exception
-    {
+        // testSaveState
         Bundle bundleTest = new Bundle();
         viewer.viewerAmbitoIncidSpinner.setSelectedItemId(11);
         viewer.viewerImportanciaSpinner.setSelectedItemId((short) 31);
         // Solo hay una comunidad en el spinner.
         viewer.saveState(bundleTest);
-
         assertThat(bundleTest.getLong(AMBITO_INCIDENCIA_POSITION.key), is(11L));
         assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));
         assertThat(bundleTest.containsKey(COMUNIDAD_ID.key), is(true));
+
+        // test_DoOnClickItemId
+        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect());
+        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(0L));
+
+        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(23L).build()));
+        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(23L));
+
+        // testClearSubscriptions
+        checkSubscriptionsOnStop(activity, viewer.getController(),
+                viewer.viewerAmbitoIncidSpinner.getController(),
+                viewer.viewerComuSpinner.getController());
     }
 
     @Test
-    public void testDoIncidImportanciaFromView() throws Exception
+    public void testDoIncidImportanciaFromView()
     {
         final AtomicBoolean isRun = new AtomicBoolean(false);
 
@@ -187,15 +177,5 @@ public class ViewerIncidRegFrTest {
         // Exec and checkMenu for NOT ok case.
         assertThat(viewer.doIncidImportanciaFromView(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getResources().getText(R.string.incid_reg_importancia).toString()));
-    }
-
-    @Test
-    public void test_DoOnClickItemId() throws Exception
-    {
-        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect());
-        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(0L));
-
-        viewer.doOnClickItemId(new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(23L).build()));
-        assertThat(viewer.atomIncidBean.get().getComunidadId(), is(23L));
     }
 }

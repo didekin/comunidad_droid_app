@@ -7,21 +7,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.FragmentInitiatorIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.lib_one.api.router.FragmentInitiatorIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_initialized;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.IncidenciaAssertionMsg.incidencia_should_be_initialized;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -47,10 +45,9 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
     IncidImportancia incidImportancia;
     Resolucion resolucion;
     Incidencia incidencia;
-    ViewerFirebaseTokenIf viewerFirebaseToken;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)   // TODO: completar documento navegación.
+    protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
@@ -63,15 +60,22 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
         }
 
         // Preconditions.
-        assertTrue(getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key) || getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key), incidencia_should_be_initialized);
+        assertTrue(getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key)
+                || getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key), incidencia_should_be_initialized);
         incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         resolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
         boolean hasAdmRole = getIntent().hasExtra(INCID_IMPORTANCIA_OBJECT.key) && incidImportancia.getUserComu().hasAdministradorAuthority();
-        incidencia = getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key) ? ((Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key)).getIncidencia()
-                : incidImportancia.getIncidencia();
+        incidencia = getIntent().hasExtra(INCID_RESOLUCION_OBJECT.key) ?
+                ((Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key)).getIncidencia() :
+                incidImportancia.getIncidencia();
+
+        if (incidencia.getFechaCierre() != null){
+            initFragmentTx(IncidResolucionSeeFr.newInstance(incidencia, resolucion));
+            return;
+        }
 
         if (resolucion != null) {
-            if (hasAdmRole && incidencia.getFechaCierre() == null) {
+            if (hasAdmRole) {
                 initFragmentTx(IncidResolucionEditFr.newInstance(incidImportancia, resolucion));
             } else {
                 initFragmentTx(IncidResolucionSeeFr.newInstance(incidencia, resolucion));
@@ -79,23 +83,6 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
         } else {
             initFragmentTx(IncidResolucionRegFr.newInstance(incidImportancia));
         }
-    }
-
-    @Override
-    protected void onStart()
-    {
-        Timber.d("onStart()");
-        super.onStart();
-        viewerFirebaseToken = newViewerFirebaseToken(this);
-        viewerFirebaseToken.checkGcmTokenAsync();
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-        viewerFirebaseToken.clearSubscriptions();
     }
 
 //    ============================================================
@@ -127,7 +114,7 @@ public class IncidResolucionEditAc extends AppCompatActivity implements Fragment
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

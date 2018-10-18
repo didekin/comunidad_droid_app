@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,20 +7,23 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ObserverCacheCleaner;
-import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.usuario.ViewerRegUserFr;
-import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.ParentViewer;
+import com.didekindroid.lib_one.usuario.ViewerRegUserFr;
+import com.didekindroid.usuariocomunidad.repository.CtrlerUsuarioComunidad;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
 
+import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.lib_one.usuario.UsuarioBundleKey.usuario_object;
+import static com.didekindroid.lib_one.usuario.router.UserContextName.new_user_usercomu_just_registered;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
@@ -29,11 +31,11 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 10:37
  */
 
-final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
+final class ViewerRegUserAndUserComuAc extends ParentViewer<View, CtrlerUsuarioComunidad> {
 
     private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
     {
-        super(view, activity);
+        super(view, activity, null);
     }
 
     static ViewerRegUserAndUserComuAc newViewerRegUserAndUserComuAc(RegUserAndUserComuAc activity)
@@ -61,16 +63,15 @@ final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, Ctrler
     void onRegisterSuccess(UsuarioComunidad userComu)
     {
         Timber.d("onRegisterSuccess()");
-        DialogFragment newFragment = PasswordSentDialog.newInstance(userComu.getUsuario());
-        newFragment.show(activity.getFragmentManager(), "passwordMailDialog");
+        getContextualRouter().getActionFromContextNm(new_user_usercomu_just_registered)
+                .initActivity(activity, usuario_object.getBundleForKey(userComu.getUsuario()));
     }
 
-    @SuppressWarnings("WeakerAccess")
     class RegUserAndUserComuButtonListener implements View.OnClickListener {
 
         final Comunidad comunidadIntent;
 
-        public RegUserAndUserComuButtonListener(Comunidad comunidadIntent)
+        RegUserAndUserComuButtonListener(Comunidad comunidadIntent)
         {
             this.comunidadIntent = comunidadIntent;
         }
@@ -87,16 +88,21 @@ final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, Ctrler
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!ConnectionUtils.isInternetConnected(activity)) {
-                makeToast(activity, R.string.no_internet_conn_toast);
-            } else {
-                controller.registerUserAndUserComu(
-                        new ObserverCacheCleaner(ViewerRegUserAndUserComuAc.this) {
+                return;
+            }
+            if (checkInternetConnected(activity)) {
+                controller.regUserAndUserComu(
+                        new DisposableCompletableObserver() {
                             @Override
                             public void onComplete()
                             {
-                                super.onComplete();
                                 onRegisterSuccess(usuarioComunidad);
+                            }
+
+                            @Override
+                            public void onError(Throwable e)
+                            {
+                                onErrorInObserver(e);
                             }
                         },
                         usuarioComunidad);

@@ -3,21 +3,18 @@ package com.didekindroid.usuariocomunidad.spinner;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.lib_one.api.ActivityMock;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
-import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkSpinnerCtrlerLoadItems;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOneUser;
+import static com.didekindroid.lib_one.usuario.UserTestData.regComuUserUserComuGetAuthTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_JUAN;
 
 /**
  * User: pedro@didekin
@@ -30,21 +27,20 @@ public class CtrlerComuSpinnerTest {
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
-    CtrlerComuSpinner controller;
+    private CtrlerComuSpinner controller;
 
     @Before
-    public void setUp() throws IOException, UiException
+    public void setUp()
     {
         controller = new CtrlerComuSpinner();
     }
 
     @Test
-    public void testLoadDataInSpinner() throws IOException, UiException
+    public void testLoadDataInSpinner() throws Exception
     {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-
+        regComuUserUserComuGetAuthTk(COMU_REAL_JUAN);
         checkSpinnerCtrlerLoadItems(controller);
 
-        cleanOneUser(USER_JUAN);
+        cleanOneUser(USER_JUAN.getUserName());
     }
 }

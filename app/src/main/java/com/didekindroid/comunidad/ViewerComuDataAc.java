@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ParentViewerInjected;
-import com.didekindroid.api.router.ActivityInitiatorIf;
-import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.lib_one.api.ParentViewer;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
@@ -17,22 +15,24 @@ import java.io.Serializable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comuData_should_be_modified;
-import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comunidadId_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekindroid.comunidad.util.ComuContextualName.comu_data_just_modified;
+import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comuData_should_be_modified;
+import static com.didekindroid.comunidad.util.ComunidadAssertionMsg.comunidadId_should_be_initialized;
+import static com.didekindroid.lib_one.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.getErrorMsgBuilder;
+import static com.didekindroid.lib_one.util.UiUtil.makeToast;
 
 /**
  * User: pedro@didekin
  * Date: 08/05/17
  * Time: 14:09
  */
-class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> implements ActivityInitiatorIf {
+class ViewerComuDataAc extends ParentViewer<View, CtrlerComunidad> {
 
-    ViewerComuDataAc(View view, AppCompatActivity activity)
+    private ViewerComuDataAc(View view, AppCompatActivity activity)
     {
-        super(view, activity);
+        super(view, activity, null);
     }
 
     static ViewerComuDataAc newViewerComuDataAc(@NonNull ComuDataAc activity)
@@ -75,14 +75,15 @@ class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> imple
             Comunidad comunidadFromViewer = getChildViewer(ViewerRegComuFr.class).getComunidadFromViewer(errorBuilder);
             if (comunidadFromViewer == null) {
                 makeToast(activity, errorBuilder.toString());
-            } else if (!ConnectionUtils.isInternetConnected(activity)) {
-                makeToast(activity, R.string.no_internet_conn_toast);
-            } else {
-                Comunidad comunidadOut = new Comunidad.ComunidadBuilder()
-                        .c_id(comunidadIn.getC_Id())
-                        .copyComunidadNonNullValues(comunidadFromViewer)
-                        .build();
-                controller.modifyComunidadData(new ComuDataAcObserver(), comunidadOut);
+                return;
+            }
+            if (checkInternetConnected(activity)){
+                controller.modifyComunidadData(new ComuDataAcObserver(),
+                        new Comunidad.ComunidadBuilder()
+                                .c_id(comunidadIn.getC_Id())
+                                .copyComunidadNonNullValues(comunidadFromViewer)
+                                .build()
+                );
             }
         }
     }
@@ -95,7 +96,7 @@ class ViewerComuDataAc extends ParentViewerInjected<View, CtrlerComunidad> imple
         {
             Timber.d("onSuccess()");
             assertTrue(rowsUpdated == 1, comuData_should_be_modified);
-            initAcFromActivity(null);
+            getContextualRouter().getActionFromContextNm(comu_data_just_modified).initActivity(activity);
         }
 
         @Override

@@ -4,21 +4,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.CtrlerSelectList;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectList;
+import com.didekindroid.lib_one.api.CtrlerSelectList;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.ViewerSelectList;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
+import static java.util.Arrays.asList;
 
 /**
  * User: pedro@didekin
@@ -40,15 +41,7 @@ public final class ViewerImportanciaSpinner extends
     public static ViewerImportanciaSpinner newViewerImportanciaSpinner(@NonNull Spinner view, @NonNull ViewerIf parentViewer)
     {
         Timber.d("newViewerImportanciaSpinner()");
-        ViewerImportanciaSpinner instance = new ViewerImportanciaSpinner(view, parentViewer);
-        instance.setController(new CtrlerSelectList<String>() {
-            @Override
-            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<String>> observer, Long... entityId)
-            {
-                throw new UnsupportedOperationException();
-            }
-        });
-        return instance;
+        return new ViewerImportanciaSpinner(view, parentViewer);
     }
 
     // ==================================== ViewerSelectListIf ====================================
@@ -67,7 +60,24 @@ public final class ViewerImportanciaSpinner extends
         }
     }
 
-    // ==================================== ViewerIf ====================================
+    @Override
+    public Function<String, Long> getBeanIdFunction()
+    {
+        Timber.d("getBeanIdFunction()");
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onSuccessLoadItemList(List<String> itemsList)
+    {
+        Timber.d("onSuccessLoadItemList()");
+        ArrayAdapter<String> adapter = getArrayAdapterForSpinner(activity);
+        adapter.addAll(itemsList);
+        view.setAdapter(adapter);
+        view.setSelection((int) itemSelectedId);
+    }
+
+    /* ==================================== ViewerIf ====================================*/
 
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
@@ -76,7 +86,7 @@ public final class ViewerImportanciaSpinner extends
         bean = IncidImportanciaBean.class.cast(viewBean);
         view.setOnItemSelectedListener(new ImportanciaSelectedListener());
         initSelectedItemId(savedState);
-        onSuccessLoadItemList(Arrays.asList(activity.getResources().getStringArray(R.array.IncidImportanciaArray)));
+        onSuccessLoadItemList(asList(activity.getResources().getStringArray(R.array.IncidImportanciaArray)));
     }
 
     @Override
@@ -94,8 +104,8 @@ public final class ViewerImportanciaSpinner extends
 
     //  ===================================== HELPERS ============================================
 
-    @SuppressWarnings("WeakerAccess")
     public class ImportanciaSelectedListener implements AdapterView.OnItemSelectedListener {
+
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {

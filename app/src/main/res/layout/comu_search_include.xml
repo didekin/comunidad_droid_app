@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+            style="@style/baseLayout.scroll"
+            tools:showIn="@layout/drawer_decorator">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/comu_search_ac_coordinatorlayout"
+        style="@style/baseLayout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <include layout="@layout/appbar_include_design"/>
+
+        <LinearLayout
+            android:id="@+id/comu_search_ac_linearlayout"
+            style="@style/baseLayout"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
+            tools:context="com.didekindroid.com.didekinaar.comunidad.ComuSearchAc">
+
+            <TextView
+                android:id="@+id/comu_search_ac_rotulo"
+                style="@style/textBase.textPageLabel1"
+                android:padding="@dimen/list_padding"
+                android:text="@string/comu_search_ac_rotulo"/>
+
+            <fragment
+                android:id="@+id/reg_comunidad_frg"
+                android:name="com.didekindroid.comunidad.RegComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/reg_comu_fr"/>
+
+            <Button
+                android:id="@+id/searchComunidad_Bton"
+                style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/search_button"/>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</ScrollView>

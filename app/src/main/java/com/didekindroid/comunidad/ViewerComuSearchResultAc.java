@@ -6,10 +6,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.Viewer;
+import com.didekindroid.lib_one.api.Controller;
+import com.didekindroid.lib_one.api.Viewer;
+import com.didekindroid.lib_one.api.router.UiExceptionRouterIf;
 
 import timber.log.Timber;
+
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
 
 /**
  * User: pedro@didekin
@@ -40,7 +43,7 @@ final class ViewerComuSearchResultAc extends Viewer<View, Controller> {
     void updateActivityMenu(Menu menu)
     {
         Timber.d("updateActivityMenu()");
-        if(!controller.isRegisteredUser()){
+        if (!controller.isRegisteredUser()) {
             return;
         }
         MenuItem comuDataItem = menu.findItem(R.id.see_usercomu_by_user_ac_mn);

@@ -1,37 +1,45 @@
 package com.didekindroid.incidencia.core;
 
-import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.MaybeObserverMock;
-import com.didekindroid.api.SingleObserverMock;
+import com.didekindroid.DidekinApp;
+import com.didekindroid.lib_one.api.MaybeObserverMock;
+import com.didekindroid.lib_one.api.SingleObserverMock;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.sql.Timestamp;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.reactivex.observers.DisposableSingleObserver;
-
-import static com.didekindroid.incidencia.IncidObservable.incidImportanciaByUsers;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
+import static android.app.Instrumentation.newApplication;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static com.didekindroid.incidencia.testutils.IncidTestData.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetDefaultResolucion;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidTestData.insertGetIncidenciaUser;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.execCheckSchedulersTest;
+import static com.didekindroid.lib_one.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.lib_one.usuario.UserTestData.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanOptions;
+import static com.didekindroid.lib_one.util.UiUtil.getMilliSecondsFromCalendarAdd;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestData.signUpGetUserComu;
+import static java.util.Calendar.SECOND;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -41,18 +49,16 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class CtrlerIncidenciaCoreTest {
 
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-    CtrlerIncidenciaCore controller;
-    long incidenciaId;
-    IncidImportancia incidImportancia;
+    private CtrlerIncidenciaCore controller;
+    private AtomicBoolean toClean = new AtomicBoolean(false);
 
     @Before
     public void setUp() throws Exception
     {
-        incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
-        incidenciaId = incidImportancia.getIncidencia().getIncidenciaId();
+        getInstrumentation().callApplicationOnCreate(newApplication(DidekinApp.class, getTargetContext()));
         controller = new CtrlerIncidenciaCore();
+        toClean.set(true);
+        waitAtMost(2, SECONDS).until(() -> toClean.get());
     }
 
     @After
@@ -60,151 +66,102 @@ public class CtrlerIncidenciaCoreTest {
     {
         controller.clearSubscriptions();
         resetAllSchedulers();
-        cleanOptions(CLEAN_PEPE);
+        if (toClean.get()) {
+            cleanOptions(CLEAN_PEPE);
+        }
     }
 
     //    ============================= TESTS ===============================
 
     @Test
-    public void testEraseIncidencia() throws Exception
+    public void test_CloseIncidencia() throws Exception
     {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.eraseIncidencia(new DisposableSingleObserver<Integer>() {
-                @Override
-                public void onSuccess(Integer integer)
-                {
-                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-                }
-
-                @Override
-                public void onError(Throwable e)
-                {
-                    fail();
-                }
-            }, incidImportancia.getIncidencia()), is(true));
-        } finally {
-            resetAllSchedulers();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
+        execCheckSchedulersTest(
+                ctrler -> ctrler.closeIncidencia(new SingleObserverMock<>(), insertGetDefaultResolucion(signUpGetUserComu(COMU_ESCORIAL_PEPE))),
+                controller
+        );
     }
 
     @Test
-    public void testGetAmbitoIncidDesc() throws Exception
+    public void test_EraseIncidencia() throws Exception
+    {
+        execCheckSchedulersTest(
+                ctrler -> ctrler.eraseIncidencia(new SingleObserverMock<>(), insertGetIncidImportancia(COMU_REAL_PEPE).getIncidencia()),
+                controller
+        );
+    }
+
+    @Test
+    public void testGetAmbitoIncidDesc()
     {
         assertThat(controller.getAmbitoIncidDesc((short) 9), is("Buzones"));
+        toClean.set(false);
     }
 
     @Test
     public void test_LoadItemsByEntitiyId() throws Exception
     {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.loadItemsByEntitiyId(
-                    incidImportanciaByUsers(incidenciaId),
-                    new SingleObserverMock<>(),
-                    incidenciaId),
-                    is(true));
-        } finally {
-            resetAllSchedulers();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
+        // No hay registros de incidImportancia; lista vacía.
+        execCheckSchedulersTest(
+                ctrler -> ctrler.loadItemsByEntitiyId(new SingleObserverMock<>(), signUpGetComu(COMU_ESCORIAL_PEPE).getC_Id()),
+                controller
+        );
     }
 
     @Test
     public void testModifyIncidImportancia() throws Exception
     {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.modifyIncidImportancia(
-                    new DisposableSingleObserver<Integer>() {
-                        @Override
-                        public void onSuccess(Integer integer)
-                        {
-                            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                        }
-
-                        @Override
-                        public void onError(Throwable e)
-                        {
-                            fail();
-                        }
-                    },
-                    new IncidImportancia.IncidImportanciaBuilder(incidImportancia.getIncidencia())
-                            .copyIncidImportancia(incidImportancia)
-                            .importancia((short) 1)
-                            .build()),
-                    is(true)
-            );
-        } finally {
-            resetAllSchedulers();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        execCheckSchedulersTest(
+                ctrler -> ctrler.modifyIncidImportancia(new SingleObserverMock<>(), insertGetIncidImportancia(COMU_ESCORIAL_PEPE)),
+                controller
+        );
     }
 
     @Test
-    public void testRegisterIncidencia() throws Exception
+    public void test_ModifyResolucion() throws Exception
     {
-        assertThat(controller.getSubscriptions().size(), is(0));
-
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(
-                    controller.registerIncidImportancia(new DisposableSingleObserver<Integer>() {
-                        @Override
-                        public void onSuccess(Integer integer)
-                        {
-                            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_C), is(BEFORE_METHOD_EXEC));
-                        }
-
-                        @Override
-                        public void onError(Throwable e)
-                        {
-                            fail();
-                        }
-                    }, doIncidImportancia()),
-                    is(true));
-        } finally {
-            resetAllSchedulers();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_C));
+        execCheckSchedulersTest(
+                ctrler -> ctrler.modifyResolucion(new SingleObserverMock<>(), insertGetDefaultResolucion(signUpGetUserComu(COMU_ESCORIAL_PEPE))),
+                controller
+        );
     }
 
     @Test
-    public void testSeeResolucion() throws Exception
+    public void test_regIncidImportancia() throws Exception
     {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.seeResolucion(new MaybeObserverMock<>(), incidenciaId), is(true));
-        } finally {
-            resetAllSchedulers();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
-    }
-
-    //    .................................... HELPER METHODS .................................
-
-    @NonNull
-    private IncidImportancia doIncidImportancia()
-    {
-        return new IncidImportancia.IncidImportanciaBuilder(
-                doIncidencia(
-                        incidImportancia.getUserComu().getUsuario().getUserName(),
-                        "Incidencia One",
-                        incidImportancia.getUserComu().getComunidad().getC_Id(),
-                        (short) 43
-                )
-        )
-                .usuarioComunidad(incidImportancia.getUserComu())
-                .importancia((short) 3)
+        UsuarioComunidad userComu = signUpGetUserComu(COMU_REAL_PEPE);
+        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
+                doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
+                .usuarioComunidad(userComu)
+                .importancia((short) 1)
                 .build();
+
+        execCheckSchedulersTest(
+                ctrler -> ctrler.regIncidImportancia(new SingleObserverMock<>(), incidImportancia),
+                controller
+        );
+    }
+
+    @Test
+    public void test_SeeResolucion() throws Exception
+    {
+        // Incidencia
+        execCheckSchedulersTest(
+                ctrler -> ctrler.seeResolucion(
+                        new MaybeObserverMock<>(),
+                        insertGetDefaultResolucion(signUpGetUserComu(COMU_ESCORIAL_PEPE)).getIncidencia().getIncidenciaId()),
+                controller
+        );
+    }
+
+    @Test
+    public void test_RegResolucion() throws Exception
+    {
+        Resolucion resolucion = doResolucion(
+                insertGetIncidenciaUser(signUpGetUserComu(COMU_ESCORIAL_PEPE), 2).getIncidencia(),
+                "resol_desc", 1000,
+                new Timestamp(getMilliSecondsFromCalendarAdd(SECOND, 30))
+        );
+        execCheckSchedulersTest(ctrler -> ctrler.regResolucion(new SingleObserverMock<>(), resolucion), controller);
     }
 }

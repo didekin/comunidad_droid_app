@@ -1,7 +1,6 @@
 package com.didekindroid.usuariocomunidad.data;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,21 +8,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.router.ActivityInitiatorIf;
+import com.didekindroid.lib_one.api.InjectorOfParentViewerIf;
+import com.didekindroid.lib_one.api.ParentViewerIf;
+import com.didekindroid.lib_one.api.ViewerIf;
+import com.didekindroid.lib_one.api.router.MnRouterIf;
 import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.IncidBundleKey.INCID_CLOSED_LIST_FLAG;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAc.newViewerUserComuDataAc;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -41,7 +40,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * ComuSearchAc.
  */
 @SuppressWarnings("ConstantConditions")
-public class UserComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf, ActivityInitiatorIf {
+public class UserComuDataAc extends AppCompatActivity implements InjectorOfParentViewerIf {
 
     ViewerUserComuDataAc viewer;
     RegUserComuFr regUserComuFr;
@@ -60,9 +59,7 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
 
         oldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key);
         viewer = newViewerUserComuDataAc(this);
-        viewer.doViewInViewer(
-                savedInstanceState,
-                oldUserComu);
+        viewer.doViewInViewer(savedInstanceState, oldUserComu);
 
         regUserComuFr = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
     }
@@ -75,12 +72,12 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ChildViewersInjectorIf  =================================
+    // ==================================  InjectorOfParentViewerIf  =================================
 
     @Override
-    public ParentViewerInjectedIf getParentViewer()
+    public ParentViewerIf getInjectedParentViewer()
     {
-        Timber.d("getParentViewer()");
+        Timber.d("getInjectedParentViewer()");
         return viewer;
     }
 
@@ -89,14 +86,6 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
     {
         Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(childViewer);
-    }
-
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
     }
 
     // ============================================================
@@ -108,8 +97,6 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
     {
         Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
-        // comu_data_ac_mn is shown only to adm/pre rol and to oldest user.
-        viewer.setAcMenu(menu);
         return true;
     }
 
@@ -123,8 +110,8 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
     {
         Timber.d("onPrepareOptionsMenu()");
         MenuItem comuDataItem = menu.findItem(R.id.comu_data_ac_mn);
-        comuDataItem.setVisible(viewer.showComuDataMn.get());
-        comuDataItem.setEnabled(viewer.showComuDataMn.get());
+        comuDataItem.setVisible(viewer.showMnOldestAdmonUser.get());
+        comuDataItem.setEnabled(viewer.showMnOldestAdmonUser.get());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -133,27 +120,29 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
     {
         Timber.d("onOptionsItemSelected()");
 
+        MnRouterIf router = routerInitializer.get().getMnRouter();
         int resourceId = item.getItemId();
         Bundle bundle;
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                router.getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
             case R.id.comu_data_ac_mn:
             case R.id.incid_reg_ac_mn:
-                initAcFromMenu(COMUNIDAD_ID.getBundleForKey(oldUserComu.getComunidad().getC_Id()), resourceId);
+                router.getActionFromMnItemId(resourceId)
+                        .initActivity(this, COMUNIDAD_ID.getBundleForKey(oldUserComu.getComunidad().getC_Id()));
                 return true;
             case R.id.incid_see_open_by_comu_ac_mn:
                 bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(false);
                 bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
-                initAcFromMenu(bundle, resourceId);
+                router.getActionFromMnItemId(resourceId).initActivity(this, bundle);
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
                 bundle = INCID_CLOSED_LIST_FLAG.getBundleForKey(true);
                 bundle.putLong(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
-                initAcFromMenu(bundle, resourceId);
+                router.getActionFromMnItemId(resourceId).initActivity(this, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

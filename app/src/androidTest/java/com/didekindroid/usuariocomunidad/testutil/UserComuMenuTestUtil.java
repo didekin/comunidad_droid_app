@@ -3,11 +3,12 @@ package com.didekindroid.usuariocomunidad.testutil;
 import android.app.Activity;
 
 import com.didekindroid.R;
-import com.didekindroid.testutil.MenuTestUtilIf;
+import com.didekindroid.lib_one.testutil.MenuTestUtilIf;
 
-import static com.didekindroid.testutil.ActivityTestUtils.checkAppBarMenu;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REQUIRES_USER_NO_TOKEN;
+import static com.didekindroid.lib_one.security.SecInitializer.secInitializer;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.user_should_not_be_registered;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.testutil.ActivityTestUtil.checkAppBarMenu;
 
 /**
  * User: pedro@didekin
@@ -19,13 +20,7 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     REG_COMU_USERCOMU_AC {
         @Override
-        public void checkItemNoRegisterUser(Activity activity)
-        {
-            throw new UnsupportedOperationException(REGISTERED_USER);
-        }
-
-        @Override
-        public void checkItemRegisterUser(Activity activity)
+        public void checkItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.reg_nueva_comunidad_ac_mn, R.id.reg_comu_and_usercomu_layout);
         }
@@ -33,27 +28,16 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     REG_COMU_USER_USERCOMU_AC {
         @Override
-        public void checkItemNoRegisterUser(Activity activity)
+        public void checkItem(Activity activity)
         {
+            assertTrue(!secInitializer.get().getTkCacher().isUserRegistered(), user_should_not_be_registered);
             checkAppBarMenu(activity, R.string.reg_nueva_comunidad_ac_mn, R.id.reg_comu_and_user_and_usercomu_ac_layout);
-        }
-
-        @Override
-        public void checkItemRegisterUser(Activity activity)
-        {
-            throw new UnsupportedOperationException(REQUIRES_USER_NO_TOKEN);
         }
     },
 
     SEE_USERCOMU_BY_COMU_AC {
         @Override
-        public void checkItemNoRegisterUser(Activity activity)
-        {
-            throw new UnsupportedOperationException(SEE_USERCOMU_BY_COMU_AC.name() + REGISTERED_USER);
-        }
-
-        @Override
-        public void checkItemRegisterUser(Activity activity)
+        public void checkItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.see_usercomu_by_comu_ac_mn, R.id.see_usercomu_by_comu_frg);
         }
@@ -61,13 +45,7 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     SEE_USERCOMU_BY_USER_AC {
         @Override
-        public void checkItemNoRegisterUser(Activity activity)
-        {
-            throw new UnsupportedOperationException(SEE_USERCOMU_BY_USER_AC + " without token");
-        }
-
-        @Override
-        public void checkItemRegisterUser(Activity activity)
+        public void checkItem(Activity activity)
         {
             checkAppBarMenu(activity, R.string.see_usercomu_by_user_ac_mn, R.id.see_usercomu_by_user_frg);
         }

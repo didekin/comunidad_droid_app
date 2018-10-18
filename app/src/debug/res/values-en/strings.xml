@@ -1,6 +1,4 @@
 <resources>
-    <!-- To be used in a test in  UiUtilsTest -->
-    <string name="incid_resolucion_fecha_default_txt">>> Choose a date</string>
     <!-- To be used in a test in ComuEspressoTestUtil -->
     <string name="tipoVia_spinner_default">street type</string>
     <string name="comAutonoma_spinner_default">region</string>

@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.core.edit.importancia;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,9 @@ class AdapterIncidImportanciaSee extends ArrayAdapter<ImportanciaUser> {
         super(activity, R.layout.incid_importancia_see_list_item, R.id.incid_importancia_alias_view);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         Timber.d("getViewInViewer()");
         ImportanciaUserHolder viewHolder;

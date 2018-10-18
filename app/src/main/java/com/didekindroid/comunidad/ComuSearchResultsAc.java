@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,16 +7,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ViewerComuSearchResultAc.newViewerComuSearchResultAc;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.comunidad.util.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.lib_one.RouterInitializer.routerInitializer;
+import static com.didekindroid.lib_one.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.lib_one.util.UiUtil.assertTrue;
+import static com.didekindroid.lib_one.util.UiUtil.doToolBar;
 
 /**
  * Preconditions:
@@ -51,7 +49,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * ------ provincia: provinciaId, nombre.
  * -- usuarioComunidad: portal, escalera, planta, puerta, roles.
  */
-public class ComuSearchResultsAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class ComuSearchResultsAc extends AppCompatActivity {
 
     ViewerComuSearchResultAc viewer;
     ComuSearchResultsListFr comuSearchResultListFr;
@@ -82,14 +80,6 @@ public class ComuSearchResultsAc extends AppCompatActivity implements ActivityIn
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ActivityInitiatorIf  =================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
     // ============================================================
     //    ..... ACTION BAR ....
     // ============================================================
@@ -117,11 +107,9 @@ public class ComuSearchResultsAc extends AppCompatActivity implements ActivityIn
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
-                return true;
             case R.id.reg_nueva_comunidad_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
-                initAcFromMenu(null, resourceId);
+                routerInitializer.get().getMnRouter().getActionFromMnItemId(resourceId).initActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

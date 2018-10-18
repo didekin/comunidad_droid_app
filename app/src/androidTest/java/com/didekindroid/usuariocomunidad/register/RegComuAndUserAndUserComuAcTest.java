@@ -6,7 +6,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
 import org.junit.After;
@@ -25,16 +24,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadDefault;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
-import static com.didekindroid.testutil.ActivityTestUtils.focusOnView;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.checkChildInViewer;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.cleanTasks;
+import static com.didekindroid.lib_one.testutil.UiTestUtil.focusOnView;
+import static com.didekindroid.lib_one.usuario.UserTestData.USER_JUAN2;
+import static com.didekindroid.lib_one.usuario.UserTestData.cleanWithTkhandler;
+import static com.didekindroid.testutil.ActivityTestUtil.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtil.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtil.isToastInView;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserNameAlias;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuario.testutil.UserMenuTestUtil.LOGIN_AC;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
@@ -45,6 +44,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
 
 /**
  * User: pedro
@@ -67,26 +67,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 }
             };
 
-    RegComuAndUserAndUserComuAc activity;
-
-    private static void typeComunidad()
-    {
-        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
-        typeComunidadDefault(comunidadAutonoma);
-    }
-
-    static void execCheckRegisterError(Activity activity)
-    {
-        typeUserComuData("WRONG**", "escale_b", "planta-N", "puerta5", PRE, INQ);
-        typeUserNameAlias(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
-        // Exec.
-        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
-        // Check
-        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
-                R.string.reg_usercomu_portal_rot));
-    }
-
-    //    ================================================================================
+    private RegComuAndUserAndUserComuAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -108,15 +89,18 @@ public class RegComuAndUserAndUserComuAcTest {
     /*    =================================== Life cycle ===================================*/
 
     @Test
-    public void testRegComuAndUserComuAndUser_NotOk() throws InterruptedException
+    public void testRegComuAndUserComuAndUser_NotOk()
     {
         typeComunidad();
         focusOnView(activity, R.id.reg_usercomu_portal_ed);
         execCheckRegisterError(activity);
+
+        // test_OnStop
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
     @Test
-    public void test_OnCreate() throws Exception
+    public void test_OnCreate()
     {
         assertThat(activity, notNullValue());
         assertThat(activity.regComuFr, notNullValue());
@@ -132,35 +116,44 @@ public class RegComuAndUserAndUserComuAcTest {
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
 
+        // test_SetChildInViewer
+        checkChildInViewer(activity);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
-    }
-
-    @Test
-    public void test_OnStop() throws Exception
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
-    }
-
-    @Test
-    public void test_SetChildInViewer()
-    {
-        checkChildInViewer(activity);
     }
 
     /*    =================================== MENU ===================================*/
 
     @Test
-    public void testLoginMn_NoToken() throws InterruptedException, UiException
+    public void testLoginMn()
     {
         // Precondition.
         assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
         // Exec and check.
-        LOGIN_AC.checkItemNoRegisterUser(activity);
+        LOGIN_AC.checkItem(activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Exec and check navigate-up.
             checkUp(comuSearchAcLayout);
         }
+    }
+
+    //    ================================================================================
+
+    private static void typeComunidad()
+    {
+        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
+        typeComunidadDefault(comunidadAutonoma);
+    }
+
+    static void execCheckRegisterError(Activity activity)
+    {
+        typeUserComuData("WRONG**", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        typeUserNameAlias(USER_JUAN2.getUserName(), USER_JUAN2.getAlias());
+        // Exec.
+        onView(withId(R.id.reg_user_plus_button)).perform(scrollTo(), click());
+        // Check
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.reg_usercomu_portal_rot));
     }
 }
