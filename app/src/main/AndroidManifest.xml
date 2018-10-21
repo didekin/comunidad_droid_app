@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.didekindroid"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.didekindroid">
 
     <application
         android:name=".DidekinApp"
@@ -21,8 +21,7 @@
             tools:replace="android:parentActivityName">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchAc"
-                tools:node="replace"/>
+                android:value=".comunidad.ComuSearchAc" /> <!--tools:node="replace"  In case a parent activity is specified in lib-one-->
         </activity>
         <!-- **************************************************************** -->
         <!-- USUARIO -->
@@ -34,7 +33,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.data.UserComuDataAc"/>
+                android:value="com.didekindroid.usuariocomunidad.data.UserComuDataAc" />
         </activity>
         <activity
             android:name=".comunidad.ComuSearchAc"
@@ -42,9 +41,9 @@
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -53,7 +52,7 @@
             android:parentActivityName=".comunidad.ComuSearchAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchAc" />
         </activity>
         <activity
             android:name="com.didekindroid.lib_one.usuario.LoginAc"
@@ -61,8 +60,7 @@
             tools:replace="android:parentActivityName">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".comunidad.ComuSearchAc"
-                tools:node="replace"/>
+                android:value=".comunidad.ComuSearchAc" /> <!--tools:node="replace"  In case a parent activity is specified in lib-one-->
         </activity>
         <activity
             android:name=".usuariocomunidad.register.RegComuAndUserAndUserComuAc"
@@ -71,7 +69,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchAc" />
         </activity>
         <activity
             android:name=".usuariocomunidad.register.RegComuAndUserComuAc"
@@ -80,7 +78,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchAc" />
         </activity>
         <activity
             android:name=".usuariocomunidad.register.RegUserAndUserComuAc"
@@ -89,7 +87,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchResultsAc" />
         </activity>
         <activity
             android:name=".usuariocomunidad.register.RegUserComuAc"
@@ -98,7 +96,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchResultsAc" />
         </activity>
         <activity
             android:name=".usuariocomunidad.listbycomu.SeeUserComuByComuAc"
@@ -106,7 +104,7 @@
             android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
+                android:value="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc" />
         </activity>
         <activity
             android:name=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
@@ -114,7 +112,7 @@
             android:parentActivityName=".comunidad.ComuSearchAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchAc" />
         </activity>
         <activity
             android:name=".usuariocomunidad.data.UserComuDataAc"
@@ -123,7 +121,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
+                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc" />
         </activity>
         <activity
             android:name="com.didekindroid.lib_one.usuario.UserDataAc"
@@ -131,8 +129,7 @@
             tools:replace="android:parentActivityName">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
-                tools:node="replace"/>
+                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc" /> <!--tools:node="replace"  In case a parent activity is specified in lib-one-->
         </activity>
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
@@ -143,7 +140,7 @@
             android:parentActivityName=".incidencia.comment.IncidCommentSeeAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.comment.IncidCommentSeeAc"/>
+                android:value=".incidencia.comment.IncidCommentSeeAc" />
         </activity>
         <activity
             android:name=".incidencia.comment.IncidCommentSeeAc"
@@ -151,7 +148,7 @@
             android:parentActivityName=".incidencia.list.IncidSeeByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.list.IncidSeeByComuAc"/>
+                android:value=".incidencia.list.IncidSeeByComuAc" />
         </activity>
         <activity
             android:name=".incidencia.core.edit.IncidEditAc"
@@ -159,7 +156,7 @@
             android:parentActivityName=".incidencia.list.IncidSeeByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.list.IncidSeeByComuAc"/>
+                android:value=".incidencia.list.IncidSeeByComuAc" />
         </activity>
         <activity
             android:name=".incidencia.core.reg.IncidRegAc"
@@ -168,7 +165,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.list.IncidSeeByComuAc"/>
+                android:value=".incidencia.list.IncidSeeByComuAc" />
         </activity>
         <activity
             android:name=".incidencia.core.resolucion.IncidResolucionEditAc"
@@ -177,7 +174,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.list.IncidSeeByComuAc"/>
+                android:value=".incidencia.list.IncidSeeByComuAc" />
         </activity>
         <activity
             android:name=".incidencia.core.resolucion.IncidResolucionRegAc"
@@ -186,7 +183,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.list.IncidSeeByComuAc"/>
+                android:value=".incidencia.list.IncidSeeByComuAc" />
         </activity>
         <activity
             android:name=".incidencia.list.IncidSeeByComuAc"
@@ -194,14 +191,14 @@
             android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
+                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc" />
         </activity>
         <!-- .......... GCM services ......... -->
         <service
             android:name=".incidencia.firebase.IncidFireBaseMsgService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>
