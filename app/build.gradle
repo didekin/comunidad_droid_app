@@ -9,7 +9,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 6
-        versionName "b.1.5"
+        versionName "b.1.6"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* , "en"  Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
@@ -51,7 +51,7 @@ android {
     }
 
     // Descomentar antes de pasar a PRE.
-    testBuildType "debugPre"
+//    testBuildType "debugPre"
 
     buildTypes {
         release {
