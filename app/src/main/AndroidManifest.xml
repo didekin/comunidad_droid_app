@@ -17,8 +17,7 @@
         <!-- **************************************************************** -->
         <activity
             android:name="com.didekindroid.lib_one.accesorio.ConfidencialidadAc"
-            android:parentActivityName=".comunidad.ComuSearchAc"
-            tools:replace="android:parentActivityName">
+            android:parentActivityName=".comunidad.ComuSearchAc"> <!--tools:replace="android:parentActivityName"-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".comunidad.ComuSearchAc" /> <!--tools:node="replace"  In case a parent activity is specified in lib-one-->
@@ -56,8 +55,7 @@
         </activity>
         <activity
             android:name="com.didekindroid.lib_one.usuario.LoginAc"
-            android:parentActivityName=".comunidad.ComuSearchAc"
-            tools:replace="android:parentActivityName">
+            android:parentActivityName=".comunidad.ComuSearchAc">  <!--tools:replace="android:parentActivityName"-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".comunidad.ComuSearchAc" /> <!--tools:node="replace"  In case a parent activity is specified in lib-one-->
@@ -125,8 +123,7 @@
         </activity>
         <activity
             android:name="com.didekindroid.lib_one.usuario.UserDataAc"
-            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
-            tools:replace="android:parentActivityName">
+            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"> <!--tools:replace="android:parentActivityName"-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc" /> <!--tools:node="replace"  In case a parent activity is specified in lib-one-->
